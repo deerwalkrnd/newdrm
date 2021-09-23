@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.no-x-padding {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.pg-1 {
+    min-height: 100vh;
+}
+
+.bg-custom {
+    background-color: #e9e9f5;
+}
+
+.my-form {
+    margin: 5% 8%;
+    padding: 3% 3% 1%;
+    box-shadow: 7px 9px 10px grey;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.my-table {
+    margin: 2%;
+}
+
+.my-table table {
+    margin: 3% auto 1%;
+    box-shadow: 2px 2px 10px grey;
+}
+
+.delete {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+}
+
+.delete:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.fs-16 {
+    font-size: 16px;
+}
+
+
+/* #sidenav .active {
+    background-color: #2b2a2e !important;
+} */
+
+
+/* ---select-2 customization */
+
+.select2 {
+    width: 100% !important;
+}
+
+.select2-selection {
+    min-height: 40px !important;
+}
+
+.select2-selection__placeholder {
+    line-height: 38px !important;
+}
+
+.select2-selection__arrow {
+    top: 7px !important;
+}
+
+.select2-selection__rendered {
+    line-height: 38px !important;
+}
+
+.select2-selection--single .select2-selection__rendered {
+    padding-left: 16px !important;
+}
+
+
+/* select-2 customization ends */
+
+
+/* responsive code starts */
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-nav li,
+    .admin-logo-navbar {
+        display: none;
+    }
+}
+
+
+/* responside code ends */
