@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Unit;
-use App\Models\Organization;
-use App\Http\Requests\UnitRequest;
+use App\Models\Employee;
+use App\Http\Requests\EmployeeRequest;
 
-class UnitController extends Controller
+use App\Models\Organization;
+use App\Models\Unit;
+use App\Models\Designation;
+
+
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,12 +22,11 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $units = Unit::select('id', 'unit_name', 'organization_id')
-                        ->with('organization:id,name')
-                        ->orderBy('organization_id')
-                        ->orderBy('unit_name')
-                        ->paginate(10);
-        return view('admin.unit.index')->with(compact('units'));
+        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','organization_id','unit_id','intern_trainee_ship_date','join_date')
+        ->orderBy('first_name') 
+        ->paginate(10);
+        
+        return view('admin.employee.index')->with(compact('employees'));
     }
 
     /**
@@ -34,7 +37,10 @@ class UnitController extends Controller
     public function create()
     {
         $organizations = Organization::select('id','name')->get();
-        return view('admin.unit.create')->with(compact('organizations'));
+        $units = Unit::select('id','unit_name')->get();
+        $designations = Designation::select('id','job_title_name')->get();
+
+        return view('admin.employee.create')->with(compact('units','organizations','designations'));
     }
 
     /**
@@ -43,10 +49,11 @@ class UnitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UnitRequest $request)
+    public function store(EmployeeRequest $request)
     {
-        Unit::create($request->validated());
-        return redirect('/unit');
+        // dd($request->validated());
+        Employee::create($request->validated());
+        return redirect('/employee');
     }
 
     /**
@@ -68,9 +75,12 @@ class UnitController extends Controller
      */
     public function edit($id)
     {
-        $unit = Unit::select('id', 'unit_name', 'organization_id')->findOrFail($id);
+        $employee = Employee::findOrFail($id);
         $organizations = Organization::select('id','name')->get();
-        return view('admin.unit.edit')->with(compact('unit','organizations'));
+        $units = Unit::select('id','unit_name')->get();
+        $designations = Designation::select('id','job_title')->get();
+
+        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations'));
     }
 
     /**
@@ -80,16 +90,16 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UnitRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $unit = Unit::findOrFail($id);
+        $employee = Employee::findOrFail($id);
         
         //get validated input and merge input fields
         $input = $request->validated();
         $input['version'] = DB::raw('version+1');
 
-        $unit->update($input);
-        return redirect('/unit');
+        $employee->update($input);
+        return redirect('/employee');
     }
 
     /**
@@ -100,8 +110,6 @@ class UnitController extends Controller
      */
     public function destroy($id)
     {
-        $unit = Unit::findOrFail($id);
-        $unit->delete();
-        return redirect('/unit');
+        //
     }
 }

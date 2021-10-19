@@ -15,8 +15,8 @@ class Organization extends Model
         'code',
     ];
 
-    // public function parent()
-    // {
-    //     return $this->belongsTo(Organization::class);
-    // }
+    public function unit()
+    {
+        return $this->hasOne(Organization::class,'organization_id');
+    }
 }

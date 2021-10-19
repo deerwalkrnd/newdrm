@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+use App\Models\LeaveType;
+use App\Http\Requests\LeaveTypeRequest;
 
 class LeaveTypeController extends Controller
 {
@@ -13,7 +17,10 @@ class LeaveTypeController extends Controller
      */
     public function index()
     {
-        //
+        $leaveTypes = LeaveType::select('id', 'name')
+                        ->orderBy('name') 
+                        ->paginate(10);
+        return view('admin.leaveType.index')->with(compact('leaveTypes'));
     }
 
     /**
@@ -23,7 +30,7 @@ class LeaveTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.leaveType.create');
     }
 
     /**
@@ -32,9 +39,10 @@ class LeaveTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LeaveTypeRequest $request)
     {
-        //
+        LeaveType::create($request->validated());
+        return redirect('/leaveType');
     }
 
     /**
@@ -56,7 +64,8 @@ class LeaveTypeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $leaveType = LeaveType::select('id', 'name')->findOrFail($id);
+        return view('admin.leaveType.edit')->with(compact('leaveType'));
     }
 
     /**
@@ -66,9 +75,16 @@ class LeaveTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(LeaveTypeRequest $request, $id)
     {
-        //
+        $leaveType = LeaveType::findOrFail($id);
+        
+        //get validated input and merge input fields
+        $input = $request->validated();
+        $input['version'] = DB::raw('version+1');
+
+        $leaveType->update($input);
+        return redirect('/leaveType');
     }
 
     /**
@@ -79,6 +95,8 @@ class LeaveTypeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $leaveType = LeaveType::findOrFail($id);
+        $leaveType->delete();
+        return redirect('/leaveType');
     }
 }

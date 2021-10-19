@@ -15,6 +15,15 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/organization">Organization</a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/unit">Unit</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/leaveType">Leave Type</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/employee">Employee</a>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="/logout" method="POST">
             @csrf

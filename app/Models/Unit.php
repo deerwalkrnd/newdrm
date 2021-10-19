@@ -14,4 +14,9 @@ class Unit extends Model
         'unit_name',
         'organization_id',
     ];
+
+    public function organization()
+    {
+        return $this->belongsTo(organization::class);
+    }
 }
