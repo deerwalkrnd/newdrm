@@ -44,6 +44,7 @@ class Employee extends Model
         'temporary_tole',
         'join_date',
         'intern_trainee_ship_date',
+        'service_type',
         'manager_id',
         'designation_id',
         'designation_change_date',

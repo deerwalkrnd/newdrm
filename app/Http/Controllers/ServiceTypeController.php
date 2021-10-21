@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Organization;
-use App\Http\Requests\OrganizationRequest;
-class OrganizationController extends Controller
+use App\Models\ServiceType;
+use App\Http\Requests\ServiceTypeRequest;
+
+class ServiceTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,8 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        $organizations = Organization::select('id', 'name', 'code')->paginate(10);
-        return view('admin.organization.index')->with(compact('organizations'));
+        $serviceTypes = ServiceType::select('id', 'service_type_name')->paginate(10);
+        return view('admin.serviceType.index')->with(compact('serviceTypes'));
     }
 
     /**
@@ -27,7 +28,7 @@ class OrganizationController extends Controller
      */
     public function create()
     {
-        return view('admin.organization.create');
+        return view('admin.serviceType.create');
     }
 
     /**
@@ -36,10 +37,10 @@ class OrganizationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(OrganizationRequest $request)
+    public function store(ServiceTypeRequest $request)
     {
-        Organization::create($request->validated());
-        return redirect('/organization');
+        ServiceType::create($request->validated());
+        return redirect('/serviceType');
     }
 
     /**
@@ -61,8 +62,8 @@ class OrganizationController extends Controller
      */
     public function edit($id)
     {
-        $organization = Organization::select('id', 'name', 'code')->findOrFail($id);
-        return view('admin.organization.edit')->with(compact('organization'));
+        $serviceType = ServiceType::select('id', 'service_type_name')->findOrFail($id);
+        return view('admin.serviceType.edit')->with(compact('serviceType'));
     }
 
     /**
@@ -72,16 +73,14 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(OrganizationRequest $request, $id)
+    public function update(ServiceTypeRequest $request, $id)
     {
-        $organization = Organization::findOrFail($id);
+        $serviceType = ServiceType::findOrFail($id);
 
         //get validated input and merge input fields
         $input = $request->validated();
-        $input['version'] = DB::raw('version+1');
-
-        $organization->update($input);
-        return redirect('/organization');
+        $serviceType->update($input);
+        return redirect('/serviceType');
     }
 
     /**
@@ -93,15 +92,14 @@ class OrganizationController extends Controller
     public function destroy($id)
     {
         try{
-            $organization = Organization::findOrFail($id);
-            $organization->delete();
-            return redirect('/organization');
-    
-        }catch(\Illuminate\Database\QueryException $e){
+            $serviceType = ServiceType::findOrFail($id);
+            $serviceType->delete();
+            return redirect('/serviceType');
+        }
+        catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
                 return redirect()->back();
             }
         }
-    }  
     }
-// }
+}

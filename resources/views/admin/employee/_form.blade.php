@@ -1,5 +1,16 @@
+@if($errors->any())
+    <div class="alert alert-danger">
+        <p><strong>Opps Something went wrong</strong></p>
+        <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+        </ul>
+    </div>
+@endif
+
 <div class="form-group">
-    <label for="employee_id">Employee Id</label>
+    <label for="employee_id">Employee Id*</label>
     <input type="number" class="form-control" id="employee_id" placeholder="Enter Employee Id" name="employee_id" value="{{ !empty(old('employee_id')) ? old('employee_id') : $employee->employee_id ?? '' }}" min=1>
     @error('employee_id')
         <p class="text-danger">{{ $message }}</p>
@@ -75,26 +86,25 @@
 </div>
 <!-- marital-status -->
 
-
 <div class="form-group">
-    <label for="father_name">Gender*</label>
+    <label for="gender">Gender*</label>
     <br>
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="gender" id="gender0" value="Female" 
-        {{ (isset($employee) && $employee->gender == 'Female') ?? 'checked' }}
-        {{ old('gender') == 'Female' ?? 'checked' }}>
+        {{ (isset($employee) && $employee->gender == 'Female') ? 'checked':''}}
+        {{ old('gender') == 'Female' ? 'checked':'' }}>
         <label class="form-check-label" for="gender0">Female</label>
     </div>
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="gender" id="gender1" value="Male" 
-        {{ (isset($employee) && $employee->gender == 'Male') ?? 'checked'}}
-        {{ old('gender') == 'Male' ?? 'checked' }}>
+        {{ (isset($employee) && $employee->gender == 'Male') ? 'checked':''}}
+        {{ old('gender') == 'Male' ? 'checked':''}}>
         <label class="form-check-label" for="gender1">Male</label>
     </div>
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="gender" id="gender2" value="Other" 
-        {{ (isset($employee) && $employee->gender == 'Other') ?? 'checked' }}
-        {{ old('gender') == 'Other' ?? 'checked' }}>
+        {{ (isset($employee) && $employee->gender == 'Other') ? 'checked':'' }}
+        {{ old('gender') == 'Other' ? 'checked':'' }}>
         <label class="form-check-label" for="gender2">Other</label>
     </div>
     @error('gender')
@@ -217,7 +227,7 @@
 <!-- profile -->
 
 <div class="form-group">
-    <label for="blood_group">Blood_group</label>
+    <label for="blood_group">Blood Group</label>
     <input type="text" class="form-control" id="blood_group" placeholder="Enter Employee blood group" name="blood_group" value="{{ !empty(old('blood_group')) ? old('blood_group') : $employee->blood_group ?? '' }}">
     @error('blood_group')
         <p class="text-danger">{{ $message }}</p>
@@ -229,41 +239,13 @@
     <label for="permanent_address">Province*</label>
     <select class="form-control" id="permanent_address" name="permanent_address">
         <option value="" disabled="disabled" selected="selected">-- Choose Province --</option>
+        @foreach($provinces as $province)
         <option 
-            value="Province No. 1" 
-            {{ (!empty(old('permanent_address')) && old('permanent_address') == 'Province No. 1') ? 'selected': ''}}
-            {{ (isset($employee) && $employee->permanent_address == 'Province No. 1' && empty(old('permanent_address'))) ? 'selected' : '' }} 
-            >Province No. 1</option>
-        <option 
-            value="Province No. 2" 
-            {{ (!empty(old('permanent_address')) && old('permanent_address') == 'Province No. 2') ? 'selected': ''}}
-            {{ (isset($employee) && $employee->permanent_address == 'Province No. 2' && empty(old('permanent_address'))) ? 'selected' : '' }} 
-            >Province No. 2</option>
-        <option 
-            value="Province No. 3" 
-            {{ (!empty(old('permanent_address')) && old('permanent_address') == 'Province No. 3') ? 'selected': ''}}
-            {{ (isset($employee) && $employee->permanent_address == 'Province No. 3' && empty(old('permanent_address'))) ? 'selected' : '' }} 
-            >Province No. 3</option>
-        <option 
-            value="Gandaki Pradesh" 
-            {{ (!empty(old('permanent_address')) && old('permanent_address') == 'Gandaki Pradesh') ? 'selected': ''}}
-            {{ (isset($employee) && $employee->permanent_address == 'Gandaki Pradesh' && empty(old('permanent_address'))) ? 'selected' : '' }} 
-            >Gandaki Pradesh</option>
-        <option 
-            value="Province No. 5" 
-            {{ (!empty(old('permanent_address')) && old('permanent_address') == 'Province No. 5') ? 'selected': ''}}
-            {{ (isset($employee) && $employee->permanent_address == 'Province No. 5' && empty(old('permanent_address'))) ? 'selected' : '' }} 
-            >Province No. 5</option>
-        <option 
-            value="Karnali Pradesh" 
-            {{ (!empty(old('permanent_address')) && old('permanent_address') == 'Karnali Pradesh') ? 'selected': ''}}
-            {{ (isset($employee) && $employee->permanent_address == 'Karnali Pradesh' && empty(old('permanent_address'))) ? 'selected' : '' }} 
-            >Karnali Pradesh</option>
-        <option 
-            value="Sudurpaschim Pradesh" 
-            {{ (!empty(old('permanent_address')) && old('permanent_address') == 'Sudurpaschim Pradesh') ? 'selected': ''}}
-            {{ (isset($employee) && $employee->permanent_address == 'Sudurpaschim Pradesh' && empty(old('permanent_address'))) ? 'selected' : '' }} 
-            >Sudurpaschim Pradesh</option>
+            value="{{ $province->id }}" 
+            {{ (!empty(old('permanent_address')) && old('permanent_address') == $province->id) ? 'selected': ''}}
+            {{ (isset($employee) && $employee->permanent_address == $province->id && empty(old('permanent_address'))) ? 'selected' : '' }} 
+            >{{$province->province_name}}</option>
+        @endforeach
     </select>
     @error('permanent_address')
         <p class="text-danger">{{ $message }}</p>
@@ -273,7 +255,16 @@
 
 <div class="form-group">
     <label for="permanent_district">Permanent District*</label>
-    <input type="text" class="form-control" id="permanent_district" placeholder="Enter Employee permanent_district" name="permanent_district" value="{{ !empty(old('permanent_district')) ? old('permanent_district') : $employee->permanent_district ?? '' }}">
+    <select class="form-control" id="permanent_district" name="permanent_district">
+        <option value="" disabled="disabled" selected="selected">-- Choose District --</option>
+        @foreach($districts as $district)
+        <option 
+            value="{{ $district->id }}" 
+            {{ (!empty(old('permanent_district')) && old('permanent_district') == $district->id) ? 'selected': ''}}
+            {{ (isset($employee) && $employee->permanent_district == $district->id && empty(old('permanent_district'))) ? 'selected' : '' }} 
+            >{{$district->district_name}}</option>
+        @endforeach
+    </select>
     @error('permanent_district')
         <p class="text-danger">{{ $message }}</p>
     @enderror
@@ -312,14 +303,14 @@
     <br>
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="permanent_toletemp_add_same_as_per_add" id="yes" value="1" 
-        {{ (isset($employee) && $employee->permanent_toletemp_add_same_as_per_add == '1') ?? 'checked' }}
-        {{ old('permanent_toletemp_add_same_as_per_add') == '1' ?? 'checked' }}>
+        {{ (isset($employee) && $employee->permanent_toletemp_add_same_as_per_add == '1') ? 'checked':'' }}
+        {{ old('permanent_toletemp_add_same_as_per_add') == '1' ? 'checked':'' }}>
         <label class="form-check-label" for="yes">Yes</label>
     </div>
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="permanent_toletemp_add_same_as_per_add" id="no" value="0" 
-        {{ (isset($employee) && $employee->permanent_toletemp_add_same_as_per_add == '0') ?? 'checked' }}
-        {{ old('permanent_toletemp_add_same_as_per_add') == '0' ?? 'checked' }}>
+        {{ (isset($employee) && $employee->permanent_toletemp_add_same_as_per_add == '0') ? 'checked':'' }}
+        {{ old('permanent_toletemp_add_same_as_per_add') == '0' ? 'checked':'' }}>
         <label class="form-check-label" for="no">No</label>
     </div>
     @error('permanent_toletemp_add_same_as_per_add')
@@ -365,7 +356,8 @@
 <!-- temporary_ward_no -->
 
 <div class="form-group">
-    <label for="temporary_tole">Temporary Tole</label>
+    <label for="temporary_tole">Temporary Tole
+    </label>
     <input type="text" class="form-control" id="temporary_tole" placeholder="Enter Employee temporary_tole" name="temporary_tole" value="{{ !empty(old('temporary_tole')) ? old('temporary_tole') : $employee->temporary_tole ?? '' }}">
     @error('temporary_tole')
         <p class="text-danger">{{ $message }}</p>
@@ -374,7 +366,7 @@
 <!-- temporary_tole -->
 <hr>
 <div class="form-group">
-    <label for="join_date">Join Date</label>
+    <label for="join_date">Join Date*</label>
     <input type="date" class="form-control" id="join_date" placeholder="Enter Employee join_date" name="join_date" value="{{ !empty(old('join_date')) ? old('join_date') : $employee->join_date ?? '' }}">
     @error('join_date')
         <p class="text-danger">{{ $message }}</p>
@@ -390,6 +382,29 @@
     @enderror
 </div>
 <!-- intern_trainee_ship_date -->
+
+
+<div class="form-group">
+    <label for="service_type">Service Type*</label>
+    <select class="form-control" id="service_type" name="service_type">
+        <option value="" disabled="disabled" selected="selected">-- Choose Service --</option>
+        @forelse($serviceTypes as $serviceType)
+        <option 
+            value="{{ $serviceType->id}}" 
+            {{ (!empty(old('service_type')) && old('service_type') == $serviceType->id) ? 'selected': ''}}
+            {{ (isset($employee) && $employee->serviceType_id == $serviceType->id && empty(old('service_type'))) ? 'selected' : '' }} 
+            >
+            {{ $serviceType->service_type_name }}
+        </option>
+        @empty
+        <!-- no options -->
+        @endforelse
+    </select>
+    @error('serviceType_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+<!-- Service Type -->
 
 <div class="form-group">
     <label for="manager_id">Manager</label>
@@ -454,9 +469,7 @@
 <!-- organization_id -->
 
 <div class="form-group">
-
-{{ $units }}
-    <label for="unit_id">Unit</label>
+    <label for="unit_id">Unit*</label>
     <select class="form-control" id="unit_id" name="unit_id">
         <option value="" disabled="disabled" selected="selected">-- Choose Unit --</option>
         @forelse($units as $unit)
@@ -487,8 +500,45 @@
 <!-- email -->
 
 <div class="form-group">
-    <label for="emp_shift">Employee Shift*</label>
-    <input type="text" class="form-control" id="emp_shift" placeholder="Enter Employee emp_shift" name="emp_shift" value="{{ !empty(old('emp_shift')) ? old('emp_shift') : $employee->emp_shift ?? '' }}">
+    <label for="emp_shift">Shift*</label>
+    <select class="form-control" id="emp_shift" name="emp_shift">
+        <option value="" disabled="disabled" selected="selected">-- Choose Shift --</option>
+        <option 
+            value="morning" 
+            {{ (!empty(old('emp_shift')) && old('emp_shift') == 'morning') ? 'selected': ''}}
+            {{ (isset($employee) && $employee->emp_shift == 'morning' && empty(old('emp_shift'))) ? 'selected' : '' }} 
+            >
+            Morning
+        </option>
+        <option 
+            value="evening" 
+            {{ (!empty(old('emp_shift')) && old('emp_shift') == 'evening') ? 'selected': ''}}
+            {{ (isset($employee) && $employee->emp_shift == 'evening' && empty(old('emp_shift'))) ? 'selected' : '' }} 
+            >
+            Evening
+        </option>
+        <option 
+            value="normal" 
+            {{ (!empty(old('emp_shift')) && old('emp_shift') == 'normal') ? 'selected': ''}}
+            {{ (isset($employee) && $employee->emp_shift == 'normal' && empty(old('emp_shift'))) ? 'selected' : '' }} 
+            >
+            Normal
+        </option>
+        <option 
+            value="custom" 
+            {{ (!empty(old('emp_shift')) && old('emp_shift') == 'custom') ? 'selected': ''}}
+            {{ (isset($employee) && $employee->emp_shift == 'custom' && empty(old('emp_shift'))) ? 'selected' : '' }} 
+            >
+            Custom
+        </option>
+        <option 
+            value="exclude" 
+            {{ (!empty(old('emp_shift')) && old('emp_shift') == 'exclude') ? 'selected': ''}}
+            {{ (isset($employee) && $employee->emp_shift == 'exclude' && empty(old('emp_shift'))) ? 'selected' : '' }} 
+            >
+            Exclude
+        </option>
+    </select>
     @error('emp_shift')
         <p class="text-danger">{{ $message }}</p>
     @enderror

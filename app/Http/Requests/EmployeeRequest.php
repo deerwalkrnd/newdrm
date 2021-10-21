@@ -57,6 +57,7 @@ class EmployeeRequest extends FormRequest
             'temporary_tole' => '',
             'join_date' => 'nullable|date',
             'intern_trainee_ship_date' => 'nullable|date',
+            'service_type' => 'required',
             'manager_id' => '',
             'designation_id' => 'required',
             'designation_change_date' => 'nullable|date',

@@ -1,5 +1,4 @@
 @extends('layouts.admin.app')
-
 @section('content')
 <div class="my-table">
     <a href="/organization/create"><button class="btn btn-primary float-right">Add Organization</button></a>
@@ -27,9 +26,11 @@
                         <form action="/organization/{{ $organization->id }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="delete">Delete</button>
+                            <button type="submit" name="delete" class="delete">Delete</button>
                         </form>
+                        
                     </td>
+                    
                 </tr>
                 @empty
                 <tr>

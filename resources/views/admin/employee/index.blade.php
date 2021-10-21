@@ -1,5 +1,10 @@
 @extends('layouts.admin.app')
-
+@if ($message = Session::get('warning'))
+<div class="alert alert-warning alert-block">
+    <button type="button" class="close" data-dismiss="alert">×</button>    
+    <strong>{{ $message }}</strong>
+</div>
+@endif
 @section('content')
 <div class="my-table">
     <a href="/employee/create"><button class="btn btn-primary float-right">Add Employee</button></a>

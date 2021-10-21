@@ -11,7 +11,9 @@ use App\Http\Requests\EmployeeRequest;
 use App\Models\Organization;
 use App\Models\Unit;
 use App\Models\Designation;
-
+use App\Models\Province;
+use App\Models\District;
+use App\Models\ServiceType;
 
 class EmployeeController extends Controller
 {
@@ -39,8 +41,12 @@ class EmployeeController extends Controller
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title_name')->get();
+        $provinces = Province::select('id', 'province_name')->get();
+        $districts = District::select('id', 'district_name', 'province_id')->get();
+        $serviceTypes = ServiceType::select('id','service_type_name')->get();
+        
 
-        return view('admin.employee.create')->with(compact('units','organizations','designations'));
+        return view('admin.employee.create')->with(compact('units','organizations','designations','provinces','districts','serviceTypes'));
     }
 
     /**
@@ -79,8 +85,12 @@ class EmployeeController extends Controller
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title')->get();
+        $provinces = Province::select('id', 'province_name')->get();
+        $districts = District::select('id', 'district_name', 'province_id')->get();
+        $serviceTypes = ServiceType::select('id','service_type_name')->get();
+        
 
-        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations'));
+        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','districts','serviceTypes'));
     }
 
     /**
