@@ -3,7 +3,7 @@
 @section('content')
 <div class="my-form">
     <h3 class="text-success text-center">Add Employee</h3>
-    <form method="POST" action="/employee">
+    <form method="POST" action="/employee" enctype='multipart/form-data'>
         @csrf
         @include('admin.employee._form')
         <button type="submit" class="btn btn-primary">Add</button>

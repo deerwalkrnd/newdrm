@@ -57,9 +57,28 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeRequest $request)
     {
-        // dd($request->validated());
-        Employee::create($request->validated());
+        //get validated input
+        $input = $request->validated();
+
+        //store image
+        $image = $request->file('image');
+        $cv = $request->file('cv');
+        
+        //merge files
+        if($image!=null){
+            $input['image_name'] = $image->store('employees/images');
+        }
+        if($cv != null){
+            $input['cv_file_name'] = $cv->store('employees/cv');
+        }
+        
+        //remove unwanted fields
+        unset($input['image'], $input['cv']);
+
+        //create object based on verified input
+        Employee::create($input);
         return redirect('/employee');
+
     }
 
     /**
