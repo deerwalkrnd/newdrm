@@ -27,6 +27,9 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/serviceType">Service Type</a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/manager">Manager</a>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="/logout" method="POST">
             @csrf

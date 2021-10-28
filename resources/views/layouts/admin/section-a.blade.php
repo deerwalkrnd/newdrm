@@ -8,4 +8,5 @@
     <a href="/leaveType" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('leaveType') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">Leave Type</span></a>
     <a href="/employee" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('leaveType') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">Employee</span></a>
     <a href="/serviceType" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('serviceType') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">Service Type</span></a>
+    <a href="/manager" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('manager') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">Manager</span></a>
 </div>

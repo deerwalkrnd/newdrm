@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Unit extends Model
+class Manager extends Model
 {
     use HasFactory;
 
-    public $fillable = [
+    public $fillable=[
         'version',
-        'unit_name',
-        'organization_id',
+        'employee_id',
+        'is_active'
     ];
 
-    public function organization()
+    public function employee()
     {
-        return $this->belongsTo(Organization::class);
+        return $this->belongsTo(Employee::class);
     }
+
 }

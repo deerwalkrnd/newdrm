@@ -54,4 +54,7 @@ class Employee extends Model
         'emp_shift',
         'remarks',
     ];
+
+
+ 
 }

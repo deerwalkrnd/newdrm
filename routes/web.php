@@ -8,6 +8,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ServiceTypeController;
+use App\Http\Controllers\ManagerController;
 
 
 /*
@@ -72,3 +73,11 @@ Route::get('/serviceType',[ServiceTypeController::class, 'index']);
 Route::get('/serviceType/edit/{id}',[ServiceTypeController::class, 'edit']);
 Route::put('/serviceType/{id}',[ServiceTypeController::class, 'update']);
 Route::delete('/serviceType/{id}',[ServiceTypeController::class, 'destroy']);
+
+// manager route
+Route::get('/manager/create',[ManagerController::class, 'create']);
+Route::post('/manager',[ManagerController::class, 'store']);
+Route::get('/manager',[ManagerController::class, 'index']);
+Route::get('/manager/edit/{id}',[ManagerController::class, 'edit']);
+Route::put('/manager/{id}',[ManagerController::class, 'update']);
+Route::delete('/manager/{id}',[ManagerController::class, 'destroy']);
