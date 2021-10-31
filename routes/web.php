@@ -9,6 +9,7 @@ use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\RoleController;
 
 
 /*
@@ -81,3 +82,11 @@ Route::get('/manager',[ManagerController::class, 'index']);
 Route::get('/manager/edit/{id}',[ManagerController::class, 'edit']);
 Route::put('/manager/{id}',[ManagerController::class, 'update']);
 Route::delete('/manager/{id}',[ManagerController::class, 'destroy']);
+
+// role route
+Route::get('/role/create',[RoleController::class, 'create']);
+Route::post('/role',[RoleController::class, 'store']);
+Route::get('/role',[RoleController::class, 'index']);
+Route::get('/role/edit/{id}',[RoleController::class, 'edit']);
+Route::put('/role/{id}',[RoleController::class, 'update']);
+Route::delete('/role/{id}',[RoleController::class, 'destroy']);
