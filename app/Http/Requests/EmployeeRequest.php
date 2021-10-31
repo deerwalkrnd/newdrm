@@ -24,7 +24,8 @@ class EmployeeRequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_id' => 'required|unique:employees,employee_id,'.$this->id,
+            'employee_id' => 'required',
+            // 'employee_id' => 'required|unique:employees,employee_id,'.$this->id,
             'first_name' => 'required',
             'last_name' => 'required',
             'middle_name' => 'nullable|max:255',
@@ -58,12 +59,14 @@ class EmployeeRequest extends FormRequest
             'join_date' => 'nullable|date',
             'intern_trainee_ship_date' => 'nullable|date',
             'service_type' => 'required|exists:service_types,id',
-            'manager_id' => 'required|exists:managers,id',
+            'manager_id' => 'nullable|exists:managers,id',
             'designation_id' => 'required|max:255',
             'designation_change_date' => 'nullable|date',
             'organization_id' => 'required|max:255',
             'unit_id'  => 'required|max:255',
             'email' => 'required|email|max:255',
+            'username' => 'required|string|max:255',
+            'role' => 'required|exists:roles,id',
             'emp_shift' => 'required|max:255',
             'remarks' => 'nullable|max:255',
         ];

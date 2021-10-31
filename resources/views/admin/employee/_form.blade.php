@@ -500,6 +500,33 @@
 <!-- email -->
 
 <div class="form-group">
+    <label for="username">Username*</label>
+    <input type="text" class="form-control" id="username" placeholder="Enter Employee username" name="username" value="{{ !empty(old('username')) ? old('username') : $employee->username ?? '' }}">
+    @error('username')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+<!-- username -->
+
+<div class="form-group">
+    <label for="role">Role*</label>
+    <select class="form-control" id="role" name="role">
+        <option value="" disabled="disabled" selected="selected">-- Choose Role --</option>
+        @foreach($roles as $role)
+        <option 
+            value="{{ $role->id }}" 
+            {{ (!empty(old('role')) && old('role') == $role->id) ? 'selected': ''}}
+            {{ (isset($employee) && $employee->role == $province->id && empty(old('role'))) ? 'selected' : '' }} 
+            >{{$role->authority}}</option>
+        @endforeach
+    </select>
+    @error('role')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+<!-- role -->
+
+<div class="form-group">
     <label for="emp_shift">Shift*</label>
     <select class="form-control" id="emp_shift" name="emp_shift">
         <option value="" disabled="disabled" selected="selected">-- Choose Shift --</option>

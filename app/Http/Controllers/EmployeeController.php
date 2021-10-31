@@ -14,6 +14,9 @@ use App\Models\Designation;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\ServiceType;
+use App\Models\Role;
+
+use App\Actions\Fortify\CreateNewUser;
 
 class EmployeeController extends Controller
 {
@@ -44,9 +47,9 @@ class EmployeeController extends Controller
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
-        
+        $roles = Role::select('id','authority')->get();
 
-        return view('admin.employee.create')->with(compact('units','organizations','designations','provinces','districts','serviceTypes'));
+        return view('admin.employee.create')->with(compact('units','organizations','designations','provinces','districts','serviceTypes','roles'));
     }
 
     /**
@@ -59,6 +62,7 @@ class EmployeeController extends Controller
     {
         //get validated input
         $input = $request->validated();
+        $user = [];
 
         //store image
         $image = $request->file('image');
@@ -71,14 +75,31 @@ class EmployeeController extends Controller
         if($cv != null){
             $input['cv_file_name'] = $cv->store('employees/cv');
         }
-        
+
+        //add data to user
+        $user['organization_id'] = $request->organization_id;
+        $user['username'] = $request->username;
+        $user['role_id'] = $request->role;
+
         //remove unwanted fields
-        unset($input['image'], $input['cv']);
+        unset($input['image'], $input['cv'], $input['username'], $input['role']);
 
-        //create object based on verified input
-        Employee::create($input);
+        //use transaction to assure success or failure of both operation
+        DB::beginTransaction();
+        try {
+            //create object based on verified input
+            $user['employee_id'] = Employee::create($input)->id;
+            // dd($user);
+            $createUser = new CreateNewUser();
+            $createUser->create($user);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect('/employee/create');
+        }
+
         return redirect('/employee');
-
     }
 
     /**
