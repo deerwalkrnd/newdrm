@@ -55,6 +55,25 @@ class Employee extends Model
         'remarks',
     ];
 
-
+    public function servieType()
+    {
+        return $this->belongsTo(ServiceType::class);
+    }
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+    public function managers()
+    {
+        return $this->has(Manager::class,'manager_id');
+    }
+    public function designation()
+    {
+        return $this->hasOne(Designation::class);
+    }
  
 }

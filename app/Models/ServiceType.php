@@ -11,4 +11,5 @@ class ServiceType extends Model
     public $fillable=[
         'service_type_name'
     ];
+   
 }
