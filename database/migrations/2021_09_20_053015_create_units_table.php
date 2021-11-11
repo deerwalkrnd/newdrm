@@ -17,7 +17,7 @@ class CreateUnitsTable extends Migration
             $table->id();
             $table->integer('version')->default('0');
             $table->string('unit_name');
-            $table->foreignId('organization_id')->constrained('organizations');
+            $table->foreignId('organization_id')->constrained('organizations')->onDelete('restrict');
             $table->timestamps();
         });
     }

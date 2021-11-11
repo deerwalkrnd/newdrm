@@ -7,6 +7,10 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ServiceTypeController;
+use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\RoleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -62,3 +66,27 @@ Route::get('/employee',[EmployeeController::class, 'index']);
 Route::get('/employee/edit/{id}',[EmployeeController::class, 'edit']);
 Route::put('/employee/{id}',[EmployeeController::class, 'update']);
 Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
+
+// service type route
+Route::get('/serviceType/create',[ServiceTypeController::class, 'create']);
+Route::post('/serviceType',[ServiceTypeController::class, 'store']);
+Route::get('/serviceType',[ServiceTypeController::class, 'index']);
+Route::get('/serviceType/edit/{id}',[ServiceTypeController::class, 'edit']);
+Route::put('/serviceType/{id}',[ServiceTypeController::class, 'update']);
+Route::delete('/serviceType/{id}',[ServiceTypeController::class, 'destroy']);
+
+// manager route
+Route::get('/manager/create',[ManagerController::class, 'create']);
+Route::post('/manager',[ManagerController::class, 'store']);
+Route::get('/manager',[ManagerController::class, 'index']);
+Route::get('/manager/edit/{id}',[ManagerController::class, 'edit']);
+Route::put('/manager/{id}',[ManagerController::class, 'update']);
+Route::delete('/manager/{id}',[ManagerController::class, 'destroy']);
+
+// role route
+Route::get('/role/create',[RoleController::class, 'create']);
+Route::post('/role',[RoleController::class, 'store']);
+Route::get('/role',[RoleController::class, 'index']);
+Route::get('/role/edit/{id}',[RoleController::class, 'edit']);
+Route::put('/role/{id}',[RoleController::class, 'update']);
+Route::delete('/role/{id}',[RoleController::class, 'destroy']);

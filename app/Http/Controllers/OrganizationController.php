@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Organization;
 use App\Http\Requests\OrganizationRequest;
-
 class OrganizationController extends Controller
 {
     /**
@@ -93,8 +92,16 @@ class OrganizationController extends Controller
      */
     public function destroy($id)
     {
-        $organization = Organization::findOrFail($id);
-        $organization->delete();
-        return redirect('/organization');
+        try{
+            $organization = Organization::findOrFail($id);
+            $organization->delete();
+            return redirect('/organization');
+    
+        }catch(\Illuminate\Database\QueryException $e){
+            if($e->getCode() == "23000"){
+                return redirect()->back();
+            }
+        }
+    }  
     }
-}
+// }

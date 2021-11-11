@@ -11,7 +11,12 @@ use App\Http\Requests\EmployeeRequest;
 use App\Models\Organization;
 use App\Models\Unit;
 use App\Models\Designation;
+use App\Models\Province;
+use App\Models\District;
+use App\Models\ServiceType;
+use App\Models\Role;
 
+use App\Actions\Fortify\CreateNewUser;
 
 class EmployeeController extends Controller
 {
@@ -39,8 +44,12 @@ class EmployeeController extends Controller
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title_name')->get();
+        $provinces = Province::select('id', 'province_name')->get();
+        $districts = District::select('id', 'district_name', 'province_id')->get();
+        $serviceTypes = ServiceType::select('id','service_type_name')->get();
+        $roles = Role::select('id','authority')->get();
 
-        return view('admin.employee.create')->with(compact('units','organizations','designations'));
+        return view('admin.employee.create')->with(compact('units','organizations','designations','provinces','districts','serviceTypes','roles'));
     }
 
     /**
@@ -51,8 +60,45 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeRequest $request)
     {
-        // dd($request->validated());
-        Employee::create($request->validated());
+        //get validated input
+        $input = $request->validated();
+        $user = [];
+
+        //store image
+        $image = $request->file('image');
+        $cv = $request->file('cv');
+        
+        //merge files
+        if($image!=null){
+            $input['image_name'] = $image->store('employees/images');
+        }
+        if($cv != null){
+            $input['cv_file_name'] = $cv->store('employees/cv');
+        }
+
+        //add data to user
+        $user['organization_id'] = $request->organization_id;
+        $user['username'] = $request->username;
+        $user['role_id'] = $request->role;
+
+        //remove unwanted fields
+        unset($input['image'], $input['cv'], $input['username'], $input['role']);
+
+        //use transaction to assure success or failure of both operation
+        DB::beginTransaction();
+        try {
+            //create object based on verified input
+            $user['employee_id'] = Employee::create($input)->id;
+            // dd($user);
+            $createUser = new CreateNewUser();
+            $createUser->create($user);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect('/employee/create');
+        }
+
         return redirect('/employee');
     }
 
@@ -79,8 +125,12 @@ class EmployeeController extends Controller
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title')->get();
+        $provinces = Province::select('id', 'province_name')->get();
+        $districts = District::select('id', 'district_name', 'province_id')->get();
+        $serviceTypes = ServiceType::select('id','service_type_name')->get();
+        
 
-        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations'));
+        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','districts','serviceTypes'));
     }
 
     /**
