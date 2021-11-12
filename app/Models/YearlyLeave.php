@@ -12,8 +12,16 @@ class YearlyLeave extends Model
     public $fillable = [
         'version',
         'organization_id',
-        'leave_type',
+        'leave_type_id',
         'days',
-        'year'
+        'status'
     ];
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+    public function leaveType()
+    {
+        return $this->belongsTo(leaveType::class);
+    }
 }

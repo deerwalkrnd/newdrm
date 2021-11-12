@@ -10,6 +10,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\YearlyLeaveController;
 
 
 /*
@@ -90,3 +91,12 @@ Route::get('/role',[RoleController::class, 'index']);
 Route::get('/role/edit/{id}',[RoleController::class, 'edit']);
 Route::put('/role/{id}',[RoleController::class, 'update']);
 Route::delete('/role/{id}',[RoleController::class, 'destroy']);
+
+
+// yearly leaves route
+Route::get('/yearly-leaves/create',[YearlyLeaveController::class, 'create']);
+Route::post('/yearly-leaves',[YearlyLeaveController::class, 'store']);
+Route::get('/yearly-leaves',[YearlyLeaveController::class, 'index']);
+Route::get('/yearly-leaves/edit/{id}',[YearlyLeaveController::class, 'edit']);
+Route::put('/yearly-leaves/{id}',[YearlyLeaveController::class, 'update']);
+Route::delete('/yearly-leaves/{id}',[YearlyLeaveController::class, 'destroy']);
