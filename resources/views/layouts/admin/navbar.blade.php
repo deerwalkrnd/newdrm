@@ -22,6 +22,9 @@
                 <a class="nav-link" href="/leaveType">Leave Type</a>
             </li>
             <li class="nav-item active">
+                <a class="nav-link" href="/yearly-leaves">Yearly Leave</a>
+            </li>
+            <li class="nav-item active">
                 <a class="nav-link" href="/employee">Employee</a>
             </li>
             <li class="nav-item active">

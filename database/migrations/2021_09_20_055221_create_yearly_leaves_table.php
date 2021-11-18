@@ -17,11 +17,9 @@ class CreateYearlyLeavesTable extends Migration
             $table->id();
             $table->integer('version')->default('0');
             $table->foreignId('organization_id')->constrained('organizations');
-            $table->foreignId('leave_type')->constrained('leave_types');
-            $table->enum('paid_unpaid',['paid','unpaid']);
+            $table->foreignId('leave_type_id')->constrained('leave_types');
             $table->integer('days');
-            $table->integer('year'); //might change later
-            $table->enum('status',['active','disabled']);
+            $table->enum('status',['active','disabled'])->default('active');
             $table->timestamps();
         });
     }

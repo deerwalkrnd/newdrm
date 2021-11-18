@@ -19,4 +19,8 @@ class Unit extends Model
     {
         return $this->belongsTo(Organization::class);
     }
+    public function employees()
+    {
+        return $this->hasMany(Employee::class,'unit_id');
+    }
 }
