@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->integer('version')->default('0');
             $table->enum('account_expired',['1','0'])->default('0');
             $table->enum('account_locked',['1','0'])->default('0');
-            $table->foreignId('organization_id')->constrained('organizations')->nullable();
+            // $table->foreignId('organization_id')->constrained('organizations')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->unique();
             $table->foreignId('role_id')->constrained('roles')->unique();
             $table->enum('enable',['1','0'])->default('1');

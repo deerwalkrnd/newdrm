@@ -108,7 +108,7 @@
 				<div class="row box-content m-1 p-3">
 					<div class="col-md-12 col-lg-12">
 					<form action="{{ route('login') }}" method="POST">
-					@csrf
+					{{ csrf_field() }}
 						<div class="row">
 							<div class="col-md-3 col-lg-4 col-sm-4 col-6 mt-1 text-right">
 								<span class="title">Username: </span>

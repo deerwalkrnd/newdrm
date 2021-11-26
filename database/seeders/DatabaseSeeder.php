@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
          $this->call([
         ProvinceDistrictTableSeeder::class,
-       
+        DefaultEmployeeSeeder::class, 
     ]);
         // \App\Models\User::factory(10)->create();
     }

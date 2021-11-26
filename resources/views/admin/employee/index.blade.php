@@ -44,7 +44,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <th colspan=5 class="text-center">No Employee Created</th>
+                    <th colspan=11 class="text-center">No Employee Created</th>
                 </tr>
                 @endforelse
             </tbody>

@@ -77,7 +77,7 @@ class EmployeeController extends Controller
         }
 
         //add data to user
-        $user['organization_id'] = $request->organization_id;
+        // $user['organization_id'] = $request->organization_id;
         $user['username'] = $request->username;
         $user['role_id'] = $request->role;
 
