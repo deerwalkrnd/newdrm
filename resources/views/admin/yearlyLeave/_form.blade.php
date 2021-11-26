@@ -6,7 +6,7 @@
         <option 
             value="{{ $organization->id}}" 
             {{ (!empty(old('organization_id')) && old('organization_id') == $organization->id) ? 'selected': ''}}
-            {{ (isset($yearlyLeave) && $unit->organization_id == $organization->id && empty(old('organization_id'))) ? 'selected' : '' }} 
+            {{ (isset($yearlyLeaves) && $yearlyLeaves->organization_id == $organization->id && empty(old('organization_id'))) ? 'selected' : '' }} 
             >
             {{ $organization->name }}
         </option>
@@ -44,7 +44,7 @@
 
 <div class="form-group">
     <label for="days">Leave Days*</label>
-    <input type="text" class="form-control" id="days" placeholder="Enter leave days" name="days" value="{{ !empty(old('days')) ? old('days') : $yearlyLeave->days ?? '' }}">  
+    <input type="text" class="form-control" id="days" placeholder="Enter leave days" name="days" value="{{ !empty(old('days')) ? old('days') : $yearlyLeaves->days ?? '' }}">  
     @error('days')
         <p class="text-danger">{{ $message }}</p>
     @enderror
@@ -58,14 +58,14 @@
         <option 
             value="active" selected
             {{ (!empty(old('status')) && old('status') == 'active') ? 'selected': ''}}
-            {{ (isset($yearlyLeave) && $yearlyLeave->status == 'active' && empty(old('status'))) ? 'selected' : '' }} 
+            {{ (isset($yearlyLeaves) && $yearlyLeaves->status == 'active' && empty(old('status'))) ? 'selected' : '' }} 
             >
             active
         </option>
         <option 
             value="disabled" 
             {{ (!empty(old('status')) && old('status') == 'disabled') ? 'selected': ''}}
-            {{ (isset($yearlyLeave) && $yearlyLeave->status == 'disabled' && empty(old('status'))) ? 'selected' : '' }} 
+            {{ (isset($yearlyLeaves) && $yearlyLeaves->status == 'disabled' && empty(old('status'))) ? 'selected' : '' }} 
             >
             disabled
         </option>
