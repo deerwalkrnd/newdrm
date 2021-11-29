@@ -11,6 +11,7 @@ class LeaveType extends Model
 
     public $fillable = [
         'version',
-        'name'
+        'name',
+        'gender'
     ];
 }

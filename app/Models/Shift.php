@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ServiceType extends Model
+class Shift extends Model
 {
     use HasFactory;
-    public $fillable=[
-        'service_type_name',
-        'date_required'
+
+    public $fillable = [
+        'name',
+        'time_required'
     ];
-   
 }

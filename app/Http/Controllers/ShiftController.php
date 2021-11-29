@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\ServiceType;
-use App\Http\Requests\ServiceTypeRequest;
+use App\Models\Shift;
+use App\Http\Requests\ShiftRequest;
 
-class ServiceTypeController extends Controller
+class ShiftController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class ServiceTypeController extends Controller
      */
     public function index()
     {
-        $serviceTypes = ServiceType::select('id', 'service_type_name')->paginate(10);
-        return view('admin.serviceType.index')->with(compact('serviceTypes'));
+        $shifts = Shift::select('id', 'name')->paginate(10);
+        return view('admin.shift.index')->with(compact('shifts'));
     }
 
     /**
@@ -28,7 +28,7 @@ class ServiceTypeController extends Controller
      */
     public function create()
     {
-        return view('admin.serviceType.create');
+        return view('admin.shift.create');
     }
 
     /**
@@ -37,10 +37,10 @@ class ServiceTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ServiceTypeRequest $request)
+    public function store(ShiftRequest $request)
     {
-        ServiceType::create($request->validated());
-        return redirect('/serviceType');
+        Shift::create($request->validated());
+        return redirect('/shift');
     }
 
     /**
@@ -62,8 +62,8 @@ class ServiceTypeController extends Controller
      */
     public function edit($id)
     {
-        $serviceType = ServiceType::select('id', 'service_type_name', 'date_required')->findOrFail($id);
-        return view('admin.serviceType.edit')->with(compact('serviceType'));
+        $shift = Shift::select('id', 'name', 'time_required')->findOrFail($id);
+        return view('admin.shift.edit')->with(compact('shift'));
     }
 
     /**
@@ -73,14 +73,14 @@ class ServiceTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ServiceTypeRequest $request, $id)
+    public function update(ShiftRequest $request, $id)
     {
-        $serviceType = ServiceType::findOrFail($id);
+        $shift = Shift::findOrFail($id);
 
         //get validated input and merge input fields
         $input = $request->validated();
-        $serviceType->update($input);
-        return redirect('/serviceType');
+        $shift->update($input);
+        return redirect('/shift');
     }
 
     /**
@@ -92,9 +92,9 @@ class ServiceTypeController extends Controller
     public function destroy($id)
     {
         try{
-            $serviceType = ServiceType::findOrFail($id);
-            $serviceType->delete();
-            return redirect('/serviceType');
+            $shift = Shift::findOrFail($id);
+            $shift->delete();
+            return redirect('/shift');
         }
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){

@@ -8,6 +8,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ServiceTypeController;
+use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\YearlyLeaveController;
@@ -77,6 +78,14 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/serviceType/edit/{id}',[ServiceTypeController::class, 'edit']);
     Route::put('/serviceType/{id}',[ServiceTypeController::class, 'update']);
     Route::delete('/serviceType/{id}',[ServiceTypeController::class, 'destroy']);
+
+    // service type route
+    Route::get('/shift/create',[ShiftController::class, 'create']);
+    Route::post('/shift',[ShiftController::class, 'store']);
+    Route::get('/shift',[ShiftController::class, 'index']);
+    Route::get('/shift/edit/{id}',[ShiftController::class, 'edit']);
+    Route::put('/shift/{id}',[ShiftController::class, 'update']);
+    Route::delete('/shift/{id}',[ShiftController::class, 'destroy']);
 
     // manager route
     Route::get('/manager/create',[ManagerController::class, 'create']);

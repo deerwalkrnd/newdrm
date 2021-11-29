@@ -6,3 +6,15 @@
     @enderror
 </div>
 
+<div class="form-group">
+    <div class="form-check form-check-inline">
+        <input type="hidden" name="date_required" value="0">
+        <input class="form-check-input" type="checkbox" name="date_required" id="date_required" value="1" 
+        {{ (isset($serviceType) && $serviceType->date_required == '1') ? 'checked':'' }}
+        {{ old('date_required') == '1' ? 'checked':'' }}>
+        <label for="date_required">Required Start/End Date</label>
+    </div>
+    @error('date_required')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>

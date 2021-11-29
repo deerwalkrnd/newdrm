@@ -16,6 +16,7 @@ class CreateServiceTypesTable extends Migration
         Schema::create('service_types', function (Blueprint $table) {
             $table->id();
             $table->string('service_type_name');
+            $table->enum('date_required',[0,1])->default('0');
             $table->timestamps();
         });
     }

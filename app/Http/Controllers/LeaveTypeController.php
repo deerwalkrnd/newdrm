@@ -64,7 +64,7 @@ class LeaveTypeController extends Controller
      */
     public function edit($id)
     {
-        $leaveType = LeaveType::select('id', 'name')->findOrFail($id);
+        $leaveType = LeaveType::select('id', 'name', 'gender')->findOrFail($id);
         return view('admin.leaveType.edit')->with(compact('leaveType'));
     }
 
