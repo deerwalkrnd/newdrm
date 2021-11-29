@@ -76,7 +76,7 @@ class CreateEmployeesTable extends Migration
             $table->foreignId('unit_id')->constrained('units'); //foreign
             //unit change date missing
             $table->string('email');
-            $table->string('emp_shift');
+            $table->string('shift_id')->constrained('shifts');
             $table->string('remarks')->nullable();
 
 

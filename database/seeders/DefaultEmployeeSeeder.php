@@ -15,7 +15,11 @@ class DefaultEmployeeSeeder extends Seeder
     public function run()
     {
         DB::table('service_types')->insert([
-            'service_type_name' => 'Full Time'
+            'service_type_name' => 'Permanent'
+        ]);
+
+        DB::table('shifts')->insert([
+            'name' => 'Normal'
         ]);
 
         DB::table('designations')->insert([
@@ -59,7 +63,7 @@ class DefaultEmployeeSeeder extends Seeder
             'organization_id' => '1',
             'unit_id' => '1',
             'email' => 'satyadeep.neupane@deerwalk.edu.np',
-            'emp_shift' => 'morning'
+            'shift_id' => '1'
         ]);
 
         DB::table('users')->insert([

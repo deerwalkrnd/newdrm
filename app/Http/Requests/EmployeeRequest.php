@@ -67,7 +67,7 @@ class EmployeeRequest extends FormRequest
             'email' => 'required|email|max:255',
             'username' => 'required|string|max:255',
             'role' => 'required|exists:roles,id',
-            'emp_shift' => 'required|max:255',
+            'shift_id' => 'required|max:255',
             'remarks' => 'nullable|max:255',
         ];
     }

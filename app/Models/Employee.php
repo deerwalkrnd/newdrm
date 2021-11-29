@@ -51,7 +51,7 @@ class Employee extends Model
         'organization_id',
         'unit_id',
         'email',
-        'emp_shift',
+        'shift_id',
         'remarks',
     ];
 

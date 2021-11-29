@@ -526,6 +526,30 @@
 </div>
 <!-- role -->
 
+
+<div class="form-group">
+    <label for="shift_id">Shift*</label>
+    <select class="form-control" id="shift_id" name="shift_id">
+        <option value="" disabled="disabled" selected="selected">-- Choose Shift --</option>
+        @forelse($shifts as $shift)
+        <option 
+            value="{{ $shift->id}}" 
+            {{ (!empty(old('shift_id')) && old('shift_id') == $shift->id) ? 'selected': ''}}
+            {{ (isset($employee) && $employee->shift_id == $shift->id && empty(old('shift_id'))) ? 'selected' : '' }} 
+            >
+            {{ $shift->name }}
+        </option>
+        @empty
+        <!-- no options -->
+        @endforelse
+    </select>
+    @error('shift_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+<!-- Shift -->
+
+@if(1==0)
 <div class="form-group">
     <label for="emp_shift">Shift*</label>
     <select class="form-control" id="emp_shift" name="emp_shift">
@@ -571,6 +595,7 @@
     @enderror
 </div>
 <!-- emp_shift -->
+@endif
 
 <div class="form-group">
     <label for="remarks">Employee Remarks</label>

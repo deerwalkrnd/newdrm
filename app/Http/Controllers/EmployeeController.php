@@ -14,6 +14,7 @@ use App\Models\Designation;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\ServiceType;
+use App\Models\Shift;
 use App\Models\Role;
 
 use App\Actions\Fortify\CreateNewUser;
@@ -47,9 +48,10 @@ class EmployeeController extends Controller
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
+        $shifts = Shift::select('id','name')->get();
         $roles = Role::select('id','authority')->get();
 
-        return view('admin.employee.create')->with(compact('units','organizations','designations','provinces','districts','serviceTypes','roles'));
+        return view('admin.employee.create')->with(compact('units','organizations','designations','provinces','districts','serviceTypes','shifts','roles'));
     }
 
     /**
@@ -128,9 +130,10 @@ class EmployeeController extends Controller
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
+        $shifts = Shift::select('id','name')->get();
         
 
-        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','districts','serviceTypes'));
+        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','districts','serviceTypes','shifts'));
     }
 
     /**
