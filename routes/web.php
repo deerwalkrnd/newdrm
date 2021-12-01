@@ -12,6 +12,7 @@ use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\YearlyLeaveController;
+use App\Http\Controllers\AttendanceController;
 
 
 /*
@@ -110,6 +111,10 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/yearly-leaves/edit/{id}',[YearlyLeaveController::class, 'edit']);
     Route::put('/yearly-leaves/{id}',[YearlyLeaveController::class, 'update']);
     Route::delete('/yearly-leaves/{id}',[YearlyLeaveController::class, 'destroy']);
+
+    Route::get('/punch-in',[AttendanceController::class, 'index']);
+    Route::post('/punch-in',[AttendanceController::class, 'punchIn']);
+    Route::post('/punch-out',[AttendanceController::class, 'punchOut']);
 });
 
 

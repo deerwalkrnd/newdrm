@@ -40,6 +40,12 @@
                 <a class="nav-link" href="/role">Role</a>
             </li>
         </ul>
+        @if(session('punchIn') == 2)
+        <form class="form-inline my-2 my-lg-0 mr-3" action="/punch-out" method="POST" onsubmit="return confirm('Do you want to punch-out?');">
+            @csrf
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Punch Out</button>
+        </form>
+        @endif
         <form class="form-inline my-2 my-lg-0" action="/logout" method="POST">
             @csrf
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
