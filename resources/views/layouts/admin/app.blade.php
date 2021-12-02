@@ -12,8 +12,9 @@
 
         <!-- custom css -->
         <link href="/assets/css/style.css" rel="stylesheet" type="text/css">    
+        <link href="/assets/images/login/favicon.gif" rel="shortcut icon">
         <title>DRM</title>
-
+        
         <!-- Select 2 assets -->
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     </head>
