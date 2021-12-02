@@ -12,6 +12,7 @@ use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\YearlyLeaveController;
+use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\AttendanceController;
 
 
@@ -111,6 +112,14 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/yearly-leaves/edit/{id}',[YearlyLeaveController::class, 'edit']);
     Route::put('/yearly-leaves/{id}',[YearlyLeaveController::class, 'update']);
     Route::delete('/yearly-leaves/{id}',[YearlyLeaveController::class, 'destroy']);
+
+    // leave request route
+    Route::get('/leave-request/create',[LeaveRequestController::class, 'create']);
+    Route::post('/leave-request',[LeaveRequestController::class, 'store']);
+    Route::get('/leave-request',[LeaveRequestController::class, 'index']);
+    Route::get('/leave-request/edit/{id}',[LeaveRequestController::class, 'edit']);
+    Route::put('/leave-request/{id}',[LeaveRequestController::class, 'update']);
+    Route::delete('/leave-request/{id}',[LeaveRequestController::class, 'destroy']);
 
     Route::get('/punch-in',[AttendanceController::class, 'index']);
     Route::post('/punch-in',[AttendanceController::class, 'punchIn']);

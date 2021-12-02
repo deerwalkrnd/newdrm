@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\LeaveRequest;
+use App\Models\LeaveType;
 use App\Http\Requests\LeaveRequestRequest;
 
 class LeaveRequestController extends Controller
@@ -17,7 +18,8 @@ class LeaveRequestController extends Controller
      */
     public function index()
     {
-        $leaveRequests = LeaveType::select('id', 'start_date', 'end_date', 'days',' leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
+        $leaveRequests = LeaveRequest::select('id', 'start_date', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
+        ->with(['employee:id,first_name,last_name','leaveType:id,name'])     
         ->orderBy('created_at')
         ->orderBy('updated_at')
         ->paginate(10);
@@ -32,7 +34,8 @@ class LeaveRequestController extends Controller
      */
     public function create()
     {
-        return view('admin.leaveRequest.create');
+        $leaveTypes = LeaveType::select('id','name')->get();
+        return view('admin.leaveRequest.create')->with(compact('leaveTypes'));
     }
 
     /**
@@ -43,7 +46,19 @@ class LeaveRequestController extends Controller
      */
     public function store(LeaveRequestRequest $request)
     {
-        LeaveRequest::create($request->validated());
+        // dd($request);
+        $data = $request->validated();
+        $data['employee_id'] = \Auth::user()->id;
+        if(isset($data->half_leave) && ($data->half_leave == 1))
+        {
+            $data['half_leave'] = '1';
+        }else{
+            $data['full_leave'] = '1';
+        }
+
+        $data['accepted_by'] = '1';
+
+        LeaveRequest::create($data);
         return redirect('/leave-request');
     }
 

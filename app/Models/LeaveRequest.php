@@ -27,6 +27,11 @@ class LeaveRequest extends Model
         return $this->belongsTo(Employee::class,'id');
     }
 
+    public function leaveType()
+    {
+        return $this->belongsTo(LeaveType::class,'id');
+    }
+
     public function accepted_by_detail()
     {
         return $this->hasOne(Employee::class);

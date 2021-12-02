@@ -16,7 +16,7 @@
                     <th scope="col">Days</th>
                     <th scope="col">Reason</th>
                     <th scope="col">State</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
 
@@ -24,19 +24,23 @@
                 @forelse($leaveRequests as $leaveRequest)
                 <tr>
                     <th scope="row" class="pl-4">{{ $loop->iteration }}</th>
-                    <td>{{ $leaveRequest->employee_id }}</td>
-                    <td>{{ $leaveRequest->leave_type }}</td>
-                    <td>{{ $leaveRquest->start_date }}</td>
-                    <td>{{ $leaveRquest->end_date }}</td>
-                    <td>{{ $leaveRquest->days }}</td>
-                    <td>{{ $leaveRquest->reason }}</td>
-                    <td>{{ $leaveRquest->acceptance }}</td>
+                    <td>{{ $leaveRequest->employee->first_name.' '.$leaveRequest->employee->last_name }}</td>
+                    <td>{{ $leaveRequest->leaveType->name }}</td>
+                    <td>{{ $leaveRequest->start_date }}</td>
+                    <td>{{ $leaveRequest->end_date }}</td>
+                    <td>{{ $leaveRequest->days }}</td>
+                    <td>{{ $leaveRequest->reason }}</td>
+                    <td>{{ $leaveRequest->acceptance }}</td>
                     <td>
                         <form action="/leaveRequest/{{ $leaveRequest->id }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="delete">Delete</button>
                         </form>
+                        |
+                        <a href="#">Accept</a>
+                        |
+                        <a href="#">Reject</a>
                     </td>
                 </tr>
                 @empty

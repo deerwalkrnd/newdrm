@@ -24,16 +24,12 @@ class LeaveRequestRequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_id' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
             'days' => 'required',
             'leave_type_id' => 'required',
-            'full_leave' => 'required',
             'half_leave' => 'nullable',
             'reason' => 'required',
-            'acceptance' => 'required',
-            'accepted_by' => 'nullable',
         ];
     }
 }
