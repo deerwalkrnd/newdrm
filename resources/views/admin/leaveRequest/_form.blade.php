@@ -30,8 +30,6 @@
     @enderror
 </div>
 
-
-
 <div class="form-group">
     <label for="days">Leave Days</label>
     <input type="number" class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : $leaveRequest->days ?? '' }}">

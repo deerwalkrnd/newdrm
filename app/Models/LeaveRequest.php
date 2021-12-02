@@ -24,12 +24,12 @@ class LeaveRequest extends Model
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class,'id');
+        return $this->belongsTo(Employee::class,'employee_id');
     }
 
     public function leaveType()
     {
-        return $this->belongsTo(LeaveType::class,'id');
+        return $this->belongsTo(LeaveType::class,'leave_type_id');
     }
 
     public function accepted_by_detail()

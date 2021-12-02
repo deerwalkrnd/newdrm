@@ -75,5 +75,9 @@ class Employee extends Model
     {
         return $this->hasOne(Designation::class);
     }
+    public function leaveRequest()
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
  
 }

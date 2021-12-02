@@ -32,15 +32,45 @@
                     <td>{{ $leaveRequest->reason }}</td>
                     <td>{{ $leaveRequest->acceptance }}</td>
                     <td>
-                        <form action="/leaveRequest/{{ $leaveRequest->id }}" method="POST" class="d-inline">
+                        @if($leaveRequest->acceptance == 'pending')
+                        <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="delete">Delete</button>
                         </form>
                         |
-                        <a href="#">Accept</a>
+                        <form action="/leave-request/accept/{{ $leaveRequest->id }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="delete">Accept</button>
+                        </form>
                         |
-                        <a href="#">Reject</a>
+                        <form action="/leave-request/reject/{{ $leaveRequest->id }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="delete">Reject</button>
+                        </form>
+                        @else
+                        <div class="dropdown">
+                            <button class="btn btn-{{ $leaveRequest->acceptance == 'accepted' ? 'success' : 'danger' }} dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                            {{ $leaveRequest->acceptance }}
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <form action="/leave-request/accept/{{ $leaveRequest->id }}" method="POST" class="dropdown-item">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="delete" style="width:100%;">Accept</button>
+                                </form>
+                                <!-- accept -->
+                                <form action="/leave-request/reject/{{ $leaveRequest->id }}" method="POST" class="dropdown-item">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="delete" style="width:100%;">Reject</button>
+                                </form>
+                                <!-- reject -->
+                            </div>
+                        </div>
+                        @endif
                     </td>
                 </tr>
                 @empty

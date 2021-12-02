@@ -19,7 +19,7 @@ class LeaveRequestController extends Controller
     public function index()
     {
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
-        ->with(['employee:id,first_name,last_name','leaveType:id,name'])     
+        ->with(['employee:id,first_name,last_name','leaveType:id,name'])
         ->orderBy('created_at')
         ->orderBy('updated_at')
         ->paginate(10);
@@ -106,6 +106,28 @@ class LeaveRequestController extends Controller
     {
         $leaveRequest = LeaveRequest::where('acceptance','pending')->findOrFail($id);
         $leaveRequest->delete();
+        return redirect('/leave-request');
+    }
+
+    public function accept($id)
+    {
+        LeaveRequest::findOrFail($id)
+        ->update([
+            'acceptance' => 'accepted',
+            'accepted_by' => \Auth::user()->id
+        ]);
+
+        return redirect('/leave-request');
+    }
+
+    public function reject($id)
+    {
+        LeaveRequest::findOrFail($id)
+        ->update([
+            'acceptance' => 'rejected',
+            'accepted_by' => \Auth::user()->id
+        ]);
+
         return redirect('/leave-request');
     }
 }

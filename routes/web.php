@@ -120,6 +120,8 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/leave-request/edit/{id}',[LeaveRequestController::class, 'edit']);
     Route::put('/leave-request/{id}',[LeaveRequestController::class, 'update']);
     Route::delete('/leave-request/{id}',[LeaveRequestController::class, 'destroy']);
+    Route::put('/leave-request/accept/{id}',[LeaveRequestController::class, 'accept']);
+    Route::put('/leave-request/reject/{id}',[LeaveRequestController::class, 'reject']);
 
     Route::get('/punch-in',[AttendanceController::class, 'index']);
     Route::post('/punch-in',[AttendanceController::class, 'punchIn']);
