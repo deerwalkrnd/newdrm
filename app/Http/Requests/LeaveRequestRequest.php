@@ -28,7 +28,7 @@ class LeaveRequestRequest extends FormRequest
             'end_date' => 'required',
             'days' => 'required',
             'leave_type_id' => 'required',
-            'half_leave' => 'nullable',
+            'leave_time' => 'required|in:full,first,second',
             'reason' => 'required',
         ];
     }

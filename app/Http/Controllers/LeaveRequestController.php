@@ -46,17 +46,22 @@ class LeaveRequestController extends Controller
      */
     public function store(LeaveRequestRequest $request)
     {
-        // dd($request);
         $data = $request->validated();
         $data['employee_id'] = \Auth::user()->id;
-        if(isset($data->half_leave) && ($data->half_leave == 1))
+        
+        if($data['leave_time'] == 'full')
         {
-            $data['half_leave'] = '1';
-        }else{
             $data['full_leave'] = '1';
+        }else{
+            $data['full_leave'] = '0';
+            if($data['leave_time'] == 'first'){
+                $data['half_leave'] = 'first';
+            }else{
+                $data['half_leave'] = 'second';
+            }
         }
 
-        $data['accepted_by'] = '1';
+        $data['accepted_by'] = \Auth::user()->id;
 
         LeaveRequest::create($data);
         return redirect('/leave-request');
