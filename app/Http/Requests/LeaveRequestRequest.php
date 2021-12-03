@@ -23,10 +23,15 @@ class LeaveRequestRequest extends FormRequest
      */
     public function rules()
     {
+        $today = date('Y-m-d');
+        $start_date = \Request::input('start_date');
+        $end_date = \Request::input('end_date');
+        $calcDay = ((strtotime($end_date) - strtotime($start_date))/ (60 * 60 * 24)) + 1;
+        
         return [
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'days' => 'required',
+            'start_date' => 'required|after_or_equal:'.$today,
+            'end_date' => 'required|after_or_equal:start_date',
+            'days' => 'required|in:'.$calcDay,
             'leave_type_id' => 'required',
             'leave_time' => 'required|in:full,first,second',
             'reason' => 'required',

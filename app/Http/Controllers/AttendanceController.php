@@ -78,8 +78,28 @@ class AttendanceController extends Controller
         if(!$this->recordRowExists()){
             if($request->code == $this->verificationCode)
             {
-                $maxTime = strtotime(date('Y-m-d').' 09:20:00');
                 $presentTime = strtotime(Carbon::now());
+                $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
+                            ->whereDate('end_date', '>=', $presentTime)
+                            ->where('employee_id', \Auth::user()->id)->count();
+
+                if($hasAnyLeave !== 0)
+                {
+                    $maxTime = strtotime(date('Y-m-d').' 09:20:00');
+                }else{
+                    $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
+                            ->whereDate('end_date', '>=', $presentTime)
+                            ->where('employee_id', \Auth::user()->id)->get();
+                    $full_leave = $leave->full_leave;
+                    if($full_leave == 0){
+                        $half = $leave->half_leave;
+                        if($half == 'second')
+                        {
+                            $maxTime = strtotime(date('Y-m-d').' 13:30:00');
+                        }
+                    }
+                }
+                
                 $isLate = $presentTime <= $maxTime ? '0' : '1';
                 $reason = $request->reason;
                 // if reason is null for isLate true throw error
@@ -102,6 +122,30 @@ class AttendanceController extends Controller
         $today = date('Y-m-d');
         if($this->recordRowExists() && !$this->hasPunchOut())
         {
+            $presentTime = strtotime(Carbon::now());
+            $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
+                        ->whereDate('end_date', '>=', $presentTime)
+                        ->where('employee_id', \Auth::user()->id)->count();
+
+            if($hasAnyLeave !== 0)
+            {
+                $minTime = strtotime(date('Y-m-d').' 18:00:00');
+            }else{
+                $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
+                        ->whereDate('end_date', '>=', $presentTime)
+                        ->where('employee_id', \Auth::user()->id)->get();
+                $full_leave = $leave->full_leave;
+                if($full_leave == 0){
+                    $half = $leave->half_leave;
+                    if($half == 'first')
+                    {
+                        $minTime = strtotime(date('Y-m-d').' 13:30:00');
+                    }
+                }
+            }
+
+            $issueForcedLeave = $presentTime < $minTime ? '1' : '0';
+
             $attendance = Attendance::select('punch_out_time')
                         ->where('employee_id',$employee_id)
                         ->whereDate('created_at',$today)
@@ -109,6 +153,21 @@ class AttendanceController extends Controller
                             'punch_out_time' => Carbon::now()->toDateTimeString()
                         ]);
             \Session::put('punchIn', '3');
+
+            if($issueForcedLeave == 1)
+            {
+                LeaveType::create([
+                    'employee_id' => \Auth::user()->id,
+                    'start_date' => date('Y-m-d'),
+                    'end_date' => date('Y-m-d'),
+                    'days' => '1',
+                    'leave_type_id' => '1',
+                    'full_leave' => '1',
+                    'reason' => 'Forced (System)',
+                    'acceptance' => 'system',
+                    // 'accepted_by' => hr
+                ]);
+            }
         }
 
         return redirect($this->redirect_to);
