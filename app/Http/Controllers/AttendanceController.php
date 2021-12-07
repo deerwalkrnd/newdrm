@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
+use App\Models\LeaveRequest;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -63,8 +64,6 @@ class AttendanceController extends Controller
         //set punch-in state;
         \Session::put('punchIn', $state);
 
-        // dd(session('punchIn'));
-
         if($state == 1)
         {
             return view('admin.attendance.punchIn')->with(['code' => $this->verificationCode]);
@@ -83,7 +82,7 @@ class AttendanceController extends Controller
                             ->whereDate('end_date', '>=', $presentTime)
                             ->where('employee_id', \Auth::user()->id)->count();
 
-                if($hasAnyLeave !== 0)
+                if($hasAnyLeave == 0)
                 {
                     $maxTime = strtotime(date('Y-m-d').' 09:20:00');
                 }else{
@@ -127,7 +126,7 @@ class AttendanceController extends Controller
                         ->whereDate('end_date', '>=', $presentTime)
                         ->where('employee_id', \Auth::user()->id)->count();
 
-            if($hasAnyLeave !== 0)
+            if($hasAnyLeave == 0)
             {
                 $minTime = strtotime(date('Y-m-d').' 18:00:00');
             }else{
