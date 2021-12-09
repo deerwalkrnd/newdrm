@@ -2,27 +2,29 @@
 
 @section('content')
 <div class="my-table">
-    <a href="/leaveType/create"><button class="btn btn-primary float-right">Add Leave Type</button></a>
-    <h3 class="text-success text-center">Leave Type List</h3>
+    <a href="/holiday/create"><button class="btn btn-primary float-right">Add Holiday</button></a>
+    <h3 class="text-success text-center">Holiday List</h3>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th scope="col" class="pl-4">S.N</th>
-                    <th scope="col">Type</th>
+                    <th scope="col">Name</th>
+                    <th scope='col'>Date</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
 
             <tbody>
-                @forelse($leaveTypes as $leaveType)
+                @forelse($holidays as $holiday)
                 <tr>
                     <th scope="row" class="pl-4">{{ $loop->iteration }}</th>
-                    <td>{{ $leaveType->name }}</td>
+                    <td>{{ $holiday->name }}</td>
+                    <td>{{ $holiday->date }}</td>
                     <td>
-                        <a href="/leaveType/edit/{{ $leaveType->id }}">Edit</a> 
+                        <a href="/holiday/edit/{{ $holiday->id }}">Edit</a> 
                         | 
-                        <form action="/leaveType/{{ $leaveType->id }}" method="POST" class="d-inline">
+                        <form action="/holiday/{{ $holiday->id }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="delete">Delete</button>
@@ -31,12 +33,12 @@
                 </tr>
                 @empty
                 <tr>
-                    <th colspan=5 class="text-center">No Leave Type Created</th>
+                    <th colspan=5 class="text-center">No Holiday Created</th>
                 </tr>
                 @endforelse
             </tbody>
         </table>
-        {{ $leaveTypes->links() }}
+        {{ $holidays->links() }}
     </div>
 </div>
 @endsection
