@@ -20,6 +20,7 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input)
     {
+        // dd($input);
         Validator::make($input, [
             // 'organization_id' => ['required','exists:organizations,id'],
             'employee_id' => ['required','exists:employees,id','unique:users'],
@@ -32,14 +33,13 @@ class CreateNewUser implements CreatesNewUsers
             ],
             // 'password' => $this->passwordRules(),
         ])->validate();
-
-        return User::create([
-            'username' => $input['username'],
-            'role_id' => $input['role_id'],
-            // 'employee_id' => $input['employee_id'],
-            'organization_id' => $input['organization_id'],            
-            'password' => Hash::make('Deerwa1k@DRM'),
-            // 'password' => Hash::make($input['password']),
-        ]);
+        $user=['username'=>$input['username'],
+            'role_id'=>$input['role_id'],
+            'employee_id'=>$input['employee_id'],
+            // 'organization_id'=>$input['organization_id'], 
+            'password'=>Hash::make('Deerwa1k@DRM')];
+            // dd($user);
+        return(User::create($user));
+        // dd($user);
     }
 }

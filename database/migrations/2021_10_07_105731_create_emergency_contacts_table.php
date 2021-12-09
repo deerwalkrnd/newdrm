@@ -22,7 +22,7 @@ class CreateEmergencyContactsTable extends Migration
             $table->string('last_name');
             $table->string('relationship');
             $table->string('phone_no');
-            $table->string('alternate_phone_no');
+            $table->string('alternate_phone_no')->nullable();
             $table->timestamps();
         });
     }

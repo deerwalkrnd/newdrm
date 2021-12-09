@@ -24,7 +24,7 @@ class EmployeeRequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_id' => 'required',
+            // 'employee_id' => 'required',
             // 'employee_id' => 'required|unique:employees,employee_id,'.$this->id,
             'first_name' => 'required',
             'last_name' => 'required',
@@ -69,6 +69,12 @@ class EmployeeRequest extends FormRequest
             'role' => 'required|exists:roles,id',
             'shift_id' => 'required|max:255',
             'remarks' => 'nullable|max:255',
+            'emg_first_name' =>'required|max:255|string',
+            'emg_middle_name' =>'nullable|max:255',
+            'emg_last_name' =>'required|max:255|string',
+            'emg_relationship' =>'required|max:255|string',
+            'emg_contact' =>'required|max:15|min:7|string',
+            'emg_alternate_contact' =>'nullable|min:7|max:15',
         ];
     }
 }
