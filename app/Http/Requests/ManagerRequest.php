@@ -25,7 +25,7 @@ class ManagerRequest extends FormRequest
     {
         return [
             'employee_id'=>'required|exists:employees,id|unique:managers,employee_id,'.$this->id,
-            'is_active'=>'required|max:8'
+            'is_active'=>'required|string|max:8'
         ];
     }
 }

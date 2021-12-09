@@ -25,7 +25,7 @@ class DesignationRequest extends FormRequest
     {
         return [
             'job_title_name' => 'required|max:255|unique:designations,job_title_name,'.$this->id,
-            'job_description' => 'required|max:255',
+            'job_description' => 'required|max:255|string',
         ];
     }
 }
