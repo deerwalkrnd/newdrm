@@ -11,7 +11,7 @@ class Employee extends Model
 
     public $fillable = [
         'version',
-        'employee_id',
+        // 'employee_id',
         'first_name',
         'last_name',
         'middle_name',
@@ -79,5 +79,8 @@ class Employee extends Model
     {
         return $this->hasMany(LeaveRequest::class);
     }
- 
+    public function emergencyContact()
+    {
+        return $this->hasOne(EmergencyContact::class,'employee_id','id');
+    }
 }

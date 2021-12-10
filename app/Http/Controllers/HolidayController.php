@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Holiday;
 
 use Illuminate\Http\Request;
+
+use App\Http\Requests\HolidayRequest;
 
 class HolidayController extends Controller
 {
@@ -13,7 +16,8 @@ class HolidayController extends Controller
      */
     public function index()
     {
-        //
+        $holidays = Holiday::select('id','name','date','female_only')->orderBy('name')->paginate(10);
+        return view('admin.holiday.index')->with(compact('holidays'));
     }
 
     /**
@@ -23,7 +27,7 @@ class HolidayController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.holiday.create');
     }
 
     /**
@@ -32,9 +36,12 @@ class HolidayController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HolidayRequest $request)
     {
-        //
+        // dd($request);
+        $input = $request->validated();
+        Holiday::create($input);
+        return redirect('/holiday');
     }
 
     /**
@@ -56,7 +63,8 @@ class HolidayController extends Controller
      */
     public function edit($id)
     {
-        //
+        $holiday = Holiday::findOrFail($id);
+        return view('admin.holiday.edit')->with(compact('holiday'));
     }
 
     /**
@@ -66,9 +74,13 @@ class HolidayController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(HolidayRequest $request, $id)
     {
-        //
+        $holiday = Holiday::findOrFail($id);
+        $input = $request->validated();
+        
+        $holiday->update($input);
+        return redirect('/holiday');
     }
 
     /**
@@ -79,6 +91,15 @@ class HolidayController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            $holiday = Holiday::findOrFail($id);
+            $holiday->delete();
+            return redirect('/holiday');
+
+        }catch(\Illuminate\Database\QueryException $e){
+            if($e->getCode() == "23000"){
+                return redirect()->back();
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->integer('version')->default(0);
             // personal details
-            $table->string('employee_id');
+            // $table->string('employee_id');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('middle_name')->nullable();

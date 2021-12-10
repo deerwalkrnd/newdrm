@@ -16,6 +16,7 @@ use App\Models\District;
 use App\Models\ServiceType;
 use App\Models\Shift;
 use App\Models\Role;
+use App\Models\EmergencyContact;
 
 use App\Actions\Fortify\CreateNewUser;
 
@@ -65,7 +66,10 @@ class EmployeeController extends Controller
         //get validated input
         $input = $request->validated();
         $user = [];
-
+        $testUser = new Employee;
+        $emergency_contact =[];
+        $emergencyContact = new EmergencyContact;
+        // dd(gettype($testUser));
         //store image
         $image = $request->file('image');
         $cv = $request->file('cv');
@@ -82,25 +86,41 @@ class EmployeeController extends Controller
         // $user['organization_id'] = $request->organization_id;
         $user['username'] = $request->username;
         $user['role_id'] = $request->role;
+        
+        $testUser->username = $input['username'];
+        $testUser->role_id = $input['role'];
 
-        //remove unwanted fields
+
+        $emergency_contact['first_name'] = $input['emg_first_name'];
+        $emergency_contact['last_name'] =  $input['emg_last_name'];
+        $emergency_contact['middle_name'] =  $input['emg_middle_name'];
+        $emergency_contact['relationship'] =  $input['emg_relationship'];
+        $emergency_contact['phone_no'] = $input['emg_contact'];
+        $emergency_contact['alternate_phone_no'] =  $input['emg_alternate_contact'];
+        // $emergency_contact['employee_id'] =  $input['employee_id'];
+     
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
-
-        //use transaction to assure success or failure of both operation
+        unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
+ 
         DB::beginTransaction();
         try {
-            //create object based on verified input
             $user['employee_id'] = Employee::create($input)->id;
-            // dd($user);
+            $emergency_contact['employee_id']=$user['employee_id'];
+            // dd($emergency_contact);
             $createUser = new CreateNewUser();
             $createUser->create($user);
-
+            
+            EmergencyContact::create($emergency_contact);
+            // dd("here");
             DB::commit();
+            // dd("here");
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
             return redirect('/employee/create');
         }
-
+        // dd("after db");
+        
         return redirect('/employee');
     }
 
@@ -123,17 +143,22 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        $employee = Employee::findOrFail($id);
+        $employee = Employee::with('emergencyContact')->findOrFail($id);
+        // $employee = Employee::where('id',$id)->get();
+        
+        // dd($employee);
+
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
-        $designations = Designation::select('id','job_title')->get();
+        $designations = Designation::select('id','job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name')->get();
-        
-
-        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','districts','serviceTypes','shifts'));
+        // $emergency_contacts = EmergencyContact::select('id','first_name','last_name','middle_name','relationship','phone_no','alternate_phone_no')->where('employee_id',$id)->get();
+        // $emergency_contact = EmergencyContact::FindOrFail($id);
+        $roles = Role::select('authority')->get();
+        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles'));
     }
 
     /**

@@ -9,13 +9,13 @@
     </div>
 @endif
 
-<div class="form-group">
+<!-- <div class="form-group">
     <label for="employee_id">Employee Id*</label>
     <input type="number" class="form-control" id="employee_id" placeholder="Enter Employee Id" name="employee_id" value="{{ !empty(old('employee_id')) ? old('employee_id') : $employee->employee_id ?? '' }}" min=1>
     @error('employee_id')
         <p class="text-danger">{{ $message }}</p>
     @enderror
-</div>
+</div> -->
 <!-- employee id -->
 
 <div class="form-group">
@@ -564,8 +564,8 @@
     <legend>Emergency Contact</legend>
     
     <div class="form-group">
-        <label for="emg_first_name">First Name</label>
-        <input type="text" class="form-control" id="emg_first_name" placeholder="Enter Emergency Contact First Name" name="emg_first_name" value="">
+        <label for="emg_first_name">First Name*</label>
+        <input type="text" class="form-control" id="emg_first_name" placeholder="Enter Emergency Contact First Name" name="emg_first_name" value="{{ !empty(old('emg_first_name')) ? old('emg_first_name') : $employee->emergencyContact->first_name?? '' }}">
         @error('emg_first_name')
             <p class="text-danger">{{ $message }}</p>
         @enderror
@@ -574,7 +574,7 @@
 
     <div class="form-group">
         <label for="emg_middle_name">Middle Name</label>
-        <input type="text" class="form-control" id="emg_middle_name" placeholder="Enter Emergency Contact Middle Name" name="emg_middle_name" value="">
+        <input type="text" class="form-control" id="emg_middle_name" placeholder="Enter Emergency Contact Middle Name" name="emg_middle_name" value="{{ !empty(old('emg_middle_name')) ? old('emg_middle_name') : $employee->emergencyContact->middle_name?? '' }}">
         @error('emg_middle_name')
             <p class="text-danger">{{ $message }}</p>
         @enderror
@@ -582,8 +582,8 @@
     <!-- emg_middle_name -->
 
     <div class="form-group">
-        <label for="emg_last_name">Last Name</label>
-        <input type="text" class="form-control" id="emg_last_name" placeholder="Enter Emergency Contact Last Name" name="emg_last_name" value="">
+        <label for="emg_last_name">Last Name*</label>
+        <input type="text" class="form-control" id="emg_last_name" placeholder="Enter Emergency Contact Last Name" name="emg_last_name" value="{{ !empty(old('emg_last_name')) ? old('emg_last_name') : $employee->emergencyContact->last_name?? '' }}">
         @error('emg_last_name')
             <p class="text-danger">{{ $message }}</p>
         @enderror
@@ -591,27 +591,27 @@
     <!-- emg_last_name -->
 
     <div class="form-group">
-        <label for="relationship">Relationship</label>
-        <input type="text" class="form-control" id="relationship" placeholder="Enter Emergency Contact First Name" name="relationship" value="">
-        @error('relationship')
+        <label for="emg_relationship">Relationship*</label>
+        <input type="text" class="form-control" id="emg_relationship" placeholder="Enter Emergency Contact First Name" name="emg_relationship" value="{{ !empty(old('emg_relationship')) ? old('emg_relationship') : $employee->emergencyContact->relationship ?? '' }}">
+        @error('emg_relationship')
             <p class="text-danger">{{ $message }}</p>
         @enderror
     </div>
     <!-- relationship -->
 
     <div class="form-group">
-        <label for="contact">Emergency Contact</label>
-        <input type="text" class="form-control" id="contact" placeholder="Enter Emergency Contact First Name" name="contact" value="">
-        @error('contact')
+        <label for="emg_contact">Emergency Contact*</label>
+        <input type="text" class="form-control" id="emg_contact" placeholder="Enter Emergency Contact First Name" name="emg_contact" value="{{ !empty(old('emg_contact')) ? old('emg_contact') : $employee->emergencyContact->phone_no?? '' }}">
+        @error('emg_contact')
             <p class="text-danger">{{ $message }}</p>
         @enderror
     </div>
     <!-- contact -->
 
     <div class="form-group">
-        <label for="alternate_contact">Alternate Contact</label>
-        <input type="text" class="form-control" id="alternate_contact" placeholder="Enter Emergency Alternate_contact First Name" name="alternate_contact" value="">
-        @error('alternate_contact')
+        <label for="emg_alternate_contact">Alternate Contact</label>
+        <input type="text" class="form-control" id="emg_alternate_contact" placeholder="Enter Emergency Alternate_contact First Name" name="emg_alternate_contact" value="{{ !empty(old('emg_alternate_contact')) ? old('emg_alternate_contact') : $employee->emergencyContact->alternate_phone_no?? '' }}">
+        @error('emg_alternate_contact')
             <p class="text-danger">{{ $message }}</p>
         @enderror
     </div>

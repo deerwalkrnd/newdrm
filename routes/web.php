@@ -14,6 +14,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\YearlyLeaveController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\HolidayController;
 
 
 /*
@@ -126,6 +127,14 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/punch-in',[AttendanceController::class, 'index']);
     Route::post('/punch-in',[AttendanceController::class, 'punchIn']);
     Route::post('/punch-out',[AttendanceController::class, 'punchOut']);
+
+    // holiday route
+    Route::get('/holiday/create',[HolidayController::class, 'create']);
+    Route::post('/holiday',[HolidayController::class, 'store']);
+    Route::get('/holiday',[HolidayController::class, 'index']);
+    Route::get('/holiday/edit/{id}',[HolidayController::class, 'edit']);
+    Route::put('/holiday/{id}',[HolidayController::class, 'update']);
+    Route::delete('/holiday/{id}',[HolidayController::class, 'destroy']);
 });
 
 

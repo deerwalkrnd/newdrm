@@ -42,7 +42,7 @@ class DefaultEmployeeSeeder extends Seeder
         ]);
 
         DB::table('employees')->insert([
-            'employee_id' => '1',
+            // 'employee_id' => '1',
             'first_name' => 'Ram',
             'last_name' => 'Sharma',
             'date_of_birth' => '1990-01-01',

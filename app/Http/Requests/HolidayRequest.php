@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrganizationRequest extends FormRequest
+class HolidayRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,11 @@ class OrganizationRequest extends FormRequest
      */
     public function rules()
     {
+        // dd(\Request::input());
         return [
-            'name' => 'required|string|max:255|unique:organizations,name,'.$this->id,
-            'code' => 'required|string|max:255|unique:organizations,code,'.$this->id,
+            'name'=>'required|string|max:255',
+            'date'=>'required|date|unique:holidays,date',
+            'female_only'=>'required|numeric',
         ];
     }
 }

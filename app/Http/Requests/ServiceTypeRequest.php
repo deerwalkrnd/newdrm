@@ -24,8 +24,8 @@ class ServiceTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'service_type_name' => 'required|max:255|unique:service_types,service_type_name,'.$this->id,
-            'date_required' => 'nullable'
+            'service_type_name' => 'required|string|max:255|unique:service_types,service_type_name,'.$this->id,
+            'date_required' => 'nullable|numeric'
         ];
     }
 }
