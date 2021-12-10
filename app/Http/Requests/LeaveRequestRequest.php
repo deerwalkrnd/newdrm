@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use App\Helpers\Helper;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LeaveRequestRequest extends FormRequest
@@ -26,8 +26,8 @@ class LeaveRequestRequest extends FormRequest
         $today = date('Y-m-d');
         $start_date = \Request::input('start_date');
         $end_date = \Request::input('end_date');
-        $calcDay = ((strtotime($end_date) - strtotime($start_date))/ (60 * 60 * 24)) + 1;
-        // dd($calcDay);
+        $calcDay = Helper::getDays($start_date, $end_date);
+        
         return [
             'start_date' => 'required|date|after_or_equal:'.$today,
             'end_date' => 'required|date|after_or_equal:start_date',

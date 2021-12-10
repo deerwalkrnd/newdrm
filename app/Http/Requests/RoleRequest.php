@@ -24,7 +24,7 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'authority' => 'required|max:255|unique:roles,authority,'.$this->id,
+            'authority' => 'required|max:255|string|unique:roles,authority,'.$this->id,
         ];
     }
 }
