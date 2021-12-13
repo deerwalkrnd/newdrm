@@ -190,4 +190,22 @@ class EmployeeController extends Controller
     {
         //
     }
+
+    /**
+     * Search the specified resource from storage
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */ 
+    public function search(Request $request)
+    {
+        $employees = Employee::take(50)->get();
+        if($request->has('q'))
+        {
+            $keyword = $request->q;
+            $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->get();
+        }
+
+        return response()->json($employees);
+    }
 }
