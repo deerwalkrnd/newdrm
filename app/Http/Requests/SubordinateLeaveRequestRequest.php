@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 use App\Helpers\Helper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class LeaveRequestRequest extends FormRequest
+class SubordinateLeaveRequestRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,6 +29,7 @@ class LeaveRequestRequest extends FormRequest
         $calcDay = Helper::getDays($start_date, $end_date);
         // dd($start_date,$end_date,$calcDay);
         return [
+            'employee_id' => 'required|exists:employees,id',
             'start_date' => 'required|date|after_or_equal:'.$today,
             'end_date' => 'required|date|after_or_equal:start_date',
             'days' => 'required|integer|in:'.$calcDay,

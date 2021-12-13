@@ -23,14 +23,14 @@ final class Helper
         $weekend = ['SUN','SAT'];
         $day = 0;
         do{
-            $t_date = date('Y-m-d',strtotime($t_date.'+1 days'));          
             $weekDay = strtoupper(date('D',strtotime($t_date)));
-
             if(!(in_array($t_date,$holidayDates) || in_array($weekDay,$weekend))){
                 if(!(strtolower($employee->gender) == "female" && in_array($t_date,$femaleHolidayDates))){
                     $day++;
                 }
             }
+
+            $t_date = date('Y-m-d',strtotime($t_date.'+1 days'));          
         }while(strtotime($t_date) <= strtotime($e_date));
 
         // dd($day);

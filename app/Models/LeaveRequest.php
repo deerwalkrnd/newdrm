@@ -19,6 +19,7 @@ class LeaveRequest extends Model
         'half_leave',
         'reason',
         'acceptance',
+        'requested_by',
         'accepted_by',
     ];
 
