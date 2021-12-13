@@ -115,7 +115,7 @@ class EmployeeController extends Controller
             DB::commit();
             // dd("here");
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             DB::rollback();
             return redirect('/employee/create');
         }
