@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
 use App\Models\LeaveRequest;
+
+use App\Models\LeaveType;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
