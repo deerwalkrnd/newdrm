@@ -38,7 +38,7 @@
         <script>
             $('.livesearch').select2({
                 ajax: {
-                    url: '/student/search',
+                    url: '/employee/search',
                     data: function (params) {
                         var query = {
                             q: params.term,
@@ -51,8 +51,9 @@
                     processResults: function (data) {
                         return {
                             results: $.map(data, function (item) {
+                                let full_name = (item.middle_name === null) ? item.first_name + " " + item.last_name : item.first_name + " " + item.middle_name + " " + item.last_name;
                                 return {
-                                    text: item.name,
+                                    text: full_name,
                                     id: item.id
                                 }
                             })

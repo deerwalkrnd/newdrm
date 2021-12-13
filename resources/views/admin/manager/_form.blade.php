@@ -1,3 +1,4 @@
+@if(1==2)
 <div class="form-group">
     <label for="employee_id">Employee Name*</label>
     <select class="form-control" id="employee_id" name="employee_id">
@@ -13,6 +14,20 @@
         @empty
         <!-- no options -->
         @endforelse
+    </select>
+    @error('employee_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+@endif
+<div class="form-group">
+    <label for="employee_id">Employee Name</label>
+    <select class="livesearch form-control p-3" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
+        @if(!empty(old('employee_id')))
+            <option value="{{ old('employee_id') }}" selected="selected">{{ old('employee_name') }}</option>
+        @elseif(isset($manager) && !empty($manager->employee))
+            <option value="{{ $manager->employee->id }}" selected="selected">{{ $manager->employee->name }}</option>
+        @endif
     </select>
     @error('employee_id')
         <p class="text-danger">{{ $message }}</p>

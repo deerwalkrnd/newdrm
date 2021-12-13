@@ -73,6 +73,7 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/employee/edit/{id}',[EmployeeController::class, 'edit']);
     Route::put('/employee/{id}',[EmployeeController::class, 'update']);
     Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
+    Route::get('/employee/search',[EmployeeController::class, 'search']);
 
     // service type route
     Route::get('/serviceType/create',[ServiceTypeController::class, 'create']);
@@ -92,10 +93,10 @@ Route::middleware(['logged-in','hr'])->group(function(){
 
     // manager route
     Route::get('/manager/create',[ManagerController::class, 'create']);
-    Route::post('/manager',[ManagerController::class, 'store']);
+    Route::post('/manager',[ManagerController::class, 'store'])->middleware(['pre.process.manager.request']);
     Route::get('/manager',[ManagerController::class, 'index']);
     Route::get('/manager/edit/{id}',[ManagerController::class, 'edit']);
-    Route::put('/manager/{id}',[ManagerController::class, 'update']);
+    Route::put('/manager/{id}',[ManagerController::class, 'update'])->middleware(['pre.process.manager.request']);
     Route::delete('/manager/{id}',[ManagerController::class, 'destroy']);
 
     // role route
