@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Http\Requests\LeaveRequestRequest;
+use App\Http\Requests\SubordinateLeaveRequestRequest;
 
 class LeaveRequestController extends Controller
 {
@@ -38,6 +39,11 @@ class LeaveRequestController extends Controller
         return view('admin.leaveRequest.create')->with(compact('leaveTypes'));
     }
 
+    public function createSubOrdinateLeave(){
+        $leaveTypes = LeaveType::select('id','name')->get();
+        return view('admin.leaveRequest.createSubOrdinateLeave')->with(compact('leaveTypes'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -48,6 +54,7 @@ class LeaveRequestController extends Controller
     {
         $data = $request->validated();
         $data['employee_id'] = \Auth::user()->id;
+        $data['requested_by'] = \Auth::user()->id;
         
         if($data['leave_time'] == 'full')
         {
@@ -61,7 +68,32 @@ class LeaveRequestController extends Controller
             }
         }
 
-        $data['accepted_by'] = \Auth::user()->id;
+        // dd($data);
+
+        // $data['accepted_by'] = \Auth::user()->id;
+
+        LeaveRequest::create($data);
+        return redirect('/leave-request');
+    }
+
+    public function storeSubOrdinateLeave(SubordinateLeaveRequestRequest $request)
+    {
+        $data = $request->validated();
+        $data['employee_id'] = $data['employee_id'];
+        $data['requested_by'] = \Auth::user()->id;
+        
+        if($data['leave_time'] == 'full')
+        {
+            $data['full_leave'] = '1';
+        }else{
+            $data['full_leave'] = '0';
+            if($data['leave_time'] == 'first'){
+                $data['half_leave'] = 'first';
+            }else{
+                $data['half_leave'] = 'second';
+            }
+        }
+        // dd($data);
 
         LeaveRequest::create($data);
         return redirect('/leave-request');

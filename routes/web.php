@@ -117,7 +117,9 @@ Route::middleware(['logged-in','hr'])->group(function(){
 
     // leave request route
     Route::get('/leave-request/create',[LeaveRequestController::class, 'create']);
+    Route::get('/leave-request/create/subordinate-leave',[LeaveRequestController::class, 'createSubOrdinateLeave']);
     Route::post('/leave-request',[LeaveRequestController::class, 'store']);
+    Route::post('/leave-request/subordinate-leave',[LeaveRequestController::class, 'storeSubOrdinateLeave']);
     Route::get('/leave-request',[LeaveRequestController::class, 'index']);
     Route::get('/leave-request/edit/{id}',[LeaveRequestController::class, 'edit']);
     Route::put('/leave-request/{id}',[LeaveRequestController::class, 'update']);
