@@ -18,7 +18,7 @@ class CreateEmergencyContactsTable extends Migration
             $table->integer('version')->default(0);
             $table->foreignId('employee_id')->constrained('employees');
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('relationship');
             $table->string('phone_no');
