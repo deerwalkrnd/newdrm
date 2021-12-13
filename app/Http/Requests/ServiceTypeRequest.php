@@ -25,7 +25,7 @@ class ServiceTypeRequest extends FormRequest
     {
         return [
             'service_type_name' => 'required|string|max:255|unique:service_types,service_type_name,'.$this->id,
-            'date_required' => 'nullable|numeric'
+            'date_required' => 'nullable|integer'
         ];
     }
 }

@@ -25,7 +25,7 @@ class ShiftRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255|unique:shifts,name,'.$this->id,
-            'time_required' => 'required'
+            'time_required' => 'required|integer'
         ];
     }
 }

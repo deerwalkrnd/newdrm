@@ -27,7 +27,7 @@ class HolidayRequest extends FormRequest
         return [
             'name'=>'required|string|max:255',
             'date'=>'required|date|unique:holidays,date',
-            'female_only'=>'required|numeric',
+            'female_only'=>'required|integer',
         ];
     }
 }
