@@ -11,7 +11,7 @@ final class Helper
 {
     public static function getDays($start_date, $end_date){
     
-        $holidayDates = Holiday::select('date')->get()->toArray();
+        $holidayDates = Holiday::select('date')->where('female_only',0)->get()->toArray();
         $femaleHolidayDates = Holiday::select('date')->where('female_only',1)->get()->toArray();
         $employee = Employee::findOrFail(\Auth::user()->id)->select('gender')->first();
         $holidayDates = array_column($holidayDates,'date');

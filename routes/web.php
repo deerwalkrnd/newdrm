@@ -15,7 +15,7 @@ use App\Http\Controllers\YearlyLeaveController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HolidayController;
-
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,6 +136,10 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/holiday/edit/{id}',[HolidayController::class, 'edit']);
     Route::put('/holiday/{id}',[HolidayController::class, 'update']);
     Route::delete('/holiday/{id}',[HolidayController::class, 'destroy']);
+
+    //Search District
+    Route::get('/district/search/{id?}',[SearchController::class, 'searchDistrict']);
+    
 });
 
 
