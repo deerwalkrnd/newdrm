@@ -24,8 +24,8 @@ class UnitRequest extends FormRequest
     public function rules()
     {
         return [
-            'unit_name' => 'required|max:255|unique:units,unit_name,'.$this->id.',id,organization_id,'.$this->organization_id,
-            'organization_id' => 'required|exists:organizations,id',
+            'unit_name' => 'required|string|max:255|unique:units,unit_name,'.$this->id.',id,organization_id,'.$this->organization_id,
+            'organization_id' => 'required|integer|exists:organizations,id',
         ];
     }
 }
