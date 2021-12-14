@@ -16,6 +16,7 @@ use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\LeaveReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,6 +142,7 @@ Route::middleware(['logged-in','hr'])->group(function(){
 
     //Search District
     Route::get('/district/search/{id?}',[SearchController::class, 'searchDistrict']);
+    Route::get('/list',[LeaveReportController::class, 'leaveBalance']);
     
 });
 
