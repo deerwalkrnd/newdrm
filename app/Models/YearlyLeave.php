@@ -14,7 +14,8 @@ class YearlyLeave extends Model
         'organization_id',
         'leave_type_id',
         'days',
-        'status'
+        'status',
+        'leave_year'
     ];
     public function organization()
     {

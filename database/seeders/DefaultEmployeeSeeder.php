@@ -40,6 +40,23 @@ class DefaultEmployeeSeeder extends Seeder
         DB::table('roles')->insert([
             'authority' => 'hr'
         ]);
+        DB::table('leave_types')->insert([
+            'name' => 'Personal',
+            'gender' => 'All',
+            'paid_unpaid' => '0'
+        ]);
+        DB::table('yearly_leaves')->insert([
+            'organization_id' => '1',
+            'leave_type_id' => '1',
+            'days' => '2',
+            'status' => 'active',
+            'leave_year' => '2021'
+        ]);
+        DB::table('holidays')->insert([
+            'name' => 'Christmas',
+            'date' => '2021-12-25',
+            'female_only' => '0'
+        ]);
 
         DB::table('employees')->insert([
             // 'employee_id' => '1',

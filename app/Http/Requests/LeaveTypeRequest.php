@@ -25,7 +25,8 @@ class LeaveTypeRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255|unique:leave_types,name,'.$this->id,
-            'gender' => 'required|string'
+            'gender' => 'required|string',
+            'paid_unpaid'=>'required|integer'
         ];
     }
 }

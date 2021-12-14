@@ -27,10 +27,10 @@ class LeaveRequestRequest extends FormRequest
         $start_date = \Request::input('start_date');
         $end_date = \Request::input('end_date');
         $calcDay = Helper::getDays($start_date, $end_date);
-        // dd($start_date,$end_date,$calcDay);
+        $start_date_year = date('Y',strtotime($start_date));
         return [
             'start_date' => 'required|date|after_or_equal:'.$today,
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'end_date' => 'required|date|after_or_equal:start_date|starts_with:'.$start_date_year,
             'days' => 'required|integer|in:'.$calcDay,
             'leave_type_id' => 'required|integer',
             'leave_time' => 'required|in:full,first,second',
