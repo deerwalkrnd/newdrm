@@ -13,6 +13,7 @@
                     <th scope="col">Organization</th>
                     <th scope="col">Days</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Leave Year</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -25,7 +26,7 @@
                     <td>{{ $yearlyLeave->organization->name }}</td>
                     <td>{{ $yearlyLeave->days }}</td>
                     <td>{{ $yearlyLeave->status }}</td>
-
+                    <td>{{ $yearlyLeave->leave_year }}</td>
                     <td>
                         <a href="/yearly-leaves/edit/{{ $yearlyLeave->id }}">Edit</a> 
                         |

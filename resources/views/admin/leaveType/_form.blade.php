@@ -31,3 +31,24 @@
         <p class="text-danger">{{ $message }}</p>
     @enderror
 </div>
+
+
+<div class="form-group">
+    <label for="paid_unpaid">Paid/Unpaid*</label>
+    <br>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="paid_unpaid" id="paid" value="1" 
+        {{ (isset($leaveType) && $leaveType->paid_unpaid == '1') ? 'checked':''}}
+        {{ old('paid_unpaid') == '1' ? 'checked':'' }}>
+        <label class="form-check-label" for="paid">Paid</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="paid_unpaid" id="unpaid" value="0" 
+        {{ (isset($leaveType) && $leaveType->paid_unpaid == '0') ? 'checked':''}}
+        {{ old('paid_unpaid') == '0' ? 'checked':''}}>
+        <label class="form-check-label" for="unpaid">Unpaid</label>
+    </div>
+    @error('paid_unpaid')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
