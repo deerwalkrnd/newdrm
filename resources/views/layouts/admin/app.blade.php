@@ -36,9 +36,6 @@
         <!-- select 2 -->
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
         <script>
-            // var permanent_address = document.getElementById('permanent_address');
-            // var value = permanent_address.options[permanent_address.selectedIndex].value;
-            // console.log(value);
             $('.manager-livesearch').select2({
                 
                 ajax: {
