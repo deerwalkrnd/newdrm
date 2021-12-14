@@ -36,7 +36,11 @@
         <!-- select 2 -->
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
         <script>
-            $('.livesearch').select2({
+            // var permanent_address = document.getElementById('permanent_address');
+            // var value = permanent_address.options[permanent_address.selectedIndex].value;
+            // console.log(value);
+            $('.manager-livesearch').select2({
+                
                 ajax: {
                     url: '/employee/search',
                     data: function (params) {
@@ -60,6 +64,36 @@
                         };
                     },
                     cache: true
+                }
+            });
+
+
+            $('.district-livesearch').select2({
+                ajax: {
+                    url: '/district/search',
+                    data: function (params) {
+                        var query = {
+                            q: params.term,
+                            p: $('#permanent_address').val()  
+                        }
+                         // Query parameters will be ?search=[term]
+                        return query;
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.district_name ,
+                                    id: item.id
+                                }
+                            })
+                        };
+                        
+                        // console.log(query);
+                    },
+                    cache: false
                 }
             });
         </script>

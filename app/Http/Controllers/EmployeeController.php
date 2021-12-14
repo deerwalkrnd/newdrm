@@ -152,13 +152,13 @@ class EmployeeController extends Controller
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
-        $districts = District::select('id', 'district_name', 'province_id')->get();
+        // $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name')->get();
         // $emergency_contacts = EmergencyContact::select('id','first_name','last_name','middle_name','relationship','phone_no','alternate_phone_no')->where('employee_id',$id)->get();
         // $emergency_contact = EmergencyContact::FindOrFail($id);
         $roles = Role::select('authority')->get();
-        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles'));
+        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','serviceTypes','shifts','roles'));
     }
 
     /**

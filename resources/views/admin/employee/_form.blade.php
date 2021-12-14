@@ -253,17 +253,11 @@
 </div>
 <!-- province -->
 
+
 <div class="form-group">
     <label for="permanent_district">Permanent District*</label>
-    <select class="form-control" id="permanent_district" name="permanent_district">
-        <option value="" disabled="disabled" selected="selected">-- Choose District --</option>
-        @foreach($districts as $district)
-        <option 
-            value="{{ $district->id }}" 
-            {{ (!empty(old('permanent_district')) && old('permanent_district') == $district->id) ? 'selected': ''}}
-            {{ (isset($employee) && $employee->permanent_district == $district->id && empty(old('permanent_district'))) ? 'selected' : '' }} 
-            >{{$district->district_name}}</option>
-        @endforeach
+    <select class="district-livesearch form-control p-3" name="permanent_district" id="permanent_district" data-placeholder="-- Choose District --">
+        <option value="" disabled="disabled" selected="selected">-- Choose District --</option>    
     </select>
     @error('permanent_district')
         <p class="text-danger">{{ $message }}</p>

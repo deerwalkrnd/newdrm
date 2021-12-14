@@ -22,7 +22,7 @@
 @endif
 <div class="form-group">
     <label for="employee_id">Employee Name</label>
-    <select class="livesearch form-control p-3" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
+    <select class="manager-livesearch form-control p-3" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
         @if(!empty(old('employee_id')))
             <option value="{{ old('employee_id') }}" selected="selected">{{ old('employee_name') }}</option>
         @elseif(isset($manager) && !empty($manager->employee))
