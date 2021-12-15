@@ -28,7 +28,7 @@ class YearlyLeaveRequest extends FormRequest
             'organization_id'=>'required|exists:organizations,id',
             'leave_type_id'=>'required|exists:leave_types,id',
             'status'=>'required|string',
-            'leave_year'=>'required|integer'
+            'year'=>'required|integer'
         ];
     }
 }

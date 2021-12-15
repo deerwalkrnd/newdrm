@@ -50,7 +50,7 @@ class DefaultEmployeeSeeder extends Seeder
             'leave_type_id' => '1',
             'days' => '2',
             'status' => 'active',
-            'leave_year' => '2021'
+            'year' => '2021'
         ]);
         DB::table('holidays')->insert([
             'name' => 'Christmas',

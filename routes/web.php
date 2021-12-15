@@ -142,7 +142,9 @@ Route::middleware(['logged-in','hr'])->group(function(){
 
     //Search District
     Route::get('/district/search/{id?}',[SearchController::class, 'searchDistrict']);
-    Route::get('/list',[LeaveReportController::class, 'leaveBalance']);
+
+    //Leave Report
+    Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
     
 });
 
