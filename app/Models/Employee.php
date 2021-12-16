@@ -83,4 +83,7 @@ class Employee extends Model
     {
         return $this->hasOne(EmergencyContact::class,'employee_id','id');
     }
+    public function user(){
+        return $this->hasOne(User::class,'employee_id','id');
+    }
 }

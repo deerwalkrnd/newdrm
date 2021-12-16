@@ -16,6 +16,7 @@ use App\Models\District;
 use App\Models\ServiceType;
 use App\Models\Shift;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\EmergencyContact;
 
 use App\Actions\Fortify\CreateNewUser;
@@ -66,10 +67,8 @@ class EmployeeController extends Controller
         //get validated input
         $input = $request->validated();
         $user = [];
-        $testUser = new Employee;
         $emergency_contact =[];
-        $emergencyContact = new EmergencyContact;
-        // dd(gettype($testUser));
+
         //store image
         $image = $request->file('image');
         $cv = $request->file('cv');
@@ -83,21 +82,15 @@ class EmployeeController extends Controller
         }
 
         //add data to user
-        // $user['organization_id'] = $request->organization_id;
         $user['username'] = $request->username;
         $user['role_id'] = $request->role;
-        
-        $testUser->username = $input['username'];
-        $testUser->role_id = $input['role'];
-
-
+       
         $emergency_contact['first_name'] = $input['emg_first_name'];
         $emergency_contact['last_name'] =  $input['emg_last_name'];
         $emergency_contact['middle_name'] =  $input['emg_middle_name'];
         $emergency_contact['relationship'] =  $input['emg_relationship'];
         $emergency_contact['phone_no'] = $input['emg_contact'];
         $emergency_contact['alternate_phone_no'] =  $input['emg_alternate_contact'];
-        // $emergency_contact['employee_id'] =  $input['employee_id'];
      
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
         unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
@@ -106,21 +99,15 @@ class EmployeeController extends Controller
         try {
             $user['employee_id'] = Employee::create($input)->id;
             $emergency_contact['employee_id']=$user['employee_id'];
-            // dd($emergency_contact);
             $createUser = new CreateNewUser();
             $createUser->create($user);
             
             EmergencyContact::create($emergency_contact);
-            // dd("here");
             DB::commit();
-            // dd("here");
         } catch (\Exception $e) {
-            // dd($e);
             DB::rollback();
             return redirect('/employee/create');
         }
-        // dd("after db");
-        
         return redirect('/employee');
     }
 
@@ -144,21 +131,18 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::with('emergencyContact')->findOrFail($id);
-        // $employee = Employee::where('id',$id)->get();
-        
-        // dd($employee);
-
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
-        // $districts = District::select('id', 'district_name', 'province_id')->get();
+        $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name')->get();
         // $emergency_contacts = EmergencyContact::select('id','first_name','last_name','middle_name','relationship','phone_no','alternate_phone_no')->where('employee_id',$id)->get();
         // $emergency_contact = EmergencyContact::FindOrFail($id);
-        $roles = Role::select('authority')->get();
-        return view('admin.employee.edit')->with(compact('employee','organizations','units','designations','provinces','serviceTypes','shifts','roles'));
+        $user = User::select('id','username')->where('employee_id',$id)->get();
+        $roles = Role::select('id','authority')->get();
+        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles'));
     }
 
     /**
@@ -168,15 +152,51 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EmployeeRequest $request, $id)
     {
         $employee = Employee::findOrFail($id);
-        
-        //get validated input and merge input fields
-        $input = $request->validated();
-        $input['version'] = DB::raw('version+1');
+        $emergencyContact = EmergencyContact::where('employee_id',$employee->id)->first();
 
-        $employee->update($input);
+        $input = $request->validated();
+        // dd($input);
+        $user = [];
+        $emergency_contact =[];
+        //store image
+        $image = $request->file('image');
+        $cv = $request->file('cv');
+        
+        //merge files
+        // if($image!=null){
+        //     $input['image_name'] = $image->store('employees/images');
+        // }
+        // if($cv != null){
+        //     $input['cv_file_name'] = $cv->store('employees/cv');
+        // }
+
+        //add data to user
+        $user['username'] = $request->username;
+        $user['role_id'] = $request->role;
+        
+        $emergency_contact['first_name'] = $input['emg_first_name'];
+        $emergency_contact['last_name'] =  $input['emg_last_name'];
+        $emergency_contact['middle_name'] =  $input['emg_middle_name'];
+        $emergency_contact['relationship'] =  $input['emg_relationship'];
+        $emergency_contact['phone_no'] = $input['emg_contact'];
+        $emergency_contact['alternate_phone_no'] =  $input['emg_alternate_contact'];
+     
+        unset($input['image'], $input['cv'], $input['username'], $input['role']);
+        unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
+ 
+        DB::beginTransaction();
+        try {
+            $employee->update($input);
+            
+            $emergencyContact->update($emergency_contact);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect('/employee/edit');
+        }
         return redirect('/employee');
     }
 
@@ -188,7 +208,18 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            $employee = Employee::findOrFail($id);
+            // dd($employee);
+            $employee->delete();
+            dd("herl");
+            return redirect('/employee');
+    
+        }catch(\Illuminate\Database\QueryException $e){
+            if($e->getCode() == "23000"){
+                return redirect()->back();
+            }
+        }
     }
 
     /**
