@@ -6,3 +6,27 @@
     @enderror
 </div>
 <!-- Category Name -->
+
+<div class="form-group">
+    <label for="status">Status*</label>
+    <select class="form-control" id="status" name="status">
+        <option 
+            value="active" selected
+            {{ (!empty(old('status')) && old('status') == 'active') ? 'selected': ''}}
+            {{ (isset($fileCategory) && $fileCategory->status == 'active' && empty(old('status'))) ? 'selected' : '' }} 
+            >
+            active
+        </option>
+        <option 
+            value="inactive" 
+            {{ (!empty(old('status')) && old('status') == 'inactive') ? 'selected': ''}}
+            {{ (isset($fileCategory) && $fileCategory->status == 'inactive' && empty(old('status'))) ? 'selected' : '' }} 
+            >
+            inactive
+        </option>
+    </select>
+    @error('status')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>
+<!-- status -->

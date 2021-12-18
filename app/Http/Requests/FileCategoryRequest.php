@@ -25,6 +25,8 @@ class FileCategoryRequest extends FormRequest
     {
         return [
             'category_name'=>'required|string|max:255',
+            'status'=>'required|string|max:8',
+
         ];
     }
 }

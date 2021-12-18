@@ -10,6 +10,7 @@
                 <tr>
                     <th scope="col" class="pl-4">S.N</th>
                     <th scope="col">Category Name</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -19,6 +20,7 @@
                 <tr>
                     <th scope="row" class="pl-4">{{ $loop->iteration }}</th>
                     <td>{{ $fileCategory->category_name }}</td>
+                    <td>{{ $fileCategory->status }}</td>
                     <td>
                         <a href="/file-category/edit/{{ $fileCategory->id }}">Edit</a> 
                         | 

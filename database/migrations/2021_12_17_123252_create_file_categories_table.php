@@ -16,6 +16,7 @@ class CreateFileCategoriesTable extends Migration
         Schema::create('file_categories', function (Blueprint $table) {
             $table->id();
             $table->String('category_name');
+            $table->enum('status',['active','inactive'])->default('inactive');
             $table->enum('single_multiple',[0,1])->nullable();
             $table->timestamps();
         });

@@ -15,7 +15,7 @@ class FileCategoryController extends Controller
      */
     public function index()
     {
-        $fileCategories = FileCategory::select('id', 'category_name')->paginate(10);
+        $fileCategories = FileCategory::select('id', 'category_name','status')->paginate(10);
         return view('admin.fileCategory.index')->with(compact('fileCategories'));
     }
 
@@ -62,7 +62,7 @@ class FileCategoryController extends Controller
      */
     public function edit($id)
     {
-        $fileCategory = FileCategory::select('id', 'category_name')->findOrFail($id);
+        $fileCategory = FileCategory::select('id', 'category_name','status')->findOrFail($id);
         return view('admin.fileCategory.edit')->with(compact('fileCategory'));
     }
 

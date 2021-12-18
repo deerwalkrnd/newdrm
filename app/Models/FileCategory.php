@@ -10,6 +10,7 @@ class FileCategory extends Model
     use HasFactory;
 
     public $fillable = [
-        'category_name'
+        'category_name',
+        'status'
     ];
 }
