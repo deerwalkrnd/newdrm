@@ -17,6 +17,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\LeaveReportController;
+use App\Http\Controllers\CarryOverLeaveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::middleware(['logged-in','hr'])->group(function(){
+Route::middleware(['logged-in'])->group(function(){
     
     // designation route
     Route::get('/designation/create',[DesignationController::class, 'create']);
@@ -144,6 +145,8 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/district/search/{id?}',[SearchController::class, 'searchDistrict']);
     Route::get('/list',[LeaveReportController::class, 'leaveBalance']);
     
+
+    Route::get('/info',[CarryOverLeaveController::class,'calculateCarryOverLeave']);
 });
 
 

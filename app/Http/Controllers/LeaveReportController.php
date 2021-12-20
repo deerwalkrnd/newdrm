@@ -44,7 +44,7 @@ class LeaveReportController extends Controller
     private function getAllowedLeaveDays($org_id,$leaveType,$year)
     {
         $allowedLeave = YearlyLeave::select('days')
-                                // ->where('year',$year)
+                                ->where('year',$year)
                                 ->where('organization_id',$org_id)
                                 ->where('leave_type_id',$leaveType)
                                 ->where('status','active')
