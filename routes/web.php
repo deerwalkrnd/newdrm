@@ -18,6 +18,8 @@ use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\LeaveReportController;
 use App\Http\Controllers\CarryOverLeaveController;
+use App\Http\Controllers\FileCategoryController;
+use App\Http\Controllers\FileUploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,13 +145,40 @@ Route::middleware(['logged-in'])->group(function(){
 
     //Search District
     Route::get('/district/search/{id?}',[SearchController::class, 'searchDistrict']);
-    Route::get('/list',[LeaveReportController::class, 'leaveBalance']);
+
+    //Leave Report
+    Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
     
 
     Route::get('/info',[CarryOverLeaveController::class,'calculateCarryOverLeave']);
+
+    // fileCategory route
+    Route::get('/file-category/create',[FileCategoryController::class, 'create']);
+    Route::post('/file-category',[FileCategoryController::class, 'store']);
+    Route::get('/file-category',[FileCategoryController::class, 'index']);
+    Route::get('/file-category/edit/{id}',[FileCategoryController::class, 'edit']);
+    Route::put('/file-category/{id}',[FileCategoryController::class, 'update']);
+    Route::delete('/file-category/{id}',[FileCategoryController::class, 'destroy']);
+
+
+     // fileUpload route
+    Route::get('/file-upload/create',[FileUploadController::class, 'create']);
+    Route::post('/file-upload',[FileUploadController::class, 'store']);
+    Route::get('/file-upload',[FileUploadController::class, 'index']);
+    Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
+    // Route::put('/file-upload/{id}',[FileUploadController::class, 'download']);
+    Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
+
 });
 
+// Route::middleware(['logged-in','employee'])->group(function(){
+//     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
+//     Route::post('/file-upload',[FileUploadController::class, 'store']);
+//     Route::get('/file-upload',[FileUploadController::class, 'index']);
+//     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
+//     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
 
+// });
 
 // Route::get('/test',function(){
 //     if(Auth::user())

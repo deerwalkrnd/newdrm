@@ -19,7 +19,7 @@ class YearlyLeaveController extends Controller
      */
    public function index()
     {
-        $yearlyLeaves = YearlyLeave::select('id', 'organization_id','leave_type_id','days','status','leave_year')
+        $yearlyLeaves = YearlyLeave::select('id', 'organization_id','leave_type_id','days','status','year')
                         ->with('organization:id,name')
                         ->with('leaveType:id,name')
                         ->orderBy('organization_id')
@@ -70,7 +70,7 @@ class YearlyLeaveController extends Controller
      */
     public function edit($id)
     {
-        $yearlyLeaves = YearlyLeave::select('id', 'organization_id','leave_type_id','days','status','leave_year')->findOrFail($id);
+        $yearlyLeaves = YearlyLeave::select('id', 'organization_id','leave_type_id','days','status','year')->findOrFail($id);
         $organizations = Organization::select('id','name')->get();
         $leaveTypes = LeaveType::select('id','name')->get();
         return view('admin.yearlyLeave.edit')->with(compact('yearlyLeaves','organizations','leaveTypes'));

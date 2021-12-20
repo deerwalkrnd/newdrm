@@ -26,7 +26,7 @@
                     <td>{{ $yearlyLeave->organization->name }}</td>
                     <td>{{ $yearlyLeave->days }}</td>
                     <td>{{ $yearlyLeave->status }}</td>
-                    <td>{{ $yearlyLeave->leave_year }}</td>
+                    <td>{{ $yearlyLeave->year }}</td>
                     <td>
                         <a href="/yearly-leaves/edit/{{ $yearlyLeave->id }}">Edit</a> 
                         |
