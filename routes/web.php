@@ -17,9 +17,11 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\LeaveReportController;
+use App\Http\Controllers\CarryOverLeaveController;
 use App\Http\Controllers\FileCategoryController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\SendMailController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +38,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::middleware(['logged-in','employee'])->group(function(){
+
+Route::middleware(['logged-in'])->group(function(){
     
     // designation route
     Route::get('/designation/create',[DesignationController::class, 'create']);
@@ -149,7 +152,9 @@ Route::middleware(['logged-in','employee'])->group(function(){
     //Leave Report
     Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
     
-    
+
+    Route::get('/info',[CarryOverLeaveController::class,'calculateCarryOverLeave']);
+
     // fileCategory route
     Route::get('/file-category/create',[FileCategoryController::class, 'create']);
     Route::post('/file-category',[FileCategoryController::class, 'store']);
