@@ -17,10 +17,9 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\LeaveReportController;
+use App\Http\Controllers\CarryOverLeaveController;
 use App\Http\Controllers\FileCategoryController;
 use App\Http\Controllers\FileUploadController;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +36,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::middleware(['logged-in','hr'])->group(function(){
+Route::middleware(['logged-in'])->group(function(){
     
     // designation route
     Route::get('/designation/create',[DesignationController::class, 'create']);
@@ -150,7 +149,9 @@ Route::middleware(['logged-in','hr'])->group(function(){
     //Leave Report
     Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
     
-    
+
+    Route::get('/info',[CarryOverLeaveController::class,'calculateCarryOverLeave']);
+
     // fileCategory route
     Route::get('/file-category/create',[FileCategoryController::class, 'create']);
     Route::post('/file-category',[FileCategoryController::class, 'store']);
@@ -167,6 +168,7 @@ Route::middleware(['logged-in','hr'])->group(function(){
     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
     // Route::put('/file-upload/{id}',[FileUploadController::class, 'download']);
     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
+
 });
 
 // Route::middleware(['logged-in','employee'])->group(function(){
