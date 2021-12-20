@@ -14,4 +14,6 @@
     <a href="/role" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('role') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">Role</span></a>
     <a href="/holiday" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('holiday') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">Holiday</span></a>
     <a href="/leave-request" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('leaveRequest') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">Leave Request</span></a>
+    <a href="/file-category" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('fileCategory') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">File Category</span></a>
+    <a href="/file-upload" class="text-white list-group-item list-group-item-action bg-dark side-list border-bottom border-light {{ Request::is('fileUpload') ? 'active' : '' }}"><i class="fas fa-book fa-lg nav-icon mr-2"></i> <span class="my-auto">File Upload</span></a>
 </div>

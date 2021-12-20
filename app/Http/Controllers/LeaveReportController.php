@@ -17,8 +17,8 @@ class LeaveReportController extends Controller
         $org_id = \Auth::user()->employee->organization_id;
         $leaveTypes = LeaveType::select('name','id')->get();
 
-        $list = [];
-
+        $lists = [];
+        // return $leaveTypes;
         foreach($leaveTypes as $leaveType)
         {
             $allowedLeave = $this->getAllowedLeaveDays($org_id,$leaveType->id,$year);
@@ -30,27 +30,35 @@ class LeaveReportController extends Controller
                                         ->sum('days');
             $balance = $allowedLeave - $leaveTaken;
 
-            $list[$leaveType->name] = [
+            $lists[$leaveType->name] = [
                 'allowed' => $allowedLeave,
-                'acquired' => $acquiredLeave,
+                'accrued' => $acquiredLeave,
                 'taken' => $leaveTaken,
                 'balance' => $balance
             ];
         }
 
-        return $list;
+        // foreach($lists as $leaveName => $data)
+        // {
+        //     echo $leaveName;
+        //     print_r($data['allowed']);
+        // }
+        // return $lists;
+        return  view('admin.leaveBalance.index',compact('lists','leaveTypes'));
     }
 
     private function getAllowedLeaveDays($org_id,$leaveType,$year)
     {
+        // dd($org_id,$leaveType,$year);
         $allowedLeave = YearlyLeave::select('days')
-                                // ->where('year',$year)
+                                ->where('year',$year)
                                 ->where('organization_id',$org_id)
                                 ->where('leave_type_id',$leaveType)
                                 ->where('status','active')
-                                ->first();
-
-        if(isset($allowedLeave) && $allowedLeave->count() == 1)
+                                ->get()->first();
+        
+        // dd($allowedLeave->exists());
+        if(isset($allowedLeave) && ($allowedLeave->exists() == 1))
             $allowedLeave = $allowedLeave->days;
         else
             $allowedLeave = 0;

@@ -8,7 +8,6 @@
         </ul>
     </div>
 @endif
-
 <!-- <div class="form-group">
     <label for="employee_id">Employee Id*</label>
     <input type="number" class="form-control" id="employee_id" placeholder="Enter Employee Id" name="employee_id" value="{{ !empty(old('employee_id')) ? old('employee_id') : $employee->employee_id ?? '' }}" min=1>
@@ -198,8 +197,9 @@
 
 <div class="form-group">
     <label for="country">Country*</label>
-    @if(isset($employee)) $country = $employee->country @endif
+    
     <select class="form-control" id="country" name="country">
+        @if(isset($employee)) $country = $employee->country @endif
         @include('layouts.country_options')
     </select>
     @error('country')
@@ -257,7 +257,13 @@
 <div class="form-group">
     <label for="permanent_district">Permanent District*</label>
     <select class="district-livesearch form-control p-3" name="permanent_district" id="permanent_district" data-placeholder="-- Choose District --">
-        <option value="" disabled="disabled" selected="selected">-- Choose District --</option>    
+    @foreach($districts as $district)
+    <option value="{{ $district->id }}" 
+        {{ (!empty(old('permanent_district')) && old('permanent_district') == $district->id) ? 'selected': ''}}
+            {{ (isset($employee) && $employee->permanent_district == $district->id && empty(old('permanent_district'))) ? 'selected' : '' }} 
+            >{{$district->district_name}}
+    </option>    
+    @endforeach
     </select>
     @error('permanent_district')
         <p class="text-danger">{{ $message }}</p>
@@ -293,18 +299,18 @@
 <!-- permanent_tole -->
 
 <div class="form-group">
-    <label for="permanent_toletemp_add_same_as_per_add">Temporary Add Same As Permanent*</label>
+    <label for="temp_add_same_as_per_add">Temporary Add Same As Permanent*</label>
     <br>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="permanent_toletemp_add_same_as_per_add" id="yes" value="1" 
-        {{ (isset($employee) && $employee->permanent_toletemp_add_same_as_per_add == '1') ? 'checked':'' }}
-        {{ old('permanent_toletemp_add_same_as_per_add') == '1' ? 'checked':'' }}>
+        <input class="form-check-input" type="radio" name="temp_add_same_as_per_add" id="yes" value="1" 
+        {{ (isset($employee) && $employee->temp_add_same_as_per_add == '1') ? 'checked':'' }}
+        {{ old('temp_add_same_as_per_add') == '1' ? 'checked':'' }}>
         <label class="form-check-label" for="yes">Yes</label>
     </div>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="permanent_toletemp_add_same_as_per_add" id="no" value="0" 
-        {{ (isset($employee) && $employee->permanent_toletemp_add_same_as_per_add == '0') ? 'checked':'' }}
-        {{ old('permanent_toletemp_add_same_as_per_add') == '0' ? 'checked':'' }}>
+        <input class="form-check-input" type="radio" name="temp_add_same_as_per_add" id="no" value="0" 
+        {{ (isset($employee) && $employee->temp_add_same_as_per_add == '0') ? 'checked':'' }}
+        {{ old('temp_add_same_as_per_add') == '0' ? 'checked':'' }}>
         <label class="form-check-label" for="no">No</label>
     </div>
     @error('permanent_toletemp_add_same_as_per_add')
@@ -386,7 +392,7 @@
         <option 
             value="{{ $serviceType->id}}" 
             {{ (!empty(old('service_type')) && old('service_type') == $serviceType->id) ? 'selected': ''}}
-            {{ (isset($employee) && $employee->serviceType_id == $serviceType->id && empty(old('service_type'))) ? 'selected' : '' }} 
+            {{ (isset($employee) && $employee->service_type == $serviceType->id && empty(old('service_type'))) ? 'selected' : '' }} 
             >
             {{ $serviceType->service_type_name }}
         </option>
@@ -495,7 +501,8 @@
 
 <div class="form-group">
     <label for="username">Username*</label>
-    <input type="text" class="form-control" id="username" placeholder="Enter Employee username" name="username" value="{{ !empty(old('username')) ? old('username') : $employee->username ?? '' }}">
+    <input type="text" class="form-control" id="username" placeholder="Enter Employee username" name="username" 
+    value="{{ !empty(old('username')) ? old('username'): $employee->user->username ?? ''}}">
     @error('username')
         <p class="text-danger">{{ $message }}</p>
     @enderror
@@ -505,12 +512,14 @@
 <div class="form-group">
     <label for="role">Role*</label>
     <select class="form-control" id="role" name="role">
+        @if(Route::current()->uri != 'employee/edit/{id}')
         <option value="" disabled="disabled" selected="selected">-- Choose Role --</option>
+        @endif
         @foreach($roles as $role)
         <option 
-            value="{{ $role->id }}" 
+            value="{{$role->id}}" 
             {{ (!empty(old('role')) && old('role') == $role->id) ? 'selected': ''}}
-            {{ (isset($employee) && $employee->role == $province->id && empty(old('role'))) ? 'selected' : '' }} 
+            {{ (isset($employee) && $employee->role == $role->id && empty(old('role'))) ? 'selected' : '' }} 
             >{{$role->authority}}</option>
         @endforeach
     </select>

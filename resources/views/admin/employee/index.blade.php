@@ -24,6 +24,7 @@
                     <th scope="col">Y Since Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Tier Level</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
 
@@ -41,6 +42,15 @@
                     <td>year</td>
                     <td>status</td>
                     <td>tier</td>
+                    <td>
+                        <a href="/employee/edit/{{ $employee->id }}">Edit</a> 
+                        | 
+                        <form action="/employee/{{ $employee->id }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="delete">Delete</button>
+                        </form>
+                    </td>
                 </tr>
                 @empty
                 <tr>

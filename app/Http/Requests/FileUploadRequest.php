@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class YearlyLeaveRequest extends FormRequest
+class FileUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,9 @@ class YearlyLeaveRequest extends FormRequest
     public function rules()
     {
         return [
-            'days'=>'required|integer',
-            'organization_id'=>'required|exists:organizations,id',
-            'leave_type_id'=>'required|exists:leave_types,id',
-            'status'=>'required|string',
-            'year'=>'required|integer'
+            'file' => 'file|required|mimes:jpg,png,jpeg,pdf',
+            'file_category_id'=>'required|integer|exists:file_categories,id',
+            'employee_id'=>'required|integer',
         ];
     }
 }

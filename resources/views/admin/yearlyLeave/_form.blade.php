@@ -28,7 +28,7 @@
         <option 
             value="{{ $leaveType->id }}" 
             {{ (!empty(old('leave_type_id')) && old('leave_type_id') == $leaveType->id) ? 'selected': ''}}
-            {{ (isset($yearlyLeaves) && $yearlyLeaves->leave_type_id == $yearlyLeaves->id && empty(old('leave_type_id'))) ? 'selected' : '' }} 
+            {{ (isset($yearlyLeaves) && $yearlyLeaves->leave_type_id == $leaveType->id && empty(old('leave_type_id'))) ? 'selected' : '' }} 
             >
             {{ $leaveType->name }}
         </option>
@@ -78,8 +78,8 @@
 
 <div class="form-group">
     <label for="days">Year*</label>
-    <input type="number" class="form-control" id="leave_year" placeholder="Enter Leave Year" name="leave_year" value="{{ !empty(old('leave_year')) ? old('leave_year') : $yearlyLeaves->leave_year ?? '' }}" >  
-    @error('leave_year')
+    <input type="number" class="form-control" id="year" placeholder="Enter Leave Year" name="year" value="{{ !empty(old('year')) ? old('year') : $yearlyLeaves->year ?? '' }}" >  
+    @error('year')
         <p class="text-danger">{{ $message }}</p>
     @enderror
 </div>

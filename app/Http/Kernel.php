@@ -66,7 +66,7 @@ class Kernel extends HttpKernel
         'logged-in' => \App\Http\Middleware\IsLoggedIn::class,
         'hr' => \App\Http\Middleware\IsHR::class,
         'manager' => \App\Http\Middleware\IsManager::class,
-        'employee' => \App\Http\Middleware\Employee::class,
+        'employee' => \App\Http\Middleware\IsEmployee::class,
         'pre.process.manager.request' => \App\Http\Middleware\ProcessManagerRequest::class,
     ];
 }
