@@ -45,6 +45,12 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/leave-request">Leave Request</a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/file-category">File Category</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/file-upload">File Upload</a>
+            </li>
         </ul>
         @if(session('punchIn') == 2)
         <form class="form-inline my-2 my-lg-0 mr-3" action="/punch-out" method="POST" onsubmit="return confirm('Do you want to punch-out?');">

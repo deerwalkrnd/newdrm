@@ -33,7 +33,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <th colspan=5 class="text-center">No Holiday Created</th>
+                    <th colspan=5 class="text-center">No File Category Created</th>
                 </tr>
                 @endforelse
             </tbody>

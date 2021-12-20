@@ -13,4 +13,9 @@ class FileCategory extends Model
         'category_name',
         'status'
     ];
+    
+    public function fileUploads()
+    {
+        return $this->hasMany(FileUpload::class,'file_category_id');
+    }
 }
