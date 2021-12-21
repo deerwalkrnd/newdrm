@@ -6,31 +6,47 @@ use Illuminate\Http\Request;
 
 class SendMailController extends Controller
 {
-    public function sendMail($name, $title,$subject, $message, $regards, $receiver_mail) {
+    private $hr = 'satyadeep.neupane@deerwalk.edu.np';
+    public $details = [];
+
+    public function sendMail($to, $name, $subject, $message, $cc = false, $bcc = false)
+    {
         $details = [
+            'to' => $to,
             'name'=>$name,
-            'title' => $title,
-            'message' => $message,
-            'regards' =>$regards,
-            'receiver_mail' =>$receiver_mail,
-            'subject' =>$subject
+            'subject' =>$subject,
+            'body' => $message,
+            'bcc' =>$bcc,
+            'cc' => $cc,
         ];
-        if(count($details['receiver_mail']) > 1){
-            \Mail::bcc($receiver_mail)->send(new SendMail($details));
-        }else{
-            \Mail::to($receiver_mail)->send(new SendMail($details));
-        }
-    
-        // dd("Email is Sent.");
+     
+        \Mail::send('admin.emails.sendMail',$details, function($message) use ($details) {
+            $message->to($details['to']);
+            $message->subject($details['subject']);
+            $message->from('deena.sitikhu@deerwalk.edu.np');
+            if($details['cc'])
+                $message->cc($details['cc']);
+            if($details['bcc'])
+                $message->bcc($details['bcc']);
+        });
+
+        return true;
     }
 
-    public function punchInMail(){
+    public function punchOutMail(){
+        //receive employee_id
+        //fetch_manager_email 
+
+        //employee by mnager_id to hr , cc manager, bcc employee
+        
+        $to = 'deenasitikhu123@gmail.com';
+        $cc = ['satyadeep.neupane@deerwalk.edu.np'];
+        $bcc = ['deenasitikhu@gmail.com'];
         $name = 'deena';
-        $title = 'Punch In Mail';
-        $message = 'Why late punch in';
-        $regards ='Deena';
+        $message = 'still not punch out';
+        $regards ='HR';
         $subject = 'Punch In Subject';
-        $receiver_mail = ['deenasitikhu@gmail.com','apurba.thapaliya@deerwalk.edu.np'];
-        return $this->sendMail($name, $title,$subject, $message, $regards, $receiver_mail);
+        // $receiver_mail = ['deenasitikhu@gmail.com','apurba.thapaliya@deerwalk.edu.np'];
+        return $this->sendMail($to, $name, $subject, $message, $cc, $bcc);
     }
 }

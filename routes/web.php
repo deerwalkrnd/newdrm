@@ -172,7 +172,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
 
     // Send Mail Route
-    Route::get('punch-in-mail',[SendMailController::class,'punchInMail']);
+    Route::get('punch-out-mail',[SendMailController::class,'punchOutMail']);
 
 });
 
