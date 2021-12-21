@@ -1,0 +1,402 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* navigation bar */
+
+.navigation {
+    background-color: #0f5288;
+    padding: 0;
+}
+
+.navigation_link {
+    color: white !important;
+    line-height: 36px;
+    padding: 0;
+}
+
+.navigation_link:hover {
+    margin: 0;
+    line-height: 36px;
+    background-color: #3573A3;
+}
+
+/* .active {
+    margin: 0;
+    line-height: 36px;
+    background-color: #3573A3;
+} */
+
+.hr_menu {
+    border: none;
+    background-color: #3573A3 !important;
+    margin: 0;
+    height: auto;
+}
+
+.hr_menu_content:hover {
+    background-color: #5A94BD;
+}
+
+.hr_item {
+    color: white !important;
+    padding-right: 0 !important;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.icon {
+    padding-right: 4px;
+}
+
+.dropdown-menu[data-bs-popper] {
+    margin-top: 0.4rem;
+}
+
+.hr_menu_content {
+    padding: 0.35rem 1rem;
+}
+
+.hr_menu_content a {
+    text-decoration: none;
+    color: white;
+}
+
+.hr_menu_content a:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.hr_menu_content img {
+    height: 18px;
+    margin-right: 0.25rem;
+}
+
+.hr_menu_table {
+    font-size: smaller;
+    font-weight: 600;
+    color: white;
+    width: 50vw;
+    margin: 0 auto;
+}
+
+.hr_menu_title {
+    opacity: 0.7;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.nav_right {
+    color: white !important;
+    line-height: 36px;
+    padding: 0;
+    position: absolute;
+    right: 3%;
+}
+
+.nav_right span {
+    padding: 10px;
+}
+
+.nav_right span a {
+    color: white;
+    text-decoration: none;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    background-color: transparent !important;
+}
+
+.nav_mobile {
+    display: none;
+}
+
+.nav_mobile .nav-item span:hover {
+    background-color: transparent;
+}
+
+.navigation_mobile {
+    width: 100%;
+}
+
+@media screen and (max-width:768px) {
+    .hr_menu_table {
+        width: auto;
+        font-size: 0.55rem;
+    }
+
+    .hr_menu_title {
+        font-size: 0.85rem;
+    }
+
+    .nav_right {
+        display: none;
+    }
+
+    .nav_mobile {
+        display: block;
+    }
+
+    .button_div {
+        margin-right: 0;
+    }
+
+}
+
+/* title of page */
+.title {
+    color: #0f5288;
+}
+
+/* underline */
+.underline {
+    content: " ";
+    width: 15%;
+    display: block;
+    height: 3px;
+    background-color: #0f5288;
+}
+
+/* for unit list page */
+
+.table_container {
+    width: 100%;
+}
+
+.button_div {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 2.5vw;
+}
+
+/* add button */
+.add_button {
+    position: relative;
+    /* float: right; */
+    padding: 7px 9px;
+    margin-bottom: 2vh;
+    color: white;
+    border: none;
+    background-color: #0f5288;
+    border-radius: 5px;
+}
+
+/* table */
+.unit_table {
+    width: 95%;
+    border-style: hidden;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.unit_table td, .unit_table th {
+    border-right: 1px solid rgba(0, 0, 0, .1);
+    padding-left: 1%;
+}
+
+.unit_table th {
+    font-size: 0.8rem;
+}
+
+.unit_table td {
+    font-size: 0.75rem;
+}
+
+.unit_table tr:nth-child(odd) {
+    background-color: rgba(15, 82, 136, 0.1);
+}
+
+.unit_table th {
+    color: white;
+}
+
+.action {
+    color: tomato;
+}
+
+.action:hover {
+    color: maroon;
+}
+
+.unit_table tr {
+    height: 30px;
+}
+
+.unit_table tr:hover {
+    font-weight: 700;
+}
+
+/* for create employee page */
+
+.main_form {
+    background-color: rgba(53, 115, 163, 0.03);
+}
+
+legend {
+    font-size: 1.25rem;
+}
+
+.form_container {
+    width: 75vw;
+    margin-top: 10vh;
+}
+
+.submit_button {
+    background-color: rgba(53, 115, 163, 0.5);
+}
+
+
+/* for dashboard */
+
+.dashboard_container .row {
+    align-items: center;
+}
+
+.punch_out_button button {
+    background: #0f5288;
+    color: #fff;
+    outline: none;
+    border: none;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+}
+
+.punch_out_button {
+    z-index: 2;
+}
+
+.applyLeave_btn {
+    background-color: #0f5288;
+    color: white;
+}
+
+.punch_out_form {
+    float: right;
+    display: flex;
+    align-items: center;
+}
+
+.punch_out_form input[type=text] {
+    position: relative;
+    left: 15px;
+    padding: 10px;
+    font-size: 15px;
+    font-family: sans-serif;
+    border: 1px solid #0f5288;
+    border-radius: 10px 0 0 10px;
+}
+
+.current_time {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 !important;
+}
+
+.box_background {
+    background-color: rgba(211, 211, 211, 0.2);
+    border-radius: 10px;
+}
+
+.birthdays_container {
+    height: 45vh;
+    overflow-y: scroll;
+}
+
+.birthdate_box {
+    background-color: white;
+    border: 1px solid #0f5288;
+    padding: 0.25rem;
+    font-size: 2.5vh;
+    width: 15% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.birthday_person h1 {
+    font-size: 2.5vh;
+}
+
+.birthday_person h4 {
+    font-size: 2vh;
+}
+
+.employees_leave {
+    margin: 0 1.5rem;
+}
+
+
+.date_box input[type=text] {
+    width: 150px;
+    position: relative;
+    left: 15px;
+    padding: 8px;
+    font-size: 15px;
+    font-family: sans-serif;
+    border: 1px solid #0f5288;
+    border-radius: 10px;
+}
+
+.total_count_box input[type=text] {
+    width: 60px;
+    position: relative;
+    left: 15px;
+    padding: 8px;
+    font-size: 15px;
+    font-family: sans-serif;
+    border: 1px solid #0f5288;
+    border-radius: 10px;
+}
+
+.empOnLeave_table_container {
+    display: flex;
+    justify-content: center;
+}
+
+.empOnLeave_table {
+    /* background-color: #0f5288;
+    color: #fff; */
+    margin: 1rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.8vh;
+}
+
+.empOnLeave_table td, .empOnLeave_table th {
+    padding: 0.35rem;
+    border: 1px solid lightgray;
+}
+
+@media screen and (max-width:768px) {
+    .top_buttons .col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .employees_leave {
+        margin: 0;
+    }
+
+    .empOnLeave_table_container {
+        margin: 0 1vw;
+    }
+
+    .birthday_person {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .topRow_empleave{
+        padding-left: 4vw;
+    }
+}

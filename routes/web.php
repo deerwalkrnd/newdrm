@@ -171,6 +171,10 @@ Route::middleware(['logged-in'])->group(function(){
 
 });
 
+Route::view('/test','admin.dashboard.index');
+Route::view('/form','admin.dashboard.form');
+Route::view('/table','admin.dashboard.table');
+
 // Route::middleware(['logged-in','employee'])->group(function(){
 //     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
 //     Route::post('/file-upload',[FileUploadController::class, 'store']);
