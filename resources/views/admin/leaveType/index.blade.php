@@ -11,6 +11,7 @@
                     <th scope="col" class="pl-4">S.N</th>
                     <th scope="col">Type</th>
                     <th scope="col">Payment Status</th>
+                    <th scope="col">Include Holiday Status</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -21,6 +22,7 @@
                     <th scope="row" class="pl-4">{{ $loop->iteration }}</th>
                     <td>{{ $leaveType->name }}</td>
                     <td> {{ $leaveType->paid_unpaid == 1? 'Paid':'Unpaid'}} </td>
+                    <td>{{ $leaveType->include_holiday }}</td>
                     <td>
                         <a href="/leaveType/edit/{{ $leaveType->id }}">Edit</a> 
                         | 

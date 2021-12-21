@@ -56,6 +56,7 @@ class LeaveRequestController extends Controller
         // dd($data);
         $data['employee_id'] = \Auth::user()->id;
         $data['requested_by'] = \Auth::user()->id;
+        // $date['year'] = date
         
         if($data['leave_time'] == 'full')
         {

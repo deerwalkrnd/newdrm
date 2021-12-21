@@ -19,7 +19,7 @@ class CreateLeaveRequestsTable extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->integer('days');
-            $table->integer('year')->default(date('Y'));
+            $table->year('to')->default(new Expression('(YEAR(CURDATE()))'));
             $table->foreignId('leave_type_id')->constrained('leave_types');
             $table->enum('full_leave',[0,1]);
             $table->enum('half_leave',['first','second'])->nullable();

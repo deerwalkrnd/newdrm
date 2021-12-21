@@ -52,3 +52,16 @@
         <p class="text-danger">{{ $message }}</p>
     @enderror
 </div>
+
+<div class="form-group">
+    <div class="form-check form-check-inline">
+        <input type="hidden" name="include_holiday" value="0">
+        <input class="form-check-input" type="checkbox" name="include_holiday" id="include_holiday" value="1" 
+        {{ (isset($leaveType) && $leaveType->include_holiday == '1') ? 'checked':'' }}
+        {{ old('include_holiday') == '1' ? 'checked':'' }}>
+        <label class="form-check-label" for="female_only">Include Holiday Status</label>
+    </div>
+    @error('include_holiday')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror
+</div>

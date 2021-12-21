@@ -19,6 +19,7 @@ class CreateLeaveTypesTable extends Migration
             $table->string('name');
             $table->enum('gender',['Male','Female','All']);
             $table->enum('paid_unpaid',['0','1']);
+            $table->enum('include_holiday',['0','1']);
             $table->timestamps();
         });
     }

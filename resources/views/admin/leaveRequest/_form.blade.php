@@ -18,18 +18,7 @@
     @enderror
 </div>
 <!-- leave type -->
-<hr>
 
-
-
-<div class="form-group">
-    <label for="year">Year*</label>
-    <input type="number" class="form-control" id="year" placeholder="Enter Leave Year" name="year" value="{{ !empty(old('year')) ? old('year') : $leaveRequest->year ?? '' }}" >  
-    @error('year')
-        <p class="text-danger">{{ $message }}</p>
-    @enderror
-</div>
-<!-- leave request year -->
 
 <div class="form-group">
     <label for="half_leave">Leave Time*</label>
