@@ -19,7 +19,7 @@ class LeaveRequestController extends Controller
      */
     public function index()
     {
-        $leaveRequests = LeaveRequest::select('id', 'start_date', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
+        $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
         ->with(['employee:id,first_name,last_name','leaveType:id,name'])
         ->orderBy('created_at')
         ->orderBy('updated_at')
@@ -53,6 +53,7 @@ class LeaveRequestController extends Controller
     public function store(LeaveRequestRequest $request)
     {
         $data = $request->validated();
+        // dd($data);
         $data['employee_id'] = \Auth::user()->id;
         $data['requested_by'] = \Auth::user()->id;
         

@@ -32,6 +32,7 @@ class LeaveRequestRequest extends FormRequest
             'start_date' => 'required|date|after_or_equal:'.$today,
             'end_date' => 'required|date|after_or_equal:start_date|starts_with:'.$start_date_year,
             'days' => 'required|integer|in:'.$calcDay,
+            'year' => 'required|integer',
             'leave_type_id' => 'required|integer',
             'leave_time' => 'required|in:full,first,second',
             'reason' => 'required|string',
