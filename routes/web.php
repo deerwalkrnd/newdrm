@@ -177,6 +177,18 @@ Route::middleware(['logged-in'])->group(function(){
 });
 
 
+Route::view('/test','admin.dashboard.index');
+Route::view('/form','admin.dashboard.form');
+Route::view('/table','admin.dashboard.table');
+
+// Route::middleware(['logged-in','employee'])->group(function(){
+//     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
+//     Route::post('/file-upload',[FileUploadController::class, 'store']);
+//     Route::get('/file-upload',[FileUploadController::class, 'index']);
+//     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
+//     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
+
+
 
 // Route::get('/test',function(){
 //     if(Auth::user())
