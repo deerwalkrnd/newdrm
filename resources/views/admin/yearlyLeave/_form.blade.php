@@ -77,7 +77,7 @@
 <!-- paid-status -->
 
 <div class="form-group">
-    <label for="days">Year*</label>
+    <label for="year">Year*</label>
     <input type="number" class="form-control" id="year" placeholder="Enter Leave Year" name="year" value="{{ !empty(old('year')) ? old('year') : $yearlyLeaves->year ?? '' }}" >  
     @error('year')
         <p class="text-danger">{{ $message }}</p>

@@ -11,6 +11,7 @@
                     <th scope="col" class="pl-4">S.N</th>
                     <th scope="col">Employee</th>
                     <th scope="col">Leave Type</th>
+                    <th scope="col">Year</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
                     <th scope="col">Days</th>
@@ -26,6 +27,7 @@
                     <th scope="row" class="pl-4">{{ $loop->iteration }}</th>
                     <td>{{ $leaveRequest->employee->first_name.' '.$leaveRequest->employee->last_name }}</td>
                     <td>{{ $leaveRequest->leaveType->name }}</td>
+                    <td>{{ $leaveRequest->year }}</td>
                     <td>{{ $leaveRequest->start_date }}</td>
                     <td>{{ $leaveRequest->end_date }}</td>
                     <td>{{ $leaveRequest->days }}</td>

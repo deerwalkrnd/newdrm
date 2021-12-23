@@ -17,11 +17,11 @@
         <p class="text-danger">{{ $message }}</p>
     @enderror
 </div>
+<!-- leave type -->
 
-<hr>
 
 <div class="form-group">
-    <label for="half_leave">Leave Time</label>
+    <label for="half_leave">Leave Time*</label>
     <br>
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="leave_time" id="leave_time0" value="full" 
@@ -47,7 +47,7 @@
 </div>
 <hr>
 <div class="form-group">
-    <label for="days">Leave Days</label>
+    <label for="days">Leave Days*</label>
     <input type="number" class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : $leaveRequest->days ?? '' }}">
     @error('days')
         <p class="text-danger">{{ $message }}</p>
@@ -55,7 +55,7 @@
 </div>
 
 <div class="form-group">
-    <label for="start_date">Start Date</label>
+    <label for="start_date">Start Date*</label>
     <input type="date" class="form-control" id="start_date" name="start_date" value="{{ !empty(old('start_date')) ? old('start_date') : $leaveRequest->start_date ?? '' }}">
     @error('start_date')
         <p class="text-danger">{{ $message }}</p>
@@ -63,7 +63,7 @@
 </div>
 
 <div class="form-group">
-    <label for="end_date">End Date</label>
+    <label for="end_date">End Date*</label>
     <input type="date" class="form-control" id="end_date" name="end_date" value="{{ !empty(old('end_date')) ? old('end_date') : $leaveRequest->end_date ?? '' }}">
     @error('end_date')
         <p class="text-danger">{{ $message }}</p>
@@ -71,7 +71,7 @@
 </div>
 
 <div class="form-group">
-    <label for="reason">Reason</label>
+    <label for="reason">Reason*</label>
     <input type="text" class="form-control" id="reason" placeholder="Enter Reason" name="reason" value="{{ !empty(old('reason')) ? old('reason') : $leaveRequest->reason ?? '' }}">
     @error('reason')
         <p class="text-danger">{{ $message }}</p>

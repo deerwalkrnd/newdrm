@@ -20,6 +20,8 @@ use App\Http\Controllers\LeaveReportController;
 use App\Http\Controllers\CarryOverLeaveController;
 use App\Http\Controllers\FileCategoryController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\SendMailController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,7 @@ use App\Http\Controllers\FileUploadController;
 Route::get('/', function () {
     return view('auth.login');
 });
+
 
 Route::middleware(['logged-in'])->group(function(){
     
@@ -149,7 +152,7 @@ Route::middleware(['logged-in'])->group(function(){
     //Leave Report
     Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
     
-
+    //Carry Over Leave
     Route::get('/info',[CarryOverLeaveController::class,'calculateCarryOverLeave']);
 
     // fileCategory route
@@ -160,7 +163,6 @@ Route::middleware(['logged-in'])->group(function(){
     Route::put('/file-category/{id}',[FileCategoryController::class, 'update']);
     Route::delete('/file-category/{id}',[FileCategoryController::class, 'destroy']);
 
-
      // fileUpload route
     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
     Route::post('/file-upload',[FileUploadController::class, 'store']);
@@ -168,6 +170,9 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
     // Route::put('/file-upload/{id}',[FileUploadController::class, 'download']);
     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
+
+    // Send Mail Route
+    Route::get('punch-out-mail',[SendMailController::class,'punchOutMail']);
 
 });
 
@@ -182,7 +187,6 @@ Route::view('/table','admin.dashboard.table');
 //     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
 //     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
 
-// });
 
 // Route::get('/test',function(){
 //     if(Auth::user())
