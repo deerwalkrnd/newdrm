@@ -273,7 +273,10 @@
                     <!-- not for mobile -->
                     <li class="nav_right">
                         <span>Welcome: Ruby Shakya</span>
-                        <span><a href="#"><i class="fas fa-power-off"></i> Logout</a></span>
+                        
+                        <!-- logout -->
+                        <span><a href="javascript:{}" onclick="document.getElementById('logout_form').submit();"><i class="fas fa-power-off"></i> Logout</a></span>
+                        <form action="/logout" method="POST" id="logout_form">@csrf</form>
                     </li>
 
                 </ul>

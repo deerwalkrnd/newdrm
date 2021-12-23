@@ -3,6 +3,7 @@
     padding: 0;
 }
 
+
 /* navigation bar */
 
 .navigation {
@@ -21,6 +22,7 @@
     line-height: 36px;
     background-color: #3573A3;
 }
+
 
 /* .active {
     margin: 0;
@@ -106,7 +108,8 @@
     text-decoration: none;
 }
 
-.dropdown-item:focus, .dropdown-item:hover {
+.dropdown-item:focus,
+.dropdown-item:hover {
     background-color: transparent !important;
 }
 
@@ -127,31 +130,30 @@
         width: auto;
         font-size: 0.55rem;
     }
-
     .hr_menu_title {
         font-size: 0.85rem;
     }
-
     .nav_right {
         display: none;
     }
-
     .nav_mobile {
         display: block;
     }
-
     .button_div {
         margin-right: 0;
     }
-
 }
 
+
 /* title of page */
+
 .title {
     color: #0f5288;
 }
 
+
 /* underline */
+
 .underline {
     content: " ";
     width: 15%;
@@ -159,6 +161,7 @@
     height: 3px;
     background-color: #0f5288;
 }
+
 
 /* for unit list page */
 
@@ -172,7 +175,9 @@
     margin-right: 2.5vw;
 }
 
+
 /* add button */
+
 .add_button {
     position: relative;
     /* float: right; */
@@ -182,16 +187,24 @@
     border: none;
     background-color: #0f5288;
     border-radius: 5px;
+    text-decoration: none;
 }
 
+.add_button:hover {
+    color: #fff;
+}
+
+
 /* table */
+
 .unit_table {
     width: 95%;
     border-style: hidden;
     border: 1px solid rgba(0, 0, 0, .2);
 }
 
-.unit_table td, .unit_table th {
+.unit_table td,
+.unit_table th {
     border-right: 1px solid rgba(0, 0, 0, .1);
     padding-left: 1%;
 }
@@ -227,6 +240,7 @@
 .unit_table tr:hover {
     font-weight: 700;
 }
+
 
 /* for create employee page */
 
@@ -332,7 +346,6 @@ legend {
     margin: 0 1.5rem;
 }
 
-
 .date_box input[type=text] {
     width: 150px;
     position: relative;
@@ -369,7 +382,8 @@ legend {
     font-size: 1.8vh;
 }
 
-.empOnLeave_table td, .empOnLeave_table th {
+.empOnLeave_table td,
+.empOnLeave_table th {
     padding: 0.35rem;
     border: 1px solid lightgray;
 }
@@ -381,22 +395,18 @@ legend {
         align-items: center;
         justify-content: center;
     }
-
     .employees_leave {
         margin: 0;
     }
-
     .empOnLeave_table_container {
         margin: 0 1vw;
     }
-
     .birthday_person {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-
-    .topRow_empleave{
+    .topRow_empleave {
         padding-left: 4vw;
     }
 }
