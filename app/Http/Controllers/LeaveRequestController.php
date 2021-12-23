@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\YearlyLeave;
 use App\Http\Requests\LeaveRequestRequest;
 use App\Http\Requests\SubordinateLeaveRequestRequest;
 
@@ -53,10 +54,12 @@ class LeaveRequestController extends Controller
     public function store(LeaveRequestRequest $request)
     {
         $data = $request->validated();
-        // dd($data);
+        $leave_type_id = $data['leave_type_id'];
+        $requested_leave_days = $data['days'];
+        $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('organization_id',\Auth::user()->employee->organization_id)->get()->first()->days;
         $data['employee_id'] = \Auth::user()->id;
         $data['requested_by'] = \Auth::user()->id;
-        // $date['year'] = date
+
         
         if($data['leave_time'] == 'full')
         {
@@ -69,11 +72,11 @@ class LeaveRequestController extends Controller
                 $data['half_leave'] = 'second';
             }
         }
-
-        // dd($data);
-
-        // $data['accepted_by'] = \Auth::user()->id;
-
+        $remaining_leave = $this->calculateRemainingTime($allowed_leave,$leave_type_id,$requested_leave_days,$data['employee_id']);
+       
+        if(!$remaining_leave){
+          return redirect('/leave-request/create');
+        }
         LeaveRequest::create($data);
         return redirect('/leave-request');
     }
@@ -150,7 +153,7 @@ class LeaveRequestController extends Controller
 
     public function accept($id)
     {
-        LeaveRequest::findOrFail($id)
+        $leaveRequest = LeaveRequest::findOrFail($id)
         ->update([
             'acceptance' => 'accepted',
             'accepted_by' => \Auth::user()->id
@@ -168,5 +171,23 @@ class LeaveRequestController extends Controller
         ]);
 
         return redirect('/leave-request');
+    }
+
+    private function calculateRemainingTime($allowed_leave,$leave_type_id,$requested_leave_days,$user_id){
+        $year = date('Y');
+        $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance','full_leave')
+                                        ->where('acceptance','accepted')
+                                        ->where('year',$year)
+                                        ->where('employee_id', $user_id)
+                                        ->where('leave_type_id',$leave_type_id)
+                                        ->sum('days');
+
+        $remaining_leave = $allowed_leave-$already_taken_leaves;
+
+        if($remaining_leave < $requested_leave_days )
+            return false;
+        
+        return $remaining_leave ;
+        
     }
 }

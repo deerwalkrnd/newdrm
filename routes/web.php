@@ -152,7 +152,7 @@ Route::middleware(['logged-in'])->group(function(){
     //Leave Report
     Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
     
-
+    //Carry Over Leave
     Route::get('/info',[CarryOverLeaveController::class,'calculateCarryOverLeave']);
 
     // fileCategory route
