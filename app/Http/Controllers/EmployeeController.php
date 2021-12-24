@@ -32,7 +32,7 @@ class EmployeeController extends Controller
     {
         $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','organization_id','unit_id','intern_trainee_ship_date','join_date')
         ->orderBy('first_name') 
-        ->paginate(10);
+        ->get();
         
         return view('admin.employee.index')->with(compact('employees'));
     }

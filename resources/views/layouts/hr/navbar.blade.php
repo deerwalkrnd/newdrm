@@ -168,7 +168,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/overdue.png">Request Punch
                                                     In Exception</a></td>
@@ -178,7 +178,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/warning.png">My
                                                     Punch In
@@ -190,7 +190,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/report (1).png">DWIT Interns
                                                     Report
@@ -201,7 +201,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/seo-report.png">Auditor
                                                     Report
@@ -211,7 +211,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/search.png">No
                                                     Punch In
@@ -223,24 +223,24 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"></td>
-                                            <td class="hr_menu_content"></td>
+                                            <td></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><img class="img-fluid"
                                                     src="/assets/images/icons/squad.png">Squad</a>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"></td>
-                                            <td class="hr_menu_content"></td>
+                                            <td></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/list.png">Release Checklist Personnel</a>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"></td>
-                                            <td class="hr_menu_content"></td>
+                                            <td></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/calendar (2).png">Fiscal Year</a></td>
                                         </tr>
