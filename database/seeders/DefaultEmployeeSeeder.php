@@ -48,6 +48,13 @@ class DefaultEmployeeSeeder extends Seeder
             'gender' => 'All',
             'paid_unpaid' => '0'
         ]);
+
+        DB::table('leave_types')->insert([
+            'name' => 'Carry Over',
+            'gender' => 'All',
+            'paid_unpaid' => '0'
+        ]);
+
         DB::table('yearly_leaves')->insert([
             'organization_id' => '1',
             'leave_type_id' => '1',
@@ -62,7 +69,6 @@ class DefaultEmployeeSeeder extends Seeder
         ]);
 
         DB::table('employees')->insert([
-            // 'employee_id' => '1',
             'first_name' => 'Ram',
             'last_name' => 'Sharma',
             'date_of_birth' => '1990-01-01',
@@ -94,7 +100,6 @@ class DefaultEmployeeSeeder extends Seeder
         ]);
 
         DB::table('employees')->insert([
-            // 'employee_id' => '1',
             'first_name' => 'Deena',
             'last_name' => 'Sitikhu',
             'date_of_birth' => '1990-01-01',

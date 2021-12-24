@@ -14,6 +14,7 @@ class LeaveRequest extends Model
         'start_date',
         'end_date',
         'days',
+        'year',
         'leave_type_id',
         'full_leave',
         'half_leave',

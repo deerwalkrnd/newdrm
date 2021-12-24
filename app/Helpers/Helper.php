@@ -3,6 +3,9 @@
 namespace App\Helpers;
 
 use App\Models\LeaveType;
+use App\Models\LeaveRequest;
+use App\Models\YearlyLeave;
+use App\Models\CarryOverLeave;
 use App\Models\Holiday;
 use App\Models\Employee;
 use Carbon\CarbonPeriod;
@@ -11,7 +14,6 @@ use Carbon\Carbon;
 final class Helper
 {
     private $weekend = ['SUN','SAT'];
-    
 
     public static function getDays($start_date, $end_date, $leave_type_id){
         $employee = Employee::findOrFail(\Auth::user()->id)->select('gender')->first();
@@ -64,5 +66,54 @@ final class Helper
         return $day;
     }
 
+    public static function getRemainingDays($leave_type_id){
+        $year = date('Y');
+        $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
+                                        ->where('acceptance','accepted')
+                                        ->where('year',$year)
+                                        ->where('employee_id', \Auth::user()->id)
+                                        ->where('leave_type_id',$leave_type_id)
+                                        ->sum('days');
+
+        $allowed_leave = YearlyLeave::select('days')
+                                        // ->where('organization_id')
+                                        ->where('leave_type_id',$leave_type_id)
+                                        ->where('year',$year)
+                                        ->first();
+
+        if($allowed_leave)
+            $allowed_leave = $allowed_leave->days;
+        else
+            $allowed_leave = 0;
+
+        $remaining_leave = $allowed_leave - $already_taken_leaves;
+       
+        return $remaining_leave;     
+    }
+
+    public static function getRemainingCarryOverLeave()
+    {
+        $year = date('Y');
+        $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
+                                        ->where('acceptance','accepted')
+                                        ->where('year',$year)
+                                        ->where('employee_id', \Auth::user()->id)
+                                        ->where('leave_type_id',2) // 2 for carry_over leave
+                                        ->sum('days');
+
+        $allowed_leave = CarryOverLeave::select('days')
+                                        ->where('year',date('Y')-1)
+                                        ->where('employee_id',\Auth::user()->id)
+                                        ->first();
+
+        if($allowed_leave)
+            $allowed_leave = $allowed_leave->days;
+        else
+            $allowed_leave = 0;
+                               
+        $remaining_leave = $allowed_leave - $already_taken_leaves;
+       
+        return $remaining_leave;     
+    }
 }
 ?>

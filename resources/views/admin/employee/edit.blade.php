@@ -36,3 +36,63 @@
 </section>
 <!-- form end -->
 @endsection
+
+@section('scripts')
+<script>
+    $('.manager-livesearch').select2({    
+        ajax: {
+            url: '/employee/search',
+            data: function (params) {
+                var query = {
+                    q: params.term,
+                }
+                    // Query parameters will be ?search=[term]
+                return query;
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        let full_name = (item.middle_name === null) ? item.first_name + " " + item.last_name : item.first_name + " " + item.middle_name + " " + item.last_name;
+                        return {
+                            text: full_name,
+                            id: item.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+
+    $('.district-livesearch').select2({
+        ajax: {
+            url: '/district/search',
+            data: function (params) {
+                var query = {
+                    q: params.term,
+                    p: $('#permanent_address').val()  
+                }
+                    // Query parameters will be ?search=[term]
+                return query;
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: item.district_name ,
+                            id: item.id
+                        }
+                    })
+                };
+                
+                // console.log(query);
+            },
+            cache: false
+        }
+    });
+</script>
+@endsection

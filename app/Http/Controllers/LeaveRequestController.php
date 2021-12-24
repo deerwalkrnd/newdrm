@@ -59,7 +59,7 @@ class LeaveRequestController extends Controller
         $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('organization_id',\Auth::user()->employee->organization_id)->get()->first()->days;
         $data['employee_id'] = \Auth::user()->id;
         $data['requested_by'] = \Auth::user()->id;
-
+        $data['year'] = date('Y',strtotime($data['start_date']));
         
         if($data['leave_time'] == 'full')
         {
@@ -72,11 +72,11 @@ class LeaveRequestController extends Controller
                 $data['half_leave'] = 'second';
             }
         }
-        $remaining_leave = $this->calculateRemainingTime($allowed_leave,$leave_type_id,$requested_leave_days,$data['employee_id']);
+        // $remaining_leave = $this->calculateRemainingTime($allowed_leave,$leave_type_id,$requested_leave_days,$data['employee_id']);
        
-        if(!$remaining_leave){
-          return redirect('/leave-request/create');
-        }
+        // if(!$remaining_leave){
+        //   return redirect('/leave-request/create');
+        // }
         LeaveRequest::create($data);
         return redirect('/leave-request');
     }
@@ -182,12 +182,8 @@ class LeaveRequestController extends Controller
                                         ->where('leave_type_id',$leave_type_id)
                                         ->sum('days');
 
-        $remaining_leave = $allowed_leave-$already_taken_leaves;
+        $remaining_leave = $allowed_leave - $already_taken_leaves;
 
-        if($remaining_leave < $requested_leave_days )
-            return false;
-        
         return $remaining_leave ;
-        
     }
 }
