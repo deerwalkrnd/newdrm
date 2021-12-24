@@ -22,7 +22,7 @@ class UnitController extends Controller
                         ->with('organization:id,name')
                         ->orderBy('organization_id')
                         ->orderBy('unit_name')
-                        ->paginate(10);
+                        ->get();
         return view('admin.unit.index')->with(compact('units'));
     }
 

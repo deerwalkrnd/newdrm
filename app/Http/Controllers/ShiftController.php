@@ -17,7 +17,7 @@ class ShiftController extends Controller
      */
     public function index()
     {
-        $shifts = Shift::select('id', 'name')->paginate(10);
+        $shifts = Shift::select('id', 'name')->get();
         return view('admin.shift.index')->with(compact('shifts'));
     }
 

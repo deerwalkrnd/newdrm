@@ -17,7 +17,7 @@ class ServiceTypeController extends Controller
      */
     public function index()
     {
-        $serviceTypes = ServiceType::select('id', 'service_type_name')->paginate(10);
+        $serviceTypes = ServiceType::select('id', 'service_type_name')->get();
         return view('admin.serviceType.index')->with(compact('serviceTypes'));
     }
 

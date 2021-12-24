@@ -19,7 +19,7 @@ class LeaveTypeController extends Controller
     {
         $leaveTypes = LeaveType::select('id', 'name','paid_unpaid','include_holiday')
                         ->orderBy('name')
-                        ->paginate(10);
+                        ->get();
         // dd($leaveTypes);
         return view('admin.leaveType.index')->with(compact('leaveTypes'));
     }

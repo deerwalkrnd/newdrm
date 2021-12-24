@@ -16,7 +16,7 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        $organizations = Organization::select('id', 'name', 'code')->paginate(10);
+        $organizations = Organization::select('id', 'name', 'code')->get();
         return view('admin.organization.index')->with(compact('organizations'));
     }
 

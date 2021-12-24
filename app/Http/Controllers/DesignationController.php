@@ -17,7 +17,7 @@ class DesignationController extends Controller
      */
     public function index()
     {
-        $designations = Designation::select('id', 'job_title_name', 'job_description')->paginate(10);
+        $designations = Designation::select('id', 'job_title_name', 'job_description')->get();
         return view('admin.designation.index')->with(compact('designations'));
     }
 

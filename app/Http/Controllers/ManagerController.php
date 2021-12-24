@@ -23,7 +23,7 @@ class ManagerController extends Controller
         $managers = Manager::select('id', 'employee_id','is_active')
                             ->with('employee:id,first_name,last_name')
                             ->orderBy('id')
-                            ->paginate(10);
+                            ->get();
         return view('admin.manager.index')->with(compact('managers'));
     }
 

@@ -16,7 +16,7 @@ class HolidayController extends Controller
      */
     public function index()
     {
-        $holidays = Holiday::select('id','name','date','female_only')->orderBy('name')->paginate(10);
+        $holidays = Holiday::select('id','name','date','female_only')->orderBy('name')->get();
         return view('admin.holiday.index')->with(compact('holidays'));
     }
 

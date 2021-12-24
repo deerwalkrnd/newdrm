@@ -23,7 +23,7 @@ class YearlyLeaveController extends Controller
                         ->with('organization:id,name')
                         ->with('leaveType:id,name')
                         ->orderBy('organization_id')
-                        ->paginate(10);
+                        ->get();
         return view('admin.yearlyLeave.index')->with(compact('yearlyLeaves'));
     }
 
