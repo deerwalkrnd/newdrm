@@ -210,12 +210,10 @@ class EmployeeController extends Controller
     {
         try{
             $employee = Employee::findOrFail($id);
-            // dd($employee);
-            $employee->delete();
-            dd("herl");
             return redirect('/employee');
     
         }catch(\Illuminate\Database\QueryException $e){
+            dd($e);
             if($e->getCode() == "23000"){
                 return redirect()->back();
             }

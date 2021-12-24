@@ -52,6 +52,7 @@ class AttendanceController extends Controller
         //state = 1 ; no punch-in
         //state = 2; no punch-out
         //state = 3; punch-out
+        // dd(request()->ip());
 
         $state = 1;
         if($this->recordRowExists())
@@ -104,9 +105,11 @@ class AttendanceController extends Controller
                 $isLate = $presentTime <= $maxTime ? '0' : '1';
                 $reason = $request->reason;
                 // if reason is null for isLate true throw error
+                // dd(request()->ip());
                 Attendance::create([
                     'employee_id' => \Auth::user()->employee_id,
                     'punch_in_time' => Carbon::now()->toDateTimeString(),
+                    'punch_in_ip' => request()->ip(),
                     'late_punch_in' => $isLate,
                     'reason' => $reason
                 ]);
@@ -117,7 +120,7 @@ class AttendanceController extends Controller
         return redirect($this->redirect_to);
     } 
 
-    public function punchOut()
+    public function punchOut(Request $request)
     {
         $employee_id = \Auth::user()->employee_id;
         $today = date('Y-m-d');
@@ -151,7 +154,8 @@ class AttendanceController extends Controller
                         ->where('employee_id',$employee_id)
                         ->whereDate('created_at',$today)
                         ->update([
-                            'punch_out_time' => Carbon::now()->toDateTimeString()
+                            'punch_out_time' => Carbon::now()->toDateTimeString(),
+                            'punch_out_ip' => request()->ip(),
                         ]);
             \Session::put('punchIn', '3');
 

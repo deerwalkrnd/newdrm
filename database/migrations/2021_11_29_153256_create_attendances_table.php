@@ -17,8 +17,10 @@ class CreateAttendancesTable extends Migration
             $table->id();
             $table->foreignId('employee_id')->constrained('employees');
             $table->dateTime('punch_in_time');
+            $table->string('punch_in_ip');
             $table->enum('late_punch_in',[0,1])->default('0');
             $table->dateTime('punch_out_time')->nullable();
+            $table->string('punch_out_ip')->nullable();
             $table->enum('missed_punch_out',[0,1])->default('0');
             $table->string('reason')->nullable();
             $table->timestamps();
