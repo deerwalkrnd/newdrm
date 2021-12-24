@@ -50,6 +50,7 @@
 <!-- section for current time end-->
 
 {{-- @include('admin.dashboard.midSection') --}}
+@include('admin.dashboard.midSection')
 
 
 <!-- section for employees on leave part start-->

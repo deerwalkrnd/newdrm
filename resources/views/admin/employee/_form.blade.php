@@ -48,7 +48,7 @@
 
     <div class="col-md-6">
         <div class="mb-4">
-            <label for="date_of_birth">DOB*</label>
+            <label for="date_of_birth" class="form-label">DOB*</label>
             <input type="date" class="form-control" id="date_of_birth" placeholder="Enter Employee DOB" name="date_of_birth" value="{{ !empty(old('date_of_birth')) ? old('date_of_birth') : $employee->date_of_birth ?? '' }}">
             @error('date_of_birth')
                 <p class="text-danger">{{ $message }}</p>
@@ -321,6 +321,7 @@
         <div class="mb-4">
             <label for="permanent_district">Permanent District*</label>
             <select class="district-livesearch form-control p-3" name="permanent_district" id="permanent_district" data-placeholder="-- Choose District --">
+            <option value="" selected disabled>--Select District--</option>
             @foreach($districts as $district)
             <option value="{{ $district->id }}" 
                 {{ (!empty(old('permanent_district')) && old('permanent_district') == $district->id) ? 'selected': ''}}
