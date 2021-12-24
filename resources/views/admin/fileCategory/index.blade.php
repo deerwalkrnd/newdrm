@@ -1,44 +1,40 @@
-@extends('layouts.admin.app')
+@extends('layouts.hr.app')
+
+@section('title','File Category')
 
 @section('content')
-<div class="my-table">
-    <a href="/file-category/create"><button class="btn btn-primary float-right">Add File Category</button></a>
-    <h3 class="text-success text-center">File Category List</h3>
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col" class="pl-4">S.N</th>
-                    <th scope="col">Category Name</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
+@include('layouts.basic.tableHead',["table_title" => "File Category List", "url" => "/file-category/create"])
+<table class="unit_table mx-auto">
+    <tr class="table_title" style="background-color: #3573A3;">
+       <th scope="col" class="ps-4">S.N</th>
+        <th scope="col">Category Name</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+    </tr>
+      @forelse($fileCategories as $fileCategory)
+        <tr>
+            <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
+            <td>{{ $fileCategory->category_name }}</td>
+            <td>{{ $fileCategory->status }}</td>
+            <td class="text-center">
+                <a href="/file-category/edit/{{ $fileCategory->id }}"><i class="far fa-edit"></i></a> 
+                | 
+                <form action="/file-category/{{ $fileCategory->id }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button  class="border-0" type="submit" class="delete"><i class="fas fa-trash-alt action"></i></button>
+                </form>
+            </td>
+            
+        </tr>
+        @empty
+        <tr>
+            <th colspan=5 class="text-center text-dark">No File Category Created</th>
+        </tr>
+        @endforelse
 
-            <tbody>
-                @forelse($fileCategories as $fileCategory)
-                <tr>
-                    <th scope="row" class="pl-4">{{ $loop->iteration }}</th>
-                    <td>{{ $fileCategory->category_name }}</td>
-                    <td>{{ $fileCategory->status }}</td>
-                    <td>
-                        <a href="/file-category/edit/{{ $fileCategory->id }}">Edit</a> 
-                        | 
-                        <form action="/file-category/{{ $fileCategory->id }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="delete">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <th colspan=5 class="text-center">No File Category Created</th>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-        {{ $fileCategories->links() }}
-    </div>
-</div>
+</table>
+{{ $fileCategories->links() }}
+
+@include('layouts.basic.tableFoot')
 @endsection
