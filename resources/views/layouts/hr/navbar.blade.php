@@ -49,11 +49,14 @@
                                                     Detail</a></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/leave.png">Approve Leave</a></td>
+
                                             <td class="hr_menu_content"><a href="/designation"><img class="img-fluid"
+
                                                         src="/assets/images/icons/title.png">Designation</a></td>
                                         </tr>
 
                                         <tr>
+
                                             <td class="hr_menu_content"><a href="/employee/create"><img class="img-fluid"
                                                         src="/assets/images/icons/add.png">Add
                                                     Employee</a></td>
@@ -71,6 +74,7 @@
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/report.png">Monthly Leave
                                                     Report</a></td>
+
                                             <td class="hr_menu_content"><a href="/unit"><img class="img-fluid"
                                                         src="/assets/images/icons/pie-chart.png">Unit</a></td>
                                         </tr>
