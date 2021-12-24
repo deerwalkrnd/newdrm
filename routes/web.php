@@ -152,7 +152,7 @@ Route::middleware(['logged-in'])->group(function(){
     //Leave Report
     Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
     
-
+    //Carry Over Leave
     Route::get('/info',[CarryOverLeaveController::class,'calculateCarryOverLeave']);
 
     // fileCategory route
@@ -172,9 +172,21 @@ Route::middleware(['logged-in'])->group(function(){
     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
 
     // Send Mail Route
-    Route::get('punch-in-mail',[SendMailController::class,'punchInMail']);
+    Route::get('punch-out-mail',[SendMailController::class,'punchOutMail']);
 
 });
+
+
+Route::view('/test','admin.dashboard.index');
+Route::view('/form','admin.dashboard.form');
+Route::view('/table','admin.dashboard.table');
+
+// Route::middleware(['logged-in','employee'])->group(function(){
+//     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
+//     Route::post('/file-upload',[FileUploadController::class, 'store']);
+//     Route::get('/file-upload',[FileUploadController::class, 'index']);
+//     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
+//     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
 
 
 
