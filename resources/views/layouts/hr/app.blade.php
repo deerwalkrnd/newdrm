@@ -22,10 +22,13 @@
     
     <!-- Select 2 assets -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Data-Table assets -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+
 </head>
 
 <body>
-
     <!-- navigation bar start -->
     @include('layouts.hr.navbar')
     <!-- navigation bar end -->
@@ -44,6 +47,7 @@
         crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     @yield('scripts')
 </body>
 
