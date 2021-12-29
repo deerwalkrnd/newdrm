@@ -32,7 +32,7 @@
         </tr>
         @empty
         <tr>
-            <th colspan=5 class="text-center text-dark">No Unit Found</th>
+            <th colspan=5 class="text-center text-dark">No Manager Found</th>
         </tr>
         @endforelse
     </tbody>

@@ -35,7 +35,7 @@ class ManagerController extends Controller
     public function create()
     {
         // $managers = Manager::select('id','employee_id','is_active')->get();
-        $employees = Employee::select('id','first_name', 'last_name')->get();
+        $employees = Employee::select('id','first_name','middle_name','last_name')->get();
         return view('admin.manager.create')->with(compact('employees'));
     }
 

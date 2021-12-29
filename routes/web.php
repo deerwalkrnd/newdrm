@@ -21,6 +21,7 @@ use App\Http\Controllers\CarryOverLeaveController;
 use App\Http\Controllers\FileCategoryController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\SendMailController;
+use App\Http\Controllers\PunchInOutReportController;
 
 
 /*
@@ -173,6 +174,11 @@ Route::middleware(['logged-in'])->group(function(){
 
     // Send Mail Route
     Route::get('punch-out-mail',[SendMailController::class,'punchOutMail']);
+
+    //get punch in and out report
+    Route::get('/punch',[PunchInOutReportController::class,'getPunchInOut']);
+    
+
 
 });
 

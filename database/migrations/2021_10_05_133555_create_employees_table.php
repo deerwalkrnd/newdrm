@@ -17,7 +17,7 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->integer('version')->default(0);
             // personal details
-            // $table->string('employee_id');
+            // $table->foreignId('employee_id')
             $table->string('first_name');
             $table->string('last_name');
             $table->string('middle_name')->nullable();
@@ -63,7 +63,7 @@ class CreateEmployeesTable extends Migration
             $table->foreignId('service_type')->constrained('service_types');
             // $table->foreignId('service_type')->constrained('service_types')->onDelete('restrict');
             //service change date missing
-            $table->foreignId('manager_id')->nullable();// manager missing->nullable()
+            $table->foreignId('manager_id')->nullable()->constrained('employees');// manager missing->nullable()
             //manager_change_date //not needed
             $table->foreignId('designation_id')->constrained('designations'); //foreign
             $table->date('designation_change_date')->nullable();

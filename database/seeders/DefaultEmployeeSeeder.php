@@ -69,8 +69,8 @@ class DefaultEmployeeSeeder extends Seeder
         ]);
 
         DB::table('employees')->insert([
-            'first_name' => 'Ram',
-            'last_name' => 'Sharma',
+            'first_name' => 'Satyadeep',
+            'last_name' => 'Neupane',
             'date_of_birth' => '1990-01-01',
             'marital_status' => 'single',
             'gender' => 'male',
@@ -127,6 +127,38 @@ class DefaultEmployeeSeeder extends Seeder
             'employee_id' => '2',
             'role_id' => '2',
             'username' => 'deena.sitikhu',
+            'password' => \Hash::make('Deerwa1k@DRM')
+        ]);
+
+
+        DB::table('employees')->insert([
+            'first_name' => 'Sahil',
+            'last_name' => 'Lodha',
+            'date_of_birth' => '1990-01-01',
+            'marital_status' => 'single',
+            'gender' => 'male',
+            'mobile' => '9841000000',
+            'alter_email' => 'lodha@gmail.com',
+            'country' => 'Nepal',
+            'permanent_address' => '3',
+            'permanent_district' => '28',
+            'permanent_municipality' => 'Baneshwor',
+            'permanent_ward_no' => '12',
+            'permanent_tole' => 'old baneshowr',
+            'temp_add_same_as_per_add' => '0',
+            'join_date' => '2021-11-18',
+            'service_type' => '1',
+            'designation_id' => '1',
+            'organization_id' => '1',
+            'unit_id' => '1',
+            'email' => 'sahil.lodha@deerwalk.edu.np',
+            'shift_id' => '1'
+        ]);
+
+        DB::table('users')->insert([
+            'employee_id' => '3',
+            'role_id' => '2',
+            'username' => 'sahil.lodha',
             'password' => \Hash::make('Deerwa1k@DRM')
         ]);
     }

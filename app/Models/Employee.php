@@ -67,10 +67,18 @@ class Employee extends Model
     {
         return $this->belongsTo(Unit::class);
     }
-    public function managers()
-    {
-        return $this->has(Manager::class,'manager_id');
+    // public function managers()
+    // {
+    //     return $this->hasMany(Manager::class,'manager_id');
+    // }
+
+    public function manager(){
+        return $this->hasOne(Employee::class,'id','manager_id');
     }
+    // public function manager()
+    // {
+    //     return $this->belongsTo(Manager::class,'manager_id');
+    // }
     public function designation()
     {
         return $this->hasOne(Designation::class);
@@ -89,4 +97,9 @@ class Employee extends Model
     public function fileUploads(){
         return $this->hasMany(FileUpload::class,'employee_id','id');
     }
+
+    public function attendances(){
+        return $this->hasMany(Attendance::class,'employee_id','id')->orderBy('punch_in_time');
+    }
+
 }

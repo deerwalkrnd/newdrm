@@ -17,7 +17,7 @@ class CreateHolidaysTable extends Migration
             $table->id();
             $table->integer('version')->default('0');
             $table->string('name');
-            $table->date('date');
+            $table->date('date')->unique();
             $table->enum('female_only',['0','1'])->nullable();
             $table->timestamps();
         });
