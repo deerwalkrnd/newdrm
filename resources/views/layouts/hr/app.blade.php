@@ -49,6 +49,30 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     @yield('scripts')
+    <script>
+        function currentTime() {
+            let date = new Date(); let hh = date.getHours(); let mm = date.getMinutes(); let ss = date.getSeconds(); let session = "AM";
+
+            if(hh == 0){
+                hh = 12;
+            }
+            if(hh > 12){
+                hh = hh - 12;
+                session = "PM";
+            }
+
+            hh = (hh < 10) ? "0" + hh : hh;
+            mm = (mm < 10) ? "0" + mm : mm;
+            ss = (ss < 10) ? "0" + ss : ss;
+                
+            let time = hh + ":" + mm + ":" + ss + " " + session;
+
+            document.getElementById("clock").innerText = time; 
+            let t = setTimeout(function(){ currentTime() }, 1000);
+        }
+
+        currentTime();
+    </script>
 </body>
 
 </html>

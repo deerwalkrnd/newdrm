@@ -12,24 +12,36 @@ use App\Models\Employee;
 class DashboardController extends Controller
 {
     public function index()
+    {       
+        $leaveBalance = $this->getLeaveBalance();
+        $birthdayList = $this->getBirthdayList();
+        $leaveList = $this->getLeaveList();
+        
+        // dd($leaveList);
+
+        return view('admin.dashboard.index')->with(compact('leaveBalance','birthdayList','leaveList'));
+    }
+
+    private function getLeaveList()
+    {
+        $leaveList = LeaveRequest::select('id','employee_id','start_date','end_date','days','full_leave','half_leave','leave_type_id')
+                        ->with('employee:id,first_name,last_name,middle_name')
+                        ->with('leaveType:id,name')
+                        ->where('acceptance','accepted')
+                        ->whereDate('start_date','<=',date('Y-m-d'))
+                        ->whereDate('end_date','>=',date('Y-m-d'))
+                        ->get();
+
+        return $leaveList;
+    }
+
+    private function getBirthdayList()
     {
         $curr_month = date('m');
         $curr_day = date('d');
 
         $next_month = date('m', strtotime("+30 days"));
         $next_day = date('d', strtotime("+30 days"));
-        
-        $leaveBalance = $this->getLeaveBalance();
-        // $oneMonth = date('m-d', strtotime("+30 days"));
-        // dd($curr_month, $curr_day, $next_day, $next_month);
-
-        // $birthdayList = Employee::where(function($query) {
-        //                             $query->whereMonth('date_of_birth', '=', $curr_month)
-        //                                 ->whereDay('date_of_birth','>',$curr_day);
-        //                         })
-        //                         ->orWhereMonth('date_of_birth','>',$curr_month)
-        //                         ->where()
-        //                         ;
 
         $birthdayList = Employee::select('first_name','last_name','middle_name','date_of_birth')
                                 ->whereMonth('date_of_birth','>',$curr_month)
@@ -41,9 +53,11 @@ class DashboardController extends Controller
                                 ->orWhere(function($query) use($next_month,$next_day){
                                     $query->whereMonth('date_of_birth',$next_month)
                                         ->whereDay('date_of_birth','<=',$next_day);
-                                })->get();
-        // dd($birthdayList);
-        return view('admin.dashboard.index')->with(compact('leaveBalance','birthdayList'));
+                                })
+                                ->orderByRaw("DATE_FORMAT(date_of_birth,'%d-%M-%Y')")
+                                ->get();
+
+        return $birthdayList;
     }
 
     private function getLeaveBalance()

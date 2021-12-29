@@ -6,7 +6,7 @@
 <!-- section with top buttons start -->
 <div class="row top_buttons mx-4">
     <div class="col">
-        <button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button>
+        <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
         <button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button>
     </div>
 
@@ -43,7 +43,7 @@
 
 <!-- section for current time start-->
 <div class="row mx-4">
-    <div class="col current_time mx-4">
+    <div class="col current_time mx-4" id="clock">
         time
     </div>
 </div>
@@ -60,11 +60,11 @@
         </div>
         <div class="col-md-2 mb-2 date_box">
             Date
-            <input type="date" placeholder="" disabled>
+            <input type="date" placeholder="" disabled value="{{date('Y-m-d')}}" style="width:150px; text-align:center;">
         </div>
         <div class="col-md-2 mb-2 total_count_box">
             Total Count
-            <input type="text" placeholder="" disabled>
+            <input type="text" placeholder="" value="{{ $leaveList->count() }}" disabled  style="width:55px; text-align:center;">
         </div>
     </div>
     <div class="row empOnLeave_table_container mx-3">
@@ -80,18 +80,23 @@
                 <th>Leave Days</th>
                 <th>Half</th>
             </tr>
-
+            @forelse($leaveList as $onLeave)
             <tr>
                 <td>
-                    <center>1</center>
+                    <center>{{ $loop->iteration }}</center>
                 </td>
-                <td>Laxmi Tiwari</td>
-                <td>Sick</td>
-                <td>2021-12-16</td>
-                <td>2021-12-16</td>
-                <td>1.0</td>
-                <td></td>
+                <td>{{ $onLeave->employee->first_name." ".$onLeave->employee->last_name}}</td>
+                <td>{{ $onLeave->leaveType->name }}</td>
+                <td>{{ $onLeave->start_date }}</td>
+                <td>{{ $onLeave->end_date }}</td>
+                <td>{{ $onLeave->days }}</td>
+                <td>{{ $onLeave->full_leave == 0 ? $onLeave->half_leave : '-' }}</td>
             </tr>
+            @empty
+            <tr>
+                <td colspan="7"><center>No Record Found</center></td>
+            </tr>
+            @endforelse
         </table>
     </div>
 </div>
