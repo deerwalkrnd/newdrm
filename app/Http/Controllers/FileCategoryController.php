@@ -15,7 +15,7 @@ class FileCategoryController extends Controller
      */
     public function index()
     {
-        $fileCategories = FileCategory::select('id', 'category_name','status')->paginate(10);
+        $fileCategories = FileCategory::select('id', 'category_name','status')->get();
         return view('admin.fileCategory.index')->with(compact('fileCategories'));
     }
 

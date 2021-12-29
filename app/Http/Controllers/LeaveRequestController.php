@@ -24,7 +24,7 @@ class LeaveRequestController extends Controller
         ->with(['employee:id,first_name,last_name','leaveType:id,name'])
         ->orderBy('created_at')
         ->orderBy('updated_at')
-        ->paginate(10);
+        ->get();
         
         return view('admin.leaveRequest.index')->with(compact('leaveRequests'));
     }

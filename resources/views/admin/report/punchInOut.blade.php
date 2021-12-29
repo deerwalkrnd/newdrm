@@ -1,0 +1,175 @@
+@extends('layouts.hr.app')
+
+@section('title','Employee')
+
+@section('content')
+
+
+<div class="row">
+    <div class="mb-2 w-25">
+
+    <label class="form-label" for="employee_id">Employee:</label>
+
+    <select class="employee-livesearch form-control p-3" onchange="search()"  name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
+        @if(!empty(old('employee_id')))
+            <option value="{{ request()->get('e') }}" selected="selected">{{ old('$employeeSearch->first_name') }}</option>
+        @elseif(isset($employeeSearch) && !empty($employeeSearch->id))
+            <option value="{{ $employeeSearch->id }}" selected="selected">{{ $employeeSearch->first_name }}</option>
+        @endif
+    </select>
+
+
+    <!-- <select class="form-control employee-livesearch" id="employee_id" onchange="search()" name="employee_id">
+        <option value="" disabled="disabled"  selected="selected">-- Search by Employee --</option>
+        @forelse($employeeSearch as $employeeForSearch)
+        <option 
+            value="{{ $employeeForSearch->id }}" 
+            {{ (!empty(old('employee_id')) && old('employee_id') == $employeeForSearch->id) ? 'selected': ''}}
+            {{ (isset($employeeForSearch) && $employeeForSearch->employee_id == $employeeForSearch->id && empty(old('employee_id'))) ? 'selected' : '' }} 
+            >
+            {{ $employeeForSearch->first_name.' '.substr($employeeForSearch->middle_name,0,1).' '.$employeeForSearch->last_name }}
+        </option>
+        @empty
+        @endforelse
+    </select>
+    @error('employee_id')
+        <p class="text-danger">{{ $message }}</p>
+    @enderror -->
+
+
+        <!-- <label for="employee">Employee: </label>
+        <input placeholder="Search by Employee.." type="text" name="employee" id="punch_date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" > -->
+    </div>
+</div>
+<!-- <br> -->
+<div class="d-flex justify-content-between flex-row">
+    <div class="w-25">
+        <label for="date">Date: </label>
+        <input type="date" name="punch_date" id="punch_date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
+    </div> 
+    <div >
+        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288">Reset</button>
+    </div>
+</div>
+<br>
+<table class="unit_table mx-auto drmDataTable">
+    <thead>
+        <tr  style="background-color:limegreen;">
+            <th colspan="3" ></th>
+            <th colspan="3" >Punch In</th>
+            <th colspan="2" >Punch Out</th>
+            <th colspan="1" ></th>
+        </tr>
+        <tr class="table_title" style="background-color: #0f5288;">
+            <th scope="col" class="ps-4">S.N</th>
+            <th scope="col">Name</th>
+            <th scope="col">Manager</th>
+            <th scope="col">IP Address</th>
+            <th scope="col">Time</th>
+            <th scope="col">Remarks</th>
+            <th scope="col">IP Address</th>
+            <th scope="col">Time</th>
+            <th scope="col">Total Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($employees as $employee)
+            @forelse($employee->attendances as $attendance)
+            <tr>
+                <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
+                <td>{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</td>
+                <td>{{ $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name }}</td>
+                <td>{{ $attendance->punch_in_ip}}</td>
+                <td>{{ $attendance->punch_in_time}}</td>
+
+                    <!-- in case no leave applied and no punch in -->
+                <!-- <td>{{ date('Y-m-d H:i:s',strtotime("today") + (60*60*11)) }}</td> -->
+                <!-- <td>{{ strtotime($attendance->punch_in_time) }}</td> -->
+
+                <td>{{ $attendance->reason }}</td>
+                <td>{{ $attendance->punch_out_ip }}</td>
+                <td>{{ $attendance->punch_out_time }}</td>
+                @if(!$attendance->punch_out_time)
+                    <td style="background-color:yellow">N/A</td>   
+                @else
+                    <td>{{round((strtotime($attendance->punch_out_time) - strtotime($attendance->punch_in_time))/60/60)}} </td>
+                @endif 
+            </tr>
+            @empty
+                @if(!request()->get('e'))
+                    <tr>
+                            <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
+                            <td>{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</td>
+                            <td>{{ $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name }}</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                        </tr>
+                @endif
+            @endforelse
+            
+        @empty
+        <tr>
+            <th colspan=11 class="text-center text-dark">No  Punch In Yet</th>
+        </tr>
+        @endforelse
+    </tbody>  
+</table> 
+@include('layouts.basic.tableFoot')
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $('.drmDataTable').DataTable();
+    });
+
+    //Search by date or Employee
+    function search(){
+        let date = $('#punch_date').val();
+        let employee_id = $('#employee_id').val();
+        console.log(employee_id);
+        if(date)
+            $(location).attr('href','/punch?d='+date);
+        if(employee_id)
+            $(location).attr('href','/punch?e='+employee_id);
+
+    }
+
+    function reset(){
+        $(location).attr('href','/punch');
+    }
+
+
+
+     $('.employee-livesearch').select2({         
+        ajax: {
+            url: '/employee/search',
+            data: function (params) {
+                var query = {
+                    q: params.term,
+                }
+                    // Query parameters will be ?search=[term]
+                return query;
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        let full_name = (item.middle_name === null) ? item.first_name + " " + item.last_name : item.first_name + " " + item.middle_name + " " + item.last_name;
+                        return {
+                            text: full_name,
+                            id: item.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+</script>
+@endsection

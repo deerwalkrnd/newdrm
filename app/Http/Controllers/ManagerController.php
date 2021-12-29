@@ -23,7 +23,7 @@ class ManagerController extends Controller
         $managers = Manager::select('id', 'employee_id','is_active')
                             ->with('employee:id,first_name,last_name')
                             ->orderBy('id')
-                            ->paginate(10);
+                            ->get();
         return view('admin.manager.index')->with(compact('managers'));
     }
 
@@ -35,7 +35,7 @@ class ManagerController extends Controller
     public function create()
     {
         // $managers = Manager::select('id','employee_id','is_active')->get();
-        $employees = Employee::select('id','first_name', 'last_name')->get();
+        $employees = Employee::select('id','first_name','middle_name','last_name')->get();
         return view('admin.manager.create')->with(compact('employees'));
     }
 

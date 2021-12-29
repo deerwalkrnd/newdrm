@@ -19,4 +19,9 @@ class Attendance extends Model
         'missed_punch_out',
         'reason'
     ];
+
+     public function employee()
+    {
+        return $this->belongsTo(Employee::class,'employee_id');
+    }
 }

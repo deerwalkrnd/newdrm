@@ -16,7 +16,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::select('id', 'authority')->paginate(10);
+        $roles = Role::select('id', 'authority')->get();
         return view('admin.role.index')->with(compact('roles'));
     }
 

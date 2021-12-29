@@ -26,7 +26,7 @@ class FileUploadController extends Controller
                         ->with('employee:id,first_name,middle_name,last_name')
                         ->orderBy('file_category_id')
                         ->orderBy('file_name')
-                        ->paginate(10);
+                        ->get();
             // $employees = Employee::select('id','first_name','middle_name','last_name')->get();
             // dd($fileUploads);
             return view('admin.fileUpload.index')->with(compact('fileUploads'));

@@ -3,7 +3,18 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="employee_id">Employee Name*</label>
-            <select class="form-control" id="employee_id" name="employee_id">
+
+            
+
+            <select class="manager-livesearch form-control p-3" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
+                @if(!empty(old('employee_id')))
+                    <option value="{{ old('employee_id') }}" selected="selected">{{ old('employee_name') }}</option>
+                @elseif(isset($manager) && !empty($manager->employee))
+                    <option value="{{ $manager->employee->id }}" selected="selected">{{ $manager->employee->name }}</option>
+                @endif
+            </select>
+
+            <!-- <select class="form-control" id="employee_id" name="employee_id">
                 <option value="" disabled="disabled" selected="selected">-- Choose Employee --</option>
                 @forelse($employees as $employee)
                 <option 
@@ -14,9 +25,8 @@
                     {{ $employee->first_name.' '.$employee->last_name}}
                 </option>
                 @empty
-                <!-- no options -->
                 @endforelse
-            </select>
+            </select> -->
             @error('employee_id')
                 <p class="text-danger">{{ $message }}</p>
             @enderror

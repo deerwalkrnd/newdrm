@@ -20,4 +20,9 @@ class Manager extends Model
         return $this->belongsTo(Employee::class);
     }
 
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
+
 }

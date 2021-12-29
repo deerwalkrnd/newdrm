@@ -34,7 +34,7 @@
         <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
         <td>{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</td>
         <td>Title</td>
-        <td>{{ $employee->manager_id }}</td>
+        <td>{{ $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name}} </td>
         <td>{{ $employee->organization_id }}</td>
         <td>{{ $employee->unit_id }}</td>
         <td>{{ $employee->intern_trainee_ship_date }}</td>
@@ -57,7 +57,7 @@
         <th colspan=11 class="text-center text-dark">No Employee Created</th>
     </tr>
     @endforelse
-    </body>
+    </tbody>
 </table>
 {{-- $employees->links() --}}
 
