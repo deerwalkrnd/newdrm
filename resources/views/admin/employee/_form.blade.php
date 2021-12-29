@@ -384,13 +384,15 @@
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="temp_add_same_as_per_add" id="yes" value="1" 
                 {{ (isset($employee) && $employee->temp_add_same_as_per_add == '1') ? 'checked':'' }}
-                {{ old('temp_add_same_as_per_add') == '1' ? 'checked':'' }}>
+                {{ old('temp_add_same_as_per_add') == '1' ? 'checked':'' }}
+                onclick="$('#tempBlock').hide()">
                 <label class="form-check-label" for="yes">Yes</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="temp_add_same_as_per_add" id="no" value="0" 
                 {{ (isset($employee) && $employee->temp_add_same_as_per_add == '0') ? 'checked':'' }}
-                {{ old('temp_add_same_as_per_add') == '0' ? 'checked':'' }}>
+                {{ old('temp_add_same_as_per_add') == '0' ? 'checked':'' }}
+                onclick="$('#tempBlock').show()">
                 <label class="form-check-label" for="no">No</label>
             </div>
             @error('permanent_toletemp_add_same_as_per_add')
@@ -401,10 +403,12 @@
 </div>
 <!-- temp_add_same_as_per_add -->
 
+<div id="tempBlock">
+<hr>
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temporary_address">Temporary Address</label>
+            <label class="form-label" for="temporary_address">Temporary Address*</label>
              <input type="text" class="form-control" id="temporary_address" placeholder="Enter Employee temporary Address" name="temporary_address" value="{{ !empty(old('temporary_address')) ? old('temporary_address') : $employee->temporary_address ?? '' }}">
             @error('temporary_address')
                 <p class="text-danger">{{ $message }}</p>
@@ -417,7 +421,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temporary_district">Temporary District</label>
+            <label class="form-label" for="temporary_district">Temporary District*</label>
             <input type="text" class="form-control" id="temporary_district" placeholder="Enter Employee temporary_district" name="temporary_district" value="{{ !empty(old('temporary_district')) ? old('temporary_district') : $employee->temporary_district ?? '' }}">
             @error('temporary_district')
                 <p class="text-danger">{{ $message }}</p>
@@ -430,7 +434,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temporary_municipality">Temporary Municipality</label>
+            <label class="form-label" for="temporary_municipality">Temporary Municipality*</label>
             <input type="text" class="form-control" id="temporary_municipality" placeholder="Enter Employee temporary_municipality" name="temporary_municipality" value="{{ !empty(old('temporary_municipality')) ? old('temporary_municipality') : $employee->temporary_municipality ?? '' }}">
             @error('temporary_municipality')
                 <p class="text-danger">{{ $message }}</p>
@@ -443,7 +447,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temporary_ward_no">Temporary Ward No</label>
+            <label class="form-label" for="temporary_ward_no">Temporary Ward No*</label>
             <input type="text" class="form-control" id="temporary_ward_no" placeholder="Enter Employee temporary_ward_no" name="temporary_ward_no" value="{{ !empty(old('temporary_ward_no')) ? old('temporary_ward_no') : $employee->temporary_ward_no ?? '' }}">
             @error('temporary_ward_no')
                 <p class="text-danger">{{ $message }}</p>
@@ -456,7 +460,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temporary_tole">Temporary Tole</label>
+            <label class="form-label" for="temporary_tole">Temporary Tole*</label>
             <input type="text" class="form-control" id="temporary_tole" placeholder="Enter Employee temporary_tole" name="temporary_tole" value="{{ !empty(old('temporary_tole')) ? old('temporary_tole') : $employee->temporary_tole ?? '' }}">
             @error('temporary_tole')
                 <p class="text-danger">{{ $message }}</p>
@@ -465,6 +469,8 @@
     </div>
 </div>
 <!-- temporary_tole -->
+</div>
+<!-- tempBlock Ends -->
 <hr>
 <div class="row">
     <div class="col-md-12">
