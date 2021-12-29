@@ -22,6 +22,7 @@ use App\Http\Controllers\FileCategoryController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\PunchInOutReportController;
+use App\Http\Controllers\DashboardController;
 
 
 /*
@@ -182,7 +183,7 @@ Route::middleware(['logged-in'])->group(function(){
 
 });
 
-Route::view('/test','admin.dashboard.index');
+Route::get('/dashboard',[DashboardController::class, 'index']);
 Route::view('/form','admin.dashboard.form');
 Route::view('/table','admin.dashboard.table');
 
