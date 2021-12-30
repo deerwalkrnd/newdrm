@@ -31,9 +31,15 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','organization_id','unit_id','intern_trainee_ship_date','join_date')
+        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','intern_trainee_ship_date','join_date')
+        ->with('designation:id,job_title_name')
+        ->with('organization:id,name')
+        ->with('unit:id,unit_name')
+        ->with('serviceType:id,service_type_name')
         ->orderBy('first_name') 
         ->get();
+
+        // dd($employees);
         
         return view('admin.employee.index')->with(compact('employees'));
     }

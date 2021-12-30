@@ -15,7 +15,7 @@
         <span class="punch_out_container" style="position: relative;">
             <form class="punch_out_form" action="/punch-out" method="POST" onsubmit="return confirm('Do you want to punch-out?');">
                 @csrf
-                <input type="text" placeholder="Punch In/Out Remarks">
+                <input type="hidden" placeholder="Punch In/Out Remarks">
                 <span class="punch_out_button">
                     <button>Punch Out</button>
                 </span>
@@ -29,7 +29,7 @@
             <form class="punch_out_form" action="/punch-in" method="POST">
                 @csrf
                 <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
-                <input type="hidden" placeholder="Punch In/Out Remarks">
+                <input placeholder="Punch In/Out Remarks">
                 <span class="punch_out_button">
                     <button>Punch In</button>
                 </span>

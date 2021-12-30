@@ -55,9 +55,9 @@ class Employee extends Model
         'remarks',
     ];
 
-    public function servieType()
+    public function serviceType()
     {
-        return $this->belongsTo(ServiceType::class);
+        return $this->belongsTo(ServiceType::class,'service_type','id');
     }
     public function organization()
     {
@@ -81,8 +81,9 @@ class Employee extends Model
     // }
     public function designation()
     {
-        return $this->hasOne(Designation::class);
+        return $this->hasOne(Designation::class,'id','designation_id');
     }
+
     public function leaveRequest()
     {
         return $this->hasMany(LeaveRequest::class);

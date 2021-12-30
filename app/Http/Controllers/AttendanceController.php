@@ -13,7 +13,7 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    private $redirect_to = '/organization';
+    private $redirect_to = '/dashboard';
     private $verificationCode = 'OXqSTexF5zn4uXSp';
 
     private function recordRowExists()

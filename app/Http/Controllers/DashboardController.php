@@ -8,17 +8,29 @@ use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\YearlyLeave;
 use App\Models\Employee;
+use App\Models\Attendance;
 
 class DashboardController extends Controller
 {
     public function index()
     {       
+        $state = 1;
+        if($this->recordRowExists())
+        {
+            $state = 2;
+            if($this->hasPunchOut())
+            {
+                $state = 3;
+            }
+        }
+
+        //set punch-in state;
+        \Session::put('punchIn', $state);
+
         $leaveBalance = $this->getLeaveBalance();
         $birthdayList = $this->getBirthdayList();
         $leaveList = $this->getLeaveList();
         
-        // dd($leaveList);
-
         return view('admin.dashboard.index')->with(compact('leaveBalance','birthdayList','leaveList'));
     }
 
@@ -105,5 +117,36 @@ class DashboardController extends Controller
             $allowedLeave = 0;
 
         return $allowedLeave;
+    }
+
+    private function recordRowExists()
+    {
+        $employee_id = \Auth::user()->employee_id;
+        $today = date('Y-m-d');
+        $rowExists = Attendance::where('employee_id',$employee_id)
+        ->whereDate('created_at',$today)
+        ->count();
+
+        if($rowExists == 0)
+            return false;
+        else
+            return true;
+    }
+
+    private function hasPunchOut()
+    {
+        $employee_id = \Auth::user()->employee_id;
+        $today = date('Y-m-d');
+        $punchOutTime = Attendance::select('punch_out_time')
+        ->where('employee_id',$employee_id)
+        ->whereDate('created_at',$today)
+        ->first();
+
+        if($punchOutTime->punch_out_time == null)
+        {
+            return false;
+        }else{
+            return true;
+        }
     }
 }
