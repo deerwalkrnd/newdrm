@@ -151,7 +151,8 @@ class EmployeeController extends Controller
         // $emergency_contact = EmergencyContact::FindOrFail($id);
         $user = User::select('id','username')->where('employee_id',$id)->get();
         $roles = Role::select('id','authority')->get();
-        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles'));
+        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
+        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
     }
 
     /**
