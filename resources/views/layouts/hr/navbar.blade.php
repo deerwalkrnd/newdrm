@@ -217,7 +217,7 @@
                                                     Punch In
                                                     No Leave Report
                                                 </a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/contact"><img class="img-fluid"
                                                         src="/assets/images/icons/contacts.png">Contacts</a>
                                             </td>
                                         </tr>

@@ -11,6 +11,7 @@ use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\YearlyLeaveController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\AttendanceController;
@@ -115,6 +116,14 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/role/edit/{id}',[RoleController::class, 'edit']);
     Route::put('/role/{id}',[RoleController::class, 'update']);
     Route::delete('/role/{id}',[RoleController::class, 'destroy']);
+
+    // contact route
+    Route::get('/contact/create',[ContactController::class, 'create']);
+    Route::post('/contact',[ContactController::class, 'store']);
+    Route::get('/contact',[ContactController::class, 'index']);
+    Route::get('/contact/edit/{id}',[ContactController::class, 'edit']);
+    Route::put('/contact/{id}',[ContactController::class, 'update']);
+    Route::delete('/contact/{id}',[ContactController::class, 'destroy']);
 
     // yearly leaves route
     Route::get('/yearly-leaves/create',[YearlyLeaveController::class, 'create']);
