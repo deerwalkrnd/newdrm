@@ -84,6 +84,8 @@ Route::middleware(['logged-in'])->group(function(){
     Route::put('/employee/{id}',[EmployeeController::class, 'update']);
     Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
     Route::get('/employee/search',[EmployeeController::class, 'search']);
+    Route::get('/employee/my-profile',[EmployeeController::class, 'profile']);
+
 
     // service type route
     Route::get('/serviceType/create',[ServiceTypeController::class, 'create']);
@@ -186,7 +188,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('punch-out-mail',[SendMailController::class,'punchOutMail']);
 
     //get punch in and out report
-    Route::get('/punch',[PunchInOutReportController::class,'getPunchInOut']);
+    Route::get('/punch-in-detail',[PunchInOutReportController::class,'getPunchInOut']);
     
 
 
