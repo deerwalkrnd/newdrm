@@ -15,7 +15,7 @@ class Organization extends Model
         'code',
     ];
 
-    public function units()
+    public function unit()
     {
         return $this->hasMany(Unit::class,'organization_id');
     }

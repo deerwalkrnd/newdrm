@@ -59,6 +59,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/organization/edit/{id}',[OrganizationController::class, 'edit']);
     Route::put('/organization/{id}',[OrganizationController::class, 'update']);
     Route::delete('/organization/{id}',[OrganizationController::class, 'destroy']);
+    Route::get('/structure',[OrganizationController::class, 'structure']);
 
     // unit route
     Route::get('/unit/create',[UnitController::class, 'create']);

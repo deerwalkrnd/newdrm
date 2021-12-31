@@ -86,7 +86,7 @@
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/leave-report.png">Employees on
                                                     Leave</a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/structure"><img class="img-fluid"
                                                         src="/assets/images/icons/management.png">Structure</a>
                                             </td>
                                         </tr>
