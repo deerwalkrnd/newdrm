@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Organization;
+use App\Models\Unit;
 use App\Http\Requests\OrganizationRequest;
 class OrganizationController extends Controller
 {
@@ -103,5 +104,13 @@ class OrganizationController extends Controller
             }
         }
     }  
+
+    public function structure()
+    {
+        $organizations = Organization::select('id','name','code')
+                        ->with('unit:id,unit_name,organization_id')
+                        ->get();
+
+        return view('admin.organization.structure')->with(compact('organizations'));
     }
-// }
+}
