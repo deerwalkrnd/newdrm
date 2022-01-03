@@ -139,7 +139,9 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
+        // dd($id);
         $employee = Employee::with('emergencyContact')->findOrFail($id);
+        // dd($employee);
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title_name')->get();
@@ -147,12 +149,14 @@ class EmployeeController extends Controller
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name')->get();
+
         // $emergency_contacts = EmergencyContact::select('id','first_name','last_name','middle_name','relationship','phone_no','alternate_phone_no')->where('employee_id',$id)->get();
-        $emergencyContact = EmergencyContact::FindOrFail($id);
+        // $emergencyContact = EmergencyContact::FindOrFail($id);
         $user = User::select('id','username')->where('employee_id',$id)->get();
         $roles = Role::select('id','authority')->get();
         $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
-        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers','emergencyContact'));
+        // dd($employee);
+        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
     }
 
     /**
@@ -165,10 +169,8 @@ class EmployeeController extends Controller
     public function update(EmployeeRequest $request, $id)
     {
         $employee = Employee::findOrFail($id);
-        $emergencyContact = EmergencyContact::where('employee_id',$employee->id)->first();
-
         $input = $request->validated();
-        // dd($input);
+
         $user = [];
         $emergency_contact =[];
         //store image
@@ -193,6 +195,7 @@ class EmployeeController extends Controller
         $emergency_contact['relationship'] =  $input['emg_relationship'];
         $emergency_contact['phone_no'] = $input['emg_contact'];
         $emergency_contact['alternate_phone_no'] =  $input['emg_alternate_contact'];
+        $emergency_contact['employee_id'] = $id;
      
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
         unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
@@ -201,11 +204,14 @@ class EmployeeController extends Controller
         try {
             $employee->update($input);
             
-            $emergencyContact->update($emergency_contact);
+            EmergencyContact::updateOrCreate(
+                $emergency_contact,
+                ['employee_id' => $id]
+            );
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect('/employee/edit');
+            return redirect('/employee');
         }
         return redirect('/employee');
     }
@@ -256,6 +262,7 @@ class EmployeeController extends Controller
         else
             $user = (int) $request->id;
 
+
         $employee = Employee::with('designation:id,job_title_name')
                         ->with('organization:id,name')
                         ->with('unit:id,unit_name')
@@ -265,9 +272,7 @@ class EmployeeController extends Controller
                         ->with('shift')
                         ->with('manager:id,first_name,middle_name,last_name')
                         ->with('emergencyContact:employee_id,first_name,middle_name,last_name,relationship,phone_no,alternate_phone_no')
-                        ->where('id', $user)
-                        ->first();
-
+                        ->findOrFail($user);
         
         return view('admin.employee.profile')->with('employee',$employee);
     }
