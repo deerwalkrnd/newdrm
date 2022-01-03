@@ -3,7 +3,28 @@
 @section('title','Yearly Leave')
 
 @section('content')
+
+
+
 @include('layouts.basic.tableHead',["table_title" => "Yearly Leave List", "url" => "/yearly-leaves/create"])
+
+
+<div class="d-flex justify-content-between flex-row">
+    <div class="w-25">
+        <label for="year">Year: </label>
+        <select class="form-control" name="year" onchange="search()" id="year">
+            <option value="" disabled>- Choose -</option>
+            @for($i=2011; $i<= date('Y'); $i++)
+                <option value="{{$i}}" {{ request()->get('y') == $i ? "selected" : "" }}>{{ $i }}</option>
+            @endfor
+        </select>
+        <!-- <input type="year" name="year" id="year" onchange="search()" value="{{ request()->get('y') ?? request()->get('y') }}" > -->
+    </div> 
+    <!-- <div >
+        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288">Reset</button>
+    </div> -->
+</div>
+<br>
 <table class="unit_table mx-auto drmDataTable">
     <thead>
         <tr class="table_title" style="background-color: #0f5288;">
@@ -53,5 +74,16 @@
     $(document).ready(function() {
         $('.drmDataTable').DataTable();
     })
+    //Search by year
+    function search(){
+        let year = $('#year').val();
+        if(year)
+            $(location).attr('href','/yearly-leaves?y='+year);
+    }
+
+    function reset(){
+        $(location).attr('href','/yearly-leaves');
+    }
+
 </script>
 @endsection

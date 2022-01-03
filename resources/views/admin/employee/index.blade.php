@@ -43,7 +43,7 @@
         <td>{{ $employee->serviceType->service_type_name }}</td>
         <td>{{ $employee->designation->job_title_name }}</td>
         <td class="text-center">
-            <a href="/employee/edit/{{ $employee->id }}"><i class="far fa-edit"></i></a> 
+            <a href="/employee/edit/{{$employee->id}}"><i class="far fa-edit"></i></a> 
             | 
             <form action="/employee/{{ $employee->id }}" method="POST" class="d-inline">
                 @csrf

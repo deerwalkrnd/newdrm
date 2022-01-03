@@ -83,7 +83,7 @@
                                             <td class="hr_menu_content"><a href="/employee/terminate"><img class="img-fluid"
                                                         src="/assets/images/icons/fired.png">Terminate
                                                     Employee</a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/employees-on-leave"><img class="img-fluid"
                                                         src="/assets/images/icons/leave-report.png">Employees on
                                                     Leave</a></td>
                                             <td class="hr_menu_content"><a href="/structure"><img class="img-fluid"
