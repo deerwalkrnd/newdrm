@@ -177,4 +177,13 @@ class AttendanceController extends Controller
 
         return redirect($this->redirect_to);
     }
+
+    public function myPunchIn()
+    {
+        $myPunchInList = Attendance::select('id','employee_id','punch_in_time','punch_in_ip','punch_out_time','punch_out_ip','missed_punch_out','late_punch_in')
+                    ->where('employee_id',\Auth::user()->id)
+                    ->get();
+
+        return view('admin.attendance.myPunchIn')->with(compact('myPunchInList'));
+    }
 }

@@ -148,7 +148,7 @@
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/padlock.png">Reset
                                                     Password</a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/myPunchIn"><img class="img-fluid"
                                                         src="/assets/images/icons/calendar (1).png">My Punch
                                                     In</a></td>
                                             <td class="hr_menu_content"><a href="employee"><img class="img-fluid"

@@ -195,9 +195,7 @@ Route::middleware(['logged-in'])->group(function(){
 
     //get punch in and out report
     Route::get('/punch-in-detail',[PunchInOutReportController::class,'getPunchInOut']);
-    
-
-
+    Route::get('/myPunchIn',[AttendanceController::class,'myPunchIn']);
 });
 
 Route::get('/dashboard',[DashboardController::class, 'index']);
