@@ -139,7 +139,9 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
+        // dd($id);
         $employee = Employee::with('emergencyContact')->findOrFail($id);
+        // dd($employee);
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title_name')->get();
@@ -147,12 +149,14 @@ class EmployeeController extends Controller
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name')->get();
+
         // $emergency_contacts = EmergencyContact::select('id','first_name','last_name','middle_name','relationship','phone_no','alternate_phone_no')->where('employee_id',$id)->get();
-        $emergencyContact = EmergencyContact::FindOrFail($id);
+        // $emergencyContact = EmergencyContact::FindOrFail($id);
         $user = User::select('id','username')->where('employee_id',$id)->get();
         $roles = Role::select('id','authority')->get();
         $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
-        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers','emergencyContact'));
+        // dd($employee);
+        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
     }
 
     /**

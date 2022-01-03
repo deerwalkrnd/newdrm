@@ -68,21 +68,21 @@
                 <option 
                     value="Single" 
                     {{ (!empty(old('marital_status')) && old('marital_status') == 'Single') ? 'selected': ''}}
-                    {{ (isset($employee) && $employee->marital_status == 'Single' && empty(old('marital_status'))) ? 'selected' : '' }} 
+                    {{ (isset($employee) && strtolower($employee->marital_status) == 'single' && empty(old('marital_status'))) ? 'selected' : '' }} 
                     >
                     Single
                 </option>
                 <option 
                     value="Married" 
                     {{ (!empty(old('marital_status')) && old('marital_status') == 'Married') ? 'selected': ''}}
-                    {{ (isset($employee) && $employee->marital_status == 'Married' && empty(old('marital_status'))) ? 'selected' : '' }} 
+                    {{ (isset($employee) &&  strtolower($employee->marital_status) == 'married' && empty(old('marital_status'))) ? 'selected' : '' }} 
                     >
                     Married
                 </option>
                 <option 
                     value="Divorced" 
                     {{ (!empty(old('marital_status')) && old('marital_status') == 'Divorced') ? 'selected': ''}}
-                    {{ (isset($employee) && $employee->marital_status == 'Divorced' && empty(old('marital_status'))) ? 'selected' : '' }} 
+                    {{ (isset($employee) &&  strtolower($employee->marital_status) == 'divorced' && empty(old('marital_status'))) ? 'selected' : '' }} 
                     >
                     Divorced
                 </option>
@@ -100,22 +100,22 @@
             <label  class="form-label" for="gender">Gender*</label>
             <br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gender" id="gender0" value="Female" 
-                {{ (isset($employee) && $employee->gender == 'Female') ? 'checked':''}}
-                {{ old('gender') == 'Female' ? 'checked':'' }}>
-                <label class="form-check-label" for="gender0">Female</label>
+                <input class="form-check-input" type="radio" name="gender" id="gender0" value="female" 
+                {{ (isset($employee) && $employee->gender == 'female') ? 'checked':''}}
+                {{ old('gender') == 'female' ? 'checked':'' }}>
+                <label class="form-check-label" for="gender0">female</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gender" id="gender1" value="Male" 
-                {{ (isset($employee) && $employee->gender == 'Male') ? 'checked':''}}
-                {{ old('gender') == 'Male' ? 'checked':''}}>
-                <label class="form-check-label" for="gender1">Male</label>
+                <input class="form-check-input" type="radio" name="gender" id="gender1" value="male" 
+                {{ (isset($employee) && $employee->gender == 'male') ? 'checked':''}}
+                {{ old('gender') == 'male' ? 'checked':''}}>
+                <label class="form-check-label" for="gender1">male</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gender" id="gender2" value="Other" 
-                {{ (isset($employee) && $employee->gender == 'Other') ? 'checked':'' }}
-                {{ old('gender') == 'Other' ? 'checked':'' }}>
-                <label class="form-check-label" for="gender2">Other</label>
+                <input class="form-check-input" type="radio" name="gender" id="gender2" value="other" 
+                {{ (isset($employee) && $employee->gender == 'other') ? 'checked':'' }}
+                {{ old('gender') == 'other' ? 'checked':'' }}>
+                <label class="form-check-label" for="gender2">other</label>
             </div>
             @error('gender')
                 <p class="text-danger">{{ $message }}</p>

@@ -8,7 +8,7 @@
 <!-- page title start -->
 <section class="my-3 pt-3">
     <div class="text-center">
-        <h1 class="fs-2 title">Edit Employee</h1>
+        <h1 class="fs-2 title">Employee profile</h1>
     </div>
     <div class="underline mx-auto"></div>
 </section>
