@@ -77,6 +77,7 @@ class CreateEmployeesTable extends Migration
             //unit change date missing
             $table->string('email');
             $table->string('shift_id')->constrained('shifts');
+            $table->enum('contract_status', ['active','terminated'])->default('active');
             $table->string('remarks')->nullable();
 
 

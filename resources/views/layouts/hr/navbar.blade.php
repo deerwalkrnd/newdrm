@@ -80,7 +80,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/employee/terminate"><img class="img-fluid"
                                                         src="/assets/images/icons/fired.png">Terminate
                                                     Employee</a></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
@@ -92,7 +92,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/employee/terminate"><img class="img-fluid"
                                                         src="/assets/images/icons/consent.png">Terminate
                                                     Form</a></td>
                                             <td class="hr_menu_content"><a href="/leave-request/create/subordinate-leave"><img class="img-fluid"
@@ -265,7 +265,7 @@
                     <div class="nav_mobile">
                         <li class="nav-item navigation_item">
                             <span class="nav-link navigation_link">
-                                Welcome: Ruby Shakya</a>
+                                Welcome: {{ \Auth::user()->employee->first_name." ".\Auth::user()->employee->last_name }}</a>
                         </li>
                         <li class="nav-item navigation_item">
                             <a class="nav-link navigation_link" href="#"><i class="fas fa-power-off"></i>
@@ -276,7 +276,7 @@
 
                     <!-- not for mobile -->
                     <li class="nav_right">
-                        <span>Welcome: Ruby Shakya</span>
+                        <span>Welcome: {{ \Auth::user()->employee->first_name." ".\Auth::user()->employee->last_name }}</span>
                         
                         <!-- logout -->
                         <span><a href="javascript:{}" onclick="document.getElementById('logout_form').submit();"><i class="fas fa-power-off"></i> Logout</a></span>

@@ -8,12 +8,13 @@
 <!-- page title end -->
 
 <div class="table_container">
+    @if(isset($url))
     <!-- add button start -->
     <div class="button_div">
         <a class="add_button" href="{{ $url }}"><i class="fas fa-plus"></i> Add</a>
     </div>
     <!-- add button end -->
-
+    @endif
     <!-- table start -->
     <div>
         
