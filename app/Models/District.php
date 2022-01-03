@@ -14,7 +14,10 @@ class District extends Model
         'province_id'
     ];
 
-     public function province(){
+    public function province(){
         return $this->belongsToMany(Province::class);
+    }
+    public function employees(){
+        return $this->hasMany(Employee::class,'permanent_district','id');
     }
 }

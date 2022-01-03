@@ -148,11 +148,11 @@ class EmployeeController extends Controller
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name')->get();
         // $emergency_contacts = EmergencyContact::select('id','first_name','last_name','middle_name','relationship','phone_no','alternate_phone_no')->where('employee_id',$id)->get();
-        // $emergency_contact = EmergencyContact::FindOrFail($id);
+        $emergencyContact = EmergencyContact::FindOrFail($id);
         $user = User::select('id','username')->where('employee_id',$id)->get();
         $roles = Role::select('id','authority')->get();
         $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
-        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
+        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers','emergencyContact'));
     }
 
     /**
@@ -249,19 +249,23 @@ class EmployeeController extends Controller
     }
 
 
-    public function myProfile()
+    public function profile()
     {
-        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','intern_trainee_ship_date','join_date')
-        ->with('designation:id,job_title_name')
-        ->with('organization:id,name')
-        ->with('unit:id,unit_name')
-        ->with('serviceType:id,service_type_name')
-        ->orderBy('first_name') 
-        ->get();
+        $employee = Employee::select('*')
+                        ->with('designation:id,job_title_name')
+                        ->with('organization:id,name')
+                        ->with('unit:id,unit_name')
+                        ->with('province:id,province_name')
+                        ->with('district:id,district_name')
+                        ->with('serviceType:id,service_type_name')
+                        ->with('shift')
+                        ->with('manager:id,first_name,middle_name,last_name')
+                        ->with('emergencyContact:employee_id,first_name,middle_name,last_name,relationship,phone_no,alternate_phone_no')
+                        ->where('id', \Auth::user()->id)
+                        ->first();
 
-        // dd($employees);
         
-        return view('admin.employee.index')->with(compact('employees'));
+        return view('admin.employee.profile')->with('employee',$employee);
     }
 
     public function terminated()

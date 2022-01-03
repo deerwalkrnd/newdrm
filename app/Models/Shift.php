@@ -13,4 +13,8 @@ class Shift extends Model
         'name',
         'time_required'
     ];
+
+    public function employee(){
+        return $this->belongsTo(Employee::class,'shift_id','id');
+    }
 }

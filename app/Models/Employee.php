@@ -103,5 +103,14 @@ class Employee extends Model
     public function attendances(){
         return $this->hasMany(Attendance::class,'employee_id','id')->orderBy('punch_in_time');
     }
+    public function province(){
+        return $this->hasOne(Province::class,'id','permanent_address');
+    }
+    public function district(){
+        return $this->hasOne(District::class,'id','permanent_district');
+    }
+    public function shift(){
+        return $this->hasOne(Shift::class,'id','shift_id');
+    }
 
 }

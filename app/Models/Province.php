@@ -16,4 +16,7 @@ class Province extends Model
     {
         return $this->hasMany(District::class,'province_id');
     }
+    public function employees(){
+        return $this->hasMany(Employee::class,'permanent_address','id');
+    }
 }
