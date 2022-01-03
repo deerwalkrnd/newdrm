@@ -249,10 +249,14 @@ class EmployeeController extends Controller
     }
 
 
-    public function profile()
+    public function profile(Request $request)
     {
-        $employee = Employee::select('*')
-                        ->with('designation:id,job_title_name')
+        if($request->id == NULL)
+            $user = \Auth::user()->employee_id;
+        else
+            $user = (int) $request->id;
+
+        $employee = Employee::with('designation:id,job_title_name')
                         ->with('organization:id,name')
                         ->with('unit:id,unit_name')
                         ->with('province:id,province_name')
@@ -261,7 +265,7 @@ class EmployeeController extends Controller
                         ->with('shift')
                         ->with('manager:id,first_name,middle_name,last_name')
                         ->with('emergencyContact:employee_id,first_name,middle_name,last_name,relationship,phone_no,alternate_phone_no')
-                        ->where('id', \Auth::user()->id)
+                        ->where('id', $user)
                         ->first();
 
         
