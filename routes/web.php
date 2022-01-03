@@ -85,7 +85,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::put('/employee/{id}',[EmployeeController::class, 'update']);
     Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
     Route::get('/employee/search',[EmployeeController::class, 'search']);
-    Route::get('/employee/my-profile',[EmployeeController::class, 'profile']);
+    Route::get('/employee/profile',[EmployeeController::class, 'profile']);
 
 
     // service type route

@@ -105,7 +105,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="employee/profile"><img class="img-fluid"
                                                         src="/assets/images/icons/profile.png">My
                                                     Profile</a></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
@@ -152,7 +152,7 @@
                                                         src="/assets/images/icons/calendar (1).png">My Punch
                                                     In</a></td>
                                             <td class="hr_menu_content"><a href="employee"><img class="img-fluid"
-                                                        src="/assets/images/icons/terminated.png">Terminated
+               mu                                         src="/assets/images/icons/terminated.png">Terminated
                                                     Employee Detail</a></td>
                                         </tr>
 

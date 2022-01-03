@@ -40,8 +40,10 @@ class CreateEmployeesTable extends Migration
             $table->string('blood_group')->nullable();
 
             //permanent address
-            $table->string('permanent_address');
-            $table->string('permanent_district');
+            // $table->foreign('permanent_address')->references('id')->on('provinces'); //foreign id
+            // $table->foreignId('permanent_district')->constrained('districts'); //foreign id
+            $table->foreignId('permanent_address')->constrained('provinces');
+            $table->foreignId('permanent_district')->constrained('districts');
             $table->string('permanent_municipality');
             $table->string('permanent_ward_no');
             $table->string('permanent_tole');
@@ -75,8 +77,10 @@ class CreateEmployeesTable extends Migration
             $table->foreignId('organization_id')->constrained('organizations'); //foreign id
             $table->foreignId('unit_id')->constrained('units'); //foreign
             //unit change date missing
+
+            // $table->foreignId('role')->constrained('roles');
             $table->string('email');
-            $table->string('shift_id')->constrained('shifts');
+            $table->foreignId('shift_id')->constrained('shifts');
             $table->string('remarks')->nullable();
 
 
