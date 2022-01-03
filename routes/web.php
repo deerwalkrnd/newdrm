@@ -87,7 +87,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/employee/search',[EmployeeController::class, 'search']);
     Route::get('/employee/terminate',[EmployeeController::class, 'terminated']);
     Route::post('/employee/terminate',[EmployeeController::class, 'terminate']);
-    Route::get('/employee/profile',[EmployeeController::class, 'profile']);
+    Route::get('/employee/profile/{id?}',[EmployeeController::class, 'profile']);
 
 
     // service type route

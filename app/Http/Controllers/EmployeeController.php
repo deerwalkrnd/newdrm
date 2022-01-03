@@ -169,10 +169,8 @@ class EmployeeController extends Controller
     public function update(EmployeeRequest $request, $id)
     {
         $employee = Employee::findOrFail($id);
-        $emergencyContact = EmergencyContact::where('employee_id',$employee->id)->first();
-
         $input = $request->validated();
-        // dd($input);
+
         $user = [];
         $emergency_contact =[];
         //store image
@@ -197,6 +195,7 @@ class EmployeeController extends Controller
         $emergency_contact['relationship'] =  $input['emg_relationship'];
         $emergency_contact['phone_no'] = $input['emg_contact'];
         $emergency_contact['alternate_phone_no'] =  $input['emg_alternate_contact'];
+        $emergency_contact['employee_id'] = $id;
      
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
         unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
@@ -205,11 +204,14 @@ class EmployeeController extends Controller
         try {
             $employee->update($input);
             
-            $emergencyContact->update($emergency_contact);
+            EmergencyContact::updateOrCreate(
+                $emergency_contact,
+                ['employee_id' => $id]
+            );
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect('/employee/edit');
+            return redirect('/employee');
         }
         return redirect('/employee');
     }
@@ -253,10 +255,14 @@ class EmployeeController extends Controller
     }
 
 
-    public function profile()
+    public function profile(Request $request)
     {
-        $employee = Employee::select('*')
-                        ->with('designation:id,job_title_name')
+        if($request->id == NULL)
+            $user = \Auth::user()->employee_id;
+        else
+            $user = $request->id;
+
+        $employee = Employee::with('designation:id,job_title_name')
                         ->with('organization:id,name')
                         ->with('unit:id,unit_name')
                         ->with('province:id,province_name')
@@ -265,9 +271,7 @@ class EmployeeController extends Controller
                         ->with('shift')
                         ->with('manager:id,first_name,middle_name,last_name')
                         ->with('emergencyContact:employee_id,first_name,middle_name,last_name,relationship,phone_no,alternate_phone_no')
-                        ->where('id', \Auth::user()->id)
-                        ->first();
-
+                        ->findOrFail($user);
         
         return view('admin.employee.profile')->with('employee',$employee);
     }
