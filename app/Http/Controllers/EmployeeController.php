@@ -260,7 +260,8 @@ class EmployeeController extends Controller
         if($request->id == NULL)
             $user = \Auth::user()->employee_id;
         else
-            $user = $request->id;
+            $user = (int) $request->id;
+
 
         $employee = Employee::with('designation:id,job_title_name')
                         ->with('organization:id,name')
