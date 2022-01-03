@@ -167,6 +167,9 @@ Route::middleware(['logged-in'])->group(function(){
 
     //Leave Report
     Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
+
+    //Employees On Leave Report
+    Route::get('/employees-on-leave',[LeaveReportController::class, 'employeesOnLeave']);
     
     //Carry Over Leave
     Route::get('/info',[CarryOverLeaveController::class,'calculateCarryOverLeave']);

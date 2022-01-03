@@ -78,7 +78,7 @@
             <tr>
                 <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
                 <td>{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</td>
-                <td>{{ $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name }}</td>
+                <td>{{ $employee->manager ? $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name:'--' }}</td>
                 <td>{{ $attendance->punch_in_ip}}</td>
                 <td>{{ $attendance->punch_in_time}}</td>
 
@@ -100,7 +100,7 @@
                     <tr>
                             <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
                             <td>{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</td>
-                            <td>{{ $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name }}</td>
+                            <td>{{ $employee->manager ? $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name : '--'}}</td>
                             <td>--</td>
                             <td>--</td>
                             <td>--</td>
@@ -133,43 +133,15 @@
         let employee_id = $('#employee_id').val();
         console.log(employee_id);
         if(date)
-            $(location).attr('href','/punch?d='+date);
+            $(location).attr('href','/punch-in-detail?d='+date);
         if(employee_id)
-            $(location).attr('href','/punch?e='+employee_id);
+            $(location).attr('href','/punch-in-detail?e='+employee_id);
 
     }
 
     function reset(){
-        $(location).attr('href','/punch');
+        $(location).attr('href','/punch-in-detail');
     }
 
-
-
-     $('.employee-livesearch').select2({         
-        ajax: {
-            url: '/employee/search',
-            data: function (params) {
-                var query = {
-                    q: params.term,
-                }
-                    // Query parameters will be ?search=[term]
-                return query;
-            },
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-                return {
-                    results: $.map(data, function (item) {
-                        let full_name = (item.middle_name === null) ? item.first_name + " " + item.last_name : item.first_name + " " + item.middle_name + " " + item.last_name;
-                        return {
-                            text: full_name,
-                            id: item.id
-                        }
-                    })
-                };
-            },
-            cache: true
-        }
-    });
 </script>
 @endsection
