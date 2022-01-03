@@ -81,6 +81,7 @@ class CreateEmployeesTable extends Migration
             // $table->foreignId('role')->constrained('roles');
             $table->string('email');
             $table->foreignId('shift_id')->constrained('shifts');
+            $table->enum('contract_status', ['active','terminated'])->default('active');
             $table->string('remarks')->nullable();
 
 

@@ -268,4 +268,23 @@ class EmployeeController extends Controller
         return view('admin.employee.profile')->with('employee',$employee);
     }
 
+    public function terminated()
+    {
+        $terminatedEmployees = Employee::select('id','first_name','last_name','middle_name','manager_id', 'designation_id')
+                    ->where('contract_status','terminated')
+                    ->with('designation')
+                    ->with('manager:id,first_name,last_name,middle_name')
+                    ->get();
+
+        return view('admin.employee.terminate')->with(compact('terminatedEmployees'));
+    }
+
+    public function terminate(Request $request)
+    {
+        $id = (int) $request->employee_id;
+        Employee::findOrFail($id)->update(['contract_status' => 'terminated']);
+
+        return redirect('/employee/terminate');
+    }
+
 }

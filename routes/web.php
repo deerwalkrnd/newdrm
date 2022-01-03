@@ -85,6 +85,8 @@ Route::middleware(['logged-in'])->group(function(){
     Route::put('/employee/{id}',[EmployeeController::class, 'update']);
     Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
     Route::get('/employee/search',[EmployeeController::class, 'search']);
+    Route::get('/employee/terminate',[EmployeeController::class, 'terminated']);
+    Route::post('/employee/terminate',[EmployeeController::class, 'terminate']);
     Route::get('/employee/profile',[EmployeeController::class, 'profile']);
 
 

@@ -41,7 +41,7 @@
             </div>
         </div>
         @empty
-        No Birthday found
+        <h5 class="mt-4">No Birthday found</h5>
         @endforelse
 
 
