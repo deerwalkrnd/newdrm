@@ -621,7 +621,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_first_name">First Name*</label>
-                <input type="text" class="form-control" id="emg_first_name" placeholder="None" disabled name="emg_first_name" value="{{ !empty(old('emg_first_name')) ? old('emg_first_name') : ucfirst($employee->emergencyContact->first_name)?? '' }}">
+                <input type="text" class="form-control" id="emg_first_name" placeholder="None" disabled name="emg_first_name" value="{{ !empty(old('emg_first_name')) ? old('emg_first_name') : $employee->emergencyContact->first_name?? '' }}">
                 @error('emg_first_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -633,7 +633,7 @@
         <div class="col-md-6">
                 <div class="mb-4">
                 <label class="form-label" for="emg_middle_name">Middle Name</label>
-                <input type="text" class="form-control" id="emg_middle_name"placeholder="None" disabled name="emg_middle_name" value="{{ !empty(old('emg_middle_name')) ? old('emg_middle_name') : ucfirst($employee->emergencyContact->middle_name)?? '' }}">
+                <input type="text" class="form-control" id="emg_middle_name"placeholder="None" disabled name="emg_middle_name" value="{{ !empty(old('emg_middle_name')) ? old('emg_middle_name') : $employee->emergencyContact->middle_name?? '' }}">
                 @error('emg_middle_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -646,7 +646,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_last_name">Last Name*</label>
-                <input type="text" class="form-control" id="emg_last_name" placeholder="None" disabled name="emg_last_name" value="{{ !empty(old('emg_last_name')) ? old('emg_last_name') : ucfirst($employee->emergencyContact->last_name)?? '' }}">
+                <input type="text" class="form-control" id="emg_last_name" placeholder="None" disabled name="emg_last_name" value="{{ !empty(old('emg_last_name')) ? old('emg_last_name') : $employee->emergencyContact->last_name?? '' }}">
                 @error('emg_last_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -658,7 +658,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_relationship">Relationship*</label>
-                <input type="text" class="form-control" id="emg_relationship" placeholder="None" disabled name="emg_relationship" value="{{ !empty(old('emg_relationship')) ? old('emg_relationship') : ucfirst($employee->emergencyContact->relationship) ?? '' }}">
+                <input type="text" class="form-control" id="emg_relationship" placeholder="None" disabled name="emg_relationship" value="{{ !empty(old('emg_relationship')) ? old('emg_relationship') : $employee->emergencyContact->relationship ?? '' }}">
                 @error('emg_relationship')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror

@@ -17,13 +17,21 @@ class YearlyLeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-   public function index()
+   public function index(Request $request)
     {
+        if(isset($request->y))
+            $year = $request->y;
+        else
+            $year = date('Y');
+
+        // dd($year);
         $yearlyLeaves = YearlyLeave::select('id', 'organization_id','leave_type_id','days','status','year')
                         ->with('organization:id,name')
                         ->with('leaveType:id,name')
+                        ->where('year',$year)
                         ->orderBy('organization_id')
                         ->get();
+        // dd($yearlyLeaves);
         return view('admin.yearlyLeave.index')->with(compact('yearlyLeaves'));
     }
 
