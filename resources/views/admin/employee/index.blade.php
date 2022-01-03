@@ -32,7 +32,7 @@
     @forelse($employees as $employee)
     <tr>
         <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
-        <td>{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</td>
+        <td><a href="/employee/edit/{{$employee->id}}">{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</a></td>
         <td>Title</td>
         <td>{{ $employee->manager != NULL ? $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name : "N/A"}} </td>
         <td>{{ $employee->organization->name }}</td>
