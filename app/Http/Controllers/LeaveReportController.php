@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\YearlyLeave;
+use App\Models\Employee;
 
 class LeaveReportController extends Controller
 {
@@ -80,5 +81,22 @@ class LeaveReportController extends Controller
                                     ->whereDate('start_date','<=',$date)        
                                     ->get();
         return view('admin.report.employeesOnLeave')->with(compact('acceptedRequests'));;
+    }
+
+    public function noPunchInNoLeave()
+    {
+        $noRecordList = Employee::select('id','first_name','last_name','middle_name','manager_id','contract_status')
+                ->with('manager:id,first_name,last_name')
+                ->where('contract_status','active')
+                ->whereDoesntHave('attendances', function ($query) {
+                        $query->whereDate('created_at', date('Y-m-d'));
+                    })
+                ->whereDoesntHave('leaveRequest', function($query){
+                    $query->whereDate('start_date','<=',date('Y-m-d'))
+                        ->whereDate('end_date','>=',date('Y-m-d'));
+                })
+                ->get();
+
+        return view('admin.report.noPunchInNoLeave')->with(compact('noRecordList'));
     }
 }

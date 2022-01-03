@@ -167,6 +167,7 @@ Route::middleware(['logged-in'])->group(function(){
 
     //Leave Report
     Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);
+    Route::get('/no-punch-in-leave',[LeaveReportController::class, 'noPunchInNoLeave']);
 
     //Employees On Leave Report
     Route::get('/employees-on-leave',[LeaveReportController::class, 'employeesOnLeave']);
