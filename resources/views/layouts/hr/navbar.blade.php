@@ -212,7 +212,7 @@
 
                                         <tr>
                                             <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/no-punch-in-leave"><img class="img-fluid"
                                                         src="/assets/images/icons/search.png">No
                                                     Punch In
                                                     No Leave Report

@@ -18,7 +18,7 @@
     <form method="POST"class="main_form p-4" class="main_form p-4" action="/leave-request/subordinate-leave">
         @csrf
             <label for="employee_id">Employee Name</label>
-            <select class="livesearch form-control p-3" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --"></select>
+            <select class="manager-livesearch form-control p-3 mb-2" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --"></select>
             @error('employee_id')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -29,4 +29,35 @@
     </div>
 </section>
 <!-- form end -->
+@endsection
+
+@section('scripts')
+<script>
+     $('.manager-livesearch').select2({    
+        ajax: {
+            url: '/employee/search',
+            data: function (params) {
+                var query = {
+                    q: params.term,
+                }
+                    // Query parameters will be ?search=[term]
+                return query;
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        let full_name = (item.middle_name === null) ? item.first_name + " " + item.last_name : item.first_name + " " + item.middle_name + " " + item.last_name;
+                        return {
+                            text: full_name,
+                            id: item.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+</script>
 @endsection

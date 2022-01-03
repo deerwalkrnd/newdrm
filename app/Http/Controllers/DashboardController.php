@@ -74,6 +74,7 @@ class DashboardController extends Controller
 
     private function getLeaveBalance()
     {
+        // dd("Here");
         $year = date('Y');
         $month = date('m');
         $org_id = \Auth::user()->employee->organization_id;
@@ -89,13 +90,13 @@ class DashboardController extends Controller
                                         ->where('employee_id', \Auth::user()->id)
                                         ->where('leave_type_id',$leaveType->id)
                                         ->sum('days');
-            $balance = $allowedLeave - $leaveTaken;
+            $balance = $acquiredLeave - $leaveTaken;
 
             $lists[$leaveType->name] = [
                 'allowed' => $allowedLeave,
-                'accrued' => $acquiredLeave,
+                'accrued' => round($acquiredLeave,2),
                 'taken' => $leaveTaken,
-                'balance' => $balance
+                'balance' => round($balance,2)
             ];
         }
 

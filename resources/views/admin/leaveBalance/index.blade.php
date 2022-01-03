@@ -7,27 +7,106 @@
 <table class="unit_table mx-auto">
     <thead></thead>
         <tr class="table_title" style="background-color: #0f5288;">
-        <th scope="col" class="ps-4">S.N</th>
-            <th scope="col">Accrued</th>
-            <th scope="col">Allowed</th>
-            <th scope="col">Leave Taken</th>
-            <th scope="col">Balance</th>
+            <th scope="col" class="ps-4" rowspan=2>S.N</th>
+            <th scope="col" rowspan=2>Employee</th>
+            <th scope="col" rowspan=2>Year</th>
+            <th scope="col" colspan=4>Home</th>
+            <th scope="col" colspan=4>Floating</th>
+            <th scope="col" colspan=4>Sick</th>
+            <th scope="col" colspan=4>Mourning</th>
+            <th scope="col" colspan=4>Maternity</th>
+            <th scope="col" rowspan=2>Unpaid</th>
+            <th scope="col" rowspan=2>Carry Over</th>
+        </tr>
+        <tr class="table_title" style="background-color: #0f5288;">
+            <th>AC</th>
+            <th>A</th>
+            <th>T</th>
+            <th>B</th>
+            <th>AC</th>
+            <th>A</th>
+            <th>T</th>
+            <th>B</th>
+            <th>AC</th>
+            <th>A</th>
+            <th>T</th>
+            <th>B</th>
+            <th>AC</th>
+            <th>A</th>
+            <th>T</th>
+            <th>B</th>
+            <th>AC</th>
+            <th>A</th>
+            <th>T</th>
+            <th>B</th>
         </tr>
     </thead>
     <tbody>
-        @forelse($lists as $leaveName => $data)
         <tr>
-            <td>{{ $leaveName }}</td>
-            <td>{{ $data['accrued'] }}</td>
-            <td>{{ $data['allowed'] }}</td>
-            <td>{{ $data['taken'] }}</td>
-            <td>{{ $data['balance'] }}</td>
+            <td>1</td>
+            <td>Sagar Shrestha</td>
+            <td>2022</td>
+            <td>10</td>
+            <td>10</td>
+            <td>2</td>
+            <td>8</td>
+            <!--  -->
+            <td>13</td>
+            <td>13</td>
+            <td>6</td>
+            <td>7</td>
+            <!--  -->
+            <td>10</td>
+            <td>10</td>
+            <td>2</td>
+            <td>8</td>
+            <!--  -->
+            <td>10</td>
+            <td>10</td>
+            <td>2</td>
+            <td>8</td>
+            <!--  -->
+            <td>10</td>
+            <td>10</td>
+            <td>2</td>
+            <td>8</td>
+            <!--  -->
+            <td>0.0</td>
+            <td>0.0</td>
         </tr>
-        @empty
+
         <tr>
-            <th colspan=5 class="text-center">No Leave Balance Report to Show</th>
+            <td>1</td>
+            <td>Satyadeep Neupane</td>
+            <td>2022</td>
+            <td>10</td>
+            <td>10</td>
+            <td>2</td>
+            <td>8</td>
+            <!--  -->
+            <td>13</td>
+            <td>13</td>
+            <td>6</td>
+            <td>7</td>
+            <!--  -->
+            <td>10</td>
+            <td>10</td>
+            <td>2</td>
+            <td>8</td>
+            <!--  -->
+            <td>10</td>
+            <td>10</td>
+            <td>2</td>
+            <td>8</td>
+            <!--  -->
+            <td>10</td>
+            <td>10</td>
+            <td>2</td>
+            <td>8</td>
+            <!--  -->
+            <td>0.0</td>
+            <td>0.0</td>
         </tr>
-        @endforelse
     </tbody>    
 </table>
 

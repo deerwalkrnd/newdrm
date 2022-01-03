@@ -13,39 +13,39 @@ class LeaveReportController extends Controller
 {
     public function leaveBalance()
     {
-        $year = date('Y');
-        $month = date('m');
-        $org_id = \Auth::user()->employee->organization_id;
-        $leaveTypes = LeaveType::select('name','id')->get();
+        return  view('admin.leaveBalance.index');
 
-        $lists = [];
-        // return $leaveTypes;
-        foreach($leaveTypes as $leaveType)
+        $employees = Employee::where('contract_status','active')->get();
+
+        $leaveTypes = LeaveType::select('name')->where('gender','all')->get();
+        // dd($leaveTypes);
+        $record = [];
+
+        foreach($employees as $employee)
         {
-            $allowedLeave = $this->getAllowedLeaveDays($org_id,$leaveType->id,$year);
-            $acquiredLeave = $allowedLeave / 12 * $month;
-            $leaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
-                                        ->where('acceptance','accepted')
-                                        ->where('employee_id', \Auth::user()->id)
-                                        ->where('leave_type_id',$leaveType->id)
-                                        ->sum('days');
-            $balance = $allowedLeave - $leaveTaken;
+            $temp = array();
+            $temp['name'] = $employee->first_name." ".$employee->last_name;
+            $temp['leaves'] = array();
+            for($year=date('Y',strtotime($employee->join_date)); $year <= date('Y'); $year++)
+            {
+                $temp['leaves'] = array($year => array());
+                // dd($temp);
+                foreach($leaveTypes as $type)
+                {
+                    $temp['leaves'][$year][$type->name] = '2';
+                }
 
-            $lists[$leaveType->name] = [
-                'allowed' => $allowedLeave,
-                'accrued' => $acquiredLeave,
-                'taken' => $leaveTaken,
-                'balance' => $balance
-            ];
+                // dd($temp);
+
+                $yearlyLeave = YearlyLeave::select('days','leave_type_id')->with('leaveType:id,name')->where('year',$year)->get();
+                echo($yearlyLeave);
+                // echo($year."<br>");
+            }
+            array_push($record,$temp);
         }
 
-        // foreach($lists as $leaveName => $data)
-        // {
-        //     echo $leaveName;
-        //     print_r($data['allowed']);
-        // }
-        // return $lists;
-        return  view('admin.leaveBalance.index',compact('lists','leaveTypes'));
+        dd("Here",$record);
+        return  view('admin.leaveBalance.index',compact());
     }
 
     private function getAllowedLeaveDays($org_id,$leaveType,$year)
