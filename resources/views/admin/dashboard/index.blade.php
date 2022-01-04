@@ -8,6 +8,9 @@
     <div class="col">
         <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
         <a href="/leave-request"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button></a>
+        @if(Auth::user()->role->authority == 'manager')
+            <a href="/leave-request/approve"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Request</button></a>
+        @endif
     </div>
 
     @if(env('ip') == session('userIp'))

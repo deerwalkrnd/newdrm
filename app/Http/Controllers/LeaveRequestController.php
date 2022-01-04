@@ -223,10 +223,22 @@ class LeaveRequestController extends Controller
 
     public function approve(Request $request)
     {
+        if(\Auth::user()->role->authority == 'employee')
+            return abort(401);
+
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
         ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
         ->where('acceptance','pending');
-        // ->orWhere('acceptance','rejected');
+
+        // dd("Here");
+
+        if(\Auth::user()->role->authority == 'manager'){
+            $leaveRequests = $leaveRequests->whereHas('employee',function($query){
+                $query->where('manager_id',\Auth::user()->employee_id);
+            });
+        }
+
+
       
         if($request->d)
             $leaveRequests = $leaveRequests->where('start_date',$request->d)->orderBy('created_at')->orderBy('updated_at')->get();

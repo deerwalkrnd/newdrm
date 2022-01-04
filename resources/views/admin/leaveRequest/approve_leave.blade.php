@@ -20,19 +20,19 @@
 
 <table class="unit_table mx-auto drmDataTable">
     <thead>
-    ` <tr class="table_title" style="background-color: #0f5288;">
-        <th scope="col" class="ps-4">S.N</th>
-            <th scope="col">Employee</th>
-            <th scope="col">Leave Type</th>
-            <th scope="col">Year</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">Days</th>
-            <th scope="col">Reason</th>
-            <th scope="col">Manager</th>
-            <th scope="col">State</th>
-            <th scope="col" class="text-center">Action</th>    
-        </tr>`
+        <tr class="table_title" style="background-color: #0f5288;">
+            <th scope="col" class="ps-4">S.N</th>
+                <th scope="col">Employee</th>
+                <th scope="col">Leave Type</th>
+                <th scope="col">Year</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Days</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Manager</th>
+                <th scope="col">State</th>
+                <th scope="col" class="text-center">Action</th>    
+        </tr>
     </thead>
     <tbody>
         @forelse($leaveRequests as $leaveRequest)
