@@ -281,7 +281,7 @@
 
     <div class="col-md-6">
         <div class="mb-4">
-            <label class="form-label" for="blood_group">Blood Group</label>
+            <label class="form-label" for="blood_group">Blood Group*</label>
             <input type="text" class="form-control" id="blood_group" placeholder="Enter Employee blood group" name="blood_group" value="{{ !empty(old('blood_group')) ? old('blood_group') : $employee->blood_group ?? '' }}">
             @error('blood_group')
                 <p class="text-danger">{{ $message }}</p>
@@ -540,8 +540,8 @@
                 <option value="" disabled="disabled" selected="selected">-- Choose Manager --</option>
                 @forelse($managers as $manager)
                 <option 
-                    value="{{ $manager->employee_id}}" 
-                    {{ (!empty(old('manager_id')) && old('manager_id') == $manager->employee_id) ? 'selected': ''}}
+                    value="{{ $manager->employee_id }}" 
+                    {{ (!empty(old('manager_id')) && old('manager_id') == $manager->employee->id) ? 'selected': ''}}
                     {{ (isset($employee) && $employee->manager_id == $manager->employee_id && empty(old('manager_id'))) ? 'selected' : '' }} 
                     >
                     {{ $manager->employee->first_name.' '.substr($manager->employee->middle_name,0,1).' '.$manager->employee->last_name }}

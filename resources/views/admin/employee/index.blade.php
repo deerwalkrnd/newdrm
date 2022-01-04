@@ -44,12 +44,12 @@
         <td>{{ $employee->designation->job_title_name }}</td>
         <td class="text-center">
             <a href="/employee/edit/{{$employee->id}}"><i class="far fa-edit"></i></a> 
-            | 
+            <!-- | 
             <form action="/employee/{{ $employee->id }}" method="POST" class="d-inline">
                 @csrf
                 @method('DELETE')
                 <button  type="submit" class="delete border-0 action"><i class="fas fa-trash-alt"></i></button>
-            </form>
+            </form> -->
         </td>
     </tr>
     @empty
