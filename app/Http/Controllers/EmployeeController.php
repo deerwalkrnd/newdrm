@@ -19,6 +19,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\EmergencyContact;
 use App\Models\Manager;
+use App\Models\CarryOverLeave;
 
 use App\Actions\Fortify\CreateNewUser;
 
@@ -113,8 +114,15 @@ class EmployeeController extends Controller
             $emergency_contact['employee_id']=$user['employee_id'];
             $createUser = new CreateNewUser();
             $createUser->create($user);
-            
             EmergencyContact::create($emergency_contact);
+            
+            $carryOverLeave = [
+                'employee_id' => $user['employee_id'],
+                'year' => date('Y') - 1,
+                'days' => 0
+            ];
+
+            CarryOverLeave::create($carryOverLeave);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();

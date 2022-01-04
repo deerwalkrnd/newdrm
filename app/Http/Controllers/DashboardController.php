@@ -116,11 +116,11 @@ class DashboardController extends Controller
         return $lists;
     }
 
-    private function getAllowedLeaveDays($org_id,$leaveType,$year)
+    private function getAllowedLeaveDays($unit_id,$leaveType,$year)
     {
         $allowedLeave = YearlyLeave::select('days')
                                 ->where('year',$year)
-                                ->where('unit_id',$org_id)
+                                ->where('unit_id',$unit_id)
                                 ->where('leave_type_id',$leaveType)
                                 ->where('status','active')
                                 ->get()->first();

@@ -5,19 +5,6 @@
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => $table_title, "url" => "/leave-request/create"])
 
-<!-- @if(strtolower($table_title) == 'leave applications')
-<div class="justify-content-between ">
-    <div class="w-25">
-        <label for="date">Date: </label>
-        <input type="date" name="date" id="date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
-    </div> <br>
-    <div >
-        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288">Reset</button>
-    </div>
-</div>
-<br>
-@endif -->
-
 <table class="unit_table mx-auto drmDataTable">
     <thead>
         <tr class="table_title" style="background-color: #0f5288;">
