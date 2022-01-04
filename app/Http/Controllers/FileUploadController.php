@@ -30,7 +30,7 @@ class FileUploadController extends Controller
             // $employees = Employee::select('id','first_name','middle_name','last_name')->get();
             // dd($fileUploads);
             return view('admin.fileUpload.index')->with(compact('fileUploads'));
-        }elseif($role == 'employee'){
+        }elseif($role == 'employee' || $role== 'manager'){
             $fileUploads = FileUpload::select('id','file_category_id','file_name','uploaded_by','employee_id')
                         ->where('employee_id', \Auth::user()->employee_id)
                         ->with('fileCategory:id,category_name')
@@ -51,7 +51,7 @@ class FileUploadController extends Controller
     {
         $fileCategories = FileCategory::select('id','category_name')->get();
         $role = \Auth::user()->role->authority;
-        if($role == 'employee'){
+        if($role == 'employee' || $role == 'manager'){
             $employees = Employee::select('id','first_name','middle_name','last_name')->where('id',\Auth::user()->employee_id)->where('contract_status','active')->get();
         }elseif($role == 'hr'){
             $employees = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
