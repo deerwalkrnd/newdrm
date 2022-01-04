@@ -11,6 +11,9 @@ use App\Models\Employee;
 use App\Models\YearlyLeave;
 use App\Http\Requests\LeaveRequestRequest;
 use App\Http\Requests\SubordinateLeaveRequestRequest;
+use App\Http\Controllers\SendMailController;
+
+use App\Helpers\MailHelper;
 
 class LeaveRequestController extends Controller
 {
@@ -99,12 +102,24 @@ class LeaveRequestController extends Controller
                 $data['half_leave'] = 'second';
             }
         }
-        // $remaining_leave = $this->calculateRemainingTime($allowed_leave,$leave_type_id,$requested_leave_days,$data['employee_id']);
        
-        // if(!$remaining_leave){
-        //   return redirect('/leave-request/create');
+        // if(MailHelper::sendMissedPunchOutMail()){
+        //     dd('here');
         // }
-        LeaveRequest::create($data);
+       
+        //Send Mail to manager,hr and employee after successful leave request 
+        $emails = MailHelper::getEmail();
+        $sendMailController = new SendMailController;
+        //mail sent time 5-6 secs
+        if(LeaveRequest::create($data)){
+            $to = $emails['manager'];
+            $cc = [$emails['hr'], $emails['employee']];
+            $name = \Auth::user()->employee->manager->first_name;
+            $message = $emails['employee_fullname'].' has requested leave from '.$data['start_date'].' to '.$data['end_date'].' i.e. for '.$data['days'].'days and the reason is : '.$data['reason'];
+            $regards ='HR';
+            $subject = 'Leave Request';
+           $sendMailController->sendMail($to, $name, $subject, $message, $cc);
+        };
         return redirect('/leave-request');
     }
 

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
 use App\Models\LeaveRequest;
+use App\Http\Controllers\SendMailController;
+use App\Helpers\MailHelper;
 
 use App\Models\LeaveType;
 use Carbon\Carbon;
@@ -112,15 +114,32 @@ class AttendanceController extends Controller
                     ]); 
                 }
 
+
                 // if reason is null for isLate true throw error
                 // dd(request()->ip());
-                Attendance::create([
+                $attendance = Attendance::create([
                     'employee_id' => \Auth::user()->employee_id,
                     'punch_in_time' => Carbon::now()->toDateTimeString(),
                     'punch_in_ip' => request()->ip(),
                     'late_punch_in' => $isLate,
                     'reason' => $reason
                 ]);
+                // dd($attendance);
+
+                //Send Mail to manager,hr and employee after late punch in 
+                $emails = MailHelper::getEmail();
+                $sendMailController = new SendMailController;
+                
+
+                if($attendance->late_punch_in){
+                    $to = $emails['employee'];
+                    $cc = [$emails['hr'], $emails['manager']];
+                    $name = \Auth::user()->employee->first_name;
+                    $message = 'Today you have punched in late at '.$attendance->punch_in_time.'.The reason is : '.$attendance->reason;
+                    $regards ='HR';
+                    $subject = 'Late Punch In';
+                    $sendMailController->sendMail($to, $name, $subject, $message, $cc);
+                }
                 \Session::put('punchIn', '2');
             }
         }

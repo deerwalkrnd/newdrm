@@ -3,9 +3,9 @@
     <title>New DRM Mail</title>
 </head>
 <body>
-    <p>Hello {{$name,}}</p>
+    <p>Hello {{$name}},</p>
     <p>{{ $body }}</p>
-   <br>
+   <!-- <br> -->
     <p>
         Thank you<br>
         Regards,<br>
