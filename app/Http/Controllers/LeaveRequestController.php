@@ -50,7 +50,7 @@ class LeaveRequestController extends Controller
             $leaveRequests = $leaveRequests->orderBy('start_date')->get();
         }
 
-        $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->get();
+        $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
         $table_title = 'Employee Leave Details Lists';
         
         return view('admin.leaveRequest.leave_details')->with(compact('leaveRequests','table_title','employeeSearch'));
