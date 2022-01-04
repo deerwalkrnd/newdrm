@@ -36,6 +36,7 @@ class EmployeeController extends Controller
         ->with('organization:id,name')
         ->with('unit:id,unit_name')
         ->with('serviceType:id,service_type_name')
+        ->where('contract_status','active')
         ->orderBy('first_name') 
         ->orderBy('last_name')
         ->get();
@@ -246,7 +247,7 @@ class EmployeeController extends Controller
     */ 
     public function search(Request $request)
     {
-        $employees = Employee::take(50)->get();
+        $employees = Employee::take(50)->where('contract_status','active')->get();
         if($request->has('q'))
         {
             $keyword = $request->q;

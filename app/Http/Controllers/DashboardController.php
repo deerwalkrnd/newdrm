@@ -57,6 +57,7 @@ class DashboardController extends Controller
         $next_day = date('d', strtotime("+30 days"));
 
         $birthdayList = Employee::select('first_name','last_name','middle_name','date_of_birth')
+                                ->where('contract_status','active')
                                 ->whereMonth('date_of_birth','>',$curr_month)
                                 ->orWhere(function($query) use($curr_month,$curr_day){
                                     $query->whereMonth('date_of_birth',$curr_month)

@@ -16,7 +16,7 @@ final class Helper
     private $weekend = ['SUN','SAT'];
 
     public static function getDays($start_date, $end_date, $leave_type_id){
-        $employee = Employee::findOrFail(\Auth::user()->employee_id)->select('gender')->first();
+        $employee = Employee::findOrFail(\Auth::user()->employee_id)->select('gender')->where('contract_status','active')->first();
         $includeHoliday = LeaveType::select('include_holiday')->where('id',$leave_type_id)->get()->first();
         $s_date = date('Y-m-d',strtotime($start_date));
         $e_date = date('Y-m-d',strtotime($end_date));

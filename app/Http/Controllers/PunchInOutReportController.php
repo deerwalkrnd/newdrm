@@ -9,7 +9,7 @@ class PunchInOutReportController extends Controller
 {
     public function getPunchInOut(Request $request){
 
-        $employees = Employee::select('id','first_name','middle_name','last_name','manager_id')->with(['attendances'=>function($query) use($request){
+        $employees = Employee::select('id','first_name','middle_name','last_name','manager_id')->where('contract_status','active')->with(['attendances'=>function($query) use($request){
 
             $query->select('id', 'employee_id', 'punch_in_time', 'punch_in_ip', 'late_punch_in', 'punch_out_time', 'punch_out_ip', 'missed_punch_out', 'reason');
             if(isset($request->e))
@@ -25,7 +25,7 @@ class PunchInOutReportController extends Controller
 
         // dd($employees);
 
-        $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->get();
+        $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
         return view('admin.report.punchInOut')->with(compact('employees','employeeSearch'));
     }
 

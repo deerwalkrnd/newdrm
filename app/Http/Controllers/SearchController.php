@@ -39,7 +39,7 @@ class SearchController extends Controller
         if($request->has('q'))
         {
             $keyword = $request->q;
-            $employees = Employee::select('id','first_name','middle_name','last_name')->where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->get();
+            $employees = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->get();
         }
 
         return response()->json($employees);

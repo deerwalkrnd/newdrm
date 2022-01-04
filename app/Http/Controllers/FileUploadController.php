@@ -52,9 +52,9 @@ class FileUploadController extends Controller
         $fileCategories = FileCategory::select('id','category_name')->get();
         $role = \Auth::user()->role->authority;
         if($role == 'employee'){
-            $employees = Employee::select('id','first_name','middle_name','last_name')->where('id',\Auth::user()->employee_id)->get();
+            $employees = Employee::select('id','first_name','middle_name','last_name')->where('id',\Auth::user()->employee_id)->where('contract_status','active')->get();
         }elseif($role == 'hr'){
-            $employees = Employee::select('id','first_name','middle_name','last_name')->get();
+            $employees = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
         }
         return view('admin.fileUpload.create')->with(compact('fileCategories','employees'));
     }
