@@ -40,7 +40,8 @@ class LeaveRequestRequest extends FormRequest
             $remainingDays = Helper::getRemainingCarryOverLeave();
         }
 
-        // dd($remainingDays, $calcDay);
+        if(\Request::input('leave_time') != 'full')
+            $remainingDays = $remainingDays * 2;
 
         $start_date_year = date('Y',strtotime($start_date));
         return [
