@@ -3,6 +3,7 @@
 @section('title','Employee')
 
 @section('content')
+@include('layouts.basic.tableHead',["table_title" => "Employee Punch In-Out Detail"])
 
 
 <div class="row">

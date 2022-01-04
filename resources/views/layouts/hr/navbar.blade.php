@@ -47,7 +47,7 @@
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/guest.png">Guest
                                                     Detail</a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/leave-request/approve"><img class="img-fluid"
                                                         src="/assets/images/icons/leave.png">Approve Leave</a></td>
 
                                             <td class="hr_menu_content"><a href="/designation"><img class="img-fluid"
@@ -158,7 +158,7 @@
 
                                         <tr>
                                             <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/late-missed-punch"><img class="img-fluid"
                                                         src="/assets/images/icons/hurry.png">Late/ No/
                                                     Exception Punch
                                                     In</a></td>

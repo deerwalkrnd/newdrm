@@ -8,7 +8,7 @@
                 <option 
                     value="{{ $leaveType->id}}" 
                     {{ (!empty(old('leave_type_id')) && old('leave_type_id') == $leaveType->id) ? 'selected': ''}}
-                    >
+                    {{(isset($leaveRequest) && $leaveRequest->leaveType->id == $leaveType->id) ? 'selected':''}}>
                     {{ $leaveType->name }}
                 </option>
                 @empty
@@ -32,19 +32,19 @@
             <br>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="leave_time" id="leave_time0" value="full" 
-                {{ (isset($leaveRequest) && $leaveRequest->leave_time == 'full') ? 'checked':''}}
+                {{ (isset($leaveRequest) && $leaveRequest->full_leave == 1) ? 'checked':''}}
                 {{ old('leave_time') == 'full' ? 'checked':'' }}>
                 <label class="form-check-label" for="leave_time0">Full Day</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="leave_time" id="leave_time1" value="first" 
-                {{ (isset($leaveRequest) && $leaveRequest->leave_time == 'first') ? 'checked':''}}
+                {{ (isset($leaveRequest) && strtolower($leaveRequest->half_leave) == 'first') ? 'checked':''}}
                 {{ old('leave_time') == 'first' ? 'checked':'' }}>
                 <label class="form-check-label" for="leave_time1">First Half</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="leave_time" id="leave_time2" value="second" 
-                {{ (isset($leaveRequest) && $leaveRequest->leave_time == 'second') ? 'checked':''}}
+                {{ (isset($leaveRequest) && strtolower($leaveRequest->leave_time) == 'second') ? 'checked':''}}
                 {{ old('leave_time') == 'second' ? 'checked':'' }}>
                 <label class="form-check-label" for="leave_time2">Second Half</label>
             </div>

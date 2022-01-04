@@ -28,4 +28,19 @@ class PunchInOutReportController extends Controller
         $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->get();
         return view('admin.report.punchInOut')->with(compact('employees','employeeSearch'));
     }
+
+    public function latePunchInOut(Request $request){
+        if($request->d)
+            $date = $request->d;
+        else
+            $date =  date('Y-m-d');
+
+        $latePunchInOuts =  Attendance::select('id','employee_id','punch_in_time','punch_in_ip','punch_out_time','punch_out_ip','missed_punch_out','late_punch_in','reason')
+                    ->where('late_punch_in','1')
+                    // ->orWhere('missed_punch_out','1')
+                    // ->where('punch_in_time',$date)
+                    ->get();
+        // dd($latePunchInOuts);
+        return view('admin.attendance.latePunchInOut')->with(compact('latePunchInOuts'));
+    }
 }
