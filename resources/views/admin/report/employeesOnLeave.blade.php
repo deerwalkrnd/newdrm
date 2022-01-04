@@ -37,7 +37,7 @@
                 <td>{{ $acceptedRequest->leaveType->name}}</td>
                 <td>{{ $acceptedRequest->start_date}}</td>
                 <td>{{ $acceptedRequest->end_date}}</td>
-                <td>{{ $acceptedRequest->days}}</td>
+                <td>{{ $acceptedRequest->days * ($acceptedRequest->full_leave == 1 ? 1 : 0.5)}}</td>
                 <td>{{ $acceptedRequest->half_leave ?? $acceptedRequest->half_leave}}</td>
                 <td>{{ $acceptedRequest->reason}}</td>
             </tr>          

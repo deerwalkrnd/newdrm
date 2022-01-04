@@ -19,7 +19,7 @@
                 <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
                 <td>{{ $record->first_name.' '.substr($record->middle_name,0,1).' '.$record->last_name }}</td>
                 @if($record->manager != NULL)
-                    <td>{{ $record->employee->first_name.' '.substr($record->employee->middle_name,0,1).' '.$record->employee->last_name }}</td>
+                    <td>{{ $record->manager->first_name.' '.substr($record->manager->middle_name,0,1).' '.$record->manager->last_name }}</td>
                 @else
                     <td> -- </td>
                 @endif

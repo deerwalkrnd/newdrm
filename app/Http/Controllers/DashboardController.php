@@ -87,11 +87,22 @@ class DashboardController extends Controller
         {
             $allowedLeave = $this->getAllowedLeaveDays($org_id,$leaveType->id,$year);
             $acquiredLeave = $allowedLeave / 12 * $month;
-            $leaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
+            
+            $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
                                         ->where('acceptance','accepted')
                                         ->where('employee_id', \Auth::user()->employee_id)
                                         ->where('leave_type_id',$leaveType->id)
+                                        ->where('full_leave',"1")
                                         ->sum('days');
+
+            $halfLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
+                                        ->where('acceptance','accepted')
+                                        ->where('employee_id', \Auth::user()->employee_id)
+                                        ->where('leave_type_id',$leaveType->id)
+                                        ->where('full_leave',"0")
+                                        ->sum('days');
+
+            $leaveTaken = $fullLeaveTaken + 0.5 * $halfLeaveTaken;
             $balance = $acquiredLeave - $leaveTaken;
 
             $lists[$leaveType->name] = [

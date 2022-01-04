@@ -43,16 +43,13 @@
             <td>{{ $leaveRequest->year }}</td>
             <td>{{ $leaveRequest->start_date }}</td>
             <td>{{ $leaveRequest->end_date }}</td>
-            <td>{{ $leaveRequest->days }}</td>
+            <td>{{ $leaveRequest->days * ($leaveRequest->full_leave == 1 ? 1 : 0.5) }}</td>
             <td>{{ $leaveRequest->reason }}</td>
             <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:''}}</td>
             <td>{{ $leaveRequest->acceptance }}</td>
             
              <td class="text-center">
                 @if($leaveRequest->acceptance == 'pending')
-
-                <!-- <a href="/leave-request/edit/{{ $leaveRequest->id }}"><i class="far fa-edit"></i></a> 
-                |  -->
                 <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')

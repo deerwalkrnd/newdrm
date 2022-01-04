@@ -32,7 +32,7 @@
             <td>{{ $leaveRequest->year }}</td>
             <td>{{ $leaveRequest->start_date }}</td>
             <td>{{ $leaveRequest->end_date }}</td>
-            <td>{{ $leaveRequest->days }}</td>
+            <td>{{ $leaveRequest->days * ($leaveRequest->full_leave == 1 ? 1 : 0.5) }}</td>
             <td>{{ $leaveRequest->half_leave }}</td>
             <td>{{ $leaveRequest->reason }}</td>
             <td>{{ $leaveRequest->acceptance }}</td>
