@@ -37,8 +37,10 @@
             <td>{{ $leaveRequest->reason }}</td>
             <td>{{ $leaveRequest->acceptance }}</td>
             <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:'' }}</td>
-            <td>{{ $leaveRequest->accepted_by }}</td>
+            <td>{{ ucfirst($leaveRequest->accepted_by_detail->first_name).' '.ucfirst($leaveRequest->accepted_by_detail->middle_name).' '.ucfirst($leaveRequest->accepted_by_detail->last_name) }}</td>
+            
             <td class="text-center">
+                @if(!($leaveRequest->start_date == date('Y-m-d')))
                 <a href="/leave-request/edit/{{ $leaveRequest->id }}"><i class="far fa-edit"></i></a> 
                 | 
                 <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
@@ -46,6 +48,7 @@
                     @method('DELETE')
                     <button type="submit" class="delete action border-0"><i class="fas fa-trash-alt action"></i></button>
                 </form>
+                @endif
             </td>
         </tr>
         @empty

@@ -152,7 +152,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::put('/leave-request/reject/{id}',[LeaveRequestController::class, 'reject']);
     //leave-applications
     Route::get('/leave-request/approve',[LeaveRequestController::class, 'approve']);
-    // Route::get('/leave-request/details',[LeaveRequestController::class, 'index']);
+    Route::get('/leave-request/details',[LeaveRequestController::class, 'leaveDetail']);
     
 
     Route::get('/punch-in',[AttendanceController::class, 'index']);

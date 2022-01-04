@@ -35,7 +35,7 @@
                                             <td class="hr_menu_content"><a href="/employee"><img class="img-fluid"
                                                         src="/assets/images/icons/employee.png">Employee
                                                     Detail</a></td>
-                                            <td class="hr_menu_content"><a href="/leave-request"><img class="img-fluid"
+                                            <td class="hr_menu_content"><a href="/leave-request/details"><img class="img-fluid"
                                                         src="/assets/images/icons/exit.png">Leave
                                                     Detail</a></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"

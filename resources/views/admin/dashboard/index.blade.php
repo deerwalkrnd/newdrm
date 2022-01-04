@@ -7,7 +7,7 @@
 <div class="row top_buttons mx-4">
     <div class="col">
         <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
-        <button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button>
+        <a href="/leave-request"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button></a>
     </div>
 
     @if(session('punchIn') == 2)

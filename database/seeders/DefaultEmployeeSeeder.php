@@ -60,12 +60,13 @@ class DefaultEmployeeSeeder extends Seeder
         DB::table('roles')->insert([
             'authority' => 'hr'
         ]);
+         DB::table('roles')->insert([
+            'authority' => 'manager'
+        ]);
         DB::table('roles')->insert([
             'authority' => 'employee'
         ]);
-        DB::table('roles')->insert([
-            'authority' => 'manager'
-        ]);
+       
 
         DB::table('leave_types')->insert([
             'name' => 'Personal',
@@ -163,7 +164,7 @@ class DefaultEmployeeSeeder extends Seeder
             'designation_id' => '1',
             'organization_id' => '1',
             'unit_id' => '1',
-            'email' => 'satyadeep.neupane@deerwalk.edu.np',
+            'email' => 'sagar.shrestha@deerwalk.edu.np',
             'shift_id' => '1'
         ]);
       
@@ -256,8 +257,8 @@ class DefaultEmployeeSeeder extends Seeder
 
         DB::table('users')->insert([
             'employee_id' => '4',
-            'role_id' => '2',
-            'username' => 'employee',
+            'role_id' => '3',
+            'username' => 'deena.sitikhu',
             'password' => \Hash::make('Deerwa1k@DRM')
         ]);
 
@@ -298,7 +299,7 @@ class DefaultEmployeeSeeder extends Seeder
 
         DB::table('users')->insert([
             'employee_id' => '5',
-            'role_id' => '2',
+            'role_id' => '3',
             'username' => 'sahil.lodha',
             'password' => \Hash::make('Deerwa1k@DRM')
         ]);
@@ -368,6 +369,46 @@ class DefaultEmployeeSeeder extends Seeder
             'year' => '2021',
             'days'=>'5',
         ]);
+
+
+        //Leave Requests
+        DB::table('leave_requests')->insert([
+            'employee_id'=>'3',
+            'start_date' => '2022-1-5',
+            'end_date' => '2022-1-6',
+            'days'=>'2',
+            'year'=>'2022',
+            'leave_type_id'=>'1',
+            'full_leave'=>'1',
+            'acceptance' => 'pending',
+            'reason'=>'sick',
+            'requested_by'=>'3',
+        ]);      
+        
+        DB::table('leave_requests')->insert([
+            'employee_id'=>'4',
+            'start_date' => '2022-1-4',
+            'end_date' => '2022-1-4',
+            'days'=>'1',
+            'year'=>'2022',
+            'leave_type_id'=>'1',
+            'half_leave'=>'first',
+            'acceptance' => 'pending',
+            'reason'=>'sick',
+            'requested_by'=>'4',
+        ]);      
+        DB::table('leave_requests')->insert([
+            'employee_id'=>'5',
+            'start_date' => '2022-1-5',
+            'end_date' => '2022-1-5',
+            'days'=>'1',
+            'year'=>'2022',
+            'leave_type_id'=>'1',
+            'full_leave'=>'1',
+            'reason'=>'sick',
+            'acceptance' => 'pending',
+            'requested_by'=>'5',
+        ]);      
         
     }
 }
