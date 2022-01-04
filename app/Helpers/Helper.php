@@ -76,7 +76,7 @@ final class Helper
                                         ->sum('days');
 
         $allowed_leave = YearlyLeave::select('days')
-                                        // ->where('unit_id')
+                                        ->where('unit_id', \Auth::user()->employee->unit_id)
                                         ->where('leave_type_id',$leave_type_id)
                                         ->where('year',$year)
                                         ->first();

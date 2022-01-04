@@ -167,19 +167,30 @@ class AttendanceController extends Controller
                         ]);
             \Session::put('punchIn', '3');
 
+            $issueForcedLeave = 1;
+
             if($issueForcedLeave == 1)
             {
-                LeaveType::create([
+                // dd("Hereee");/
+                try{
+                LeaveRequest::create([
                     'employee_id' => \Auth::user()->employee_id,
                     'start_date' => date('Y-m-d'),
                     'end_date' => date('Y-m-d'),
                     'days' => '1',
+                    'year' => date('Y'),
                     'leave_type_id' => '1',
-                    'full_leave' => '1',
+                    'full_leave' => '0',
                     'reason' => 'Forced (System)',
-                    'acceptance' => 'system',
-                    // 'accepted_by' => hr
+                    'acceptance' => 'accepted',
+                    'requested_by' => \Auth::user()->employee_id,
+                    'accepted_by' => NULL
                 ]);
+            }catch(Exception $e)
+            {
+                dd($e);
+            }
+                // dd("hereee2");
             }
         }
 

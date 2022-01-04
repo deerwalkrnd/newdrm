@@ -18,7 +18,7 @@
 <section class="form_container mx-auto">
     <div class="row mx-auto">
         <div class="col-md-2 col-sm-4 mb-4 mx-auto">
-            <img src="/assets/images/image.png" class="img-thumbnail img-fluid" width="100%">
+            <img src="{{ ($employee->image_name != NULL) ? asset($employee->image_name) : '/assets/images/image.png' }}" class="img-thumbnail img-fluid" width="100%">
         </div>
 
         <div class="col-md-10 col-sm-8" style="background-color:aliceblue; padding: 20px 40px;">

@@ -105,7 +105,7 @@
                 <td>{{ $onLeave->leaveType->name }}</td>
                 <td>{{ $onLeave->start_date }}</td>
                 <td>{{ $onLeave->end_date }}</td>
-                <td>{{ $onLeave->days }}</td>
+                <td>{{ $onLeave->days * ($onLeave->full_leave == 1 ? 1 : 0.5) }}</td>
                 <td>{{ $onLeave->full_leave == 0 ? $onLeave->half_leave : '-' }}</td>
             </tr>
             @empty
