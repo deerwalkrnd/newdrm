@@ -175,7 +175,7 @@ class DefaultEmployeeSeeder extends Seeder
             'password' => \Hash::make('Deerwa1k@DRM')
         ]);
         DB::table('emergency_contacts')->insert([
-            'employee_id' => '1',
+            'employee_id' => '2',
             'first_name' => 'Sujan',
             'last_name' => 'Shrestha',
             'relationship'=>'Uncle',
@@ -222,7 +222,7 @@ class DefaultEmployeeSeeder extends Seeder
             'password' => \Hash::make('Deerwa1k@DRM')
         ]);
         DB::table('emergency_contacts')->insert([
-            'employee_id' => '1',
+            'employee_id' => '3',
             'first_name' => 'Ram',
             'last_name' => 'Sharma',
             'relationship'=>'Uncle',
@@ -263,7 +263,7 @@ class DefaultEmployeeSeeder extends Seeder
         ]);
 
         DB::table('emergency_contacts')->insert([
-            'employee_id' => '2',
+            'employee_id' => '4',
             'first_name' => 'Dhana',
             'middle_name' => 'Ram',
             'last_name' => 'Sitikhu',
@@ -304,7 +304,7 @@ class DefaultEmployeeSeeder extends Seeder
             'password' => \Hash::make('Deerwa1k@DRM')
         ]);
         DB::table('emergency_contacts')->insert([
-            'employee_id' => '3',
+            'employee_id' => '5',
             'first_name' => 'Suyog',
             'last_name' => 'Lodha',
             'relationship'=>'Uncle',

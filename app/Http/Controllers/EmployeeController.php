@@ -37,6 +37,7 @@ class EmployeeController extends Controller
         ->with('unit:id,unit_name')
         ->with('serviceType:id,service_type_name')
         ->orderBy('first_name') 
+        ->orderBy('last_name')
         ->get();
 
         // dd($employees);
@@ -74,9 +75,11 @@ class EmployeeController extends Controller
     public function store(EmployeeRequest $request)
     {
         //get validated input
+        // dd($request);
         $input = $request->validated();
         $user = [];
         $emergency_contact =[];
+        // dd($input['manager_id']);
 
         //store image
         $image = $request->file('image');
@@ -103,7 +106,6 @@ class EmployeeController extends Controller
      
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
         unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
- 
         DB::beginTransaction();
         try {
             $user['employee_id'] = Employee::create($input)->id;

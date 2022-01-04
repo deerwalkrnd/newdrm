@@ -60,7 +60,7 @@ class EmployeeRequest extends FormRequest
             'join_date' => 'nullable|date',
             'intern_trainee_ship_date' => 'nullable|date',
             'service_type' => 'required|exists:service_types,id',
-            'manager_id' => 'nullable|exists:managers,id',
+            'manager_id' => 'nullable|exists:employees,id',
             'designation_id' => 'required|max:255|integer',
             'designation_change_date' => 'nullable|date',
             'organization_id' => 'required|max:255|integer',
