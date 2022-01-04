@@ -11,6 +11,7 @@
             <div class="collapse navbar-collapse navigation_mobile" id="navbarNavDropdown">
                 <ul class="navbar-nav">
 
+                    @if(Auth::user()->role->authority == 'hr')
                     <li class="nav-item dropdown navigation_item active">
                         <a class="nav-link navigation_link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -152,7 +153,7 @@
                                                         src="/assets/images/icons/calendar (1).png">My Punch
                                                     In</a></td>
                                             <td class="hr_menu_content"><a href="employee"><img class="img-fluid"
-               mu                                         src="/assets/images/icons/terminated.png">Terminated
+                                                        src="/assets/images/icons/terminated.png">Terminated
                                                     Employee Detail</a></td>
                                         </tr>
 
@@ -248,14 +249,16 @@
                                     </table>
                                 </div>
                             </li>
-
                         </ul>
                     </li>
+                    @endif
 
+                    @if(Auth::user()->role->authority == 'manager')
                     <li class="nav-item navigation_item">
-                        <a class="nav-link navigation_link" href="#"><i class="fas fa-warehouse icon"></i> Inventory
-                            Management</a>
+                        <a class="nav-link navigation_link" href="/leave-request/create/subordinate-leave"><i class="fas fa-sign-out-alt icon"></i>
+                            Create Sub Ordinate Leave</a>
                     </li>
+                    @endif
 
                     <li class="nav-item navigation_item">
                         <a class="nav-link navigation_link" href="#"><i class="fas fa-address-book icon"></i>

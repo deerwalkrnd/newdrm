@@ -12,7 +12,7 @@ use App\Models\Attendance;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {       
         $state = 1;
         if($this->recordRowExists())
@@ -26,6 +26,7 @@ class DashboardController extends Controller
 
         //set punch-in state;
         \Session::put('punchIn', $state);
+        \Session::put('userIp', request()->ip());
 
         $leaveBalance = $this->getLeaveBalance();
         $birthdayList = $this->getBirthdayList();

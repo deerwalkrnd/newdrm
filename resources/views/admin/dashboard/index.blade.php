@@ -10,34 +10,36 @@
         <button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button>
     </div>
 
-    @if(session('punchIn') == 2)
-    <div class="col">
-        <span class="punch_out_container" style="position: relative;">
-            <form class="punch_out_form" action="/punch-out" method="POST" onsubmit="return confirm('Do you want to punch-out?');">
-                @csrf
-                <input type="hidden" placeholder="Punch In/Out Remarks">
-                <span class="punch_out_button">
-                    <button>Punch Out</button>
-                </span>
-            </form>
-        </span>
-    </div>
+    @if(env('ip') == session('userIp'))
+        @if(session('punchIn') == 2)
+        <div class="col">
+            <span class="punch_out_container" style="position: relative;">
+                <form class="punch_out_form" action="/punch-out" method="POST" onsubmit="return confirm('Do you want to punch-out?');">
+                    @csrf
+                    <input type="hidden" placeholder="Punch In/Out Remarks">
+                    <span class="punch_out_button">
+                        <button>Punch Out</button>
+                    </span>
+                </form>
+            </span>
+        </div>
+        @endif
+        @if(session('punchIn') == 1)
+        <div class="col">
+            <span class="punch_out_container" style="position: relative;">
+                <form class="punch_out_form" action="/punch-in" method="POST">
+                    @csrf
+                    <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
+                    <input placeholder="Punch In/Out Remarks">
+                    <span class="punch_out_button">
+                        <button>Punch In</button>
+                    </span>
+                </form>
+            </span>
+        </div>
+        @endif
+        <!-- punch-in/punch-out col -->
     @endif
-    @if(session('punchIn') == 1)
-    <div class="col">
-        <span class="punch_out_container" style="position: relative;">
-            <form class="punch_out_form" action="/punch-in" method="POST">
-                @csrf
-                <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
-                <input placeholder="Punch In/Out Remarks">
-                <span class="punch_out_button">
-                    <button>Punch In</button>
-                </span>
-            </form>
-        </span>
-    </div>
-    @endif
-    <!-- punch-in/punch-out col -->
 </div>
 <!-- section with top buttons end -->
 
