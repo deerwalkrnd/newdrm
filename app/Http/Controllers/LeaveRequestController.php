@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\Employee;
 use App\Models\YearlyLeave;
 use App\Http\Requests\LeaveRequestRequest;
 use App\Http\Requests\SubordinateLeaveRequestRequest;
@@ -18,15 +19,41 @@ class LeaveRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+     public function index()
     {
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
         ->with(['employee:id,first_name,last_name','leaveType:id,name'])
+        ->where('employee_id',\Auth::user()->id)
         ->orderBy('created_at')
         ->orderBy('updated_at')
         ->get();
+        $table_title = 'Employee Leave Details';
         
-        return view('admin.leaveRequest.index')->with(compact('leaveRequests'));
+        return view('admin.leaveRequest.index')->with(compact('leaveRequests','table_title'));
+    }
+
+    public function leaveDetail(Request $request)
+    {
+        $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
+        ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
+        ->with('accepted_by_detail:id,first_name,last_name')
+        ->where('acceptance','accepted')
+        // ->orWhere('acceptance','rejected')
+        ->orderBy('created_at')
+        ->orderBy('updated_at');
+        // dd($leaveRequests->get());
+
+        if($request->d){
+            $leaveRequests = $leaveRequests->where('start_date',$request->d)->get();
+        }else{
+            $leaveRequests = $leaveRequests->orderBy('start_date')->get();
+        }
+
+        $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->get();
+        $table_title = 'Employee Leave Details Lists';
+        
+        return view('admin.leaveRequest.leave_details')->with(compact('leaveRequests','table_title','employeeSearch'));
     }
 
     /**
@@ -123,7 +150,10 @@ class LeaveRequestController extends Controller
      */
     public function edit($id)
     {
-        //
+        $leaveRequest = LeaveRequest::findOrFail($id);
+        $leaveTypes = LeaveType::select('id','name')->get();
+        return view('admin.leaveRequest.edit')->with(compact('leaveRequest','leaveTypes'));
+
     }
 
     /**
@@ -133,9 +163,13 @@ class LeaveRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(LeaveRequestRequest $request, $id)
     {
-        //
+        $leaveRequest = LeaveRequest::findOrFail($id);
+        $input = $request->validated();
+        
+        $leaveRequest->update($input);
+        return redirect('/leave-request/details');
     }
 
     /**
@@ -159,7 +193,7 @@ class LeaveRequestController extends Controller
             'accepted_by' => \Auth::user()->id
         ]);
 
-        return redirect('/leave-request');
+        return redirect('/leave-request/approve');
     }
 
     public function reject($id)
@@ -170,7 +204,7 @@ class LeaveRequestController extends Controller
             'accepted_by' => \Auth::user()->id
         ]);
 
-        return redirect('/leave-request');
+        return redirect('/leave-request/approve');
     }
 
     private function calculateRemainingTime($allowed_leave,$leave_type_id,$requested_leave_days,$user_id){
@@ -185,5 +219,21 @@ class LeaveRequestController extends Controller
         $remaining_leave = $allowed_leave - $already_taken_leaves;
 
         return $remaining_leave ;
+    }
+
+    public function approve(Request $request)
+    {
+        $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
+        ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
+        ->where('acceptance','pending');
+        // ->orWhere('acceptance','rejected');
+      
+        if($request->d)
+            $leaveRequests = $leaveRequests->where('start_date',$request->d)->orderBy('created_at')->orderBy('updated_at')->get();
+        else
+            $leaveRequests = $leaveRequests->orderBy('start_date')->orderBy('created_at')->orderBy('updated_at')->get();
+        $table_title = 'Leave Applications';
+        // dd($leaveRequests[0]->employee->manager);
+        return view('admin.leaveRequest.approve_leave')->with(compact('leaveRequests','table_title'));
     }
 }

@@ -47,20 +47,7 @@
             <td>{{ $leaveRequest->reason }}</td>
             <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:''}}</td>
             <td>{{ $leaveRequest->acceptance }}</td>
-            
-             <td class="text-center">
-                @if($leaveRequest->acceptance == 'pending')
-
-                <!-- <a href="/leave-request/edit/{{ $leaveRequest->id }}"><i class="far fa-edit"></i></a> 
-                |  -->
-                <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="delete action border-0"><i class="fas fa-trash-alt action"></i></button>
-                </form>
-                @endif
-            </td>
-            <!-- <td>
+            <td>
                 @if($leaveRequest->acceptance == 'pending')
                 <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
                     @csrf
@@ -89,18 +76,18 @@
                             @csrf
                             @method('PUT')
                             <button type="submit" class="delete" style="width:100%;">Accept</button>
-                        </form> -->
+                        </form>
                         <!-- accept -->
-                        <!-- <form action="/leave-request/reject/{{ $leaveRequest->id }}" method="POST" class="dropdown-item">
+                        <form action="/leave-request/reject/{{ $leaveRequest->id }}" method="POST" class="dropdown-item">
                             @csrf
                             @method('PUT')
                             <button type="submit" class="delete" style="width:100%;">Reject</button>
-                        </form> -->
+                        </form>
                         <!-- reject -->
-                    <!-- </div>
+                    </div>
                 </div>
                 @endif
-            </td> -->
+            </td>
         </tr>
         @empty
         <tr>

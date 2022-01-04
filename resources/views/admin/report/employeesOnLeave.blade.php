@@ -3,6 +3,7 @@
 @section('title','Employee')
 
 @section('content')
+@include('layouts.basic.tableHead',["table_title" => "Employees On Leave"])
 
 
 <div class="d-flex justify-content-between flex-row">

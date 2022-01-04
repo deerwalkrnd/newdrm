@@ -143,17 +143,22 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/leave-request/create/subordinate-leave',[LeaveRequestController::class, 'createSubOrdinateLeave']);
     Route::post('/leave-request',[LeaveRequestController::class, 'store']);
     Route::post('/leave-request/subordinate-leave',[LeaveRequestController::class, 'storeSubOrdinateLeave']);
+    //leave-details
     Route::get('/leave-request',[LeaveRequestController::class, 'index']);
     Route::get('/leave-request/edit/{id}',[LeaveRequestController::class, 'edit']);
     Route::put('/leave-request/{id}',[LeaveRequestController::class, 'update']);
     Route::delete('/leave-request/{id}',[LeaveRequestController::class, 'destroy']);
     Route::put('/leave-request/accept/{id}',[LeaveRequestController::class, 'accept']);
     Route::put('/leave-request/reject/{id}',[LeaveRequestController::class, 'reject']);
+    //leave-applications
+    Route::get('/leave-request/approve',[LeaveRequestController::class, 'approve']);
+    Route::get('/leave-request/details',[LeaveRequestController::class, 'leaveDetail']);
+    
 
     Route::get('/punch-in',[AttendanceController::class, 'index']);
     Route::post('/punch-in',[AttendanceController::class, 'punchIn']);
     Route::post('/punch-out',[AttendanceController::class, 'punchOut']);
-
+   
     // holiday route
     Route::get('/holiday/create',[HolidayController::class, 'create']);
     Route::post('/holiday',[HolidayController::class, 'store']);
@@ -182,7 +187,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/file-category/edit/{id}',[FileCategoryController::class, 'edit']);
     Route::put('/file-category/{id}',[FileCategoryController::class, 'update']);
     Route::delete('/file-category/{id}',[FileCategoryController::class, 'destroy']);
-
+   
      // fileUpload route
     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
     Route::post('/file-upload',[FileUploadController::class, 'store']);
@@ -197,6 +202,9 @@ Route::middleware(['logged-in'])->group(function(){
     //get punch in and out report
     Route::get('/punch-in-detail',[PunchInOutReportController::class,'getPunchInOut']);
     Route::get('/myPunchIn',[AttendanceController::class,'myPunchIn']);
+     //late-punch-in missed-punch-out
+    Route::get('/late-missed-punch',[PunchInOutReportController::class, 'latePunchInOut']);
+
 });
 
 Route::get('/dashboard',[DashboardController::class, 'index']);
