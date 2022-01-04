@@ -79,13 +79,13 @@ class DashboardController extends Controller
         // dd("Here");
         $year = date('Y');
         $month = date('m');
-        $org_id = \Auth::user()->employee->organization_id;
+        $unit_id = \Auth::user()->employee->unit_id;
         $leaveTypes = LeaveType::select('name','id')->get();
 
         $lists = array();
         foreach($leaveTypes as $leaveType)
         {
-            $allowedLeave = $this->getAllowedLeaveDays($org_id,$leaveType->id,$year);
+            $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year);
             $acquiredLeave = $allowedLeave / 12 * $month;
             
             $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
