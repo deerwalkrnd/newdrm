@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\YearlyLeave;
-use App\Models\Organization;
+use App\Models\Unit;
 use App\Models\LeaveType;
 use App\Http\Requests\YearlyLeaveRequest;
 
@@ -25,11 +25,11 @@ class YearlyLeaveController extends Controller
             $year = date('Y');
 
         // dd($year);
-        $yearlyLeaves = YearlyLeave::select('id', 'organization_id','leave_type_id','days','status','year')
-                        ->with('organization:id,name')
+        $yearlyLeaves = YearlyLeave::select('id', 'unit_id','leave_type_id','days','status','year')
+                        ->with('unit:id,unit_name')
                         ->with('leaveType:id,name')
                         ->where('year',$year)
-                        ->orderBy('organization_id')
+                        ->orderBy('unit_id')
                         ->get();
         // dd($yearlyLeaves);
         return view('admin.yearlyLeave.index')->with(compact('yearlyLeaves'));
@@ -42,9 +42,9 @@ class YearlyLeaveController extends Controller
      */
     public function create()
     {
-        $organizations = Organization::select('id','name')->get();
+        $units = Unit::select('id','unit_name')->get();
         $leaveTypes = LeaveType::select('id','name')->get();
-        return view('admin.yearlyLeave.create')->with(compact('organizations','leaveTypes'));
+        return view('admin.yearlyLeave.create')->with(compact('units','leaveTypes'));
     }
 
     /**
@@ -78,10 +78,10 @@ class YearlyLeaveController extends Controller
      */
     public function edit($id)
     {
-        $yearlyLeaves = YearlyLeave::select('id', 'organization_id','leave_type_id','days','status','year')->findOrFail($id);
-        $organizations = Organization::select('id','name')->get();
+        $yearlyLeaves = YearlyLeave::select('id', 'unit_id','leave_type_id','days','status','year')->findOrFail($id);
+        $units = Unit::select('id','unit_name')->get();
         $leaveTypes = LeaveType::select('id','name')->get();
-        return view('admin.yearlyLeave.edit')->with(compact('yearlyLeaves','organizations','leaveTypes'));
+        return view('admin.yearlyLeave.edit')->with(compact('yearlyLeaves','units','leaveTypes'));
     }
 
     /**

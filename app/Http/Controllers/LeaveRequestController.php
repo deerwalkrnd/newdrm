@@ -83,7 +83,7 @@ class LeaveRequestController extends Controller
         $data = $request->validated();
         $leave_type_id = $data['leave_type_id'];
         $requested_leave_days = $data['days'];
-        $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('organization_id',\Auth::user()->employee->organization_id)->get()->first()->days;
+        $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('unit_id',\Auth::user()->employee->unit_id)->get()->first()->days;
         $data['employee_id'] = \Auth::user()->id;
         $data['requested_by'] = \Auth::user()->id;
         $data['year'] = date('Y',strtotime($data['start_date']));

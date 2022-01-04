@@ -81,18 +81,18 @@ class DefaultEmployeeSeeder extends Seeder
         ]);
 
         DB::table('yearly_leaves')->insert([
-            'organization_id' => '1',
+            'unit_id' => '1',
             'leave_type_id' => '1',
             'days' => '10',
             'status' => 'active',
-            'year' => '2021'
+            'year' => '2022'
         ]);
          DB::table('yearly_leaves')->insert([
-            'organization_id' => '1',
+            'unit_id' => '1',
             'leave_type_id' => '2',
             'days' => '8',
             'status' => 'active',
-            'year' => '2021'
+            'year' => '2022'
         ]);
         DB::table('holidays')->insert([
             'name' => 'Christmas',

@@ -25,7 +25,7 @@ class YearlyLeaveRequest extends FormRequest
     {
         return [
             'days'=>'required|integer',
-            'organization_id'=>'required|exists:organizations,id',
+            'unit_id'=>'required|exists:units,id',
             'leave_type_id'=>'required|exists:leave_types,id',
             'status'=>'required|string',
             'year'=>'required|integer'

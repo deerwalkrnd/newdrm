@@ -30,7 +30,7 @@
         <tr class="table_title" style="background-color: #0f5288;">
             <th scope="col" class="ps-4">S.N</th>
             <th scope="col">Leave Type</th>
-            <th scope="col">Organization</th>
+            <th scope="col">Unit</th>
             <th scope="col">Days</th>
             <th scope="col">Status</th>
             <th scope="col">Leave Year</th>
@@ -42,7 +42,7 @@
         <tr>
             <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
             <td>{{ $yearlyLeave->leaveType->name}}</td>
-            <td>{{ $yearlyLeave->organization->name }}</td>
+            <td>{{ $yearlyLeave->unit->unit_name }}</td>
             <td>{{ $yearlyLeave->days }}</td>
             <td>{{ $yearlyLeave->status }}</td>
             <td>{{ $yearlyLeave->year }}</td>
@@ -58,7 +58,7 @@
         </tr>
         @empty
         <tr>
-            <th colspan=5 class="text-center text-dark">No Yearly Leave Found</th>
+            <th colspan=7 class="text-center text-dark">No Yearly Leave Found</th>
         </tr>
         @endforelse
     </tbody>

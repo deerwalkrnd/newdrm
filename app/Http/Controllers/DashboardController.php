@@ -108,7 +108,7 @@ class DashboardController extends Controller
     {
         $allowedLeave = YearlyLeave::select('days')
                                 ->where('year',$year)
-                                ->where('organization_id',$org_id)
+                                ->where('unit_id',$org_id)
                                 ->where('leave_type_id',$leaveType)
                                 ->where('status','active')
                                 ->get()->first();

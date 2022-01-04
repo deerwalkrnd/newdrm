@@ -11,15 +11,15 @@ class YearlyLeave extends Model
 
     public $fillable = [
         'version',
-        'organization_id',
+        'unit_id',
         'leave_type_id',
         'days',
         'status',
         'year'
     ];
-    public function organization()
+    public function unit()
     {
-        return $this->belongsTo(Organization::class);
+        return $this->belongsTo(Unit::class);
     }
     public function leaveType()
     {

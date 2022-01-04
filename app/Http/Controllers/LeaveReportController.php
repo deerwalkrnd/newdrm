@@ -53,7 +53,7 @@ class LeaveReportController extends Controller
         // dd($org_id,$leaveType,$year);
         $allowedLeave = YearlyLeave::select('days')
                                 ->where('year',$year)
-                                ->where('organization_id',$org_id)
+                                ->where('unit_id',$org_id)
                                 ->where('leave_type_id',$leaveType)
                                 ->where('status','active')
                                 ->get()->first();
