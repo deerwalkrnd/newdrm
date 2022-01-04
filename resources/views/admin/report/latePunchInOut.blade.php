@@ -3,7 +3,7 @@
 @section('title','Attendance')
 
 @section('content')
-@include('layouts.basic.tableHead',["table_title" => "Late Punch In"])
+@include('layouts.basic.tableHead',["table_title" => "Late Punch In/ Missed Punch Out"])
 
 <div class="d-flex justify-content-between flex-row">
     <div class="w-25">
@@ -17,6 +17,12 @@
 <br>
 <table class="unit_table mx-auto drmDataTable">
     <thead>
+        <tr >
+            <th colspan="3"></th>
+            <th colspan="3" style="background-color:#FFBF00">Punch In</th>
+            <th colspan="1" style="background:red;">Punch Out</th>
+            <!-- <th colspan="1"></th> -->
+        </tr>
         <tr class="table_title" style="background-color: #0f5288;">
             <th scope="col" class="ps-4">S.N</th>
             <th scope="col">Name</th>
@@ -24,6 +30,7 @@
             <th scope="col">IP Address</th>
             <th scope="col">Time</th>
             <th scope="col">Remarks</th>
+            <th scope="col">Missed Punch Out</th>
         </tr>
     </thead>
     <tbody>
@@ -35,6 +42,7 @@
                 <td>{{ $record->punch_in_ip}}</td>
                 <td>{{ $record->punch_in_time}}</td>
                 <td>{{ $record->reason }}</td>
+                <td>{{ $record->missed_punch_out }}</td>
             </tr>            
         @empty
         <tr>

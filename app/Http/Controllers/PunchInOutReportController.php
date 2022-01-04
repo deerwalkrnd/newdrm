@@ -34,13 +34,13 @@ class PunchInOutReportController extends Controller
             $date = $request->d;
         else
             $date =  date('Y-m-d');
-
+        
         $latePunchInOuts =  Attendance::select('id','employee_id','punch_in_time','punch_in_ip','punch_out_time','punch_out_ip','missed_punch_out','late_punch_in','reason')
                     ->where('late_punch_in','1')
-                    // ->orWhere('missed_punch_out','1')
-                    // ->where('punch_in_time',$date)
+                    ->orWhere('missed_punch_out','1')
+                    ->whereDate('created_at',$date)
                     ->get();
         // dd($latePunchInOuts);
-        return view('admin.attendance.latePunchInOut')->with(compact('latePunchInOuts'));
+        return view('admin.report.latePunchInOut')->with(compact('latePunchInOuts'));
     }
 }
