@@ -33,10 +33,10 @@
 <br>
 <table class="unit_table mx-auto drmDataTable">
     <thead>
-        <tr  style="background-color:limegreen;">
+        <tr style="background-color:#8bb8e0;">
             <th colspan="3" ></th>
-            <th colspan="3" >Punch In</th>
-            <th colspan="2" >Punch Out</th>
+            <th colspan="3" style="background-color:#09700f;" >Punch In</th>
+            <th colspan="2" style="background-color:#d90707;">Punch Out</th>
             <th colspan="1" ></th>
         </tr>
         <tr class="table_title" style="background-color: #0f5288;">
