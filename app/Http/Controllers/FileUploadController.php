@@ -32,7 +32,7 @@ class FileUploadController extends Controller
             return view('admin.fileUpload.index')->with(compact('fileUploads'));
         }elseif($role == 'employee'){
             $fileUploads = FileUpload::select('id','file_category_id','file_name','uploaded_by','employee_id')
-                        ->where('employee_id', \Auth::user()->id)
+                        ->where('employee_id', \Auth::user()->employee_id)
                         ->with('fileCategory:id,category_name')
                         ->orderBy('file_category_id')
                         ->orderBy('file_name')
@@ -52,7 +52,7 @@ class FileUploadController extends Controller
         $fileCategories = FileCategory::select('id','category_name')->get();
         $role = \Auth::user()->role->authority;
         if($role == 'employee'){
-            $employees = Employee::select('id','first_name','middle_name','last_name')->where('id',\Auth::user()->id)->get();
+            $employees = Employee::select('id','first_name','middle_name','last_name')->where('id',\Auth::user()->employee_id)->get();
         }elseif($role == 'hr'){
             $employees = Employee::select('id','first_name','middle_name','last_name')->get();
         }
@@ -68,10 +68,10 @@ class FileUploadController extends Controller
     public function store(FileUploadRequest $request)
     {
         $input = $request->validated();
-        $input['uploaded_by'] = \Auth::user()->id;
+        $input['uploaded_by'] = \Auth::user()->employee_id;
 
         if(\Auth::user()->role->authority == 'employee'){
-            $fileUpload_count = FileUpload::where('file_category_id',$input['file_category_id'])->where('employee_id',\Auth::user()->id)->get()->count();
+            $fileUpload_count = FileUpload::where('file_category_id',$input['file_category_id'])->where('employee_id',\Auth::user()->employee_id)->get()->count();
             if(!$fileUpload_count){
                 return $this->fileStore($input);
             }else{
@@ -143,7 +143,7 @@ class FileUploadController extends Controller
         $uploaded_by = $fileUpload['uploaded_by'];
         $employee_id = $fileUpload['employee_id'];
 
-        if(strtolower(\Auth::user()->role->authority) == 'hr' || $employee_id  == \Auth::user()->id ){
+        if(strtolower(\Auth::user()->role->authority) == 'hr' || $employee_id  == \Auth::user()->employee_id ){
             // return Storage::download($path);
             Storage::delete($path);
             $fileUpload->delete();
@@ -155,14 +155,14 @@ class FileUploadController extends Controller
     }
 
     public function download($id){
-        // dd(\Auth::user()->id);
+        // dd(\Auth::user()->employee_id);
         
         $fileUpload = FileUpload::findOrFail($id);
         $path = $fileUpload['file_name'];
         $uploaded_by = $fileUpload['uploaded_by'];
         $employee_id = $fileUpload['employee_id'];
-        // dd($uploaded_by == \Auth::user()->id );
-        if(strtolower(\Auth::user()->role->authority) == 'hr' || $employee_id  == \Auth::user()->id ){
+        // dd($uploaded_by == \Auth::user()->employee_id );
+        if(strtolower(\Auth::user()->role->authority) == 'hr' || $employee_id  == \Auth::user()->employee_id ){
             return Storage::download($path);
         }else{
            return redirect('/file-upload');

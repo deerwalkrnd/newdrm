@@ -16,7 +16,7 @@ final class Helper
     private $weekend = ['SUN','SAT'];
 
     public static function getDays($start_date, $end_date, $leave_type_id){
-        $employee = Employee::findOrFail(\Auth::user()->id)->select('gender')->first();
+        $employee = Employee::findOrFail(\Auth::user()->employee_id)->select('gender')->first();
         $includeHoliday = LeaveType::select('include_holiday')->where('id',$leave_type_id)->get()->first();
         $s_date = date('Y-m-d',strtotime($start_date));
         $e_date = date('Y-m-d',strtotime($end_date));
@@ -71,7 +71,7 @@ final class Helper
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
-                                        ->where('employee_id', \Auth::user()->id)
+                                        ->where('employee_id', \Auth::user()->employee_id)
                                         ->where('leave_type_id',$leave_type_id)
                                         ->sum('days');
 
@@ -97,13 +97,13 @@ final class Helper
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
-                                        ->where('employee_id', \Auth::user()->id)
+                                        ->where('employee_id', \Auth::user()->employee_id)
                                         ->where('leave_type_id',2) // 2 for carry_over leave
                                         ->sum('days');
 
         $allowed_leave = CarryOverLeave::select('days')
                                         ->where('year',date('Y')-1)
-                                        ->where('employee_id',\Auth::user()->id)
+                                        ->where('employee_id',\Auth::user()->employee_id)
                                         ->first();
 
         if($allowed_leave)

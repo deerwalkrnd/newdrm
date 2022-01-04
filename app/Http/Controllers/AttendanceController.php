@@ -83,7 +83,7 @@ class AttendanceController extends Controller
                 $presentTime = strtotime(Carbon::now());
                 $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                             ->whereDate('end_date', '>=', $presentTime)
-                            ->where('employee_id', \Auth::user()->id)->count();
+                            ->where('employee_id', \Auth::user()->employee_id)->count();
 
                 if($hasAnyLeave == 0)
                 {
@@ -91,7 +91,7 @@ class AttendanceController extends Controller
                 }else{
                     $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                             ->whereDate('end_date', '>=', $presentTime)
-                            ->where('employee_id', \Auth::user()->id)->get();
+                            ->where('employee_id', \Auth::user()->employee_id)->get();
                     $full_leave = $leave->full_leave;
                     if($full_leave == 0){
                         $half = $leave->half_leave;
@@ -129,7 +129,7 @@ class AttendanceController extends Controller
             $presentTime = strtotime(Carbon::now());
             $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                         ->whereDate('end_date', '>=', $presentTime)
-                        ->where('employee_id', \Auth::user()->id)->count();
+                        ->where('employee_id', \Auth::user()->employee_id)->count();
 
             if($hasAnyLeave == 0)
             {
@@ -137,7 +137,7 @@ class AttendanceController extends Controller
             }else{
                 $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                         ->whereDate('end_date', '>=', $presentTime)
-                        ->where('employee_id', \Auth::user()->id)->get();
+                        ->where('employee_id', \Auth::user()->employee_id)->get();
                 $full_leave = $leave->full_leave;
                 if($full_leave == 0){
                     $half = $leave->half_leave;
@@ -162,7 +162,7 @@ class AttendanceController extends Controller
             if($issueForcedLeave == 1)
             {
                 LeaveType::create([
-                    'employee_id' => \Auth::user()->id,
+                    'employee_id' => \Auth::user()->employee_id,
                     'start_date' => date('Y-m-d'),
                     'end_date' => date('Y-m-d'),
                     'days' => '1',
@@ -181,7 +181,7 @@ class AttendanceController extends Controller
     public function myPunchIn()
     {
         $myPunchInList = Attendance::select('id','employee_id','punch_in_time','punch_in_ip','punch_out_time','punch_out_ip','missed_punch_out','late_punch_in')
-                    ->where('employee_id',\Auth::user()->id)
+                    ->where('employee_id',\Auth::user()->employee_id)
                     ->get();
 
         return view('admin.attendance.myPunchIn')->with(compact('myPunchInList'));
