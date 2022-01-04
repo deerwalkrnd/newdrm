@@ -15,7 +15,7 @@
         <select class="form-control" name="year" onchange="search()" id="year">
             <option value="" disabled>- Choose -</option>
             @for($i=2011; $i<= date('Y'); $i++)
-                <option value="{{$i}}" {{ request()->get('y') == $i ? "selected" : "" }}>{{ $i }}</option>
+                <option value="{{$i}}" {{ (request()->get('y')) ? (request()->get('y')==$i ? 'selected':'') :($i == date('Y') ? 'selected':'') }}>{{ $i }}</option>
             @endfor
         </select>
         <!-- <input type="year" name="year" id="year" onchange="search()" value="{{ request()->get('y') ?? request()->get('y') }}" > -->

@@ -39,15 +39,15 @@
                                             <td class="hr_menu_content"><a href="/leave-request/details"><img class="img-fluid"
                                                         src="/assets/images/icons/exit.png">Leave
                                                     Detail</a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/users.png">User
-                                                    Administration</a></td>
+                                            <td class="hr_menu_content"><a href="/contact"><img class="img-fluid"
+                                                        src="/assets/images/icons/contacts.png">Contacts</a>
+                                            </td>
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/guest.png">Guest
-                                                    Detail</a></td>
+                                            <td class="hr_menu_content"><a href="/employee/create"><img class="img-fluid"
+                                                src="/assets/images/icons/add.png">Add
+                                            Employee</a></td>
                                             <td class="hr_menu_content"><a href="/leave-request/approve"><img class="img-fluid"
                                                         src="/assets/images/icons/leave.png">Approve Leave</a></td>
 
@@ -57,10 +57,9 @@
                                         </tr>
 
                                         <tr>
-
-                                            <td class="hr_menu_content"><a href="/employee/create"><img class="img-fluid"
-                                                        src="/assets/images/icons/add.png">Add
-                                                    Employee</a></td>
+                                            <td class="hr_menu_content"><a href="/employee/terminate"><img class="img-fluid"
+                                                    src="/assets/images/icons/fired.png">Terminate
+                                                Employee</a></td>
                                             <td class="hr_menu_content"><a href="/leave-balance-report"><img class="img-fluid"
                                                         src="/assets/images/icons/clipboard.png">Leave Balance
                                                     Report</a></td>
@@ -69,9 +68,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/adduser.png">Add Guest</a>
-                                            </td>
+                                            <td class="hr_menu_content"><a href="/employee/terminate"><img class="img-fluid"
+                                                        src="/assets/images/icons/consent.png">Terminate
+                                                    Form</a></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/report.png">Monthly Leave
                                                     Report</a></td>
@@ -81,9 +80,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="/employee/terminate"><img class="img-fluid"
-                                                        src="/assets/images/icons/fired.png">Terminate
-                                                    Employee</a></td>
+                                            <td class="hr_menu_content"><a href="/employee/profile"><img class="img-fluid"
+                                                        src="/assets/images/icons/profile.png">My
+                                                    Profile</a></td>
                                             <td class="hr_menu_content"><a href="/employees-on-leave"><img class="img-fluid"
                                                         src="/assets/images/icons/leave-report.png">Employees on
                                                     Leave</a></td>
@@ -93,9 +92,10 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="/employee/terminate"><img class="img-fluid"
-                                                        src="/assets/images/icons/consent.png">Terminate
-                                                    Form</a></td>
+                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                                        src="/assets/images/icons/skills.png">My
+                                                    Skill</a>
+                                            </td>
                                             <td class="hr_menu_content"><a href="/leave-request/create/subordinate-leave"><img class="img-fluid"
                                                         src="/assets/images/icons/exit (1).png">Create
                                                     Subordinate Leave
@@ -106,9 +106,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="/employee/profile"><img class="img-fluid"
-                                                        src="/assets/images/icons/profile.png">My
-                                                    Profile</a></td>
+                                            <td class="hr_menu_content"><a href="/shift"><img class="img-fluid"
+                                                        src="/assets/images/icons/shifts.png">Shifts</a>
+                                            </td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/logout.png">Contractual
                                                     Status Leave
@@ -119,10 +119,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/skills.png">My
-                                                    Skill</a>
-                                            </td>
+                                           <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                                        src="/assets/images/icons/padlock.png">Reset
+                                                    Password</a></td>
                                             <td><a class="dropdown-item hr_item" href="#">
                                                     <div class="hr_menu_title text-uppercase">punch in/ out</div>
                                                 </a></td>
@@ -133,9 +132,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="/shift"><img class="img-fluid"
-                                                        src="/assets/images/icons/shifts.png">Shifts</a>
-                                            </td>
+                                            <td class="hr_menu_content"><a href="/file-upload"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">My Files
+                                                </a></td>
                                             <td class="hr_menu_content"><a href="/punch-in-detail"><img class="img-fluid"
                                                         src="/assets/images/icons/calendar.png">Date/
                                                     Employee Specific
@@ -146,9 +145,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/padlock.png">Reset
-                                                    Password</a></td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="/myPunchIn"><img class="img-fluid"
                                                         src="/assets/images/icons/calendar (1).png">My Punch
                                                     In</a></td>
@@ -160,55 +157,21 @@
                                         <tr>
                                             <td></td>
                                             <td class="hr_menu_content"><a href="/late-missed-punch"><img class="img-fluid"
-                                                        src="/assets/images/icons/hurry.png">Late/ No/
-                                                    Exception Punch
-                                                    In</a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/audit.png">Audit Log</a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/overdue.png">Request Punch
-                                                    In Exception</a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/comments.png">Add
-                                                    Message</a></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/warning.png">My
-                                                    Punch In
-                                                    Exceptions
-                                                </a></td>
-                                            <td class="hr_menu_content"><a href="/holiday"><img class="img-fluid"
+                                                        src="/assets/images/icons/hurry.png">Late Punch In/
+                                                      Missed Punch Out Report</a></td>
+                                           <td class="hr_menu_content"><a href="/holiday"><img class="img-fluid"
                                                         src="/assets/images/icons/holiday.png">Holidays</a>
                                             </td>
                                         </tr>
 
                                         <tr>
                                             <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/report (1).png">DWIT Interns
-                                                    Report
-                                                </a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/appraisal.png">Appraisal</a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/seo-report.png">Auditor
-                                                    Report
-                                                </a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/pyramid.png">Tier</a></td>
+                                            <!-- <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                                        src="/assets/images/icons/overdue.png">Request Punch
+                                                    In Exception</a></td> -->
+                                            <!-- <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                                        src="/assets/images/icons/comments.png">Add
+                                                    Message</a></td> -->
                                         </tr>
 
                                         <tr>
@@ -218,32 +181,10 @@
                                                     Punch In
                                                     No Leave Report
                                                 </a></td>
-                                            <td class="hr_menu_content"><a href="/contact"><img class="img-fluid"
-                                                        src="/assets/images/icons/contacts.png">Contacts</a>
+                                            <td class="hr_menu_content"><a href="/file-category"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">File Category Setting</a>
                                             </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="hr_menu_content"><img class="img-fluid"
-                                                    src="/assets/images/icons/squad.png">Squad</a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/list.png">Release Checklist Personnel</a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/calendar (2).png">Fiscal Year</a></td>
+                                            
                                         </tr>
 
                                     </table>
@@ -259,9 +200,12 @@
                             Create Sub Ordinate Leave</a>
                     </li>
                     @endif
-
                     <li class="nav-item navigation_item">
-                        <a class="nav-link navigation_link" href="#"><i class="fas fa-address-book icon"></i>
+                        <a class="nav-link navigation_link" href="/file-upload"><i class="fas fa-address-book icon"></i>
+                            My Files</a>
+                    </li>
+                    <li class="nav-item navigation_item">
+                        <a class="nav-link navigation_link" href="/contact"><i class="fas fa-address-book icon"></i>
                             Contacts</a>
                     </li>
                     <!-- for mobile -->
