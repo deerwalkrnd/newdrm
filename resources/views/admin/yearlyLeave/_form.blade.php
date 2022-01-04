@@ -1,28 +1,28 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label for="organization_id">Organization</label>
-            <select class="form-control" id="organization_id" name="organization_id">
-                <option value="" disabled="disabled" selected="selected">-- Choose Organization --</option>
-                @forelse($organizations as $organization)
+            <label for="unit_id">Unit</label>
+            <select class="form-control" id="unit_id" name="unit_id">
+                <option value="" disabled="disabled" selected="selected">-- Choose Unit --</option>
+                @forelse($units as $unit)
                 <option 
-                    value="{{ $organization->id}}" 
-                    {{ (!empty(old('organization_id')) && old('organization_id') == $organization->id) ? 'selected': ''}}
-                    {{ (isset($yearlyLeaves) && $yearlyLeaves->organization_id == $organization->id && empty(old('organization_id'))) ? 'selected' : '' }} 
+                    value="{{ $unit->id}}" 
+                    {{ (!empty(old('unit_id')) && old('unit_id') == $unit->id) ? 'selected': ''}}
+                    {{ (isset($yearlyLeaves) && $yearlyLeaves->unit_id == $unit->id && empty(old('unit_id'))) ? 'selected' : '' }} 
                     >
-                    {{ $organization->name }}
+                    {{ $unit->unit_name }}
                 </option>
                 @empty
                 <!-- no options -->
                 @endforelse
             </select>
-            @error('organization_id')
+            @error('unit_id')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>
     </div>
 </div>
-<!-- organization id -->
+<!-- unit id -->
 
 <div class="row">
     <div class="col-md-12">

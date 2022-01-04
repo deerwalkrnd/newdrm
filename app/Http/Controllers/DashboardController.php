@@ -88,7 +88,7 @@ class DashboardController extends Controller
             $acquiredLeave = $allowedLeave / 12 * $month;
             $leaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
                                         ->where('acceptance','accepted')
-                                        ->where('employee_id', \Auth::user()->id)
+                                        ->where('employee_id', \Auth::user()->employee_id)
                                         ->where('leave_type_id',$leaveType->id)
                                         ->sum('days');
             $balance = $acquiredLeave - $leaveTaken;
@@ -108,7 +108,7 @@ class DashboardController extends Controller
     {
         $allowedLeave = YearlyLeave::select('days')
                                 ->where('year',$year)
-                                ->where('organization_id',$org_id)
+                                ->where('unit_id',$org_id)
                                 ->where('leave_type_id',$leaveType)
                                 ->where('status','active')
                                 ->get()->first();

@@ -8,7 +8,7 @@
                 @if(\Auth::user()->role->authority == 'employee'){
                     <option 
                     selected
-                    value="{{ \Auth::user()->id}}" 
+                    value="{{ \Auth::user()->employee_id}}" 
                     {{ (!empty(old('employee_id')) && old('employee_id') == $employee->id) ? 'selected': ''}}
                     {{ (isset($fileUpload) && $fileUpload->employee_id == $employee->id && empty(old('employee_id'))) ? 'selected' : '' }} 
                     >

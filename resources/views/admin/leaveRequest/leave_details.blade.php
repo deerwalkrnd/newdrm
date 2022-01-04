@@ -53,7 +53,7 @@
         </tr>
         @empty
         <tr>
-            <th colspan=10 class="text-center text-dark">No LeaveRequest Found</th>
+            <th colspan=13 class="text-center text-dark">No LeaveRequest Found</th>
         </tr>
         @endforelse
     </tbody>

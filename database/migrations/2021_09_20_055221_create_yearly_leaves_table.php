@@ -16,7 +16,7 @@ class CreateYearlyLeavesTable extends Migration
         Schema::create('yearly_leaves', function (Blueprint $table) {
             $table->id();
             $table->integer('version')->default('0');
-            $table->foreignId('organization_id')->constrained('organizations');
+            $table->foreignId('unit_id')->constrained('units');
             $table->foreignId('leave_type_id')->constrained('leave_types');
             $table->integer('days');
             $table->enum('status',['active','disabled'])->default('active');

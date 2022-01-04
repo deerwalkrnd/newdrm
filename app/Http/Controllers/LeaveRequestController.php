@@ -24,7 +24,7 @@ class LeaveRequestController extends Controller
     {
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
         ->with(['employee:id,first_name,last_name','leaveType:id,name'])
-        ->where('employee_id',\Auth::user()->id)
+        ->where('employee_id',\Auth::user()->employee_id)
         ->orderBy('created_at')
         ->orderBy('updated_at')
         ->get();
@@ -83,9 +83,9 @@ class LeaveRequestController extends Controller
         $data = $request->validated();
         $leave_type_id = $data['leave_type_id'];
         $requested_leave_days = $data['days'];
-        $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('organization_id',\Auth::user()->employee->organization_id)->get()->first()->days;
-        $data['employee_id'] = \Auth::user()->id;
-        $data['requested_by'] = \Auth::user()->id;
+        $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('unit_id',\Auth::user()->employee->unit_id)->get()->first()->days;
+        $data['employee_id'] = \Auth::user()->employee_id;
+        $data['requested_by'] = \Auth::user()->employee_id;
         $data['year'] = date('Y',strtotime($data['start_date']));
         
         if($data['leave_time'] == 'full')
@@ -112,7 +112,7 @@ class LeaveRequestController extends Controller
     {
         $data = $request->validated();
         $data['employee_id'] = $data['employee_id'];
-        $data['requested_by'] = \Auth::user()->id;
+        $data['requested_by'] = \Auth::user()->employee_id;
         
         if($data['leave_time'] == 'full')
         {
@@ -190,7 +190,7 @@ class LeaveRequestController extends Controller
         $leaveRequest = LeaveRequest::findOrFail($id)
         ->update([
             'acceptance' => 'accepted',
-            'accepted_by' => \Auth::user()->id
+            'accepted_by' => \Auth::user()->employee_id
         ]);
 
         return redirect('/leave-request/approve');
@@ -201,7 +201,7 @@ class LeaveRequestController extends Controller
         LeaveRequest::findOrFail($id)
         ->update([
             'acceptance' => 'rejected',
-            'accepted_by' => \Auth::user()->id
+            'accepted_by' => \Auth::user()->employee_id
         ]);
 
         return redirect('/leave-request/approve');
