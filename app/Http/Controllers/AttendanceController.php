@@ -104,6 +104,14 @@ class AttendanceController extends Controller
                 
                 $isLate = $presentTime <= $maxTime ? '0' : '1';
                 $reason = $request->reason;
+
+                if($isLate)
+                {
+                    $request->validate([
+                        'reason' => 'required|string|min:25',
+                    ]); 
+                }
+
                 // if reason is null for isLate true throw error
                 // dd(request()->ip());
                 Attendance::create([
