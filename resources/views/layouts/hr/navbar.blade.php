@@ -119,7 +119,7 @@
 
                                         <tr>
                                                 <td class="hr_menu_content"><a href="/file-upload"><img class="img-fluid"
-                                                        src="/assets/images/icons/list.png">My Files
+                                                        src="/assets/images/icons/list.png">Upload Files
                                                 </a></td>
                                             <td><a class="dropdown-item hr_item" href="#">
                                                     <div class="hr_menu_title text-uppercase">punch in/ out</div>
