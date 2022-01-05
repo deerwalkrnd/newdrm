@@ -37,7 +37,11 @@ class LeaveReportController extends Controller
 
                 // dd($temp);
 
-                $yearlyLeave = YearlyLeave::select('days','leave_type_id')->with('leaveType:id,name')->where('year',$year)->get();
+                $yearlyLeave = YearlyLeave::select('days','leave_type_id')
+                                            ->with('leaveType:id,name')
+                                            ->where('year',$year)
+                                            // ->where()
+                                            ->get();
                 echo($yearlyLeave);
                 // echo($year."<br>");
             }
@@ -48,12 +52,12 @@ class LeaveReportController extends Controller
         return  view('admin.leaveBalance.index',compact());
     }
 
-    private function getAllowedLeaveDays($org_id,$leaveType,$year)
+    private function getAllowedLeaveDays($unit_id,$leaveType,$year)
     {
         // dd($org_id,$leaveType,$year);
         $allowedLeave = YearlyLeave::select('days')
                                 ->where('year',$year)
-                                ->where('unit_id',$org_id)
+                                ->where('unit_id',$unit_id)
                                 ->where('leave_type_id',$leaveType)
                                 ->where('status','active')
                                 ->get()->first();
