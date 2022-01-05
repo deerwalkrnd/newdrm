@@ -119,7 +119,7 @@ class DefaultEmployeeSeeder extends Seeder
          DB::table('employees')->insert([
             'first_name' => 'Hitesh',
             'last_name' => 'karki',
-            'date_of_birth' => '1990-01-01',
+            'date_of_birth' => '1990-01-13',
             'marital_status' => 'married',
             'gender' => 'male',
             'mobile' => '9841000000',
@@ -159,7 +159,7 @@ class DefaultEmployeeSeeder extends Seeder
         DB::table('employees')->insert([
             'first_name' => 'Sagar',
             'last_name' => 'Shrestha',
-            'date_of_birth' => '1990-01-01',
+            'date_of_birth' => '1990-01-21',
             'marital_status' => 'single',
             'gender' => 'male',
             'mobile' => '9841000000',
@@ -205,7 +205,7 @@ class DefaultEmployeeSeeder extends Seeder
         DB::table('employees')->insert([
             'first_name' => 'Sataydeep',
             'last_name' => 'Neupane',
-            'date_of_birth' => '1990-01-01',
+            'date_of_birth' => '1990-01-12',
             'marital_status' => 'single',
             'gender' => 'male',
             'mobile' => '9841000000',
@@ -245,7 +245,7 @@ class DefaultEmployeeSeeder extends Seeder
         DB::table('employees')->insert([
             'first_name' => 'Deena',
             'last_name' => 'Sitikhu',
-            'date_of_birth' => '1990-01-01',
+            'date_of_birth' => '1990-01-10',
             'marital_status' => 'single',
             'gender' => 'female',
             'mobile' => '9841000000',

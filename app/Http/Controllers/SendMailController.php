@@ -23,7 +23,7 @@ class SendMailController extends Controller
         \Mail::send('admin.emails.sendMail',$details, function($message) use ($details) {
             $message->to($details['to']);
             $message->subject($details['subject']);
-            $message->from('satyadeep.neupane@deerwalk.edu.np');    //from HR
+            $message->from('DRM System');    //from HR
             if($details['cc'])
                 $message->cc($details['cc']);
             if($details['bcc'])
