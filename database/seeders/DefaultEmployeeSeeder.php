@@ -111,7 +111,7 @@ class DefaultEmployeeSeeder extends Seeder
             'marital_status' => 'married',
             'gender' => 'male',
             'mobile' => '9841000000',
-            'alter_email' => 'hiteshkarki@gmail.com',
+            'alter_email' => 'deenasitikhu@gmail.com',
             'country' => 'Nepal',
             'permanent_address' => '3',
             'permanent_district' => '28',
@@ -124,7 +124,7 @@ class DefaultEmployeeSeeder extends Seeder
             'designation_id' => '1',
             'organization_id' => '1',
             'unit_id' => '1',
-            'email' => 'hitesk.karki@deerwalk.edu.np',
+            'email' => 'deena.sitikhu@deerwalk.edu.np',
             'shift_id' => '1'
         ]);
 
@@ -151,7 +151,7 @@ class DefaultEmployeeSeeder extends Seeder
             'marital_status' => 'single',
             'gender' => 'male',
             'mobile' => '9841000000',
-            'alter_email' => 'sagar@gmail.com',
+            'alter_email' => 'deenasitikhu@gmail.com',
             'country' => 'Nepal',
             'permanent_address' => '3',
             'permanent_district' => '28',
@@ -164,7 +164,7 @@ class DefaultEmployeeSeeder extends Seeder
             'designation_id' => '1',
             'organization_id' => '1',
             'unit_id' => '1',
-            'email' => 'sagar.shrestha@deerwalk.edu.np',
+            'email' => 'deenasitikhu@gmail.com',
             'shift_id' => '1'
         ]);
       
