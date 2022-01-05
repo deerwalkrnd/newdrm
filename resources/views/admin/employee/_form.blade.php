@@ -403,26 +403,46 @@
 </div>
 <!-- temp_add_same_as_per_add -->
 
-<div id="tempBlock">
+<div id="tempBlock" style="display:none">
 <hr>
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temporary_address">Temporary Address*</label>
-             <input type="text" class="form-control" id="temporary_address" placeholder="Enter Employee temporary Address" name="temporary_address" value="{{ !empty(old('temporary_address')) ? old('temporary_address') : $employee->temporary_address ?? '' }}">
+            <label class="form-label" for="temporary_address">Temporary Province*</label>
+            <select class="form-control" id="temporary_address" name="temporary_address">
+                <option value="" disabled="disabled" selected="selected">-- Choose Province --</option>
+                @foreach($provinces as $province)
+                <option 
+                    value="{{ $province->id }}" 
+                    {{ (!empty(old('temporary_address')) && old('temporary_address') == $province->id) ? 'selected': ''}}
+                    {{ (isset($employee) && $employee->temporary_address == $province->id && empty(old('temporary_address'))) ? 'selected' : '' }} 
+                    >{{$province->province_name}}</option>
+                @endforeach
+            </select>
             @error('temporary_address')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>
     </div>
 </div>
-<!-- tempoarary province -->
+
+<!-- province -->
+
 
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="temporary_district">Temporary District*</label>
-            <input type="text" class="form-control" id="temporary_district" placeholder="Enter Employee temporary_district" name="temporary_district" value="{{ !empty(old('temporary_district')) ? old('temporary_district') : $employee->temporary_district ?? '' }}">
+            <select class="temp-district-livesearch form-control p-3" name="temporary_district" id="temporary_district" data-placeholder="-- Choose District --">
+            <option value="" selected disabled>--Select District--</option>
+            @foreach($districts as $district)
+            <option value="{{ $district->id }}" 
+                {{ (!empty(old('temporary_district')) && old('temporary_district') == $district->id) ? 'selected': ''}}
+                    {{ (isset($employee) && $employee->temporary_district == $district->id && empty(old('temporary_district'))) ? 'selected' : '' }} 
+                    >{{$district->district_name}}
+            </option>    
+            @endforeach
+            </select>
             @error('temporary_district')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -447,7 +467,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temporary_ward_no">Temporary Ward No*</label>
+            <label class="form-label" for="temporary_ward_no">Temporary Ward_no*</label>
             <input type="text" class="form-control" id="temporary_ward_no" placeholder="Enter Employee temporary_ward_no" name="temporary_ward_no" value="{{ !empty(old('temporary_ward_no')) ? old('temporary_ward_no') : $employee->temporary_ward_no ?? '' }}">
             @error('temporary_ward_no')
                 <p class="text-danger">{{ $message }}</p>

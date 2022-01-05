@@ -71,7 +71,8 @@
             data: function (params) {
                 var query = {
                     q: params.term,
-                    p: $('#permanent_address').val()  
+                    p: $('#permanent_address').val() 
+                    // t: $('#temporary_address').val() 
                 }
                     // Query parameters will be ?search=[term]
                 return query;
@@ -93,5 +94,35 @@
             cache: false
         }
     });
+    
+    $('.temp-district-livesearch').select2({
+        ajax: {
+            url: '/district/search',
+            data: function (params) {
+                var query = {
+                    q: params.term,
+                    p: $('#temporary_address').val() 
+                }
+                    // Query parameters will be ?search=[term]
+                return query;
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: item.district_name ,
+                            id: item.id
+                        }
+                    })
+                };
+                
+                // console.log(query);
+            },
+            cache: false
+        }
+    });
+
 </script>
 @endsection

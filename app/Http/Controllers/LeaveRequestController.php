@@ -112,9 +112,21 @@ class LeaveRequestController extends Controller
         $sendMailController = new SendMailController;
         //mail sent time 5-6 secs
         if(LeaveRequest::create($data)){
-            $to = $emails['manager'];
-            $cc = [$emails['hr'], $emails['employee']];
-            $name = \Auth::user()->employee->manager->first_name;
+            if($emails['manager']){
+                $to = $emails['manager'];
+                $cc = [$emails['hr'], $emails['employee']];
+               $name = \Auth::user()->employee->manager->first_name;
+
+            }
+            else{
+                $to = $emails['employee'];
+                $cc = [$emails['hr']];
+                $name = \Auth::user()->employee->first_name;
+
+            }
+            // $to = $emails['manager'];
+            // $cc = [$emails['hr'], $emails['employee']];
+            // $name = \Auth::user()->employee->manager->first_name;
             $message = $emails['employee_fullname'].' has requested leave from '.$data['start_date'].' to '.$data['end_date'].' i.e. for '.$data['days'].'days and the reason is : '.$data['reason'];
             $regards ='HR';
             $subject = 'Leave Request';
