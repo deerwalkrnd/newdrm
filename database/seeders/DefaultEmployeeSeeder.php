@@ -17,6 +17,13 @@ class DefaultEmployeeSeeder extends Seeder
         DB::table('service_types')->insert([
             'service_type_name' => 'Permanent'
         ]);
+        DB::table('service_types')->insert([
+            'service_type_name' => 'Probation'
+        ]);
+        DB::table('service_types')->insert([
+            'service_type_name' => 'Contract'
+        ]);
+
 
         DB::table('shifts')->insert([
             'name' => 'Normal'
@@ -39,15 +46,20 @@ class DefaultEmployeeSeeder extends Seeder
             'job_title_name' => 'Creative Graphic Designer',
             'job_description' => 'Create Graphic Designs'
         ]);
-       
+        DB::table('designations')->insert([
+            'job_title_name' => 'Chief Academic Officer',
+            'job_description' => 'Manage Overall Academic Activities'
+        ]);
+        DB::table('designations')->insert([
+            'job_title_name' => 'Creative Tech Lead',
+            'job_description' => 'Lead Digital Media'
+        ]);
+        
         DB::table('organizations')->insert([
             'name' => 'DEG',
             'code' => 'DEG-001'
         ]);
-        DB::table('units')->insert([
-            'unit_name' => 'DMT',
-            'organization_id' => '1'
-        ]);
+
         DB::table('units')->insert([
             'unit_name' => 'DWIT',
             'organization_id' => '1'
@@ -118,10 +130,10 @@ class DefaultEmployeeSeeder extends Seeder
             'permanent_municipality' => 'Baneshwor',
             'permanent_ward_no' => '12',
             'permanent_tole' => 'old baneshowr',
-            'temp_add_same_as_per_add' => '0',
+            'temp_add_same_as_per_add' => '1',
             'join_date' => '2011-11-18',
             'service_type' => '1',
-            'designation_id' => '1',
+            'designation_id' => '3',
             'organization_id' => '1',
             'unit_id' => '1',
             'email' => 'deena.sitikhu@deerwalk.edu.np',
@@ -132,7 +144,7 @@ class DefaultEmployeeSeeder extends Seeder
             'employee_id' => '1',
             'role_id' => '1',
             'username' => 'hr',
-            'password' => \Hash::make('Deerwa1k@DRM')
+            'password' => \Hash::make('newDrm3@')
         ]);
         DB::table('emergency_contacts')->insert([
             'employee_id' => '1',
@@ -158,10 +170,10 @@ class DefaultEmployeeSeeder extends Seeder
             'permanent_municipality' => 'Baneshwor',
             'permanent_ward_no' => '12',
             'permanent_tole' => 'old baneshowr',
-            'temp_add_same_as_per_add' => '0',
+            'temp_add_same_as_per_add' => '1',
             'join_date' => '2021-11-18',
             'service_type' => '1',
-            'designation_id' => '1',
+            'designation_id' => '4',
             'organization_id' => '1',
             'unit_id' => '1',
             'email' => 'deenasitikhu@gmail.com',
@@ -172,7 +184,7 @@ class DefaultEmployeeSeeder extends Seeder
             'employee_id' => '2',
             'role_id' => '2',
             'username' => 'manager',
-            'password' => \Hash::make('Deerwa1k@DRM')
+            'password' => \Hash::make('newDrm3@')
         ]);
         DB::table('emergency_contacts')->insert([
             'employee_id' => '2',
@@ -204,7 +216,7 @@ class DefaultEmployeeSeeder extends Seeder
             'permanent_municipality' => 'Baneshwor',
             'permanent_ward_no' => '12',
             'permanent_tole' => 'old baneshowr',
-            'temp_add_same_as_per_add' => '0',
+            'temp_add_same_as_per_add' => '1',
             'join_date' => '2021-11-18',
             'service_type' => '1',
             'designation_id' => '1',
@@ -219,7 +231,7 @@ class DefaultEmployeeSeeder extends Seeder
             'employee_id' => '3',
             'role_id' => '3',
             'username' => 'satyadeep.neupane',
-            'password' => \Hash::make('Deerwa1k@DRM')
+            'password' => \Hash::make('newDrm3@')
         ]);
         DB::table('emergency_contacts')->insert([
             'employee_id' => '3',
@@ -244,7 +256,7 @@ class DefaultEmployeeSeeder extends Seeder
             'permanent_municipality' => 'Baneshwor',
             'permanent_ward_no' => '12',
             'permanent_tole' => 'old baneshowr',
-            'temp_add_same_as_per_add' => '0',
+            'temp_add_same_as_per_add' => '1',
             'join_date' => '2021-11-18',
             'service_type' => '1',
             'designation_id' => '1',
@@ -259,7 +271,7 @@ class DefaultEmployeeSeeder extends Seeder
             'employee_id' => '4',
             'role_id' => '3',
             'username' => 'deena.sitikhu',
-            'password' => \Hash::make('Deerwa1k@DRM')
+            'password' => \Hash::make('newDrm3@')
         ]);
 
         DB::table('emergency_contacts')->insert([
@@ -286,7 +298,7 @@ class DefaultEmployeeSeeder extends Seeder
             'permanent_municipality' => 'Baneshwor',
             'permanent_ward_no' => '12',
             'permanent_tole' => 'old baneshowr',
-            'temp_add_same_as_per_add' => '0',
+            'temp_add_same_as_per_add' => '1',
             'join_date' => '2021-11-18',
             'service_type' => '1',
             'designation_id' => '1',
@@ -301,7 +313,7 @@ class DefaultEmployeeSeeder extends Seeder
             'employee_id' => '5',
             'role_id' => '3',
             'username' => 'sahil.lodha',
-            'password' => \Hash::make('Deerwa1k@DRM')
+            'password' => \Hash::make('newDrm3@')
         ]);
         DB::table('emergency_contacts')->insert([
             'employee_id' => '5',
@@ -312,7 +324,44 @@ class DefaultEmployeeSeeder extends Seeder
         ]);
         //sahil as employee
 
+        DB::table('employees')->insert([
+            'first_name' => 'Pradeepti',
+            'last_name' => 'Aryal',
+            'date_of_birth' => '1990-01-01',
+            'marital_status' => 'single',
+            'gender' => 'male',
+            'mobile' => '9841000000',
+            'alter_email' => 'aryal@gmail.com',
+            'country' => 'Nepal',
+            'permanent_address' => '3',
+            'permanent_district' => '28',
+            'permanent_municipality' => 'Baneshwor',
+            'permanent_ward_no' => '12',
+            'permanent_tole' => 'old baneshowr',
+            'temp_add_same_as_per_add' => '1',
+            'join_date' => '2021-11-18',
+            'service_type' => '1',
+            'designation_id' => '2',
+            'organization_id' => '1',
+            'manager_id'=>'2',
+            'unit_id' => '1',
+            'email' => 'deena.sitikhu@deerwalk.edu.np',
+            'shift_id' => '1'
+        ]);
 
+        DB::table('users')->insert([
+            'employee_id' => '6',
+            'role_id' => '3',
+            'username' => 'pradeepti.aryal',
+            'password' => \Hash::make('newDrm3@')
+        ]);
+        DB::table('emergency_contacts')->insert([
+            'employee_id' => '5',
+            'first_name' => 'Prayush',
+            'last_name' => 'Aryal',
+            'relationship'=>'Uncle',
+            'phone_no'=>'9841021923',
+        ]);
 
         //Contacts
          DB::table('contacts')->insert([
@@ -336,7 +385,11 @@ class DefaultEmployeeSeeder extends Seeder
             'name' => 'Sahil Lodha',
             'number'=>'9841021923',
         ]);
-       
+       DB::table('contacts')->insert([
+            'version'=>'0.0',
+            'name' => 'Pradeepti Aryal',
+            'number'=>'9841728131',
+        ]);
         //CarryOver Leaves
 
         //Hitesh Karki
@@ -369,7 +422,12 @@ class DefaultEmployeeSeeder extends Seeder
             'year' => '2021',
             'days'=>'5',
         ]);
-
+        
+        DB::table('carry_over_leaves')->insert([
+            'employee_id'=>'6',
+            'year' => '2021',
+            'days'=>'7',
+        ]);
 
         //Leave Requests
         DB::table('leave_requests')->insert([

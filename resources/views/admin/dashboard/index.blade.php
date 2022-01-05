@@ -13,7 +13,7 @@
         @endif
     </div>
 
-    @if(env('ip') == session('userIp'))
+    @if(env('IP') == session('userIp'))
         @if(session('punchIn') == 2)
         <div class="col">
             <span class="punch_out_container" style="position: relative;">
