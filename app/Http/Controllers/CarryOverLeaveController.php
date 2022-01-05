@@ -34,6 +34,7 @@ class CarryOverLeaveController extends Controller
         })->toArray();
 
         CarryOverLeave::upsert($carryOverLeaveList,['employee_id','year'],['days']);
-        return $carryOverLeaveList;
+        // return $carryOverLeaveList;
+        return redirect('/dashboard');
     }
 }

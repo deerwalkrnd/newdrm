@@ -109,9 +109,8 @@
                                             <td class="hr_menu_content"><a href="/shift"><img class="img-fluid"
                                                         src="/assets/images/icons/shifts.png">Shifts</a>
                                             </td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/logout.png">Contractual
-                                                    Status Leave
+                                            <td class="hr_menu_content"><a href="/info"><img class="img-fluid"
+                                                        src="/assets/images/icons/logout.png">Calculate Carry Over Leave
                                                 </a></td>
                                             <td class="hr_menu_content"><a href="/serviceType"><img class="img-fluid"
                                                         src="/assets/images/icons/service.png">Service
@@ -119,9 +118,9 @@
                                         </tr>
 
                                         <tr>
-                                           <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/padlock.png">Reset
-                                                    Password</a></td>
+                                                <td class="hr_menu_content"><a href="/file-upload"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">My Files
+                                                </a></td>
                                             <td><a class="dropdown-item hr_item" href="#">
                                                     <div class="hr_menu_title text-uppercase">punch in/ out</div>
                                                 </a></td>
@@ -132,9 +131,10 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="/file-upload"><img class="img-fluid"
-                                                        src="/assets/images/icons/list.png">My Files
-                                                </a></td>
+                                            <td></td>
+                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                                        src="/assets/images/icons/padlock.png">Reset
+                                                    Password</a></td>
                                             <td class="hr_menu_content"><a href="/punch-in-detail"><img class="img-fluid"
                                                         src="/assets/images/icons/calendar.png">Date/
                                                     Employee Specific

@@ -142,7 +142,7 @@
 					<div class="col-md-12 col-lg-12 col-sm-12">
 						<div class="row justify-content-between">
 							<div class="col-md-5 col-sm-4 col-6 forgot-password">
-								<span class="align-middle"><a href="#">Forgot Password</a></span>
+								<!-- <span class="align-middle"><a href="#">Forgot Password</a></span> -->
 							</div>
 							<div class="col-md-4 col-sm-5 col-5 text-right login">
 								<button type="submit" class="btn btn-primary btn-custom">LOGIN</button>
