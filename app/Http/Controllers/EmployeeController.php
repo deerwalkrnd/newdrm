@@ -189,12 +189,12 @@ class EmployeeController extends Controller
         $cv = $request->file('cv');
         
         //merge files
-        // if($image!=null){
-        //     $input['image_name'] = $image->store('employees/images');
-        // }
-        // if($cv != null){
-        //     $input['cv_file_name'] = $cv->store('employees/cv');
-        // }
+        if($image!=null){
+            $input['image_name'] = $image->store('employees/images');
+        }
+        if($cv != null){
+            $input['cv_file_name'] = $cv->store('employees/cv');
+        }
 
         //add data to user
         $user['username'] = $request->username;

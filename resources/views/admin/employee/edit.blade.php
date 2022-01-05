@@ -22,7 +22,7 @@
         </div>
 
         <div class="col-md-10 col-sm-8" style="background-color:aliceblue; padding: 20px 40px;">
-            <form method="POST" action="/employee/{{$employee->id}}">
+            <form method="POST" action="/employee/{{$employee->id}}" enctype="multipart/form-data">
                 <legend>
                     <center>Personal Details</center>
                 </legend>
