@@ -133,7 +133,11 @@ class AttendanceController extends Controller
 
                 if($attendance->late_punch_in){
                     $to = $emails['employee'];
-                    $cc = [$emails['hr'], $emails['manager']];
+                    if($emails['manager'])
+                        $cc = [$emails['hr'], $emails['manager']];
+                    else
+                        $cc = [$emails['hr']];
+
                     $name = \Auth::user()->employee->first_name;
                     $message = 'Today you have punched in late at '.$attendance->punch_in_time.'.The reason is : '.$attendance->reason;
                     $regards ='HR';

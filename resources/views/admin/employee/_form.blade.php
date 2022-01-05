@@ -403,7 +403,7 @@
 </div>
 <!-- temp_add_same_as_per_add -->
 
-<div id="tempBlock">
+<div id="tempBlock" style="display:none">
 <hr>
 <div class="row">
     <div class="col-md-12">

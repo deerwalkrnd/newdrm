@@ -123,5 +123,6 @@
             cache: false
         }
     });
+
 </script>
 @endsection

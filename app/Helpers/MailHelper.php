@@ -10,9 +10,14 @@ class MailHelper{
     // private $hr = 'deenasitikhu@gmail.com';
 
     public static function getEmail(){
-        
+        // dd(\Auth::user()->employee->manager);
+        if(\Auth::user()->employee->manager)
+            $manager =\Auth::user()->employee->manager->email;
+        else
+            $manager = null;
+
         $email['employee_fullname'] = \Auth::user()->employee->first_name.' '.\Auth::user()->employee->middle_name.' '.\Auth::user()->employee->last_name;
-        $email['manager'] =  \Auth::user()->employee->manager->email;
+        $email['manager'] =  $manager;
         $email['employee'] = \Auth::user()->employee->email;
         $email['hr'] = 'satyadeep.neupane@deerwalk.edu.np';
         return $email;
