@@ -9,6 +9,7 @@ use App\Models\LeaveType;
 use App\Models\YearlyLeave;
 use App\Models\Employee;
 use App\Models\Attendance;
+use App\Models\CarryOverLeave;
 
 class DashboardController extends Controller
 {
@@ -118,12 +119,21 @@ class DashboardController extends Controller
 
     private function getAllowedLeaveDays($unit_id,$leaveType,$year)
     {
-        $allowedLeave = YearlyLeave::select('days')
-                                ->where('year',$year)
-                                ->where('unit_id',$unit_id)
-                                ->where('leave_type_id',$leaveType)
-                                ->where('status','active')
-                                ->get()->first();
+        // if carry Over Leave // carry over is set to 1
+        if($leaveType == 2)
+        {
+            $allowedLeave = CarryOverLeave::select('id','year','days','employee_id')
+                                            ->where('year',$year-1)
+                                            ->where('employee_id',\Auth::user()->employee_id)
+                                            ->first();
+       }else{
+            $allowedLeave = YearlyLeave::select('days')
+            ->where('year',$year)
+            ->where('unit_id',$unit_id)
+            ->where('leave_type_id',$leaveType)
+            ->where('status','active')
+            ->get()->first();
+        }
         
         if(isset($allowedLeave) && ($allowedLeave->exists() == 1))
             $allowedLeave = $allowedLeave->days;
