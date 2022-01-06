@@ -82,7 +82,13 @@ class FileUploadController extends Controller
         unset($input['file']);
         
         FileUpload::create($input);
-        return redirect('/file-upload');
+
+        if((\Auth::user()->role->authority == "hr") && ($input['employee_id']  != \Auth::user()->employee_id ))
+        {
+           return redirect('/file-upload');
+        }else{
+           return redirect('/my-file-upload');
+        } 
     }
 
     /**
