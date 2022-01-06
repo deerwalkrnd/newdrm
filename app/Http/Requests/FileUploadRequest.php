@@ -25,7 +25,7 @@ class FileUploadRequest extends FormRequest
     {
         return [
             'file' => 'file|required|mimes:jpg,png,jpeg,pdf',
-            'file_category_id'=>'required|integer|exists:file_categories,id',
+            'file_category_id'=>'required|integer|exists:file_categories,id|unique:file_uploads,file_category_id,'.$this->file_category_id.',id,employee_id,'.$this->employee_id,
             'employee_id'=>'required|integer',
         ];
     }
