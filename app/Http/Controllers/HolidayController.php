@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Holiday;
+use App\Models\Unit;
 
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class HolidayController extends Controller
      */
     public function index()
     {
-        $holidays = Holiday::select('id','name','date','female_only')->orderBy('name')->get();
+        $holidays = Holiday::select('id','name','date','female_only','unit_id')->orderBy('name')->get();
         return view('admin.holiday.index')->with(compact('holidays'));
     }
 
@@ -27,7 +28,8 @@ class HolidayController extends Controller
      */
     public function create()
     {
-        return view('admin.holiday.create');
+        $units = Unit::select('id','unit_name')->get();
+        return view('admin.holiday.create')->with(compact('units'));
     }
 
     /**
@@ -64,7 +66,8 @@ class HolidayController extends Controller
     public function edit($id)
     {
         $holiday = Holiday::findOrFail($id);
-        return view('admin.holiday.edit')->with(compact('holiday'));
+        $units = Unit::select('id','unit_name')->get();
+        return view('admin.holiday.edit')->with(compact('holiday','units'));
     }
 
     /**

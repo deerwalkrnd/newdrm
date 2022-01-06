@@ -146,11 +146,13 @@ class FileUploadController extends Controller
             {
                 Storage::delete($path);
             }
-        }
+            $fileUpload->delete();
 
-        if((\Auth::user()->role->authority == "hr") && ($employee_id  == \Auth::user()->employee_id ))
+        }
+        return redirect()->back();
+        if((\Auth::user()->role->authority == "hr") )
         {
-           return redirect('/file-upload');
+           return redirect()->back();
         }else{
            return redirect('/my-file-upload');
         }        

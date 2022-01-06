@@ -108,10 +108,12 @@ class DefaultEmployeeSeeder extends Seeder
         ]);
         DB::table('holidays')->insert([
             'name' => 'Christmas',
+            'unit_id'=>'1',
             'date' => '2022-12-25',
             'female_only' => '0'
         ]);
          DB::table('holidays')->insert([
+            'unit_id'=>'1',
             'name' => 'Holi',
             'date' => '2022-03-17',
             'female_only' => '0'

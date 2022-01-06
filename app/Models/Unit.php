@@ -23,4 +23,12 @@ class Unit extends Model
     {
         return $this->hasMany(Employee::class,'unit_id');
     }
+    public function yearlyLeaves()
+    {
+        return $this->hasMany(YearlyLeave::class,'unit_id');
+    }
+    public function holidays()
+    {
+        return $this->hasMany(Holiday::class,'unit_id');
+    }
 }
