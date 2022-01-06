@@ -132,7 +132,12 @@ class LeaveRequestController extends Controller
             $subject = 'Leave Request';
            $sendMailController->sendMail($to, $name, $subject, $message, $cc);
         };
-        return redirect('/leave-request');
+        $res = [
+            'title' => 'Leave Request Created',
+            'message' => 'Leave Request has been successfully Created',
+            'icon' => 'success'
+        ];
+        return redirect('/leave-request')->with(compact('res'));
     }
 
     public function storeSubOrdinateLeave(SubordinateLeaveRequestRequest $request)
@@ -155,7 +160,12 @@ class LeaveRequestController extends Controller
         // dd($data);
 
         LeaveRequest::create($data);
-        return redirect('/leave-request');
+        $res = [
+            'title' => 'Subordinate Leave Request Created',
+            'message' => 'Subordinate Leave Request has been successfully Created',
+            'icon' => 'success'
+        ];
+        return redirect('/leave-request')->with(compact('res'));
     }
 
     /**
@@ -196,7 +206,12 @@ class LeaveRequestController extends Controller
         $input = $request->validated();
         
         $leaveRequest->update($input);
-        return redirect('/leave-request/details');
+        $res = [
+            'title' => 'Leave Request Updated',
+            'message' => 'Leave Request has been successfully Updated',
+            'icon' => 'success'
+        ];
+        return redirect('/leave-request/details')->with(compact('res'));
     }
 
     /**

@@ -34,7 +34,12 @@ class UnitController extends Controller
     public function create()
     {
         $organizations = Organization::select('id','name')->get();
-        return view('admin.unit.create')->with(compact('organizations'));
+        $res = [
+            'title' => 'Unit Created',
+            'message' => 'Unit has been successfully created',
+            'icon' => 'success'
+        ];
+        return view('admin.unit.create')->with(compact('organizations','res'));
     }
 
     /**
@@ -89,7 +94,12 @@ class UnitController extends Controller
         $input['version'] = DB::raw('version+1');
 
         $unit->update($input);
-        return redirect('/unit');
+        $res = [
+            'title' => 'Unit Updated',
+            'message' => 'Unit has been successfully Updated',
+            'icon' => 'success'
+        ];
+        return redirect('/unit')->with(compact('res'));
     }
 
     /**

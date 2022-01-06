@@ -40,7 +40,12 @@ class ShiftController extends Controller
     public function store(ShiftRequest $request)
     {
         Shift::create($request->validated());
-        return redirect('/shift');
+        $res = [
+            'title' => 'Shift Created',
+            'message' => 'Shift has been successfully Created',
+            'icon' => 'success'
+        ];
+        return redirect('/shift')->with(compact('res'));
     }
 
     /**
@@ -80,7 +85,12 @@ class ShiftController extends Controller
         //get validated input and merge input fields
         $input = $request->validated();
         $shift->update($input);
-        return redirect('/shift');
+        $res = [
+            'title' => 'Shift Updated',
+            'message' => 'Shift has been successfully Updated',
+            'icon' => 'success'
+        ];
+        return redirect('/shift')->with(compact('res'));
     }
 
     /**

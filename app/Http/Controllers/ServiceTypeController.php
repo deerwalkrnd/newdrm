@@ -40,7 +40,12 @@ class ServiceTypeController extends Controller
     public function store(ServiceTypeRequest $request)
     {
         ServiceType::create($request->validated());
-        return redirect('/serviceType');
+        $res = [
+            'title' => 'Service Type Created',
+            'message' => 'Service Type has been successfully Created',
+            'icon' => 'success'
+        ];
+        return redirect('/serviceType')->with(compact('res'));
     }
 
     /**
@@ -80,7 +85,12 @@ class ServiceTypeController extends Controller
         //get validated input and merge input fields
         $input = $request->validated();
         $serviceType->update($input);
-        return redirect('/serviceType');
+        $res = [
+            'title' => 'Service Type Updated',
+            'message' => 'Service Type has been successfully Updated',
+            'icon' => 'success'
+        ];
+        return redirect('/serviceType')->with(compact('res'));
     }
 
     /**

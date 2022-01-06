@@ -43,7 +43,12 @@ class HolidayController extends Controller
         // dd($request);
         $input = $request->validated();
         Holiday::create($input);
-        return redirect('/holiday');
+        $res = [
+            'title' => 'Holiday Created',
+            'message' => 'Holiday has been successfully Created',
+            'icon' => 'success'
+        ];
+        return redirect('/holiday')->with(compact('res'));
     }
 
     /**
@@ -83,7 +88,12 @@ class HolidayController extends Controller
         $input = $request->validated();
         
         $holiday->update($input);
-        return redirect('/holiday');
+        $res = [
+            'title' => 'Holiday Updated',
+            'message' => 'Holiday has been successfully Updated',
+            'icon' => 'success'
+        ];
+        return redirect('/holiday')->with(compact('res'));
     }
 
     /**

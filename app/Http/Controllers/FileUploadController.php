@@ -85,9 +85,19 @@ class FileUploadController extends Controller
 
         if((\Auth::user()->role->authority == "hr") && ($input['employee_id']  != \Auth::user()->employee_id ))
         {
-           return redirect('/file-upload');
+            $res = [
+            'title' => 'File  Uploaded ',
+            'message' => 'File  has been successfully Uploaded ',
+            'icon' => 'success'
+            ];
+           return redirect('/file-upload')->with(compact('res'));
         }else{
-           return redirect('/my-file-upload');
+            $res = [
+            'title' => 'File  Uploaded ',
+            'message' => 'File  has been successfully Uploaded ',
+            'icon' => 'success'
+            ];
+           return redirect('/my-file-upload')->with(compact('res'));
         } 
     }
 

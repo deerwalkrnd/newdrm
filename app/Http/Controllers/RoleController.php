@@ -39,7 +39,12 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
         Role::create($request->validated());
-        return redirect('/role');
+        $res = [
+            'title' => 'Role Created',
+            'message' => 'Role has been successfully Created',
+            'icon' => 'success'
+        ];
+        return redirect('/role')->with(compact('res'));
     }
 
     /**
@@ -81,7 +86,12 @@ class RoleController extends Controller
         $input['version'] = DB::raw('version+1');
 
         $role->update($input);
-        return redirect('/role');
+        $res = [
+            'title' => 'Role Updated',
+            'message' => 'Role has been successfully Updated',
+            'icon' => 'success'
+        ];
+        return redirect('/role')->with(compact('res'));
     }
 
     /**

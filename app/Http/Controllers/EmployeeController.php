@@ -128,7 +128,12 @@ class EmployeeController extends Controller
             DB::rollback();
             return redirect('/employee/create');
         }
-        return redirect('/employee');
+        $res = [
+            'title' => 'Employee Created ',
+            'message' => 'Employee has been successfully Created ',
+            'icon' => 'success'
+        ];
+        return redirect('/employee')->with(compact('res'));
     }
 
     /**
@@ -224,7 +229,12 @@ class EmployeeController extends Controller
             DB::rollback();
             return redirect('/employee');
         }
-        return redirect('/employee');
+        $res = [
+            'title' => 'Employee Updated ',
+            'message' => 'Employee has been successfully Updated ',
+            'icon' => 'success'
+        ];
+        return redirect('/employee')->with(compact('res'));
     }
 
     /**
@@ -295,7 +305,7 @@ class EmployeeController extends Controller
                     ->with('designation')
                     ->with('manager:id,first_name,last_name,middle_name')
                     ->get();
-
+       
         return view('admin.employee.terminate')->with(compact('terminatedEmployees'));
     }
 
@@ -303,8 +313,13 @@ class EmployeeController extends Controller
     {
         $id = (int) $request->employee_id;
         Employee::findOrFail($id)->update(['contract_status' => 'terminated']);
+        $res = [
+            'title' => 'Employee Terminated ',
+            'message' => 'Employee has been successfully Terminated ',
+            'icon' => 'success'
+        ];
 
-        return redirect('/employee/terminate');
+        return redirect('/employee/terminate')->with(compact('res'));
     }
 
 }
