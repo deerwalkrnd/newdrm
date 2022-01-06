@@ -82,11 +82,11 @@
     <!-- check for res and display the response message -->
     <script>
         //check if res is received
-        @if(isset($res))
+        @if(Session::get('res'))
             Swal.fire(
-                "{{ $res['title'] }}",
-                "{{ $res['message'] }}",
-                "{{ $res['icon'] }}",
+                "{{ Session::get('res')['title'] }}",
+                "{{ Session::get('res')['message'] }}",
+                "{{ Session::get('res')['icon'] }}",
             );
         @endif
     </script>
