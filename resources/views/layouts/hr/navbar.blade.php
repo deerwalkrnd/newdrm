@@ -68,9 +68,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="/employee/terminate"><img class="img-fluid"
-                                                        src="/assets/images/icons/consent.png">Terminate
-                                                    Form</a></td>
+                                            <td class="hr_menu_content"><a href="/file-upload"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">Upload Files
+                                                </a></td>
                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/report.png">Monthly Leave
                                                     Report</a></td>
@@ -118,9 +118,9 @@
                                         </tr>
 
                                         <tr>
-                                                <td class="hr_menu_content"><a href="/file-upload"><img class="img-fluid"
-                                                        src="/assets/images/icons/list.png">Upload Files
-                                                </a></td>
+                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                                        src="/assets/images/icons/padlock.png">Reset
+                                                    Password</a></td>
                                             <td><a class="dropdown-item hr_item" href="#">
                                                     <div class="hr_menu_title text-uppercase">punch in/ out</div>
                                                 </a></td>
@@ -132,9 +132,6 @@
 
                                         <tr>
                                             <td></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/padlock.png">Reset
-                                                    Password</a></td>
                                             <td class="hr_menu_content"><a href="/punch-in-detail"><img class="img-fluid"
                                                         src="/assets/images/icons/calendar.png">Date/
                                                     Employee Specific
@@ -149,9 +146,9 @@
                                             <td class="hr_menu_content"><a href="/myPunchIn"><img class="img-fluid"
                                                         src="/assets/images/icons/calendar (1).png">My Punch
                                                     In</a></td>
-                                            <td class="hr_menu_content"><a href="employee"><img class="img-fluid"
-                                                        src="/assets/images/icons/terminated.png">Terminated
-                                                    Employee Detail</a></td>
+                                            <td class="hr_menu_content"><a href="/file-category"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">File Category Setting</a>
+                                            </td>
                                         </tr>
 
                                         <tr>
@@ -181,9 +178,7 @@
                                                     Punch In
                                                     No Leave Report
                                                 </a></td>
-                                            <td class="hr_menu_content"><a href="/file-category"><img class="img-fluid"
-                                                        src="/assets/images/icons/list.png">File Category Setting</a>
-                                            </td>
+                                            <td></td>
                                             
                                         </tr>
 
@@ -201,7 +196,7 @@
                     </li>
                     @endif
                     <li class="nav-item navigation_item">
-                        <a class="nav-link navigation_link" href="/file-upload"><i class="fas fa-address-book icon"></i>
+                        <a class="nav-link navigation_link" href="/my-file-upload"><i class="fas fa-address-book icon"></i>
                             My Files</a>
                     </li>
                     <li class="nav-item navigation_item">
