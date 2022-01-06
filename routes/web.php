@@ -192,10 +192,10 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
     Route::post('/file-upload',[FileUploadController::class, 'store']);
     Route::get('/file-upload',[FileUploadController::class, 'index']);
+    Route::get('/my-file-upload',[FileUploadController::class, 'myFileIndex']);
     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
     // Route::put('/file-upload/{id}',[FileUploadController::class, 'download']);
     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
-    Route::get('/my-file-upload',[FileUploadController::class, 'myFileIndex']);
     // Route::get('/my-file-upload/create',[FileUploadController::class, 'myFileCreate']);
     // Route::post('/my-file-upload',[FileUploadController::class, 'myStore']);
     // Route::delete('/my-file-upload/{id}',[FileUploadController::class, 'myDestroy']);

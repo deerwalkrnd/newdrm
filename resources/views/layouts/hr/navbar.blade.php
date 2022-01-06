@@ -118,9 +118,10 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <!-- <td class="hr_menu_content"><a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/padlock.png">Reset
-                                                    Password</a></td>
+                                                    Password</a></td> -->
+                                                    <td></td>
                                             <td><a class="dropdown-item hr_item" href="#">
                                                     <div class="hr_menu_title text-uppercase">punch in/ out</div>
                                                 </a></td>
