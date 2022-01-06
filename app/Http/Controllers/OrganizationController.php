@@ -40,7 +40,14 @@ class OrganizationController extends Controller
     public function store(OrganizationRequest $request)
     {
         Organization::create($request->validated());
-        return redirect('/organization');
+
+        $res = [
+            'title' => 'Organization Created',
+            'message' => 'Organization has ben successfully created',
+            'icon' => 'success'
+        ];
+
+        return redirect('/organization')->with(compact('res'));
     }
 
     /**
@@ -82,6 +89,13 @@ class OrganizationController extends Controller
         $input['version'] = DB::raw('version+1');
 
         $organization->update($input);
+
+        $res = [
+            'title' => 'Organization Updated',
+            'message' => 'Organization has ben successfully updated',
+            'icon' => 'success'
+        ];
+
         return redirect('/organization');
     }
 
