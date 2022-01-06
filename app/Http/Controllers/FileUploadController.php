@@ -81,6 +81,12 @@ class FileUploadController extends Controller
         }elseif($role == 'hr'){
             $employees = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
         }
+
+        // $res = [
+        //     'title' => 'File Upload',
+        //     'message' => 'File has ben successfully uploaded',
+        //     'icon' => 'success'
+        // ];
         return view('admin.fileUpload.create')->with(compact('fileCategories','employees'));
     }
 
