@@ -40,7 +40,12 @@ class DesignationController extends Controller
     public function store(DesignationRequest $request)
     {
         Designation::create($request->validated());
-        return redirect('/designation');
+        $res = [
+            'title' => 'Designation Created ',
+            'message' => 'Designation has been successfully Created ',
+            'icon' => 'success'
+        ];
+        return redirect('/designation')->with(compact('res'));
     }
 
     /**
@@ -82,7 +87,12 @@ class DesignationController extends Controller
         $input['version'] = DB::raw('version+1');
 
         $designation->update($input);
-        return redirect('/designation');
+        $res = [
+            'title' => 'Designation Updated ',
+            'message' => 'Designation has been successfully Updated ',
+            'icon' => 'success'
+        ];
+        return redirect('/designation')->with(compact('res'));
     }
 
     /**

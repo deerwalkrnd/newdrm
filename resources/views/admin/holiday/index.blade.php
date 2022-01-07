@@ -9,7 +9,9 @@
         <tr class="table_title" style="background-color: #0f5288;">
         <th scope="col" class="ps-4">S.N</th>
             <th scope="col">Name</th>
+            <th scope="col">Unit</th>
             <th scope='col'>Date</th>
+            <th scope='col'>Female Only</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -18,7 +20,13 @@
         <tr>
             <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
             <td>{{ $holiday->name }}</td>
+            @if($holiday->unit)
+                <td>{{ $holiday->unit->unit_name }}</td>
+            @else
+                <td>All</td>
+            @endif
             <td>{{ $holiday->date }}</td>
+            <td> @if($holiday->female_only) Yes @else No</td>@endif
             <td class="text-center">
                 <a href="/holiday/edit/{{ $holiday->id }}"><i class="far fa-edit"></i></a> 
                 | 

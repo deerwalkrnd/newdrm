@@ -36,7 +36,8 @@ class ManagerController extends Controller
     {
         // $managers = Manager::select('id','employee_id','is_active')->get();
         $employees = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
-        return view('admin.manager.create')->with(compact('employees'));
+       
+        return view('admin.manager.create');
     }
 
     /**
@@ -48,7 +49,12 @@ class ManagerController extends Controller
     public function store(ManagerRequest $request)
     {
         Manager::create($request->validated());
-        return redirect('/manager');
+        $res = [
+            'title' => 'Manager Created',
+            'message' => 'Manager has been successfully created',
+            'icon' => 'success'
+        ];
+        return redirect('/manager')->with(compact('res'));
     }
 
     /**
@@ -91,7 +97,12 @@ class ManagerController extends Controller
         $input['version'] = DB::raw('version+1');
 
         $manager->update($input);
-        return redirect('/manager');
+        $res = [
+            'title' => 'Manager Updated',
+            'message' => 'Manager has been successfully updated',
+            'icon' => 'success'
+        ];
+        return redirect('/manager')->with(compact('res'));
     }
 
     /**

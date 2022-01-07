@@ -4,6 +4,7 @@
             <label for="unit_id">Unit</label>
             <select class="form-control" id="unit_id" name="unit_id">
                 <option value="" disabled="disabled" selected="selected">-- Choose Unit --</option>
+                <option value="">All</option>
                 @forelse($units as $unit)
                 <option 
                     value="{{ $unit->id}}" 

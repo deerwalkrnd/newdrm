@@ -14,7 +14,7 @@
 <section class="form_container mx-auto">
     <div class="row mx-auto">
         <div class="col-md-12 col-sm-8" style="background-color:aliceblue; padding: 20px 40px;">
-            <form class="main_form p-4" method="POST" action="/employee/terminate" enctype='multipart/form-data'>
+            <form class="main_form p-4" method="POST" action="/employee/terminate" onsubmit="return confirm('Do you want to terminate?');" enctype='multipart/form-data'>
                 <legend>
                     <center>Terminate Employee</center>
                 </legend>    
@@ -25,7 +25,7 @@
                             <label class="form-label" for="employee_id">Employee</label>
                             <select class="employee-livesearch form-control p-3" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
                             </select>
-                            @error('manager_id')
+                            @error('employee_id')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>

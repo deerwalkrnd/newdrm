@@ -55,8 +55,15 @@ class YearlyLeaveController extends Controller
      */
     public function store(YearlyLeaveRequest $request)
     {
+        // dd($request->validated());
         YearlyLeave::create($request->validated());
-        return redirect('/yearly-leaves');
+
+        $res = [
+            'title' => 'Yearly Leave Created',
+            'message' => 'Yearly Leave has been successfully Created',
+            'icon' => 'success'
+        ];
+        return redirect('/yearly-leaves')->with(compact('res'));
     }
 
     /**
@@ -100,7 +107,12 @@ class YearlyLeaveController extends Controller
         $input['version'] = DB::raw('version+1');
 
         $yearlyLeave->update($input);
-        return redirect('/yearly-leaves');
+        $res = [
+            'title' => 'Yearly Leave Updated',
+            'message' => 'Yearly Leave has been successfully Updated',
+            'icon' => 'success'
+        ];
+        return redirect('/yearly-leaves')->with(compact('res'));
     }
 
     /**

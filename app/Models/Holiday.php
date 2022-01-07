@@ -10,8 +10,13 @@ class Holiday extends Model
     use HasFactory;
 
     public $fillable = [
+        'unit_id',
         'name',
         'date',
         'female_only'
     ];
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
 }

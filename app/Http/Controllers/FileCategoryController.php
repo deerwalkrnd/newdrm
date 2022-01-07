@@ -40,7 +40,12 @@ class FileCategoryController extends Controller
         
         // dd('here');
         FileCategory::create($request->validated());
-        return redirect('/file-category');
+        $res = [
+            'title' => 'File Category Created ',
+            'message' => 'File Category has been successfully Created ',
+            'icon' => 'success'
+        ];
+        return redirect('/file-category')->with(compact('res'));
     }
 
     /**
@@ -80,7 +85,12 @@ class FileCategoryController extends Controller
         //get validated input and merge input fields
         $input = $request->validated();
         $fileCategory->update($input);
-        return redirect('/file-category');
+        $res = [
+            'title' => 'File Category Updated ',
+            'message' => 'File Category has been successfully Updated ',
+            'icon' => 'success'
+        ];
+        return redirect('/file-category')->with(compact('res'));
     }
 
     /**

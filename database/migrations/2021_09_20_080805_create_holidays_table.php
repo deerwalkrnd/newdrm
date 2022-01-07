@@ -16,6 +16,7 @@ class CreateHolidaysTable extends Migration
         Schema::create('holidays', function (Blueprint $table) {
             $table->id();
             $table->integer('version')->default('0');
+            $table->foreignId('unit_id')->nullable()->constrained('units');
             $table->string('name');
             $table->date('date')->unique();
             $table->enum('female_only',['0','1'])->nullable();

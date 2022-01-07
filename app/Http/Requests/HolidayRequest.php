@@ -25,6 +25,7 @@ class HolidayRequest extends FormRequest
     {
         // dd(\Request::input());
         return [
+            'unit_id'=>'nullable|exists:units,id',
             'name'=>'required|string|max:255',
             'date'=>'required|date|unique:holidays,date',
             'female_only'=>'required|integer',

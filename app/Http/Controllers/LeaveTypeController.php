@@ -43,7 +43,12 @@ class LeaveTypeController extends Controller
     public function store(LeaveTypeRequest $request)
     {
         LeaveType::create($request->validated());
-        return redirect('/leaveType');
+        $res = [
+            'title' => 'Leave Type Created',
+            'message' => 'Leave Type has been successfully Created',
+            'icon' => 'success'
+        ];
+        return redirect('/leaveType')->with(compact('res'));
     }
 
     /**
@@ -85,7 +90,12 @@ class LeaveTypeController extends Controller
         $input['version'] = DB::raw('version+1');
 
         $leaveType->update($input);
-        return redirect('/leaveType');
+        $res = [
+            'title' => 'Leave Type Updated',
+            'message' => 'Leave Type has been successfully Updated',
+            'icon' => 'success'
+        ];
+        return redirect('/leaveType')->with(compact('res'));
     }
 
     /**

@@ -43,7 +43,7 @@ class OrganizationController extends Controller
 
         $res = [
             'title' => 'Organization Created',
-            'message' => 'Organization has ben successfully created',
+            'message' => 'Organization has been successfully created',
             'icon' => 'success'
         ];
 
@@ -92,11 +92,11 @@ class OrganizationController extends Controller
 
         $res = [
             'title' => 'Organization Updated',
-            'message' => 'Organization has ben successfully updated',
+            'message' => 'Organization has been successfully updated',
             'icon' => 'success'
         ];
 
-        return redirect('/organization');
+        return redirect('/organization')->with(compact('res'));
     }
 
     /**

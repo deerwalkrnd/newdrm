@@ -29,7 +29,12 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return view('admin.contact.create');
+        $res = [
+            'title' => 'Contact Created ',
+            'message' => 'Contact has been successfully Created ',
+            'icon' => 'success'
+        ];
+        return view('admin.contact.create')->with(compact('res'));
     }
 
     /**
@@ -83,7 +88,12 @@ class ContactController extends Controller
         $input['version'] = DB::raw('version+1');
 
         $contact->update($input);
-        return redirect('/contact');
+        $res = [
+            'title' => 'Contact Updated ',
+            'message' => 'Contact has been successfully Updated ',
+            'icon' => 'success'
+        ];
+        return redirect('/contact')->with(compact('res'));
     }
 
     /**

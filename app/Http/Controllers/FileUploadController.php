@@ -85,9 +85,19 @@ class FileUploadController extends Controller
 
         if((\Auth::user()->role->authority == "hr") && ($input['employee_id']  != \Auth::user()->employee_id ))
         {
-           return redirect('/file-upload');
+            $res = [
+            'title' => 'File  Uploaded ',
+            'message' => 'File  has been successfully Uploaded ',
+            'icon' => 'success'
+            ];
+           return redirect('/file-upload')->with(compact('res'));
         }else{
-           return redirect('/my-file-upload');
+            $res = [
+            'title' => 'File  Uploaded ',
+            'message' => 'File  has been successfully Uploaded ',
+            'icon' => 'success'
+            ];
+           return redirect('/my-file-upload')->with(compact('res'));
         } 
     }
 
@@ -146,11 +156,13 @@ class FileUploadController extends Controller
             {
                 Storage::delete($path);
             }
-        }
+            $fileUpload->delete();
 
-        if((\Auth::user()->role->authority == "hr") && ($employee_id  == \Auth::user()->employee_id ))
+        }
+        return redirect()->back();
+        if((\Auth::user()->role->authority == "hr") )
         {
-           return redirect('/file-upload');
+           return redirect()->back();
         }else{
            return redirect('/my-file-upload');
         }        
