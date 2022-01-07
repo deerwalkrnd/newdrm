@@ -42,7 +42,11 @@
         <tr>
             <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
             <td>{{ $yearlyLeave->leaveType->name}}</td>
-            <td>{{ $yearlyLeave->unit->unit_name }}</td>
+            @if($yearlyLeave->unit)
+                <td>{{ $yearlyLeave->unit->unit_name }}</td>
+            @else
+                <td>All</td>
+            @endif
             <td>{{ $yearlyLeave->days }}</td>
             <td>{{ $yearlyLeave->status }}</td>
             <td>{{ $yearlyLeave->year }}</td>

@@ -20,7 +20,11 @@
         <tr>
             <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
             <td>{{ $holiday->name }}</td>
-            <td>{{ $holiday->unit->unit_name }}</td>
+            @if($holiday->unit)
+                <td>{{ $holiday->unit->unit_name }}</td>
+            @else
+                <td>All</td>
+            @endif
             <td>{{ $holiday->date }}</td>
             <td> @if($holiday->female_only) Yes @else No</td>@endif
             <td class="text-center">

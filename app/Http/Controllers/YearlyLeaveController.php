@@ -55,7 +55,9 @@ class YearlyLeaveController extends Controller
      */
     public function store(YearlyLeaveRequest $request)
     {
+        // dd($request->validated());
         YearlyLeave::create($request->validated());
+
         $res = [
             'title' => 'Yearly Leave Created',
             'message' => 'Yearly Leave has been successfully Created',
