@@ -163,6 +163,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/holiday/create',[HolidayController::class, 'create']);
     Route::post('/holiday',[HolidayController::class, 'store']);
     Route::get('/holiday',[HolidayController::class, 'index']);
+    Route::get('/my-holiday',[HolidayController::class, 'myHoliday']);
     Route::get('/holiday/edit/{id}',[HolidayController::class, 'edit']);
     Route::put('/holiday/{id}',[HolidayController::class, 'update']);
     Route::delete('/holiday/{id}',[HolidayController::class, 'destroy']);
