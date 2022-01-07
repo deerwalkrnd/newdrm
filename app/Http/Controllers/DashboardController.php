@@ -126,13 +126,22 @@ class DashboardController extends Controller
                                             ->where('year',$year-1)
                                             ->where('employee_id',\Auth::user()->employee_id)
                                             ->first();
-       }else{
+        }else{
             $allowedLeave = YearlyLeave::select('days')
-            ->where('year',$year)
-            ->where('unit_id',$unit_id)
-            ->where('leave_type_id',$leaveType)
-            ->where('status','active')
-            ->get()->first();
+                                        ->where('year',$year)
+                                        ->where('unit_id',$unit_id)
+                                        ->where('leave_type_id',$leaveType)
+                                        ->where('status','active')
+                                        ->first();
+
+            if(!$allowedLeave)
+            {
+                $allowedLeave = YearlyLeave::select('days')
+                ->where('year',$year)
+                ->where('unit_id',null)
+                ->where('leave_type_id',$leaveType)
+                ->where('status','active')->first();
+            }
         }
         
         if(isset($allowedLeave) && ($allowedLeave->exists() == 1))
