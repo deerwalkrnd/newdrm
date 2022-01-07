@@ -81,7 +81,7 @@ class DashboardController extends Controller
         $year = date('Y');
         $month = date('m');
         $unit_id = \Auth::user()->employee->unit_id;
-        $leaveTypes = LeaveType::select('name','id')->get();
+        $leaveTypes = LeaveType::select('name','id')->where('gender','all')->orWhere('gender',ucfirst(\Auth::user()->employee->gender))->get();
 
         $lists = array();
         foreach($leaveTypes as $leaveType)
