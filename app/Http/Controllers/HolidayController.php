@@ -21,6 +21,23 @@ class HolidayController extends Controller
         return view('admin.holiday.index')->with(compact('holidays'));
     }
 
+    public function myHoliday()
+    {
+        $holidays = Holiday::select('id','name','date','female_only','unit_id')
+                            ->where(function($query){
+                                $query->where('unit_id',\Auth::user()->employee->unit_id)
+                                        ->orWhere('unit_id',null);
+                            });
+        
+        if(\Auth::user()->employee->gender != 'Female')
+        {
+            $holidays = $holidays->where('female_only',0);
+        }
+                            
+        $holidays = $holidays->orderBy('name')->get();
+        return view('admin.holiday.index')->with(compact('holidays'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

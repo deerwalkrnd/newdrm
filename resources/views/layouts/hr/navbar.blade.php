@@ -201,6 +201,10 @@
                             My Files</a>
                     </li>
                     <li class="nav-item navigation_item">
+                        <a class="nav-link navigation_link" href="/my-holiday"><i class="fas fa-address-book icon"></i>
+                            My Holiday</a>
+                    </li>
+                    <li class="nav-item navigation_item">
                         <a class="nav-link navigation_link" href="/contact"><i class="fas fa-address-book icon"></i>
                             Contacts</a>
                     </li>
