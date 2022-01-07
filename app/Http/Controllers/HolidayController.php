@@ -28,10 +28,10 @@ class HolidayController extends Controller
                                 $query->where('unit_id',\Auth::user()->employee->unit_id)
                                         ->orWhere('unit_id',null);
                             });
-        
-        if(\Auth::user()->employee->gender != 'Female')
+                            
+        if(\Auth::user()->employee->gender != 'female')
         {
-            $holidays = $holidays->where('female_only',0);
+            $holidays = $holidays->where('female_only','0');
         }
                             
         $holidays = $holidays->orderBy('name')->get();
