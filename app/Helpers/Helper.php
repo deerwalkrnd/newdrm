@@ -81,6 +81,15 @@ final class Helper
                                         ->where('year',$year)
                                         ->first();
 
+        if(!$allowed_leave)
+        {
+            $allowed_leave = YearlyLeave::select('days')
+                                        ->where('unit_id', null)
+                                        ->where('leave_type_id',$leave_type_id)
+                                        ->where('year',$year)
+                                        ->first();
+        }
+
         if($allowed_leave)
             $allowed_leave = $allowed_leave->days;
         else
