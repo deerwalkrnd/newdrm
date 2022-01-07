@@ -79,45 +79,146 @@ class DefaultEmployeeSeeder extends Seeder
             'authority' => 'employee'
         ]);
        
-
+        //leave types
         DB::table('leave_types')->insert([
             'name' => 'Personal',
             'gender' => 'All',
             'paid_unpaid' => '0'
         ]);
-
+        
         DB::table('leave_types')->insert([
             'name' => 'Carry Over',
             'gender' => 'All',
             'paid_unpaid' => '0'
         ]);
 
+        DB::table('leave_types')->insert([
+            'name' => 'Sick',
+            'gender' => 'All',
+            'paid_unpaid' => '0'
+        ]);
+
+         DB::table('leave_types')->insert([
+            'name' => 'Maternity',
+            'gender' => 'Female',
+            'paid_unpaid' => '0',
+            'include_holiday' =>'1'
+
+        ]);
+
+        DB::table('leave_types')->insert([
+            'name' => 'Maternity Care',
+            'gender' => 'Male',
+            'paid_unpaid' => '0',
+            'include_holiday' =>'1'
+        ]);
+        
+        DB::table('leave_types')->insert([
+            'name' => 'Floating for all unit',
+            'gender' => 'All',
+            'paid_unpaid' => '0'
+        ]);
+       
+        //yearly-leaves
         DB::table('yearly_leaves')->insert([
             'unit_id' => '1',
             'leave_type_id' => '1',
-            'days' => '10',
+            'days' => '13',
             'status' => 'active',
             'year' => '2022'
         ]);
          DB::table('yearly_leaves')->insert([
             'unit_id' => '1',
-            'leave_type_id' => '2',
-            'days' => '8',
+            'leave_type_id' => '3',
+            'days' => '12',
             'status' => 'active',
             'year' => '2022'
         ]);
+        DB::table('yearly_leaves')->insert([
+            'unit_id' => '1',
+            'leave_type_id' => '4',
+            'days' => '60',
+            'status' => 'active',
+            'year' => '2022'
+        ]);
+         DB::table('yearly_leaves')->insert([
+            'unit_id' => '1',
+            'leave_type_id' => '5',
+            'days' => '15',
+            'status' => 'active',
+            'year' => '2022'
+        ]);
+
+        DB::table('yearly_leaves')->insert([
+            'unit_id' => '2',
+            'leave_type_id' => '1',
+            'days' => '13',
+            'status' => 'active',
+            'year' => '2022'
+        ]);
+         DB::table('yearly_leaves')->insert([
+            'unit_id' => '2',
+            'leave_type_id' => '3',
+            'days' => '12',
+            'status' => 'active',
+            'year' => '2022'
+        ]);
+        DB::table('yearly_leaves')->insert([
+            'unit_id' => '2',
+            'leave_type_id' => '4',
+            'days' => '60',
+            'status' => 'active',
+            'year' => '2022'
+        ]);
+         DB::table('yearly_leaves')->insert([
+            'unit_id' => '2',
+            'leave_type_id' => '5',
+            'days' => '15',
+            'status' => 'active',
+            'year' => '2022'
+        ]);
+
+        DB::table('yearly_leaves')->insert([
+            // 'unit_id' => 'null',
+            'leave_type_id' => '6',
+            'days' => '12',
+            'status' => 'active',
+            'year' => '2022'
+        ]);
+        
+        //Holidays
         DB::table('holidays')->insert([
-            'name' => 'Christmas',
+            'name' => 'Christmas for DWIT',
             'unit_id'=>'1',
-            'date' => '2022-12-25',
+            'date' => '2022-01-10',
             'female_only' => '0'
         ]);
          DB::table('holidays')->insert([
             'unit_id'=>'1',
-            'name' => 'Holi',
-            'date' => '2022-03-17',
+            'name' => 'Teej for DWIT',
+            'date' => '2022-03-11',
+            'female_only' => '1'
+        ]);
+
+        DB::table('holidays')->insert([
+            'name' => 'Christmas for DSS',
+            'unit_id'=>'2',
+            'date' => '2022-01-12',
             'female_only' => '0'
         ]);
+         DB::table('holidays')->insert([
+            'unit_id'=>'2',
+            'name' => 'Teej for DSS',
+            'date' => '2022-01-13',
+            'female_only' => '1'
+        ]);
+
+        DB::table('holidays')->insert([
+            'name' => 'Sahid Diwas for All',
+            'date' => '2022-01-14',
+            'female_only' => '0'
+        ]);
+        //Employees, users and emergency contacts
          DB::table('employees')->insert([
             'first_name' => 'Hitesh',
             'last_name' => 'karki',
