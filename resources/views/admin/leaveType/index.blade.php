@@ -10,7 +10,7 @@
             <th scope="col" class="ps-4">S.N</th>
             <th scope="col">Type</th>
             <th scope="col">Payment Status</th>
-            <th scope="col">Include Holiday Status</th>
+            <th scope="col">Count Holidays as Leave</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -20,7 +20,7 @@
             <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
             <td>{{ $leaveType->name }}</td>
             <td> {{ $leaveType->paid_unpaid == 1? 'Paid':'Unpaid'}} </td>
-            <td>{{ $leaveType->include_holiday }}</td>
+            <td>{{ $leaveType->include_holiday == 1 ? 'Yes' : 'No' }}</td>
             <td class="text-center">
                 <a href="/leaveType/edit/{{ $leaveType->id }}"><i class="far fa-edit"></i></a> 
                 | 
@@ -38,7 +38,6 @@
         @endforelse
     </tbody>
 </table>
-{{-- $leaveTypes->links() --}}
 
 @include('layouts.basic.tableFoot')
 @endsection
