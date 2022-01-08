@@ -124,25 +124,11 @@ class AttendanceController extends Controller
                     'late_punch_in' => $isLate,
                     'reason' => $reason
                 ]);
-                // dd($attendance);
 
                 //Send Mail to manager,hr and employee after late punch in 
-                $emails = MailHelper::getEmail();
-                $sendMailController = new SendMailController;
-                
-
+                $subject = "Late Punch In";
                 if($attendance->late_punch_in){
-                    $to = $emails['employee'];
-                    if($emails['manager'])
-                        $cc = [$emails['hr'], $emails['manager']];
-                    else
-                        $cc = [$emails['hr']];
-
-                    $name = \Auth::user()->employee->first_name;
-                    $message = 'Today you have punched in late at '.$attendance->punch_in_time.'.The reason is : '.$attendance->reason;
-                    $regards ='HR';
-                    $subject = 'Late Punch In';
-                    $sendMailController->sendMail($to, $name, $subject, $message, $cc);
+                    MailHelper::sendEmail($type=2,$attendance,$subject);
                 }
                 \Session::put('punchIn', '2');
             }
