@@ -108,7 +108,7 @@ class LeaveRequestController extends Controller
             }
         }
        $leaveRequest = LeaveRequest::create($data);
-   
+        
         //Send Mail to manager,hr and employee after successful leave request 
         $subject = "Leave Request";
         MailHelper::sendEmail($type=1,$leaveRequest,$subject);

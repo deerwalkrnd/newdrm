@@ -48,7 +48,7 @@ class MailHelper{
             }else{
                 $cc = [$hr->employee->email]; 
             }
-            $message = $attendance->employee->first_name.' '.$attendance->employee->middle_name.' '.$attendance->employee->last_name.' has punched at '.$attendance->punch_in_time.'.';
+            $message = 'Today you have punched in at '.$attendance->punch_in_time.'.';
             $sendMailController->sendMail($to, $from, $name, $subject, $message, $cc);
         }
     }
@@ -59,20 +59,22 @@ class MailHelper{
                                 ->with('employee:id,first_name,middle_name,last_name,manager_id,email')
                                 ->whereDate('punch_in_time',date('Y-m-d',strtotime('yesterday')))
                                 ->get();
-        // return($employees);
 
         $sendMailController = new SendMailController;
 
         foreach($attendances as $attendance){
-            // dd($attendance->employee->first_name);
-            $hr = 'satyadeep.neupane@deerwalk.edu.np';
+            $hr = 'deena.sitikhu@deerwalk.edu.np';
             $to = $attendance->employee->email;
-            $cc = [$attendance->employee->manager->email,$hr]; //hr->inside colon
+            if($attendance->employee->manager)
+                $cc = [$attendance->employee->manager->email,$hr]; 
+            else
+                $cc = [$hr]; 
+
             $name = $attendance->employee->first_name;
             $message = 'You did not punch out yesterday';
             $regards ='HR';
             $subject = 'Missed Punch Out';
-            $sendMailController->sendMail($to, $name, $subject, $message, $cc);
+            $sendMailController->sendMail($to, $hr ,$name, $subject, $message, $cc);
         }
         // dd($employees);
         return true;

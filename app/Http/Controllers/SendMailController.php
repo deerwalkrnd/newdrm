@@ -24,7 +24,7 @@ class SendMailController extends Controller
         \Mail::send('admin.emails.sendMail',$details, function($message) use ($details) {
             $message->to($details['to']);
             $message->subject($details['subject']);
-            $message->from($details['from']);    //from HR
+            $message->from($details['from'],'DRM System');    //from HR
             if($details['cc'])
                 $message->cc($details['cc']);
             if($details['bcc'])
