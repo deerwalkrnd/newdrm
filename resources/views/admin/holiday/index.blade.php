@@ -16,7 +16,9 @@
             <th scope="col">Unit</th>
             <th scope='col'>Date</th>
             <th scope='col'>Female Only</th>
-            <th scope="col">Action</th>
+            @if(Auth::user()->role->authority == "hr")
+                <th scope="col">Action</th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -31,6 +33,7 @@
             @endif
             <td>{{ $holiday->date }}</td>
             <td> @if($holiday->female_only) Yes @else No</td>@endif
+            @if(Auth::user()->role->authority == "hr")
             <td class="text-center">
                 <a href="/holiday/edit/{{ $holiday->id }}"><i class="far fa-edit"></i></a> 
                 | 
@@ -40,6 +43,8 @@
                     <button type="submit"  class="delete border-0 action"><i class="fas fa-trash-alt"></i></button>
                 </form>
             </td>
+            @endif
+
         </tr>
         @empty
         <tr>
