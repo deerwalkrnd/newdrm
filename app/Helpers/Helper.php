@@ -47,18 +47,26 @@ final class Helper
     private function calculateLeaveDays($start_date, $end_date, $gender)
     {
         $holidayDates = Holiday::select('date')
-                                ->where('unit_id',\Auth::user()->employee->unit_id)
+                                ->where(function($query){
+                                    $query->where('unit_id',\Auth::user()->employee->unit_id)
+                                            ->orWhere('unit_id',null);
+                                })
                                 ->where('female_only','0')
                                 ->whereYear('date',date('Y',strtotime($start_date)))
                                 ->get()
                                 ->toArray();
 
         $femaleHolidayDates = Holiday::select('date')
-                                        ->where('unit_id',\Auth::user()->employee->unit_id)
+                                        ->where(function($query){
+                                            $query->where('unit_id',\Auth::user()->employee->unit_id)
+                                                    ->orWhere('unit_id',null);
+                                        })
                                         ->whereYear('date',date('Y',strtotime($start_date)))
                                         ->where('female_only','1')                                    
                                         ->get()
                                         ->toArray();
+
+        
 
         $holidayDates = array_column($holidayDates,'date');
 
