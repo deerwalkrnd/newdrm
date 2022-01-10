@@ -18,7 +18,7 @@ class IsLoggedIn
     public function handle(Request $request, Closure $next)
     {
         if(\Auth::user()){
-            if(in_array(\Auth::user()->role->authority, $this->userRoles))
+            if(in_array(\Auth::user()->role->authority, $this->userRoles) && (\Auth::user()->employee->contract_status == 'active'))
             {
                 return $next($request);
             }else{

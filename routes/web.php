@@ -213,11 +213,11 @@ Route::middleware(['logged-in'])->group(function(){
      //late-punch-in missed-punch-out
     Route::get('/late-missed-punch',[PunchInOutReportController::class, 'latePunchInOut']);
 
+    Route::get('/dashboard',[DashboardController::class, 'index']);
+    Route::view('/form','admin.dashboard.form');
+    Route::view('/table','admin.dashboard.table');    
 });
 
-Route::get('/dashboard',[DashboardController::class, 'index']);
-Route::view('/form','admin.dashboard.form');
-Route::view('/table','admin.dashboard.table');
 
 // Route::middleware(['logged-in','employee'])->group(function(){
 //     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
