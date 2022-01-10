@@ -27,7 +27,7 @@ class HolidayRequest extends FormRequest
         return [
             'unit_id'=>'nullable|exists:units,id',
             'name'=>'required|string|max:255',
-            'date'=>'required|date|unique:holidays,date',
+            'date'=>'required|date|unique:holidays,date,'.$this->id.',id,unit_id,'.$this->unit_id,
             'female_only'=>'required|integer',
         ];
     }
