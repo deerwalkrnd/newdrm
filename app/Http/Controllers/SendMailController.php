@@ -9,7 +9,7 @@ class SendMailController extends Controller
     // private $hr = 'satyadeep.neupane@deerwalk.edu.np';
     public $details = [];
 
-    public function sendMail($to, $from, $name, $subject, $message, $cc = false, $bcc = false,)
+    public function sendMail($to, $from, $name, $subject, $message, $cc = false, $bcc = false)
     {
         $details = [
             'to' => $to,
