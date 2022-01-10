@@ -43,7 +43,6 @@ Route::get('/', function () {
 
 
 Route::middleware(['logged-in'])->group(function(){
-    
     // designation route
     Route::get('/designation/create',[DesignationController::class, 'create']);
     Route::post('/designation',[DesignationController::class, 'store']);
@@ -88,7 +87,6 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/employee/terminate',[EmployeeController::class, 'terminated']);
     Route::post('/employee/terminate',[EmployeeController::class, 'terminate']);
     Route::get('/employee/profile/{id?}',[EmployeeController::class, 'profile']);
-
 
     // service type route
     Route::get('/serviceType/create',[ServiceTypeController::class, 'create']);
@@ -195,15 +193,8 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/file-upload',[FileUploadController::class, 'index']);
     Route::get('/my-file-upload',[FileUploadController::class, 'myFileIndex']);
     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
-    // Route::put('/file-upload/{id}',[FileUploadController::class, 'download']);
     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
-    // Route::get('/my-file-upload/create',[FileUploadController::class, 'myFileCreate']);
-    // Route::post('/my-file-upload',[FileUploadController::class, 'myStore']);
-    // Route::delete('/my-file-upload/{id}',[FileUploadController::class, 'myDestroy']);
-
-
-
-
+ 
     // Send Mail Route
     Route::get('send-mail',[SendMailController::class,'punchOutMail']);
 
@@ -218,30 +209,17 @@ Route::middleware(['logged-in'])->group(function(){
     Route::view('/table','admin.dashboard.table');    
 });
 
+// lowest level employee
+Route::middleware(['logged-in'])->group(function(){
 
-// Route::middleware(['logged-in','employee'])->group(function(){
-//     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
-//     Route::post('/file-upload',[FileUploadController::class, 'store']);
-//     Route::get('/file-upload',[FileUploadController::class, 'index']);
-//     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
-//     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
+});
 
-Route::view('/test','admin.dashboard.index');
-Route::view('/form','admin.dashboard.form');
-Route::view('/table','admin.dashboard.table');
+// lowest level manager
+Route::middleware(['manager'])->group(function(){
 
-// Route::middleware(['logged-in','employee'])->group(function(){
-//     Route::get('/file-upload/create',[FileUploadController::class, 'create']);
-//     Route::post('/file-upload',[FileUploadController::class, 'store']);
-//     Route::get('/file-upload',[FileUploadController::class, 'index']);
-//     Route::get('/file-upload/download/{id}',[FileUploadController::class, 'download']);
-//     Route::delete('/file-upload/{id}',[FileUploadController::class, 'destroy']);
+});
 
+// lowest level hr
+Route::middleware(['hr'])->group(function(){
 
-
-// Route::get('/test',function(){
-//     if(Auth::user())
-//         return "Authenticated";
-//     else
-//         return "Log In ?";
-// });
+});

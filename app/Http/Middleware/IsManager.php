@@ -18,7 +18,7 @@ class IsManager
     {
         if(\Auth::user())
         {
-            if(\Auth::user()->role->authority == 'manager')
+            if(\Auth::user()->role->authority == 'manager' || \Auth::user()->role->authority == 'hr')
             {
                 return $next($request);
             }
