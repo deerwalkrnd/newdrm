@@ -9,10 +9,11 @@ class SendMailController extends Controller
     // private $hr = 'satyadeep.neupane@deerwalk.edu.np';
     public $details = [];
 
-    public function sendMail($to, $name, $subject, $message, $cc = false, $bcc = false)
+    public function sendMail($to, $from, $name, $subject, $message, $cc = false, $bcc = false,)
     {
         $details = [
             'to' => $to,
+            'from' => $from,
             'name'=>$name,
             'subject' =>$subject,
             'body' => $message,
@@ -23,7 +24,7 @@ class SendMailController extends Controller
         \Mail::send('admin.emails.sendMail',$details, function($message) use ($details) {
             $message->to($details['to']);
             $message->subject($details['subject']);
-            $message->from('deena.sitikhu@deerwalk.edu.np','DRM System');    //from HR
+            $message->from($details['from'],'DRM System');    //from HR
             if($details['cc'])
                 $message->cc($details['cc']);
             if($details['bcc'])

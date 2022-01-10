@@ -91,6 +91,7 @@ class LeaveRequestController extends Controller
             $allowed_leave = $allowed_leave->days;
         else
             $allowed_leave = 0;
+
         $data['employee_id'] = \Auth::user()->employee_id;
         $data['requested_by'] = \Auth::user()->employee_id;
         $data['year'] = date('Y',strtotime($data['start_date']));
@@ -106,36 +107,12 @@ class LeaveRequestController extends Controller
                 $data['half_leave'] = 'second';
             }
         }
-       
-        // if(MailHelper::sendMissedPunchOutMail()){
-        //     dd('here');
-        // }
-       
+       $leaveRequest = LeaveRequest::create($data);
+        
         //Send Mail to manager,hr and employee after successful leave request 
-        $emails = MailHelper::getEmail();
-        $sendMailController = new SendMailController;
-        //mail sent time 5-6 secs
-        if(LeaveRequest::create($data)){
-            if($emails['manager']){
-                $to = $emails['manager'];
-                $cc = [$emails['hr'], $emails['employee']];
-               $name = \Auth::user()->employee->manager->first_name;
+        $subject = "Leave Request";
+        MailHelper::sendEmail($type=1,$leaveRequest,$subject);
 
-            }
-            else{
-                $to = $emails['employee'];
-                $cc = [$emails['hr']];
-                $name = \Auth::user()->employee->first_name;
-
-            }
-            // $to = $emails['manager'];
-            // $cc = [$emails['hr'], $emails['employee']];
-            // $name = \Auth::user()->employee->manager->first_name;
-            $message = $emails['employee_fullname'].' has requested leave from '.$data['start_date'].' to '.$data['end_date'].' i.e. for '.$data['days'].'days and the reason is : '.$data['reason'];
-            $regards ='HR';
-            $subject = 'Leave Request';
-           $sendMailController->sendMail($to, $name, $subject, $message, $cc);
-        };
         $res = [
             'title' => 'Leave Request Created',
             'message' => 'Leave Request has been successfully Created',
