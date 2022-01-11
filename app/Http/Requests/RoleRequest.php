@@ -13,7 +13,7 @@ class RoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return \Auth::user()->role->authority == 'hr';
     }
 
     /**

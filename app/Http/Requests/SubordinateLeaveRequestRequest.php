@@ -13,7 +13,10 @@ class SubordinateLeaveRequestRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if(\Auth::user()->role->authority == 'hr' || \Auth::user()->role->authority == 'manager')
+            return true;
+        else
+            return false;
     }
 
     /**
