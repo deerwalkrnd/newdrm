@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\NullableUnique;
 
 class HolidayRequest extends FormRequest
 {
@@ -27,7 +28,7 @@ class HolidayRequest extends FormRequest
         return [
             'unit_id'=>'nullable|exists:units,id',
             'name'=>'required|string|max:255',
-            'date'=>'required|date|unique:holidays,date,'.$this->id.',id,unit_id,'.$this->unit_id,
+            'date' => ['required','date', new NullableUnique], 
             'female_only'=>'required|integer',
         ];
     }

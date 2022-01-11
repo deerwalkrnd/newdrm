@@ -108,7 +108,13 @@ class ShiftController extends Controller
         }
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
-                return redirect()->back();
+                $res = [
+                    'title' => 'Deletion Failed',
+                    'message' => 'Shift is Being Used',
+                    'icon' => 'error'
+                ];
+
+                return redirect('/shift')->with(compact('res'));
             }
         }
     }
