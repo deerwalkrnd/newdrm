@@ -107,8 +107,13 @@ class FileCategoryController extends Controller
             return redirect('/file-category');
         }
         catch(\Illuminate\Database\QueryException $e){
-            if($e->getCode() == "23000"){
-                return redirect()->back();
+             if($e->getCode() == "23000"){
+                $res = [
+                    'title' => 'File Category Creation Fail',
+                    'message' => 'File Category is being Used',
+                    'icon' => 'error'
+                ];
+                return redirect('/file-category')->with(compact('res'));
             }
         }
     }

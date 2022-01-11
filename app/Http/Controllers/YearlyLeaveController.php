@@ -56,14 +56,25 @@ class YearlyLeaveController extends Controller
     public function store(YearlyLeaveRequest $request)
     {
         // dd($request->validated());
-        YearlyLeave::create($request->validated());
+        try{
+            YearlyLeave::create($request->validated());
+            $res = [
+                'title' => 'Yearly Leave Created',
+                'message' => 'Yearly Leave has been successfully Created',
+                'icon' => 'success'
+            ];
+            return redirect('/yearly-leaves')->with(compact('res'));
 
-        $res = [
-            'title' => 'Yearly Leave Created',
-            'message' => 'Yearly Leave has been successfully Created',
-            'icon' => 'success'
-        ];
-        return redirect('/yearly-leaves')->with(compact('res'));
+        }catch(\Illuminate\Database\QueryException $e){
+            if($e->getCode() == "23000"){
+               $res = [
+                'title' => 'Yearly Leave Creation Fail',
+                'message' => 'Duplicate Yearly Leave Details',
+                'icon' => 'error'
+            ];
+            return redirect('/yearly-leaves')->with(compact('res'));
+            }
+        }
     }
 
     /**
