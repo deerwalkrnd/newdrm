@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UniqueYearlyLeaveType;
 
 class YearlyLeaveRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class YearlyLeaveRequest extends FormRequest
             'unit_id'=>'nullable|exists:units,id',
             'status'=>'required|string',
             'year'=>'required|integer',
-            'leave_type_id'=>'required|exists:leave_types,id|unique:yearly_leaves,leave_type_id,'.$this->id.',id,unit_id,'.$this->unit_id.',id,year'.$this->year,
+            'leave_type_id'=>['required','exists:leave_types,id',new UniqueYearlyLeaveType]
         ];
     }
 }
