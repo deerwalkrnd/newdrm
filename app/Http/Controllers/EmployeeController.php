@@ -79,6 +79,18 @@ class EmployeeController extends Controller
         //get validated input
         // dd($request);
         $input = $request->validated();
+
+        // reset temporary address
+        if($input['temp_add_same_as_per_add'] == 1)
+        {
+            unset(  $input['temporary_address'],
+                    $input['temporary_district'],
+                    $input['temporary_municipality'],
+                    $input['temporary_ward_no'],
+                    $input['temporary_tole']
+                );            
+        }
+
         $user = [];
         $emergency_contact =[];
         // dd($input['manager_id']);
@@ -186,6 +198,17 @@ class EmployeeController extends Controller
     {
         $employee = Employee::findOrFail($id);
         $input = $request->validated();
+
+        // reset temporary address
+        if($input['temp_add_same_as_per_add'] == 1)
+        {
+            unset(  $input['temporary_address'],
+                    $input['temporary_district'],
+                    $input['temporary_municipality'],
+                    $input['temporary_ward_no'],
+                    $input['temporary_tole']
+                );            
+        }
 
         $user = [];
         $emergency_contact =[];
