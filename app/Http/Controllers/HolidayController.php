@@ -17,7 +17,7 @@ class HolidayController extends Controller
      */
     public function index()
     {
-        $holidays = Holiday::select('id','name','date','female_only','unit_id')->orderBy('name')->get();
+        $holidays = Holiday::select('id','name','date','female_only','unit_id')->orderBy('date','desc')->orderBy('unit_id')->get();
         return view('admin.holiday.index')->with(compact('holidays'));
     }
 
@@ -34,7 +34,7 @@ class HolidayController extends Controller
             $holidays = $holidays->where('female_only','0');
         }
                             
-        $holidays = $holidays->orderBy('name')->get();
+        $holidays = $holidays->orderBy('date','desc')->orderBy('unit_id')->get();
         return view('admin.holiday.index')->with(compact('holidays'));
     }
 
