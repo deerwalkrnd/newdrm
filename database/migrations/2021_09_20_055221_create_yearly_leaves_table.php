@@ -21,6 +21,7 @@ class CreateYearlyLeavesTable extends Migration
             $table->integer('days');
             $table->enum('status',['active','disabled'])->default('active');
             $table->integer('year')->default(date('Y'));
+            $table->unique(['unit_id','leave_type_id','year']);
             $table->timestamps();
         });
     }

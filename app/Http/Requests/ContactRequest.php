@@ -25,7 +25,7 @@ class ContactRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'number' => 'required|digits_between:7,15|unique:contacts'
+            'number' => 'required|digits_between:7,15|unique:contacts,number,'.$this->id,
         ];
     }
 }

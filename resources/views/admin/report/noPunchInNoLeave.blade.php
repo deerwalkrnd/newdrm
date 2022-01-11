@@ -3,7 +3,7 @@
 @section('title','No Punch In No Leave Report')
 
 @section('content')
-
+@include('layouts.basic.tableHead',["table_title" => "No Punch In No Leave Report"])
 <table class="unit_table mx-auto drmDataTable">
     <thead>
         <tr class="table_title" style="background-color: #0f5288;">
