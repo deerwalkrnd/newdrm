@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 
 use App\Models\Holiday;
 
-class NullableUnique implements Rule,  DataAwareRule
+class HolidayUniqueDate implements Rule,  DataAwareRule
 {
     protected $data = [];
 
