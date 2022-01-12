@@ -3,7 +3,7 @@
 @section('title','Leave Request')
 
 @section('content')
-@include('layouts.basic.tableHead',["table_title" => $table_title, "url" => "/leave-request/create"])
+@include('layouts.basic.tableHead',["table_title" => 'Leave Applications'])
 
 <table class="unit_table mx-auto drmDataTable">
     <thead>

@@ -7,7 +7,7 @@
 
 <table class="unit_table mx-auto drmDataTable">
     <thead>
-    ` <tr class="table_title" style="background-color: #0f5288;">
+     <tr class="table_title" style="background-color: #0f5288;">
         <th scope="col" class="ps-4">S.N</th>
             <th scope="col">Employee</th>
             <th scope="col">Leave Type</th>
@@ -20,8 +20,10 @@
             <th scope="col">State</th>
             <th scope="col">Manager</th>
             <th scope="col">Approved By</th>
-            <th scope="col" class="text-center">Action</th>    
-        </tr>`
+            @if(strtolower($table_title)!='employee leave details lists')
+                <th scope="col" class="text-center">Action</th>    
+            @endif
+        </tr>
     </thead>
     <tbody>
         @forelse($leaveRequests as $leaveRequest)
@@ -42,8 +44,9 @@
             @else
             <td> -- </td>
             @endif            
+            @if(!($leaveRequest->start_date == date('Y-m-d')) && strtolower($table_title)!='employee leave details lists')
             <td class="text-center">
-                @if(!($leaveRequest->start_date == date('Y-m-d')))
+                
                 <a href="/leave-request/edit/{{ $leaveRequest->id }}"><i class="far fa-edit"></i></a> 
                 | 
                 <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
@@ -51,12 +54,13 @@
                     @method('DELETE')
                     <button type="submit" class="delete action border-0"><i class="fas fa-trash-alt action"></i></button>
                 </form>
-                @endif
             </td>
+
+            @endif
         </tr>
         @empty
         <tr>
-            <th colspan=14 class="text-center text-dark">No LeaveRequest Found</th>
+            <th colspan=12 class="text-center text-dark">No LeaveRequest Found</th>
         </tr>
         @endforelse
     </tbody>

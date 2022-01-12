@@ -146,7 +146,7 @@ class LeaveRequestController extends Controller
             'message' => 'Subordinate Leave Request has been successfully Created',
             'icon' => 'success'
         ];
-        return redirect('/leave-request')->with(compact('res'));
+        return redirect('/leave-request/approve')->with(compact('res'));
     }
 
     /**
@@ -271,8 +271,7 @@ class LeaveRequestController extends Controller
             $leaveRequests = $leaveRequests->where('start_date',$request->d)->orderBy('created_at')->orderBy('updated_at')->get();
         else
             $leaveRequests = $leaveRequests->orderBy('start_date')->orderBy('created_at')->orderBy('updated_at')->get();
-        $table_title = 'Leave Applications';
         // dd($leaveRequests[0]->employee->manager);
-        return view('admin.leaveRequest.approve_leave')->with(compact('leaveRequests','table_title'));
+        return view('admin.leaveRequest.approve_leave')->with(compact('leaveRequests'));
     }
 }
