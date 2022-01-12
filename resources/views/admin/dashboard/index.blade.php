@@ -8,6 +8,9 @@
     <div class="col">
         <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
         <a href="/leave-request"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button></a>
+        <a href="/myPunchIn"><button type="button" class="btn btn-md applyLeave_btn mb-2">My Punch In</button></a>
+        <a href="/employee/profile"><button type="button" class="btn btn-md applyLeave_btn mb-2">My Profile</button></a>
+
         @if(Auth::user()->role->authority == 'manager')
             <a href="/leave-request/approve"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Request</button></a>
         @endif

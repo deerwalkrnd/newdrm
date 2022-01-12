@@ -262,7 +262,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="permanent_address">Province*</label>
-            <select class="form-control" id="permanent_address" name="permanent_address">
+            <select disabled class="form-control" id="permanent_address" name="permanent_address">
                 <option value="" disabled="disabled" selected="selected">{{ ucfirst($employee->province->province_name) }}</option>
             </select>
         </div>
@@ -276,7 +276,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="permanent_district">Permanent District*</label>
-            <select class="district-livesearch form-control p-3" name="permanent_district" id="permanent_district" data-placeholder="-- Choose District --">
+            <select disabled class="district-livesearch form-control p-3" name="permanent_district" id="permanent_district" data-placeholder="-- Choose District --">
             <option value="" disabled selected="selected">{{ ucfirst($employee->district->district_name) }}</option>
             </select>
         </div>
@@ -450,7 +450,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="service_type">Service Type*</label>
-            <select class="form-control" id="service_type" name="service_type">
+            <select disabled class="form-control" id="service_type" name="service_type">
                 <option value="" disabled="disabled" selected="selected">{{ ucfirst($employee->serviceType->service_type_name) }}</option>
             </select>
             @error('serviceType_id')
@@ -472,7 +472,7 @@
 
 
             <label class="form-label" for="manager_id">Manager</label>
-            <select class="form-control" id="manager_id" name="manager_id">
+            <select disabled class="form-control" id="manager_id" name="manager_id">
                 <option value="" disabled selected="selected">{{ $employee->manager ? (ucfirst($employee->manager->first_name).' '.ucfirst($employee->manager->middle_name).' '.ucfirst($employee->manager->last_name)) : 'None' }}</option>
             </select>
             @error('manager_id')
@@ -487,7 +487,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="designation_id">Designation*</label>
-            <select class="form-control" id="designation_id" name="designation_id">
+            <select disabled class="form-control" id="designation_id" name="designation_id">
                 <option value="" disabled="disabled" selected="selected">{{ $employee->designation->job_title_name }}</option>
             </select>
             @error('designation_id')
@@ -515,7 +515,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="organization_id">Organization*</label>
-            <select class="form-control" id="organization_id" name="organization_id">
+            <select disabled class="form-control" id="organization_id" name="organization_id">
                 <option value="" disabled="disabled" selected="selected">{{ ucfirst($employee->organization->name) }}</option>
             </select>
             @error('organization_id')
@@ -530,7 +530,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="unit_id">Unit*</label>
-            <select class="form-control" id="unit_id" name="unit_id">
+            <select disabled class="form-control" id="unit_id" name="unit_id">
                 <option value="" disabled="disabled" selected="selected">{{ ucfirst($employee->unit->unit_name) }}</option>
             </select>
             @error('unit_id')
@@ -572,7 +572,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="role">Role*</label>
-            <select class="form-control" id="role" name="role">
+            <select disabled class="form-control" id="role" name="role">
                 <option value="" disabled="disabled" selected="selected">{{ ucfirst($employee->user->role->authority) }}</option>
             </select>
             @error('role')
@@ -588,7 +588,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="shift_id">Shift*</label>
-            <select class="form-control" id="shift_id" name="shift_id">
+            <select disabled class="form-control" id="shift_id" name="shift_id">
                 <option value="" disabled="disabled" selected="selected">{{ucfirst($employee->shift->name)}}</option>
             </select>
             @error('shift_id')
