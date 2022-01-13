@@ -256,11 +256,15 @@ Route::middleware(['manager'])->group(function(){
     //subordinate leaves
     Route::get('/leave-request/create/subordinate-leave',[LeaveRequestController::class, 'createSubOrdinateLeave']);
     Route::post('/leave-request/subordinate-leave',[LeaveRequestController::class, 'storeSubOrdinateLeave']);
-     //approve-reject-delete leaves
+    //approve-reject-delete leaves
     Route::put('/leave-request/accept/{id}',[LeaveRequestController::class, 'accept']);
     Route::put('/leave-request/reject/{id}',[LeaveRequestController::class, 'reject']);
-      //leave-applications
+    //leave-applications
     Route::get('/leave-request/approve',[LeaveRequestController::class, 'approve']);
+    //employee-livesearch
+    Route::get('/employee/search',[EmployeeController::class, 'search']);
+
+
 });
 
 // lowest level hr
@@ -309,7 +313,6 @@ Route::middleware(['hr'])->group(function(){
     Route::get('/employee/edit/{id}',[EmployeeController::class, 'edit']);
     Route::put('/employee/{id}',[EmployeeController::class, 'update']);
     Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
-    Route::get('/employee/search',[EmployeeController::class, 'search']);
     Route::get('/employee/terminate',[EmployeeController::class, 'terminated']);
     Route::post('/employee/terminate',[EmployeeController::class, 'terminate']);
 

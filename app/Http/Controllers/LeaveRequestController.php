@@ -140,7 +140,9 @@ class LeaveRequestController extends Controller
         }
         // dd($data);
 
-        LeaveRequest::create($data);
+        $leaveRequest = LeaveRequest::create($data);
+        $subject = "Subordinate Leave Request";
+        MailHelper::sendEmail($type=1,$leaveRequest,$subject);
         $res = [
             'title' => 'Subordinate Leave Request Created',
             'message' => 'Subordinate Leave Request has been successfully Created',
