@@ -80,9 +80,9 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="/employee/profile"><img class="img-fluid"
-                                                        src="/assets/images/icons/profile.png">My
-                                                    Profile</a></td>
+                                            <td class="hr_menu_content"><a href="/shift"><img class="img-fluid"
+                                                        src="/assets/images/icons/shifts.png">Shifts</a>
+                                            </td>
                                             <td class="hr_menu_content"><a href="/employees-on-leave"><img class="img-fluid"
                                                         src="/assets/images/icons/leave-report.png">Employees on
                                                     Leave</a></td>
@@ -106,9 +106,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="hr_menu_content"><a href="/shift"><img class="img-fluid"
-                                                        src="/assets/images/icons/shifts.png">Shifts</a>
-                                            </td>
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="/info"><img class="img-fluid"
                                                         src="/assets/images/icons/logout.png">Calculate Carry Over Leave
                                                 </a></td>
@@ -144,9 +142,11 @@
 
                                         <tr>
                                             <td></td>
-                                            <td class="hr_menu_content"><a href="/myPunchIn"><img class="img-fluid"
-                                                        src="/assets/images/icons/calendar (1).png">My Punch
-                                                    In</a></td>
+                                            <td class="hr_menu_content"><a href="/no-punch-in-leave"><img class="img-fluid"
+                                                        src="/assets/images/icons/search.png">No
+                                                    Punch In
+                                                    No Leave Report
+                                                </a></td>
                                             <td class="hr_menu_content"><a href="/file-category"><img class="img-fluid"
                                                         src="/assets/images/icons/list.png">File Category Setting</a>
                                             </td>
@@ -174,11 +174,7 @@
 
                                         <tr>
                                             <td></td>
-                                            <td class="hr_menu_content"><a href="/no-punch-in-leave"><img class="img-fluid"
-                                                        src="/assets/images/icons/search.png">No
-                                                    Punch In
-                                                    No Leave Report
-                                                </a></td>
+                                            
                                             <td></td>
                                             
                                         </tr>
