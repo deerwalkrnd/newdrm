@@ -8,7 +8,7 @@
 <div class="d-flex justify-content-between flex-row">
     <div class="w-25">
         <label for="date">Date: </label>
-        <input type="date" name="punch_date" id="punch_date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
+        <input type="date" name="date" id="date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
     </div> 
     <div >
         <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288">Reset</button>
@@ -46,7 +46,7 @@
             </tr>            
         @empty
         <tr>
-            <th colspan=11 class="text-center text-dark">No  Punch In Yet</th>
+            <th colspan=11 class="text-center text-dark">No  Late Punch In/Missed Out</th>
         </tr>
         @endforelse
     </tbody>  
@@ -62,13 +62,13 @@
 
     //Search by date or Employee
     function search(){
-        let date = $('#punch_date').val();
+        let date = $('#date').val();
         if(date)
             $(location).attr('href','/late-missed-punch?d='+date);
     }
 
     function reset(){
-        $(location).attr('href','/punch-in-detail');
+        $(location).attr('href','/late-missed-punch');
     }
 
 </script>

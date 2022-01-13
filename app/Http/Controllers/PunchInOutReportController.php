@@ -35,9 +35,8 @@ class PunchInOutReportController extends Controller
         else
             $date =  date('Y-m-d');
         
-        $latePunchInOuts =  Attendance::select('id','employee_id','punch_in_time','punch_in_ip','punch_out_time','punch_out_ip','missed_punch_out','late_punch_in','reason')
-                    ->where('late_punch_in','1')
-                    ->orWhere('missed_punch_out','1')
+        $latePunchInOuts =  Attendance::select('id','employee_id','punch_in_time','punch_in_ip','punch_out_time','punch_out_ip','missed_punch_out','late_punch_in','reason','created_at')
+                    ->orWhere(['late_punch_in'=>'1','missed_punch_out'=>'1'])
                     ->whereDate('created_at',$date)
                     ->get();
         // dd($latePunchInOuts);
