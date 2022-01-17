@@ -164,12 +164,10 @@
 
                                         <tr>
                                             <td></td>
-                                            <!-- <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/overdue.png">Request Punch
-                                                    In Exception</a></td> -->
-                                            <!-- <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/comments.png">Add
-                                                    Message</a></td> -->
+                                            <td></td>
+                                            <td class="hr_menu_content"><a href="/mail"><img class="img-fluid"
+                                                        src="/assets/images/icons/overdue.png">Mail Setting
+                                                    </a></td>
                                         </tr>
 
                                         <tr>

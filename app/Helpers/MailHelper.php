@@ -57,11 +57,11 @@ class MailHelper{
     public static function sendMissedPunchOutMail(){
         $attendances = Attendance::where('missed_punch_out','1')
                                 ->with('employee:id,first_name,middle_name,last_name,manager_id,email')
-                                ->whereDate('punch_in_time',date('Y-m-d',strtotime('yesterday')))
+                                // ->whereDate('punch_in_time',date('Y-m-d',strtotime('yesterday')))        //for cron job
                                 ->get();
 
         $sendMailController = new SendMailController;
-
+        // dd($attendances);
         foreach($attendances as $attendance){
             $hr = 'deena.sitikhu@deerwalk.edu.np';
             $to = $attendance->employee->email;

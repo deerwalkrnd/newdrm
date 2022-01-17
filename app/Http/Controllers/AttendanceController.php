@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
+use App\Models\Mail;
 use App\Models\LeaveRequest;
 use App\Http\Controllers\SendMailController;
 use App\Helpers\MailHelper;
@@ -127,7 +128,8 @@ class AttendanceController extends Controller
 
                 //Send Mail to manager,hr and employee after late punch in 
                 $subject = "Late Punch In";
-                if($attendance->late_punch_in){
+                $send_mail = Mail::select('send_mail')->where('name','Late Punch In')->first()->send_mail;
+                if($attendance->late_punch_in && $send_mail){
                     MailHelper::sendEmail($type=2,$attendance,$subject);
                 }
                 \Session::put('punchIn', '2');

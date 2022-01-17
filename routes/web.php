@@ -24,6 +24,7 @@ use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\PunchInOutReportController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MailController;
 
 
 /*
@@ -269,6 +270,11 @@ Route::middleware(['manager'])->group(function(){
 
 // lowest level hr
 Route::middleware(['hr'])->group(function(){
+    //mailSetting
+    Route::get('/mail',[MailController::class,'index']);
+    Route::post('/mail/{id}',[MailController::class,'store']);
+
+
     //get punch in and out report
     Route::get('/punch-in-detail',[PunchInOutReportController::class,'getPunchInOut']);
     // late-punch-in missed-punch-out

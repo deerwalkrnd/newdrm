@@ -24,6 +24,23 @@ class DefaultEmployeeSeeder extends Seeder
             'service_type_name' => 'Contract'
         ]);
 
+        DB::table('mails')->insert([
+            'name' => 'Leave Request',
+            'send_mail'=> '1'
+        ]);
+        DB::table('mails')->insert([
+            'name' => 'Late Punch In',
+            'send_mail'=> '1'
+        ]);
+        DB::table('mails')->insert([
+            'name' => 'Missed Punch Out',
+            'send_mail'=> '1'
+        ]);
+        DB::table('mails')->insert([
+            'name' => 'Subordinate Leave',
+            'send_mail'=> '1'
+        ]);
+        
 
         DB::table('shifts')->insert([
             'name' => 'Normal'
@@ -254,7 +271,7 @@ class DefaultEmployeeSeeder extends Seeder
             'first_name' => 'Smriti',
             'last_name' => 'Mathema',
             'relationship'=>'Wife',
-            'phone_no'=>'9841021923',
+            'phone_no'=>'9841081923',
         ]);
         
         //Hitesh sir as hr
@@ -294,7 +311,7 @@ class DefaultEmployeeSeeder extends Seeder
             'first_name' => 'Sujan',
             'last_name' => 'Shrestha',
             'relationship'=>'Uncle',
-            'phone_no'=>'9841021923',
+            'phone_no'=>'9841621923',
         ]);
 
         DB::table('managers')->insert([
@@ -432,7 +449,7 @@ class DefaultEmployeeSeeder extends Seeder
             'last_name' => 'Aryal',
             'date_of_birth' => '1990-01-01',
             'marital_status' => 'single',
-            'gender' => 'male',
+            'gender' => 'female',
             'mobile' => '9841000000',
             'alter_email' => 'aryal@gmail.com',
             'country' => 'Nepal',
@@ -475,18 +492,18 @@ class DefaultEmployeeSeeder extends Seeder
         DB::table('contacts')->insert([
             'version'=>'0.0',
             'name' => 'Sagar Shrestha',
-            'number'=>'9841021923',
+            'number'=>'9841021023',
         ]);
        
         DB::table('contacts')->insert([
             'version'=>'0.0',
             'name' => 'Deena Sitikhu',
-            'number'=>'9841021923',
+            'number'=>'9841022923',
         ]);
         DB::table('contacts')->insert([
             'version'=>'0.0',
             'name' => 'Sahil Lodha',
-            'number'=>'9841021923',
+            'number'=>'9821021923',
         ]);
        DB::table('contacts')->insert([
             'version'=>'0.0',

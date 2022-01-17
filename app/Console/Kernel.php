@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Models\Mail;
+
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,7 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('punchOut:missed')->everyMinute();
+        $send_mail = Mail::select('send_mail')->where('name','Missed Punch Out')->first()->send_mail;
+        if($send_mail)
+            $schedule->command('punchOut:missed')->everyMinute();
     }
 
     /**
