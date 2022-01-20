@@ -8,48 +8,118 @@ use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\YearlyLeave;
 use App\Models\Employee;
+use App\Http\Controllers\DashboardController;
 
 class LeaveReportController extends Controller
 {
-    public function leaveBalance()
+    public function leaveBalance(Request $request)
     {
-        return  view('admin.leaveBalance.index');
+        // return  view('admin.leaveBalance.index');
+        // dd($request->e);
+         if(isset($request->e))
+            $employees = Employee::where('contract_status','active')->where('id',$request->e)->get();
+        else
+            $employees = Employee::where('contract_status','active')->get();
 
-        $employees = Employee::where('contract_status','active')->get();
-
-        $leaveTypes = LeaveType::select('name')->where('gender','all')->get();
-        // dd($leaveTypes);
-        $record = [];
+        // dd($employees);
+        $leaveTypes = LeaveType::select('name','id','gender')->get();
+        $records = [];
+        $dashboardController = new DashboardController;
 
         foreach($employees as $employee)
         {
             $temp = array();
             $temp['name'] = $employee->first_name." ".$employee->last_name;
             $temp['leaves'] = array();
-            for($year=date('Y',strtotime($employee->join_date)); $year <= date('Y'); $year++)
+            // dd($request->d);
+            if(isset($request->d)){
+                $start_year = $request->d;
+                $end_year = $request->d;
+            }else{
+                $start_year =  date('Y',strtotime($employee->join_date));
+                $end_year = date('Y');
+            }
+            // dd($start_year);
+            for($year=$start_year; $year <= $end_year; $year++)
             {
-                $temp['leaves'] = array($year => array());
-                // dd($temp);
+                $temp['leaves']['year'] = $year;
                 foreach($leaveTypes as $type)
                 {
-                    $temp['leaves'][$year][$type->name] = '2';
+                    if(strtolower($type->gender) == 'male' && strtolower($employee->gender) == 'male'){  
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
+                        $temp['leaves'][$type->name]= [
+                            'allowed' => $leaveTypeBalance['allowed'],
+                            'accrued' => $leaveTypeBalance['accrued'],
+                            'taken' => $leaveTypeBalance['taken'],
+                            'balance' => $leaveTypeBalance['balance']
+                        ];
+                       
+                    }elseif(strtolower($type->gender) == 'female' && strtolower($employee->gender) == 'female'){
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
+                        $temp['leaves'][$type->name]= [
+                            'allowed' => $leaveTypeBalance['allowed'],
+                            'accrued' => $leaveTypeBalance['accrued'],
+                            'taken' => $leaveTypeBalance['taken'],
+                            'balance' => $leaveTypeBalance['balance']
+                        ];
+                    }elseif(strtolower($type->gender) == 'all'){
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
+                        $temp['leaves'][$type->name]= [
+                            'allowed' => $leaveTypeBalance['allowed'],
+                            'accrued' => $leaveTypeBalance['accrued'],
+                            'taken' => $leaveTypeBalance['taken'],
+                            'balance' => $leaveTypeBalance['balance']
+                        ];
+                    }
                 }
-
-                // dd($temp);
-
                 $yearlyLeave = YearlyLeave::select('days','leave_type_id')
-                                            ->with('leaveType:id,name')
-                                            ->where('year',$year)
-                                            // ->where()
-                                            ->get();
-                echo($yearlyLeave);
-                // echo($year."<br>");
+                                    ->with('leaveType:id,name')
+                                    ->where('year',$year)
+                                    // ->where()
+                                    ->get();
+                array_push($records,$temp);
             }
-            array_push($record,$temp);
         }
+        // dd("records",$records);
+        return  view('admin.leaveBalance.index',compact('records'));
+    }
 
-        dd("Here",$record);
-        return  view('admin.leaveBalance.index',compact());
+    private function getEmployeeLeaveBalance($employee,$type,$year){
+        $dashboardController = new DashboardController;
+        //gives carryover
+        $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
+
+        //for carryover = 0
+        // $allowedLeave = $this->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
+        $acquiredLeave = $allowedLeave;
+        
+        $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
+                                    ->where('acceptance','accepted')
+                                    ->where('year',$year)
+                                    ->where('employee_id',$employee->id)
+                                    ->where('leave_type_id',$type->id)
+                                    ->where('full_leave',"1")
+                                    ->sum('days');
+
+        $halfLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
+                                    ->where('acceptance','accepted')
+                                    ->where('year',$year)
+                                    ->where('employee_id', $employee->id)
+                                    ->where('leave_type_id',$type->id)
+                                    ->where('full_leave',"0")
+                                    ->sum('days');
+
+        $leaveTaken = $fullLeaveTaken + 0.5 * $halfLeaveTaken;
+        $balance = $acquiredLeave - $leaveTaken;
+
+        $lists=[
+             'allowed' => $allowedLeave,
+            'accrued' => round($acquiredLeave,2),
+            'taken' => $leaveTaken,
+            'balance' => round($balance,2)
+        ];
+
+        return $lists;
     }
 
     private function getAllowedLeaveDays($unit_id,$leaveType,$year)

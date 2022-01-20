@@ -28,16 +28,6 @@
                         {{ old('send_mail') == '1' ? 'checked':'' }} />
                     </center>   
                 </form>
-                <!-- <form action="/mail/save/{{ $mail->id }}" method="POST" class="d-inline"> -->
-                    <!-- <div class="form-check form-switch center">
-                        <a href="/mail/save/{{ $mail->id }}">
-                        <input type="hidden" name="send_mail" value="0">
-                        <input class="form-check-input" name="send_mail" value="1" type="checkbox" role="switch" id="flexSwitchCheckChecked" 
-                        {{ (isset($mail) && $mail->send_mail == '1') ? 'checked':'' }}
-                        {{ old('send_mail') == '1' ? 'checked':'' }} />
-                        </a>
-                    </div> -->
-                <!-- </form> -->
             </td>    
             
         </tr>
@@ -58,59 +48,5 @@
     $(document).ready(function() {
         $('.drmDataTable').DataTable();
     })
-
-     //Search leave by date 
-    function search(){
-        let date = $('#date').val();
-        if(date)
-            $(location).attr('href','/leave-request/approve?d='+date);
-    }
-
-    function reset(){
-        $(location).attr('href','/leave-request/approve');
-    }
-    function validate(){
-        let send_mail = document.getElementById('send_mail').checked;
-        $(location).attr('href','/mail?m='+send_mail);
-    }
-
-    //Search by date or Employee
-    // function search(){
-    //     let date = $('#punch_date').val();
-    //     let employee_id = $('#employee_id').val();
-    //     console.log(employee_id);
-    //     if(date)
-    //         $(location).attr('href','/punch-in-detail?d='+date);
-    //     if(employee_id)
-    //         $(location).attr('href','/punch-in-detail?e='+employee_id);
-
-    // }
-
-    $('.employee-livesearch').select2({    
-        ajax: {
-            url: '/employee/search',
-            data: function (params) {
-                var query = {
-                    q: params.term,
-                }
-                    // Query parameters will be ?search=[term]
-                return query;
-            },
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-                return {
-                    results: $.map(data, function (item) {
-                        let full_name = (item.middle_name === null) ? item.first_name + " " + item.last_name : item.first_name + " " + item.middle_name + " " + item.last_name;
-                        return {
-                            text: full_name,
-                            id: item.id
-                        }
-                    })
-                };
-            },
-            cache: true
-        }
-    });
 </script>
 @endsection

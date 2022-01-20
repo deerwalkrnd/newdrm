@@ -117,7 +117,7 @@ class DashboardController extends Controller
         return $lists;
     }
 
-    private function getAllowedLeaveDays($unit_id,$leaveType,$year)
+    public function getAllowedLeaveDays($unit_id,$leaveType,$year)
     {
         // if carry Over Leave // carry over is set to 1
         if($leaveType == 2)
