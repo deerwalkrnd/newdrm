@@ -32,7 +32,10 @@
     </div>
 </div>
 <br>
-
+ <div class="col-md-4">
+    <em>Note: AC-Accrued, A-Allowed, T-Taken, B-Balance</em>
+</div>
+<br>
 <table class="unit_table mx-auto">
     <thead></thead>
         <tr class="table_title" style="background-color: #0f5288;">
