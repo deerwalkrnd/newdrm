@@ -23,6 +23,7 @@ class LeaveReportController extends Controller
 
         // dd($employees);
         $leaveTypes = LeaveType::select('name','id','gender')->get();
+        $leaveTypesCount = $leaveTypes->count();
         $records = [];
         $dashboardController = new DashboardController;
 
@@ -81,7 +82,7 @@ class LeaveReportController extends Controller
             }
         }
         // dd("records",$records);
-        return  view('admin.leaveBalance.index',compact('records'));
+        return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount'));
     }
 
     private function getEmployeeLeaveBalance($employee,$type,$year){
