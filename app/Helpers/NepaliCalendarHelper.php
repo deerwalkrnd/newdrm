@@ -1,6 +1,6 @@
 <?php 
 
-class NepaliCalender{
+class NepaliCalendar{
 	private $nepali_date = ['year'=>'','month'=>'','day'=>''];
 	private $english_date = ['year'=>'','month'=>'','day'=>''];
 
