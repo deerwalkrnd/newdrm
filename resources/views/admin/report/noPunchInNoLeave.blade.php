@@ -4,6 +4,17 @@
 
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => "No Punch In No Leave Report"])
+
+<div class="d-flex justify-content-between flex-row">
+    <div class="w-25">
+        <label for="date">Date: </label>
+        <input type="date" name="date" id="date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
+    </div> 
+    <div >
+        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288">Reset</button>
+    </div>
+</div>
+<br>
 <table class="unit_table mx-auto drmDataTable">
     <thead>
         <tr class="table_title" style="background-color: #0f5288;">
@@ -23,7 +34,7 @@
                 @else
                     <td> -- </td>
                 @endif
-                <td>{{ date('Y-m-d') }}</td>
+                <td>{{ $date }}</td>
             </tr>          
         @empty
         <tr>
@@ -40,5 +51,16 @@
     $(document).ready(function() {
         $('.drmDataTable').DataTable();
     });
+
+    //Search leave by date 
+    function search(){
+        let date = $('#date').val();
+        if(date)
+            $(location).attr('href','/no-punch-in-leave?d='+date);
+    }
+
+    function reset(){
+        $(location).attr('href','/no-punch-in-leave');
+    }
 </script>
 @endsection

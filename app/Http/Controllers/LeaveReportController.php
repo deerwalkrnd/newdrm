@@ -173,20 +173,25 @@ class LeaveReportController extends Controller
         return view('admin.report.employeesOnLeave')->with(compact('acceptedRequests'));;
     }
 
-    public function noPunchInNoLeave()
+    public function noPunchInNoLeave(Request $request)
     {
+        if(isset($request->d))
+            $date = $request->d;
+        else
+            $date = date('Y-m-d');
+
         $noRecordList = Employee::select('id','first_name','last_name','middle_name','manager_id','contract_status')
                 ->with('manager:id,first_name,last_name')
                 ->where('contract_status','active')
-                ->whereDoesntHave('attendances', function ($query) {
-                        $query->whereDate('created_at', date('Y-m-d'));
+                ->whereDoesntHave('attendances', function ($query) use ($date) {
+                        $query->whereDate('created_at', $date);
                     })
-                ->whereDoesntHave('leaveRequest', function($query){
-                    $query->whereDate('start_date','<=',date('Y-m-d'))
-                        ->whereDate('end_date','>=',date('Y-m-d'));
+                ->whereDoesntHave('leaveRequest', function($query) use ($date){
+                    $query->whereDate('start_date','<=',$date)
+                        ->whereDate('end_date','>=',$date);
                 })
                 ->get();
-
-        return view('admin.report.noPunchInNoLeave')->with(compact('noRecordList'));
+        // dd($noRecordList);
+        return view('admin.report.noPunchInNoLeave')->with(compact('noRecordList','date'));
     }
 }
