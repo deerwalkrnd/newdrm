@@ -1,6 +1,6 @@
 <?php 
-
-class NepaliCalendar{
+namespace App\Helpers;
+class NepaliCalendarHelper{
 	private $nepali_date = ['year'=>'','month'=>'','day'=>''];
 	private $english_date = ['year'=>'','month'=>'','day'=>''];
 
@@ -230,7 +230,7 @@ class NepaliCalendar{
 		if($this->compare($base_date,$date) == -1)
 		{
 			$nepali_year--;
-			$base_date = $this->nep_eng[$nep_year]; 
+			$base_date = $this->nep_eng[$nepali_year]; 
 		}
 
 		$timeDiff = strtotime(implode('-',$date)) - strtotime(implode('-',$base_date));

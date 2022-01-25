@@ -9,6 +9,7 @@ use App\Models\YearlyLeave;
 use App\Models\Unit;
 use App\Models\LeaveType;
 use App\Http\Requests\YearlyLeaveRequest;
+use App\Helpers\NepaliCalendarHelper;
 
 class YearlyLeaveController extends Controller
 {
@@ -19,10 +20,21 @@ class YearlyLeaveController extends Controller
      */
    public function index(Request $request)
     {
+        try{
+            $date = new NepaliCalendarHelper(date('Y-m-d'),1);
+            // $date = new NepaliCalendarHelper('2078-07-11');
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            $thisYear = $nepaliDateArray[0];
+            // $month = $nepaliDateArray[1];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
         if(isset($request->y))
             $year = $request->y;
         else
-            $year = date('Y');
+            $year = $thisYear;
 
         // dd($year);
         $yearlyLeaves = YearlyLeave::select('id', 'unit_id','leave_type_id','days','status','year')
@@ -32,7 +44,8 @@ class YearlyLeaveController extends Controller
                         ->orderBy('unit_id')
                         ->get();
         // dd($yearlyLeaves);
-        return view('admin.yearlyLeave.index')->with(compact('yearlyLeaves'));
+       
+        return view('admin.yearlyLeave.index')->with(compact('yearlyLeaves','thisYear'));
     }
 
     /**
@@ -44,7 +57,18 @@ class YearlyLeaveController extends Controller
     {
         $units = Unit::select('id','unit_name')->get();
         $leaveTypes = LeaveType::select('id','name')->get();
-        return view('admin.yearlyLeave.create')->with(compact('units','leaveTypes'));
+         try{
+            $date = new NepaliCalendarHelper(date('Y-m-d'),1);
+            // $date = new NepaliCalendarHelper('2078-07-11');
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            $thisYear = $nepaliDateArray[0];
+            // $month = $nepaliDateArray[1];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
+        return view('admin.yearlyLeave.create')->with(compact('units','leaveTypes','thisYear'));
     }
 
     /**

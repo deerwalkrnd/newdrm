@@ -20,7 +20,6 @@ final class Helper
         $includeHoliday = LeaveType::select('include_holiday')->where('id',$leave_type_id)->get()->first();
         $s_date = date('Y-m-d',strtotime($start_date));
         $e_date = date('Y-m-d',strtotime($end_date));
-
         if($includeHoliday->include_holiday)
         {
             return (new self)->calculateTotalLeaveDays($s_date,$e_date);      
@@ -85,8 +84,19 @@ final class Helper
         return $day;
     }
 
+    private function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            return $nepaliDateArray[0];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
+    }
     public static function getRemainingDays($leave_type_id){
-        $year = date('Y');
+        $year = (new self)->getNepaliYear(date('Y-m-d'));
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
@@ -121,7 +131,7 @@ final class Helper
 
     public static function getRemainingCarryOverLeave()
     {
-        $year = date('Y');
+        $year = (new self)->getNepaliYear(date('Y-m-d'));
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)

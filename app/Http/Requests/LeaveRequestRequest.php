@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 use App\Helpers\Helper;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Helpers\NepaliCalendarHelper;
 
 class LeaveRequestRequest extends FormRequest
 {
@@ -30,8 +31,6 @@ class LeaveRequestRequest extends FormRequest
         
         $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id);
        
-        // dd($calcDay);
-
         //if leave_type is carry_over leave make seperate calculation carry over leave id is 2
         if($leave_type_id != 2)
         {
@@ -43,10 +42,9 @@ class LeaveRequestRequest extends FormRequest
         if(\Request::input('leave_time') != 'full')
             $remainingDays = $remainingDays * 2;
 
-        $start_date_year = date('Y',strtotime($start_date));
         return [
             'start_date' => 'required|date|after_or_equal:'.$today,
-            'end_date' => 'required|date|after_or_equal:start_date|starts_with:'.$start_date_year,
+            'end_date' => 'required|date|after_or_equal:start_date',
             'days' => 'required|integer|in:'.$calcDay.'|max:'.$remainingDays,
             'leave_type_id' => 'required|integer',
             'leave_time' => 'required|in:full,first,second',
@@ -57,7 +55,7 @@ class LeaveRequestRequest extends FormRequest
     public function messages()
     {
         return [
-            'max' => 'Leave Limit Exceeded'
+            'max' => 'Leave Limit Exceeded',
         ];
     }
 }
