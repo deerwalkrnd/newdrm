@@ -20,9 +20,12 @@
     <div class="col-md-4">
         <label class="form-label" for="year">Year: </label>
         <select class="form-control p-2" name="year" onchange="search()" id="year">
-            @for($i=2011; $i<= date('Y'); $i++)
-                <option value="{{$i}}" {{ (request()->get('d')) ? (request()->get('d')==$i ? 'selected':'') :($i == date('Y') ? 'selected':'') }}>{{ $i }}</option>
+            @for($i=2067; $i<= $thisYear; $i++)
+                <option value="{{$i}}" {{ (request()->get('d')) ? (request()->get('d')==$i ? 'selected':'') :($i == $thisYear ? 'selected':'') }}>{{ $i }}</option>
             @endfor
+            <!-- @for($i=2011; $i<= date('Y'); $i++)
+                <option value="{{$i}}" {{ (request()->get('d')) ? (request()->get('d')==$i ? 'selected':'') :($i == date('Y') ? 'selected':'') }}>{{ $i }}</option>
+            @endfor -->
         </select>
     </div> 
     <!-- <div class="col-md-3"></div> -->

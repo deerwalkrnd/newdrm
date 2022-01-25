@@ -9,14 +9,30 @@ use App\Models\LeaveType;
 use App\Models\YearlyLeave;
 use App\Models\Employee;
 use App\Http\Controllers\DashboardController;
+use App\Helpers\NepaliCalendarHelper;
 
 class LeaveReportController extends Controller
 {
+    public function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            return $nepaliDateArray[0];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
+    }
     public function leaveBalance(Request $request)
     {
         // return  view('admin.leaveBalance.index');
         // dd($request->e);
-         if(isset($request->e))
+        
+        //this year
+        $thisYear = $this->getNepaliYear(date('Y-m-d'));
+       
+        if(isset($request->e))
             $employees = Employee::where('contract_status','active')->where('id',$request->e)->get();
         else
             $employees = Employee::where('contract_status','active')->get();
@@ -37,10 +53,9 @@ class LeaveReportController extends Controller
                 $start_year = $request->d;
                 $end_year = $request->d;
             }else{
-                $start_year =  date('Y',strtotime($employee->join_date));
-                $end_year = date('Y');
+                $start_year = $this->getNepaliYear($employee->join_date);
+                $end_year = $thisYear;
             }
-            // dd($start_year);
             for($year=$start_year; $year <= $end_year; $year++)
             {
                 $temp['leaves']['year'] = $year;
@@ -82,7 +97,7 @@ class LeaveReportController extends Controller
             }
         }
         // dd("records",$records);
-        return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount'));
+        return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear'));
     }
 
     private function getEmployeeLeaveBalance($employee,$type,$year){

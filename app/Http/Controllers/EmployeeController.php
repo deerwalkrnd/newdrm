@@ -20,6 +20,7 @@ use App\Models\User;
 use App\Models\EmergencyContact;
 use App\Models\Manager;
 use App\Models\CarryOverLeave;
+use App\Helpers\NepaliCalendarHelper;
 
 use App\Actions\Fortify\CreateNewUser;
 
@@ -41,10 +42,21 @@ class EmployeeController extends Controller
         ->orderBy('first_name') 
         ->orderBy('last_name')
         ->get();
-
-        // dd($employees);
+        $join_year =[];
+        foreach ($employees as $employee){
+            try{
+                $date = new NepaliCalendarHelper($employee->join_date,1);
+                $nepaliDate = $date->in_bs();
+                $nepaliDateArray = explode('-',$nepaliDate);
+                array_push($join_year,$nepaliDateArray[0]);
+            }catch(Exception $e)
+            {
+                print_r($e->getMessage());
+            }
+        }
         
-        return view('admin.employee.index')->with(compact('employees'));
+        // dd($join_year);
+        return view('admin.employee.index')->with(compact('employees','join_year'));
     }
 
     /**

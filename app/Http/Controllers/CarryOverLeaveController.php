@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\LeaveRequest;
 use App\Models\CarryOverLeave;
-
+use App\Helpers\NepaliCalendarHelper;
 
 class CarryOverLeaveController extends Controller
 {
@@ -14,7 +14,19 @@ class CarryOverLeaveController extends Controller
     // calculate by finding the max day between remaining personal leave and 8
     public function calculateCarryOverLeave()
     {
-        $year = date('Y') - 1; //previous year
+       //previous year
+        try{
+            $previous_year = date('Y-m-d');
+            $date = new NepaliCalendarHelper($previous_year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            $year = $nepaliDateArray[0] - 1; //previous Year  
+            // dd($year);
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
+        // $year = date('Y') - 1; 
         //add the year column in leave request section
         $maxPersonalLeave = 13;
         $carryOverLeaveList = LeaveRequest::select('employee_id',\DB::raw('SUM(days) as days'))

@@ -96,6 +96,12 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
+            <label for="year">Year: </label>
+        <!-- <select class="form-control" name="year"  id="year">
+            @for($i=$thisYear-5; $i<= $thisYear+10; $i++)
+                <option value="{{$i}}" {{ !empty(old('year')) ? old('year') : $yearlyLeaves->year ?? '' }}>{{ $i }}</option>
+            @endfor
+        </select> -->
             <label for="year">Year*</label>
             <input type="number" class="form-control" id="year" placeholder="Enter Leave Year" name="year" value="{{ !empty(old('year')) ? old('year') : $yearlyLeaves->year ?? '' }}" >  
             @error('year')

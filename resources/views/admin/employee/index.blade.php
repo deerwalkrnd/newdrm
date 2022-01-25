@@ -29,7 +29,8 @@
     </tr>
     </thead>
     <tbody>
-    @forelse($employees as $employee)
+    @php($i=0)
+    @forelse($employees as $employee)  
     <tr>
         <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
         <td><a href="/employee/edit/{{$employee->id}}">{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</a></td>
@@ -39,7 +40,7 @@
         <td>{{ $employee->unit->unit_name }}</td>
         <td>{{ $employee->intern_trainee_ship_date }}</td>
         <td>{{ $employee->join_date }}</td>
-        <td>{{ date('Y',strtotime($employee->join_date))}}</td>
+        <td>{{ $join_year[$i]}}</td>
         <td>{{ $employee->serviceType->service_type_name }}</td>
         <td>{{ $employee->designation->job_title_name }}</td>
         <td class="text-center">
@@ -52,6 +53,7 @@
             </form> -->
         </td>
     </tr>
+    @php($i++) 
     @empty
     <tr>
         <th colspan=11 class="text-center text-dark">No Employee Created</th>
