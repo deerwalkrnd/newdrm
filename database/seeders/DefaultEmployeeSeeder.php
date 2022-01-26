@@ -142,28 +142,28 @@ class DefaultEmployeeSeeder extends Seeder
             'leave_type_id' => '1',
             'days' => '13',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
          DB::table('yearly_leaves')->insert([
             'unit_id' => '1',
             'leave_type_id' => '3',
             'days' => '12',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
         DB::table('yearly_leaves')->insert([
             'unit_id' => '1',
             'leave_type_id' => '4',
             'days' => '60',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
          DB::table('yearly_leaves')->insert([
             'unit_id' => '1',
             'leave_type_id' => '5',
             'days' => '15',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
 
         DB::table('yearly_leaves')->insert([
@@ -171,28 +171,28 @@ class DefaultEmployeeSeeder extends Seeder
             'leave_type_id' => '1',
             'days' => '13',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
          DB::table('yearly_leaves')->insert([
             'unit_id' => '2',
             'leave_type_id' => '3',
             'days' => '12',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
         DB::table('yearly_leaves')->insert([
             'unit_id' => '2',
             'leave_type_id' => '4',
             'days' => '60',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
          DB::table('yearly_leaves')->insert([
             'unit_id' => '2',
             'leave_type_id' => '5',
             'days' => '15',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
 
         DB::table('yearly_leaves')->insert([
@@ -200,39 +200,39 @@ class DefaultEmployeeSeeder extends Seeder
             'leave_type_id' => '6',
             'days' => '12',
             'status' => 'active',
-            'year' => '2022'
+            'year' => '2078'
         ]);
         
         //Holidays
         DB::table('holidays')->insert([
             'name' => 'Christmas for DWIT',
             'unit_id'=>'1',
-            'date' => '2022-01-10',
+            'date' => '2078-01-10',
             'female_only' => '0'
         ]);
          DB::table('holidays')->insert([
             'unit_id'=>'1',
             'name' => 'Teej for DWIT',
-            'date' => '2022-03-11',
+            'date' => '2078-03-11',
             'female_only' => '1'
         ]);
 
         DB::table('holidays')->insert([
             'name' => 'Christmas for DSS',
             'unit_id'=>'2',
-            'date' => '2022-01-12',
+            'date' => '2078-01-12',
             'female_only' => '0'
         ]);
          DB::table('holidays')->insert([
             'unit_id'=>'2',
             'name' => 'Teej for DSS',
-            'date' => '2022-01-13',
+            'date' => '2078-01-13',
             'female_only' => '1'
         ]);
 
         DB::table('holidays')->insert([
             'name' => 'Sahid Diwas for All',
-            'date' => '2022-01-14',
+            'date' => '2078-01-14',
             'female_only' => '0'
         ]);
         //Employees, users and emergency contacts
@@ -555,7 +555,7 @@ class DefaultEmployeeSeeder extends Seeder
             'start_date' => '2022-1-5',
             'end_date' => '2022-1-6',
             'days'=>'2',
-            'year'=>'2022',
+            'year'=>'2078',
             'leave_type_id'=>'1',
             'full_leave'=>'1',
             'acceptance' => 'pending',
@@ -568,7 +568,7 @@ class DefaultEmployeeSeeder extends Seeder
             'start_date' => '2022-1-4',
             'end_date' => '2022-1-4',
             'days'=>'1',
-            'year'=>'2022',
+            'year'=>'2078',
             'leave_type_id'=>'1',
             'half_leave'=>'first',
             'acceptance' => 'pending',
@@ -580,13 +580,29 @@ class DefaultEmployeeSeeder extends Seeder
             'start_date' => '2022-1-5',
             'end_date' => '2022-1-5',
             'days'=>'1',
-            'year'=>'2022',
+            'year'=>'2078',
             'leave_type_id'=>'1',
             'full_leave'=>'1',
             'reason'=>'sick',
             'acceptance' => 'pending',
             'requested_by'=>'5',
-        ]);      
+        ]);    
         
+        DB::table('times')->insert([
+            'name'=>'Punch in Maximum Time',
+            'time' => '09:20:00',
+        ]);
+        DB::table('times')->insert([
+            'name'=>'Second Half Leave Maximum Punch in Time',
+            'time' => '13:30:00',
+        ]);
+        DB::table('times')->insert([
+            'name'=>'Punch Out Minimum Time',
+            'time' => '18:00:00',
+        ]);
+        DB::table('times')->insert([
+            'name'=>'First Half Leave Minimum Punch Out Time',
+            'time' => '13:30:00',
+        ]);
     }
 }

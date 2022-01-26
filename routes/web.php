@@ -25,6 +25,7 @@ use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\PunchInOutReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\TimeController;
 
 
 /*
@@ -270,6 +271,13 @@ Route::middleware(['manager'])->group(function(){
 
 // lowest level hr
 Route::middleware(['hr'])->group(function(){
+    //time setting
+    Route::get('/time',[TimeController::class,'index']);
+    Route::put('/time/{id}',[TimeController::class,'store']);
+    // Route::put('/time/{id}',function(){
+    //     dd("here");
+    // });
+
     //mailSetting
     Route::get('/mail',[MailController::class,'index']);
     Route::post('/mail/{id}',[MailController::class,'store']);

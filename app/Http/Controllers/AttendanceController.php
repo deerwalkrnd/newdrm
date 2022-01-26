@@ -12,6 +12,7 @@ use App\Http\Controllers\SendMailController;
 use App\Helpers\MailHelper;
 
 use App\Models\LeaveType;
+use App\Models\Time;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -87,10 +88,11 @@ class AttendanceController extends Controller
                 $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                             ->whereDate('end_date', '>=', $presentTime)
                             ->where('employee_id', \Auth::user()->employee_id)->count();
-
+                $max_punch_in_time = Time::select('id','time')->where('id','1')->first()->time;
+                $second_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
                 if($hasAnyLeave == 0)
                 {
-                    $maxTime = strtotime(date('Y-m-d').' 09:20:00');
+                    $maxTime = strtotime(date('Y-m-d').' '.$max_punch_in_time);
                 }else{
                     $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                             ->whereDate('end_date', '>=', $presentTime)
@@ -100,7 +102,7 @@ class AttendanceController extends Controller
                         $half = $leave->half_leave;
                         if($half == 'second')
                         {
-                            $maxTime = strtotime(date('Y-m-d').' 13:30:00');
+                            $maxTime = strtotime(date('Y-m-d').' '.$second_half_leave_max_punch_in_time);
                         }
                     }
                 }
@@ -149,10 +151,12 @@ class AttendanceController extends Controller
             $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                         ->whereDate('end_date', '>=', $presentTime)
                         ->where('employee_id', \Auth::user()->employee_id)->count();
+            $min_punch_out_time = Time::select('id','time')->where('id','3')->first()->time;
+            $first_half_leave_min_punch_out_time = Time::select('id','time')->where('id','4')->first()->time;
 
             if($hasAnyLeave == 0)
             {
-                $minTime = strtotime(date('Y-m-d').' 18:00:00');
+                $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
             }else{
                 $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                         ->whereDate('end_date', '>=', $presentTime)
@@ -162,7 +166,7 @@ class AttendanceController extends Controller
                     $half = $leave->half_leave;
                     if($half == 'first')
                     {
-                        $minTime = strtotime(date('Y-m-d').' 13:30:00');
+                        $minTime = strtotime(date('Y-m-d').' '.$first_half_leave_min_punch_out_time);
                     }
                 }
             }

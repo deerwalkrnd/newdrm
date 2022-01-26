@@ -1,6 +1,6 @@
 @extends('layouts.hr.app')
 
-@section('title','Leave Request')
+@section('title','Time Setting')
 
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => "Mail Setting", "url" => "/leave-request/create"])
@@ -33,12 +33,11 @@
         </tr>
         @empty
         <tr>
-            <th colspan=11 class="text-center text-dark">No LeaveRequest Found</th>
+            <th colspan=11 class="text-center text-dark">No Mail Setting Found</th>
         </tr>
         @endforelse
     </tbody>
 </table>
-{{-- $leaveRequests->links() --}}
 
 @include('layouts.basic.tableFoot')
 @endsection
