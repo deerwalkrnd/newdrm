@@ -22,13 +22,9 @@
                 <center>
                     <form method="POST" action="/time/{{$time->id}}">
                         @csrf
-                        @method('PUT')
                         <label for="time"></label>
-                        <input type="time" name="time" value="{{!empty(old('time')) ? old('time') : $time->time ?? ''}}">
+                        <input type="time" name="time" value="{{!empty(old('time')) ? old('time') : date('H:i',strtotime($time->time)) ?? ''}}">
                         <button type="submit" class="btn btn-primary p-2">Set</button>
-                        <!-- {{ !empty(old('time')) ? old('time') : $time->time ?? '' }} -->
-                        <!-- {{ !empty(old('first_name')) ? old('first_name') : $employee->first_name ?? '' }} -->
-                        <!-- <input onchange="this.form.submit()" class="form-check-input" name="time" value="1" type="checkbox" role="switch" id="time"  -->
                     </form>
                 </center>   
             </td>    

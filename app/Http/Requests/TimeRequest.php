@@ -25,7 +25,6 @@ class TimeRequest extends FormRequest
     {
         return [
             'time' => 'date_format:H:i',
-            // 'time' => 'nullable',
         ];
     }
 }

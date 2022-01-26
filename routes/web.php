@@ -273,7 +273,7 @@ Route::middleware(['manager'])->group(function(){
 Route::middleware(['hr'])->group(function(){
     //time setting
     Route::get('/time',[TimeController::class,'index']);
-    Route::put('/time/{id}',[TimeController::class,'store']);
+    Route::post('/time/{id}',[TimeController::class,'store']);
     // Route::put('/time/{id}',function(){
     //     dd("here");
     // });

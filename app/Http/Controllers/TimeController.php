@@ -40,8 +40,8 @@ class TimeController extends Controller
         $time = Time::findOrFail($id);
         $time->update($input);
         $res = [
-            'title' => 'Send Mail Updated',
-            'message' => 'Send Mail has been successfully Updated',
+            'title' => 'Time Updated',
+            'message' => 'Time has been successfully Updated',
             'icon' => 'success'
         ];
         return redirect('/time')->with(compact('res'));
