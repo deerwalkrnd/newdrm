@@ -172,9 +172,10 @@
 
                                         <tr>
                                             <td></td>
-                                            
                                             <td></td>
-                                            
+                                            <td class="hr_menu_content"><a href="/time"><img class="img-fluid"
+                                                src="/assets/images/icons/time.png">Time Setting
+                                            </a></td>
                                         </tr>
 
                                     </table>
