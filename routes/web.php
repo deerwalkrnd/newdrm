@@ -274,9 +274,6 @@ Route::middleware(['hr'])->group(function(){
     //time setting
     Route::get('/time',[TimeController::class,'index']);
     Route::post('/time/{id}',[TimeController::class,'store']);
-    // Route::put('/time/{id}',function(){
-    //     dd("here");
-    // });
 
     //mailSetting
     Route::get('/mail',[MailController::class,'index']);

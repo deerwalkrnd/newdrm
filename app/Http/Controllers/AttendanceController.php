@@ -10,6 +10,7 @@ use App\Models\Mail;
 use App\Models\LeaveRequest;
 use App\Http\Controllers\SendMailController;
 use App\Helpers\MailHelper;
+use App\Helpers\NepaliCalendarHelper;
 
 use App\Models\LeaveType;
 use App\Models\Time;
@@ -84,30 +85,38 @@ class AttendanceController extends Controller
         if(!$this->recordRowExists()){
             if($request->code == $this->verificationCode)
             {
-                $presentTime = strtotime(Carbon::now());
+                $presentTime = Carbon::now()->format('Y-m-d');
+                // $presentTime = strtotime(Carbon::now());
+                // dd(LeaveRequest::whereDate('start_date','<=',$presentTime)->first());
+                // dd(strtotime(LeaveRequest::select('start_date')->where('id','5')->first()->start_date) <= $presentTime ?'yes':'no');
                 $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                             ->whereDate('end_date', '>=', $presentTime)
                             ->where('employee_id', \Auth::user()->employee_id)->count();
+                // dd($hasAnyLeave);
                 $max_punch_in_time = Time::select('id','time')->where('id','1')->first()->time;
-                $second_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
+                $first_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
                 if($hasAnyLeave == 0)
                 {
+                    // dd("here");
                     $maxTime = strtotime(date('Y-m-d').' '.$max_punch_in_time);
                 }else{
                     $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                             ->whereDate('end_date', '>=', $presentTime)
-                            ->where('employee_id', \Auth::user()->employee_id)->get();
+                            ->where('employee_id', \Auth::user()->employee_id)->first();
+                    // dd($leave->full_leave);
                     $full_leave = $leave->full_leave;
                     if($full_leave == 0){
                         $half = $leave->half_leave;
-                        if($half == 'second')
+                        // dd($half);
+                        if($half == 'first')
                         {
-                            $maxTime = strtotime(date('Y-m-d').' '.$second_half_leave_max_punch_in_time);
+                            $maxTime = strtotime(date('Y-m-d').' '.$first_half_leave_max_punch_in_time);
                         }
                     }
                 }
                 
-                $isLate = $presentTime <= $maxTime ? '0' : '1';
+                $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
+                // dd($isLate,$maxTime,$presentTime);
                 $reason = $request->reason;
 
                 if($isLate)
@@ -147,12 +156,15 @@ class AttendanceController extends Controller
         $today = date('Y-m-d');
         if($this->recordRowExists() && !$this->hasPunchOut())
         {
-            $presentTime = strtotime(Carbon::now());
+            // $presentTime = strtotime(Carbon::now());
+            $presentTime = Carbon::now()->format('Y-m-d');
+
             $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                         ->whereDate('end_date', '>=', $presentTime)
                         ->where('employee_id', \Auth::user()->employee_id)->count();
+            // dd($hasAnyLeave);
             $min_punch_out_time = Time::select('id','time')->where('id','3')->first()->time;
-            $first_half_leave_min_punch_out_time = Time::select('id','time')->where('id','4')->first()->time;
+            $second_half_leave_min_punch_out_time = Time::select('id','time')->where('id','4')->first()->time;
 
             if($hasAnyLeave == 0)
             {
@@ -160,19 +172,23 @@ class AttendanceController extends Controller
             }else{
                 $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                         ->whereDate('end_date', '>=', $presentTime)
-                        ->where('employee_id', \Auth::user()->employee_id)->get();
+                        ->where('employee_id', \Auth::user()->employee_id)->first();
                 $full_leave = $leave->full_leave;
                 if($full_leave == 0){
                     $half = $leave->half_leave;
-                    if($half == 'first')
+                    if($half == 'second')
                     {
-                        $minTime = strtotime(date('Y-m-d').' '.$first_half_leave_min_punch_out_time);
+                        // dd('her');
+                        $minTime = strtotime(date('Y-m-d').' '.$second_half_leave_min_punch_out_time);
+                        echo $minTime;
+                    }else{
+                        $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
                     }
                 }
             }
 
-            $issueForcedLeave = $presentTime < $minTime ? '1' : '0';
-
+            $issueForcedLeave = strtotime(Carbon::now()) < $minTime ? '1' : '0';
+            // dd($issueForcedLeave,$minTime,strtotime(Carbon::now()));
             $attendance = Attendance::select('punch_out_time')
                         ->where('employee_id',$employee_id)
                         ->whereDate('created_at',$today)
@@ -182,20 +198,18 @@ class AttendanceController extends Controller
                         ]);
             \Session::put('punchIn', '3');
 
-            $issueForcedLeave = 1;
-
             if($issueForcedLeave == 1)
             {
-                // dd("Hereee");/
                 try{
                 LeaveRequest::create([
                     'employee_id' => \Auth::user()->employee_id,
                     'start_date' => date('Y-m-d'),
                     'end_date' => date('Y-m-d'),
                     'days' => '1',
-                    'year' => date('Y'),
+                    'year' => $this->getNepaliYear(date('Y-m-d')),
                     'leave_type_id' => '1',
                     'full_leave' => '0',
+                    'half_leave' => 'second',
                     'reason' => 'Forced (System)',
                     'acceptance' => 'accepted',
                     'requested_by' => \Auth::user()->employee_id,
@@ -219,5 +233,16 @@ class AttendanceController extends Controller
                     ->get();
 
         return view('admin.attendance.myPunchIn')->with(compact('myPunchInList'));
+    }
+    public function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            return $nepaliDateArray[0];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
     }
 }
