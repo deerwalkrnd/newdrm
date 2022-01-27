@@ -39,6 +39,32 @@
 
 @section('scripts')
 <script>
+    $(document).ready(function() {
+        shiftTime();
+    })
+    function shiftTime(){
+        var ddl = document.getElementById("shift_id");
+        // console.log(ddl.options[ddl.selectedIndex]);
+        var selectedValue = ddl.options[ddl.selectedIndex].value;
+        // console.log('selected id: ',selectedValue,selectedValue-1);
+        var shifts =document.getElementsByClassName('requireTime');
+        // console.log(shifts[0].value);
+        var shift_timings = document.getElementById('shift_time');
+        if(shifts.length > 0){
+            for(var i=0;i<=shifts.length;i++){
+                // console.log(shifts[i].value);
+                if(shifts[i].value == selectedValue){
+                    console.log(shifts[i].value);
+                    $('#shift_time').show();
+                    break;
+                }else{
+                    $('#shift_time').hide();
+                }
+            }
+        }else{
+            $('#shift_time').hide();
+        }
+    }
     $('.manager-livesearch').select2({    
         ajax: {
             url: '/employee/search',

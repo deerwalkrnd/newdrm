@@ -17,10 +17,6 @@ class CreateTimesTable extends Migration
             $table->id();
             $table->string('name');
             $table->time('time');
-            // $table->time('punch_in_max_time');
-            // $table->time('half_leave_punch_in_max_time');
-            // $table->time('punch_out_min_time');
-            // $table->time('half_leave_punch_out_min_time');
             $table->timestamps();
         });
     }

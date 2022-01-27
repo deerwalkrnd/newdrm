@@ -72,10 +72,9 @@ class EmployeeController extends Controller
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
-        $shifts = Shift::select('id','name')->get();
+        $shifts = Shift::select('id','name','time_required')->get();
         $roles = Role::select('id','authority')->get();
         $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
-        // dd($managers);
 
         return view('admin.employee.create')->with(compact('managers','units','organizations','designations','provinces','districts','serviceTypes','shifts','roles'));
     }
@@ -91,7 +90,6 @@ class EmployeeController extends Controller
         //get validated input
         // dd($request);
         $input = $request->validated();
-
         // reset temporary address
         if($input['temp_add_same_as_per_add'] == 1)
         {
@@ -103,9 +101,15 @@ class EmployeeController extends Controller
                 );            
         }
 
+        $shift = Shift::findOrFail($input['shift_id']);
+        if(!$shift->time_required){
+            unset(
+                $input['start_time'],
+                $input['end_time']
+            );
+        }
         $user = [];
         $emergency_contact =[];
-        // dd($input['manager_id']);
 
         //store image
         $image = $request->file('image');
@@ -181,17 +185,13 @@ class EmployeeController extends Controller
     {
         // dd($id);
         $employee = Employee::with('emergencyContact')->findOrFail($id);
-        // dd($employee);
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
         $designations = Designation::select('id','job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
-        $shifts = Shift::select('id','name')->get();
-
-        // $emergency_contacts = EmergencyContact::select('id','first_name','last_name','middle_name','relationship','phone_no','alternate_phone_no')->where('employee_id',$id)->get();
-        // $emergencyContact = EmergencyContact::FindOrFail($id);
+        $shifts = Shift::select('id','name','time_required')->get();
         $user = User::select('id','username')->where('employee_id',$id)->get();
         $roles = Role::select('id','authority')->get();
         $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
@@ -222,6 +222,12 @@ class EmployeeController extends Controller
                 );            
         }
 
+        $shift = Shift::findOrFail($input['shift_id']);
+        if(!$shift->time_required){
+                $input['start_time']=NULL;
+                $input['end_time']=NULL;
+        }
+
         $user = [];
         $emergency_contact =[];
         //store image
@@ -250,7 +256,7 @@ class EmployeeController extends Controller
      
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
         unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
- 
+        
         DB::beginTransaction();
         try {
             $employee->update($input);

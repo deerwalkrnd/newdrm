@@ -69,6 +69,8 @@ class EmployeeRequest extends FormRequest
             'username' => 'required|string|max:255|unique:users,username,'.$this->id,
             'role' => 'required|exists:roles,id',
             'shift_id' => 'required|max:255|integer',
+            'start_time' => 'date_format:H:i|nullable',
+            'end_time' => 'date_format:H:i|nullable',
             'remarks' => 'nullable|max:255|string',
             'emg_first_name' =>'required|max:255|string',
             'emg_middle_name' =>'nullable|max:255|string',
