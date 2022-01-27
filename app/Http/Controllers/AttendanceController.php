@@ -188,7 +188,6 @@ class AttendanceController extends Controller
             }
 
             $issueForcedLeave = strtotime(Carbon::now()) < $minTime ? '1' : '0';
-            // dd($issueForcedLeave,$minTime,strtotime(Carbon::now()));
             $attendance = Attendance::select('punch_out_time')
                         ->where('employee_id',$employee_id)
                         ->whereDate('created_at',$today)
