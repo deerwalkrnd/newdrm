@@ -599,6 +599,30 @@
 </div>
 <!-- Shift -->
 
+<div class="row"  id="shift_time" style="display:none;">
+    <div class="col-md-6">
+        <div class="mb-4">
+            <label class="form-label" for="start_time">Start Time</label>
+            <input disabled type="time" class="form-control" id="start_time" placeholder="Enter Employee\'s Shift Start time" name="start_time" value="{{ isset($employee->start_time) ? date('H:i',strtotime($employee->start_time)):''}}">
+            @error('start_time')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- Start Time -->
+    <div class="col-md-6">
+        <div class="mb-4">
+            <label class="form-label" for="end_time">End Time</label>
+            <input disabled type="time" class="form-control" id="end_time" placeholder="Enter Employee\'s Shift End time" name="end_time" value="{{ isset($employee->end_time)?date('H:i',strtotime($employee->end_time)):''}}">
+            @error('end_time')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- End Time -->
+<!-- Shift Timeif required -->
+
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">

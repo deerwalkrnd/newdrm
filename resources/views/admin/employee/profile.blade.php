@@ -30,3 +30,14 @@
 </section>
 <!-- form end -->
 @endsection
+@section('scripts')
+<script>
+    $(document).ready(function(){
+        var start_time = $("#start_time").val();
+        var end_time = $('#end_time').val();
+        if(start_time && end_time)
+            $('#shift_time').show();
+    })
+    
+</script>
+@endsection
