@@ -105,7 +105,12 @@ class RoleController extends Controller
         try{
             $role = Role::findOrFail($id);
             $role->delete();
-            return redirect('/role');
+            $res = [
+                'title' => 'Role Deleted',
+                'message' => 'Role has been successfully Deleted',
+                'icon' => 'success'
+            ];
+            return redirect('/role')->with(compact('res'));
         }catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
                 return redirect()->back();

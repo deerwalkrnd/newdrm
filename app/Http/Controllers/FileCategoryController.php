@@ -104,7 +104,12 @@ class FileCategoryController extends Controller
         try{
             $fileCategory = FileCategory::findOrFail($id);
             $fileCategory->delete();
-            return redirect('/file-category');
+            $res = [
+            'title' => 'File Category Deleted ',
+            'message' => 'File Category has been successfully Deleted ',
+            'icon' => 'success'
+        ];
+        return redirect('/file-category')->with(compact('res'));
         }
         catch(\Illuminate\Database\QueryException $e){
              if($e->getCode() == "23000"){

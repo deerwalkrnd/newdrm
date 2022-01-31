@@ -116,7 +116,12 @@ class ManagerController extends Controller
         try{
             $manager = Manager::findOrFail($id);
             $manager->delete();
-            return redirect('/manager');
+            $res = [
+                'title' => 'Manager Deleted',
+                'message' => 'Manager has been successfully Deleted',
+                'icon' => 'success'
+            ];
+            return redirect('/manager')->with(compact('res'));
         }
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){

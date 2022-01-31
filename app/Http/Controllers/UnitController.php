@@ -112,6 +112,11 @@ class UnitController extends Controller
     {
         $unit = Unit::findOrFail($id);
         $unit->delete();
-        return redirect('/unit');
+        $res = [
+            'title' => 'Unit Deleted',
+            'message' => 'Unit has been successfully Deleted',
+            'icon' => 'success'
+        ];
+        return redirect('/unit')->with(compact('res'));
     }
 }

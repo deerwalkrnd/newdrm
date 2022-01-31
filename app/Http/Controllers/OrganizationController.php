@@ -110,8 +110,12 @@ class OrganizationController extends Controller
         try{
             $organization = Organization::findOrFail($id);
             $organization->delete();
-            return redirect('/organization');
-    
+            $res = [
+                'title' => 'Organization Deleted',
+                'message' => 'Organization has been successfully Deleted',
+                'icon' => 'success'
+            ];
+            return redirect('/organization')->with(compact('res'));
         }catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
                 return redirect()->back();
