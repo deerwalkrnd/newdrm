@@ -103,6 +103,7 @@ class YearlyLeaveController extends Controller
         $yearlyLeaves = YearlyLeave::select('id', 'unit_id','leave_type_id','days','status','year')->findOrFail($id);
         $units = Unit::select('id','unit_name')->get();
         $leaveTypes = LeaveType::select('id','name')->get();
+        unset($leaveTypes[1]);
         $thisYear = $this->getNepaliYear(date('Y-m-d'));
         return view('admin.yearlyLeave.edit')->with(compact('yearlyLeaves','units','leaveTypes','thisYear'));
     }
