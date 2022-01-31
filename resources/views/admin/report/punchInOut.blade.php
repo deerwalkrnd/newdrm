@@ -7,10 +7,8 @@
 
 
 <div class="row">
-    <div class="mb-2 w-25">
-
+    <div class="col-md-4">
         <label class="form-label" for="employee_id">Employee:</label>
-
         <select class="employee-livesearch form-control p-3" onchange="search()"  name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
             @if(!empty(old('employee_id')))
                 <option value="{{ request()->get('e') }}" selected="selected">{{ old('$employeeSearch->first_name') }}</option>
@@ -19,17 +17,15 @@
             @endif
         </select>
     </div>
-</div>
-
-<div class="d-flex justify-content-between flex-row">
-    <div class="w-25">
-        <label for="date">Date: </label>
-        <input type="date" name="punch_date" id="punch_date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
+    <div class="col-md-4">
+        <label class="form-label" for="date">Date: </label>
+        <input class="form-control p-2"  type="date" name="punch_date" id="punch_date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
     </div> 
-    <div >
-        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288">Reset</button>
+    <div class="col-md-4">
+        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;">Reset</button>
     </div>
 </div>
+
 <br>
 <table class="unit_table mx-auto drmDataTable">
     <thead>

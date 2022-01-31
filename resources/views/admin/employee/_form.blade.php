@@ -725,13 +725,16 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="shift_id">Shift*</label>
-            <select class="form-control" id="shift_id" name="shift_id">
+            <select class="form-control" id="shift_id" name="shift_id" onchange="shiftTime()">
                 <option value="" disabled="disabled" selected="selected">-- Choose Shift --</option>
                 @forelse($shifts as $shift)
                 <option 
                     value="{{ $shift->id}}" 
                     {{ (!empty(old('shift_id')) && old('shift_id') == $shift->id) ? 'selected': ''}}
                     {{ (isset($employee) && $employee->shift_id == $shift->id && empty(old('shift_id'))) ? 'selected' : '' }} 
+                    @if($shift->time_required == 1)
+                        class="requireTime"
+                    @endif
                     >
                     {{ $shift->name }}
                 </option>
@@ -746,6 +749,30 @@
     </div>
 </div>
 <!-- Shift -->
+
+<div class="row" style="display:none;" id="shift_time">
+    <div class="col-md-6">
+        <div class="mb-4">
+            <label class="form-label" for="start_time">Start Time</label>
+            <input type="time" class="form-control" id="start_time" placeholder="Enter Employee\'s Shift Start time" name="start_time" value="{{ !empty(old('start_time')) ? old('start_time') :(isset($employee->start_time)?date('H:i',strtotime($employee->start_time)):'')?? '' }}">
+            @error('start_time')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- Start Time -->
+    <div class="col-md-6">
+        <div class="mb-4">
+            <label class="form-label" for="end_time">End Time</label>
+            <input type="time" class="form-control" id="end_time" placeholder="Enter Employee\'s Shift End time" name="end_time" value="{{ !empty(old('end_time')) ? old('end_time') : (isset($employee->end_time)?date('H:i',strtotime($employee->end_time)):'')?? '' }}">
+            @error('end_time')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- End Time -->
+<!-- Shift Timeif required -->
 
 <div class="row">
     <div class="col-md-12">

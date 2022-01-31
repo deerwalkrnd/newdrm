@@ -172,9 +172,10 @@
 
                                         <tr>
                                             <td></td>
-                                            
                                             <td></td>
-                                            
+                                            <td class="hr_menu_content"><a href="/time"><img class="img-fluid"
+                                                src="/assets/images/icons/time.png">Time Setting
+                                            </a></td>
                                         </tr>
 
                                     </table>
@@ -191,11 +192,11 @@
                     </li>
                     @endif
                     <li class="nav-item navigation_item">
-                        <a class="nav-link navigation_link" href="/my-file-upload"><i class="fas fa-address-book icon"></i>
+                        <a class="nav-link navigation_link" href="/my-file-upload"><i class="fas fa-file-alt icon"></i>
                             My Files</a>
                     </li>
                     <li class="nav-item navigation_item">
-                        <a class="nav-link navigation_link" href="/my-holiday"><i class="fas fa-address-book icon"></i>
+                        <a class="nav-link navigation_link" href="/my-holiday"><i class="fas fa-sleigh icon"></i>
                             My Holiday</a>
                     </li>
                     <li class="nav-item navigation_item">

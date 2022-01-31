@@ -3,7 +3,7 @@
 @section('title','Leave Report')
 
 @section('content')
-@include('layouts.basic.tableHead',["table_title" => "Leave Balance"])
+@include('layouts.basic.tableHead',["table_title" => "Leave Balance Report"])
 
 
 <div class="row">
@@ -20,9 +20,12 @@
     <div class="col-md-4">
         <label class="form-label" for="year">Year: </label>
         <select class="form-control p-2" name="year" onchange="search()" id="year">
-            @for($i=2011; $i<= date('Y'); $i++)
-                <option value="{{$i}}" {{ (request()->get('d')) ? (request()->get('d')==$i ? 'selected':'') :($i == date('Y') ? 'selected':'') }}>{{ $i }}</option>
+            @for($i=2067; $i<= $thisYear; $i++)
+                <option value="{{$i}}" {{ (request()->get('d')) ? (request()->get('d')==$i ? 'selected':'') :($i == $thisYear ? 'selected':'') }}>{{ $i }}</option>
             @endfor
+            <!-- @for($i=2011; $i<= date('Y'); $i++)
+                <option value="{{$i}}" {{ (request()->get('d')) ? (request()->get('d')==$i ? 'selected':'') :($i == date('Y') ? 'selected':'') }}>{{ $i }}</option>
+            @endfor -->
         </select>
     </div> 
     <!-- <div class="col-md-3"></div> -->
@@ -42,40 +45,19 @@
             <th scope="col" class="ps-4" rowspan=2>S.N</th>
             <th scope="col" rowspan=2>Employee</th>
             <th scope="col" rowspan=2>Year</th>
-            <th scope="col" colspan=4>Home</th>
-            <th scope="col" colspan=4>Floating</th>
-            <th scope="col" colspan=4>Sick</th>
-            <th scope="col" colspan=4>Mourning</th>
-            <th scope="col" colspan=4>Maternity</th>
-            <th scope="col" colspan=4>Paternity</th>
+            @foreach($leaveTypes as $leaveType)
+            <th scope="col" colspan=4>{{ $leaveType->name }}</th>
+            @endforeach
             <th scope="col" rowspan=2>Unpaid</th>
             <th scope="col" rowspan=2>Carry Over</th>
         </tr>
         <tr class="table_title" style="background-color: #0f5288;">
+            @for($i = $leaveTypesCount; $i>0; $i--)
             <th>AC</th>
             <th>A</th>
             <th>T</th>
             <th>B</th>
-            <th>AC</th>
-            <th>A</th>
-            <th>T</th>
-            <th>B</th>
-            <th>AC</th>
-            <th>A</th>
-            <th>T</th>
-            <th>B</th>
-            <th>AC</th>
-            <th>A</th>
-            <th>T</th>
-            <th>B</th>
-            <th>AC</th>
-            <th>A</th>
-            <th>T</th>
-            <th>B</th>
-            <th>AC</th>
-            <th>A</th>
-            <th>T</th>
-            <th>B</th>
+            @endfor
         </tr>
     </thead>
     <tbody>
@@ -85,54 +67,32 @@
                 <td>{{$record['name']}}</td>
                 <td>{{$record['leaves']['year']}}</td>
                 <!-- Personal/Home -->
-                <td>{{$record['leaves']['Personal']['accrued']}}</td>
-                <td>{{$record['leaves']['Personal']['allowed']}}</td>
-                <td>{{$record['leaves']['Personal']['taken']}}</td>
-                <td>{{$record['leaves']['Personal']['balance']}}</td>
-                <!-- Floating  -->
-                <td>{{$record['leaves']['Floating']['accrued']}}</td>
-                <td>{{$record['leaves']['Floating']['allowed']}}</td>
-                <td>{{$record['leaves']['Floating']['taken']}}</td>
-                <td>{{$record['leaves']['Floating']['balance']}}</td>
-                <!-- Sick -->
-                <td>{{$record['leaves']['Sick']['accrued']}}</td>
-                <td>{{$record['leaves']['Sick']['allowed']}}</td>
-                <td>{{$record['leaves']['Sick']['taken']}}</td>
-                <td>{{$record['leaves']['Sick']['balance']}}</td>
-                <!-- Mourning -->
-                <td>{{$record['leaves']['Mourning']['accrued']}}</td>
-                <td>{{$record['leaves']['Mourning']['allowed']}}</td>
-                <td>{{$record['leaves']['Mourning']['taken']}}</td>
-                <td>{{$record['leaves']['Mourning']['balance']}}</td>
-                <!-- Maternity -->
-                @if(array_key_exists('Maternity',$record['leaves']))
-                <td>{{$record['leaves']['Maternity']['accrued']}}</td>
-                <td>{{$record['leaves']['Maternity']['allowed']}}</td>
-                <td>{{$record['leaves']['Maternity']['taken']}}</td>
-                <td>{{$record['leaves']['Maternity']['balance']}}</td>
-                @else
+                @forelse($leaveTypes as $leaveType)
+                    @if(array_key_exists($leaveType->name,$record['leaves']))
+                        <td>{{$record['leaves'][$leaveType->name]['accrued']}}</td>
+                        <td>{{$record['leaves'][$leaveType->name]['allowed']}}</td>
+                        <td>{{$record['leaves'][$leaveType->name]['taken']}}</td>
+                        <td>{{$record['leaves'][$leaveType->name]['balance']}}</td>
+                    @else
+                        <td>0.0</td>
+                        <td>0.0</td>
+                        <td>0.0</td>
+                        <td>0.0</td>
+                    @endif
+                @empty
                 <td>0.0</td>
                 <td>0.0</td>
                 <td>0.0</td>
                 <td>0.0</td>
-                @endif
-                <!-- Paternity -->
-                @if(array_key_exists('Paternity',$record['leaves']))
-                <td>{{$record['leaves']['Paternity']['accrued']}}</td>
-                <td>{{$record['leaves']['Paternity']['allowed']}}</td>
-                <td>{{$record['leaves']['Paternity']['taken']}}</td>
-                <td>{{$record['leaves']['Paternity']['balance']}}</td>
-                 @else
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                @endif
+                @endforelse
                 <!-- Unpaid -->
                 <td>0.0</td>
                 <!-- CarryOver -->
-                <td>{{$record['leaves']['Carry Over']['allowed']}}</td>
-
+                @if(array_key_exists('Carry Over',$record['leaves']))
+                    <td>{{$record['leaves']['Carry Over']['allowed']}}</td>
+                @else
+                    <td>0.0</td>
+                @endif
             </tr>
         @endforeach
     </tbody>    

@@ -52,6 +52,8 @@ class Employee extends Model
         'unit_id',
         'email',
         'shift_id',
+        'start_time',
+        'end_time',
         'contract_status',
         'remarks',
     ];

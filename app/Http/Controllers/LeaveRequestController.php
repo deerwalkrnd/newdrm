@@ -13,7 +13,7 @@ use App\Models\YearlyLeave;
 use App\Http\Requests\LeaveRequestRequest;
 use App\Http\Requests\SubordinateLeaveRequestRequest;
 use App\Http\Controllers\SendMailController;
-
+use App\Helpers\NepaliCalendarHelper;
 use App\Helpers\MailHelper;
 
 class LeaveRequestController extends Controller
@@ -82,9 +82,22 @@ class LeaveRequestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    private function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            return $nepaliDateArray[0];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
+    }
     public function store(LeaveRequestRequest $request)
     {
         $data = $request->validated();
+        // dd($data);
         $leave_type_id = $data['leave_type_id'];
         $requested_leave_days = $data['days'];
         $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('unit_id',\Auth::user()->employee->unit_id)->get()->first();
@@ -95,8 +108,25 @@ class LeaveRequestController extends Controller
 
         $data['employee_id'] = \Auth::user()->employee_id;
         $data['requested_by'] = \Auth::user()->employee_id;
-        $data['year'] = date('Y',strtotime($data['start_date']));
+
+        //nepali date
+        $start_year = $this->getNepaliYear($data['start_date']);
+        $end_year = $this->getNepaliYear($data['end_date']);
+        // dd($start_year,$end_year);
+
         
+        // dd($data['year']);
+        if($start_year != $end_year){
+            $res = [
+                'title' => 'Leave Request Error',
+                'message' => 'Leave should be requested from same Nepali year.',
+                'icon' => 'error'
+            ];
+            return redirect()->back()->with(compact('res'));
+        }else{
+            $data['year'] = $start_year;
+        }
+
         if($data['leave_time'] == 'full')
         {
             $data['full_leave'] = '1';
@@ -109,7 +139,7 @@ class LeaveRequestController extends Controller
             }
         }
        $leaveRequest = LeaveRequest::create($data);
-        
+        // dd($data,);
         //Send Mail to manager,hr and employee after successful leave request 
         $send_mail = Mail::select('send_mail')->where('name','Leave Request')->first()->send_mail;
         $subject = "Leave Request";
@@ -143,6 +173,20 @@ class LeaveRequestController extends Controller
             }
         }
         // dd($data);
+        $start_year = $this->getNepaliYear($data['start_date']);
+        $end_year = $this->getNepaliYear($data['end_date']);
+        
+         if($start_year != $end_year){
+            $res = [
+                'title' => 'Leave Request Error',
+                'message' => 'Leave should be requested from same Nepali year.',
+                'icon' => 'error'
+            ];
+            return redirect()->back()->with(compact('res'));
+        }else{
+            $data['year'] = $start_year;
+        }
+
 
         $leaveRequest = LeaveRequest::create($data);
         //send mail

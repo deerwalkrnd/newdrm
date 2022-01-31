@@ -9,20 +9,37 @@ use App\Models\LeaveType;
 use App\Models\YearlyLeave;
 use App\Models\Employee;
 use App\Http\Controllers\DashboardController;
+use App\Helpers\NepaliCalendarHelper;
 
 class LeaveReportController extends Controller
 {
+    public function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            return $nepaliDateArray[0];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
+    }
     public function leaveBalance(Request $request)
     {
         // return  view('admin.leaveBalance.index');
         // dd($request->e);
-         if(isset($request->e))
+        
+        //this year
+        $thisYear = $this->getNepaliYear(date('Y-m-d'));
+       
+        if(isset($request->e))
             $employees = Employee::where('contract_status','active')->where('id',$request->e)->get();
         else
             $employees = Employee::where('contract_status','active')->get();
 
         // dd($employees);
         $leaveTypes = LeaveType::select('name','id','gender')->get();
+        $leaveTypesCount = $leaveTypes->count();
         $records = [];
         $dashboardController = new DashboardController;
 
@@ -36,10 +53,9 @@ class LeaveReportController extends Controller
                 $start_year = $request->d;
                 $end_year = $request->d;
             }else{
-                $start_year =  date('Y',strtotime($employee->join_date));
-                $end_year = date('Y');
+                $start_year = $this->getNepaliYear($employee->join_date);
+                $end_year = $thisYear;
             }
-            // dd($start_year);
             for($year=$start_year; $year <= $end_year; $year++)
             {
                 $temp['leaves']['year'] = $year;
@@ -81,7 +97,7 @@ class LeaveReportController extends Controller
             }
         }
         // dd("records",$records);
-        return  view('admin.leaveBalance.index',compact('records'));
+        return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear'));
     }
 
     private function getEmployeeLeaveBalance($employee,$type,$year){
@@ -157,20 +173,25 @@ class LeaveReportController extends Controller
         return view('admin.report.employeesOnLeave')->with(compact('acceptedRequests'));;
     }
 
-    public function noPunchInNoLeave()
+    public function noPunchInNoLeave(Request $request)
     {
+        if(isset($request->d))
+            $date = $request->d;
+        else
+            $date = date('Y-m-d');
+
         $noRecordList = Employee::select('id','first_name','last_name','middle_name','manager_id','contract_status')
                 ->with('manager:id,first_name,last_name')
                 ->where('contract_status','active')
-                ->whereDoesntHave('attendances', function ($query) {
-                        $query->whereDate('created_at', date('Y-m-d'));
+                ->whereDoesntHave('attendances', function ($query) use ($date) {
+                        $query->whereDate('created_at', $date);
                     })
-                ->whereDoesntHave('leaveRequest', function($query){
-                    $query->whereDate('start_date','<=',date('Y-m-d'))
-                        ->whereDate('end_date','>=',date('Y-m-d'));
+                ->whereDoesntHave('leaveRequest', function($query) use ($date){
+                    $query->whereDate('start_date','<=',$date)
+                        ->whereDate('end_date','>=',$date);
                 })
                 ->get();
-
-        return view('admin.report.noPunchInNoLeave')->with(compact('noRecordList'));
+        // dd($noRecordList);
+        return view('admin.report.noPunchInNoLeave')->with(compact('noRecordList','date'));
     }
 }
