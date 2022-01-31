@@ -109,12 +109,17 @@ class LeaveTypeController extends Controller
         try{
             $leaveType = LeaveType::findOrFail($id);
             $leaveType->delete();
-            return redirect('/leaveType');
+            $res = [
+                'title' => 'Leave Type Deleted',
+                'message' => 'Leave Type has been successfully Deleted',
+                'icon' => 'success'
+            ];
+            return redirect('/leaveType')->with(compact('res'));
         }catch(\Illuminate\Database\QueryException $e){
             // dd($e,$e->getCode(),$e->getCode()=="23000");
             if($e->getCode() == "23000"){
                  $res = [
-                    'title' => 'Delete Faile',
+                    'title' => 'Deletion Failed',
                     'message' => 'Leave Type is being Used',
                     'icon' => 'error'
                 ];

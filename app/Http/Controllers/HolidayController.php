@@ -124,7 +124,12 @@ class HolidayController extends Controller
         try{
             $holiday = Holiday::findOrFail($id);
             $holiday->delete();
-            return redirect('/holiday');
+            $res = [
+                'title' => 'Holiday Deleted',
+                'message' => 'Holiday has been successfully Deleted',
+                'icon' => 'success'
+            ];
+            return redirect('/holiday')->with(compact('res'));
 
         }catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){

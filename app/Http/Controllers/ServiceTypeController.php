@@ -104,7 +104,12 @@ class ServiceTypeController extends Controller
         try{
             $serviceType = ServiceType::findOrFail($id);
             $serviceType->delete();
-            return redirect('/serviceType');
+            $res = [
+                'title' => 'Service Type Deleted',
+                'message' => 'Service Type has been successfully Deleted',
+                'icon' => 'success'
+            ];
+            return redirect('/serviceType')->with(compact('res'));
         }
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){

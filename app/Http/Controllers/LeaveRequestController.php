@@ -258,11 +258,16 @@ class LeaveRequestController extends Controller
     {
         $leaveRequest = LeaveRequest::where('acceptance','pending')->findOrFail($id);
         $leaveRequest->delete();
+        $res = [
+            'title' => 'Leave Request Deleted',
+            'message' => 'Leave Request has been successfully Deleted',
+            'icon' => 'success'
+        ];
         $role = \Auth::user()->role->authority;
         if($role == 'hr' || $role == 'manager')
-            return back();
+            return back()->with(compact('res'));
         else
-            return redirect('/leave-request');
+            return redirect('/leave-request')->with(compact('res'));
     }
 
     public function accept($id)

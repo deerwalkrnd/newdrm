@@ -104,7 +104,12 @@ class ShiftController extends Controller
         try{
             $shift = Shift::findOrFail($id);
             $shift->delete();
-            return redirect('/shift');
+             $res = [
+                'title' => 'Shift Deleted',
+                'message' => 'Shift has been successfully Deleted',
+                'icon' => 'success'
+            ];
+            return redirect('/shift')->with(compact('res'));
         }
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){

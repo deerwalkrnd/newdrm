@@ -157,14 +157,18 @@ class FileUploadController extends Controller
                 Storage::delete($path);
             }
             $fileUpload->delete();
-
+             $res = [
+            'title' => 'File Deleted ',
+            'message' => 'File  has been successfully Deleted ',
+            'icon' => 'success'
+            ];
         }
         return redirect()->back();
         if((\Auth::user()->role->authority == "hr") )
         {
-           return redirect()->back();
+           return redirect()->back()->with(compact('res'));
         }else{
-           return redirect('/my-file-upload');
+            return redirect('/my-file-upload')->with(compact('res'));
         }        
     }
 
