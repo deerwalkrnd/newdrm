@@ -9,6 +9,23 @@
         <ul id="body{{ $loop->iteration }}">
             @foreach($organization->unit as $unit)
                 <li style="list-style:none;"><i class="fas fa-folder fa-lg" style="color:#3d6f95b5;"></i> <span style="font-size:24px;">{{$unit->unit_name}}</span></li>
+                <ul>
+                @foreach($unit->topEmployees as $manager)
+                    <li>{{ $manager }}</li>
+                    @while($manager->workers != NULL)
+                        <ul>
+                        @foreach($manager->workers as $worker)
+                            <li>{{ $worker }}</li>
+                            <!-- <ul>
+                            @foreach($worker->workers as $worker1)
+                                <li>{{ $worker1 }}</li>                               
+                            @endforeach
+                            </ul>                                -->
+                        @endforeach
+                        </ul>
+                    @endwhile
+                @endforeach
+                </ul>
             @endforeach
         </ul>
     @endforeach

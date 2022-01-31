@@ -112,5 +112,8 @@ class Employee extends Model
     public function shift(){
         return $this->hasOne(Shift::class,'id','shift_id');
     }
-
+    
+    public function workers(){
+        return $this->hasMany(Employee::class,'manager_id','id')->select('id','first_name','middle_name','last_name','manager_id');
+    }
 }

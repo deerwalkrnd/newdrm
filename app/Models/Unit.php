@@ -31,4 +31,8 @@ class Unit extends Model
     {
         return $this->hasMany(Holiday::class,'unit_id');
     }
+    public function topEmployees()
+    {
+        return $this->hasMany(Employee::class,'unit_id')->select('id','first_name','middle_name','last_name','manager_id')->where('manager_id',null);
+    }
 }
