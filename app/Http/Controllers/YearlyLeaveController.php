@@ -20,17 +20,7 @@ class YearlyLeaveController extends Controller
      */
    public function index(Request $request)
     {
-        try{
-            $date = new NepaliCalendarHelper(date('Y-m-d'),1);
-            // $date = new NepaliCalendarHelper('2078-07-11');
-            $nepaliDate = $date->in_bs();
-            $nepaliDateArray = explode('-',$nepaliDate);
-            $thisYear = $nepaliDateArray[0];
-            // $month = $nepaliDateArray[1];
-        }catch(Exception $e)
-        {
-            print_r($e->getMessage());
-        }
+        $thisYear = $this->getNepaliYear(date('Y-m-d'));
         if(isset($request->y))
             $year = $request->y;
         else
@@ -42,9 +32,7 @@ class YearlyLeaveController extends Controller
                         ->with('leaveType:id,name')
                         ->where('year',$year)
                         ->orderBy('unit_id')
-                        ->get();
-        // dd($yearlyLeaves);
-       
+                        ->get();       
         return view('admin.yearlyLeave.index')->with(compact('yearlyLeaves','thisYear'));
     }
 
@@ -57,17 +45,9 @@ class YearlyLeaveController extends Controller
     {
         $units = Unit::select('id','unit_name')->get();
         $leaveTypes = LeaveType::select('id','name')->get();
-         try{
-            $date = new NepaliCalendarHelper(date('Y-m-d'),1);
-            // $date = new NepaliCalendarHelper('2078-07-11');
-            $nepaliDate = $date->in_bs();
-            $nepaliDateArray = explode('-',$nepaliDate);
-            $thisYear = $nepaliDateArray[0];
-            // $month = $nepaliDateArray[1];
-        }catch(Exception $e)
-        {
-            print_r($e->getMessage());
-        }
+        $thisYear = $this->getNepaliYear(date('Y-m-d'));
+        unset($leaveTypes[1]);
+        // dd($leaveTypes);
         return view('admin.yearlyLeave.create')->with(compact('units','leaveTypes','thisYear'));
     }
 
@@ -123,7 +103,8 @@ class YearlyLeaveController extends Controller
         $yearlyLeaves = YearlyLeave::select('id', 'unit_id','leave_type_id','days','status','year')->findOrFail($id);
         $units = Unit::select('id','unit_name')->get();
         $leaveTypes = LeaveType::select('id','name')->get();
-        return view('admin.yearlyLeave.edit')->with(compact('yearlyLeaves','units','leaveTypes'));
+        $thisYear = $this->getNepaliYear(date('Y-m-d'));
+        return view('admin.yearlyLeave.edit')->with(compact('yearlyLeaves','units','leaveTypes','thisYear'));
     }
 
     /**
@@ -161,12 +142,28 @@ class YearlyLeaveController extends Controller
         try{
             $yearlyLeave = YearlyLeave::findOrFail($id);
             $yearlyLeave->delete();
-            return redirect('/yearly-leaves');
+            $res = [
+                'title' => 'Yearly Leave Updated',
+                'message' => 'Yearly Leave has been successfully Updated',
+                'icon' => 'success'
+            ];
+            return redirect()->back()->with(compact('res'));
         }
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
                 return redirect()->back();
             }
+        }
+    }
+    public function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            return $nepaliDateArray[0];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
         }
     }
 }
