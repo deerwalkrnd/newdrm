@@ -16,11 +16,11 @@
                         <ul>
                         @foreach($manager->workers as $worker)
                             <li>{{ $worker }}</li>
-                            <!-- <ul>
+                            <ul>
                             @foreach($worker->workers as $worker1)
                                 <li>{{ $worker1 }}</li>                               
                             @endforeach
-                            </ul>                                -->
+                            </ul>                               
                         @endforeach
                         </ul>
                     @endwhile
