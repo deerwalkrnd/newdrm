@@ -306,7 +306,11 @@ class EmployeeController extends Controller
     */ 
     public function search(Request $request)
     {
-        $employees = Employee::take(50)->where('contract_status','active')->get();
+        if(\Auth::user()->role->authority == 'manager')
+            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',\Auth::user()->employee_id)->get();
+        else
+            $employees = Employee::take(50)->where('contract_status','active')->get();
+            
         if($request->has('q'))
         {
             $keyword = $request->q;
