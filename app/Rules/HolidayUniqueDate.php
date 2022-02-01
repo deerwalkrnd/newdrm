@@ -33,6 +33,7 @@ class HolidayUniqueDate implements Rule,  DataAwareRule
         $holidays = Holiday::select('id','unit_id','date')
                             ->where('unit_id',$this->data['unit_id'])
                             ->whereDate('date',$this->data['date'])
+                            ->where('id','!=',\Request::route('id'))
                             ->count();
 
         return $holidays === 0;
