@@ -48,8 +48,8 @@
             @foreach($leaveTypes as $leaveType)
             <th scope="col" colspan=4>{{ $leaveType->name }}</th>
             @endforeach
-            <th scope="col" rowspan=2>Unpaid</th>
-            <th scope="col" rowspan=2>Carry Over</th>
+            <th scope="col" colspan=1>Unpaid</th>z
+            <th scope="col" colspan=2>Carry Over</th>
         </tr>
         <tr class="table_title" style="background-color: #0f5288;">
             @for($i = $leaveTypesCount; $i>0; $i--)
@@ -58,6 +58,9 @@
             <th>T</th>
             <th>B</th>
             @endfor
+            <th>Total Taken</th>
+            <th>A</th>
+            <th>T</th>
         </tr>
     </thead>
     <tbody>
@@ -86,11 +89,13 @@
                 <td>0.0</td>
                 @endforelse
                 <!-- Unpaid -->
-                <td>0.0</td>
+                <td>{{$record['total_unpaid_leaves']}}</td>
                 <!-- CarryOver -->
                 @if(array_key_exists('Carry Over',$record['leaves']))
                     <td>{{$record['leaves']['Carry Over']['allowed']}}</td>
+                    <td>{{$record['leaves']['Carry Over']['taken']}}</td>
                 @else
+                    <td>0.0</td>
                     <td>0.0</td>
                 @endif
             </tr>

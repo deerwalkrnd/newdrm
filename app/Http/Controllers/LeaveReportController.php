@@ -88,13 +88,27 @@ class LeaveReportController extends Controller
                         ];
                     }
                 }
-                $yearlyLeave = YearlyLeave::select('days','leave_type_id')
-                                    ->with('leaveType:id,name')
-                                    ->where('year',$year)
-                                    // ->where()
-                                    ->get();
+                $total_unpaid_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance','employee_id')
+                                        ->where('acceptance','accepted')
+                                        ->where('employee_id', $employee->id)
+                                        ->where('year',$year)
+                                        ->whereDoesntHave('leaveType',function($query){
+                                            $query->where('paid_unpaid','1');
+                                        })
+                                        // ->get();
+                                        ->sum('days');
+                // dd($total_unpaid_leaves);
+                $temp['total_unpaid_leaves'] = $total_unpaid_leaves;
+                // dd($total_unpaid_leaves,$employee->first_name,$year);
+                
+                // $yearlyLeave = YearlyLeave::select('days','leave_type_id')
+                //                     ->with('leaveType:id,name')
+                //                     ->where('year',$year)
+                //                     // ->where()
+                //                     ->get();
                 array_push($records,$temp);
             }
+            
         }
         // dd("records",$records);
         return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear'));
