@@ -140,10 +140,9 @@ final class Helper
                                         ->sum('days');
 
         $allowed_leave = CarryOverLeave::select('days')
-                                        ->where('year',date('Y')-1)
+                                        ->where('year',$year-1)
                                         ->where('employee_id',\Auth::user()->employee_id)
                                         ->first();
-
         if($allowed_leave)
             $allowed_leave = $allowed_leave->days;
         else

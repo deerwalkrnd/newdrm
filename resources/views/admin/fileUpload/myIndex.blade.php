@@ -20,7 +20,7 @@
                 <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
                 <td>{{ $fileUpload->fileCategory->category_name }}</td>
                 <td>{{ $fileUpload->employee->first_name.' '.substr($fileUpload->employee->middle_name,0,1).' '.$fileUpload->employee->last_name }}</td>
-                <td>{{ $fileUpload->uploaded_by }}</td>
+                <td>{{  $fileUpload->uploader->first_name.' '.substr($fileUpload->uploader->middle_name,0,1).' '.$fileUpload->uploader->last_name }}</td>
 
                 <td class="text-center">
                 <a href="/file-upload/download/{{ $fileUpload->id }}"><i class="fa fa-download" aria-hidden="true"></i></a> 

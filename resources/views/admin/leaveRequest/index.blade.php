@@ -45,7 +45,7 @@
             <td>{{ $leaveRequest->end_date }}</td>
             <td>{{ $leaveRequest->days * ($leaveRequest->full_leave == 1 ? 1 : 0.5) }}</td>
             <td>{{ $leaveRequest->reason }}</td>
-            <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:''}}</td>
+            <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:'---'}}</td>
             <td>{{ $leaveRequest->acceptance }}</td>
             
              <td class="text-center">

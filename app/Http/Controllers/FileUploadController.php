@@ -20,11 +20,11 @@ class FileUploadController extends Controller
     {
         $fileUploads = FileUpload::select('id','file_category_id','file_name','uploaded_by','employee_id')
                                 ->with('fileCategory:id,category_name')
+                                ->with('uploader:id,first_name,middle_name,last_name')
                                 ->with('employee:id,first_name,middle_name,last_name')
                                 ->orderBy('file_category_id')
                                 ->orderBy('file_name')
                                 ->get();
-                
         return view('admin.fileUpload.index')->with(compact('fileUploads'));       
     }
 
@@ -33,6 +33,7 @@ class FileUploadController extends Controller
         $fileUploads = FileUpload::select('id','file_category_id','file_name','uploaded_by','employee_id')
                         ->where('employee_id', \Auth::user()->employee_id)
                         ->with('fileCategory:id,category_name')
+                        ->with('uploader:id,first_name,middle_name,last_name')
                         ->with('employee:id,first_name,middle_name,last_name')
                         ->orderBy('file_category_id')
                         ->orderBy('file_name')
@@ -48,7 +49,7 @@ class FileUploadController extends Controller
      */
     public function create()
     {
-        $fileCategories = FileCategory::select('id','category_name')->get();
+        $fileCategories = FileCategory::select('id','category_name','status')->where('status','active')->get();
     
         $employees = Employee::select('id','first_name','middle_name','last_name')
                                 ->where('contract_status','active');
@@ -57,12 +58,6 @@ class FileUploadController extends Controller
             $employees = $employees->where('id',\Auth::user()->employee_id);
                                 
         $employees = $employees->get();
-
-        // $res = [
-        //     'title' => 'File Upload',
-        //     'message' => 'File has ben successfully uploaded',
-        //     'icon' => 'success'
-        // ];
         return view('admin.fileUpload.create')->with(compact('fileCategories','employees'));
     }
 
