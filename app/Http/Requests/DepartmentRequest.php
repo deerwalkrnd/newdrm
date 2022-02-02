@@ -24,7 +24,6 @@ class DepartmentRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'unit_name' => 'required|string|max:255|unique:units,unit_name,'.$this->id.',id,organization_id,'.$this->organization_id,
             'name'=>'required|max:255|string|unique:departments,name,'.$this->id.',id,unit_id,'.$this->unit_id,
             'unit_id'  => 'nullable|max:255|integer|exists:units,id',
         ];

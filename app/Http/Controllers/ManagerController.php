@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ManagerRequest;
 use App\Models\Manager;
 use App\Models\Employee;
+use App\Models\User;
 
 use Illuminate\Support\Facades\DB;
 
@@ -48,7 +49,19 @@ class ManagerController extends Controller
      */
     public function store(ManagerRequest $request)
     {
-        Manager::create($request->validated());
+        $input = $request->validated();
+        Manager::create($input);
+        //update user role according to manager status
+        $employee = [];
+        $employee_id = Manager::select('employee_id')->where('employee_id',$request->employee_id)->first()->employee_id;
+            
+        if(strtolower($input['is_active']) == 'active')
+            $employee['role_id'] = '2'; //2-manager
+        else
+            $employee['role_id'] = '3'; //3-employee
+        
+        $user = User::where('employee_id',$employee_id)->first();
+        $user->update($employee);
         $res = [
             'title' => 'Manager Created',
             'message' => 'Manager has been successfully created',
@@ -95,8 +108,19 @@ class ManagerController extends Controller
         //get validated input and merge input fields
         $input = $request->validated();
         $input['version'] = DB::raw('version+1');
-
         $manager->update($input);
+        
+        //update user role according to manager status
+        $employee = [];
+        $employee_id = $manager->employee_id;
+
+        if(strtolower($manager->is_active) == 'active')
+            $employee['role_id'] = '2';
+        else
+            $employee['role_id'] = '3';
+
+        $user = User::where('employee_id',$employee_id)->first();
+        $user->update($employee);
         $res = [
             'title' => 'Manager Updated',
             'message' => 'Manager has been successfully updated',
@@ -115,7 +139,18 @@ class ManagerController extends Controller
     {
         try{
             $manager = Manager::findOrFail($id);
-            $manager->delete();
+            $employee = [];
+            $employee_id = $manager->employee_id;
+
+            //update user role according to manager status
+            if($manager->delete())
+                $employee['role_id'] = '3';     //3-employee
+            else
+                $employee['role_id'] = '2';     //2-manager
+
+            $user = User::where('employee_id',$employee_id)->first();
+            $user->update($employee);
+
             $res = [
                 'title' => 'Manager Deleted',
                 'message' => 'Manager has been successfully Deleted',
