@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\LeaveTypeController;
@@ -284,6 +285,15 @@ Route::middleware(['hr'])->group(function(){
     Route::get('/punch-in-detail',[PunchInOutReportController::class,'getPunchInOut']);
     // late-punch-in missed-punch-out
     Route::get('/late-missed-punch',[PunchInOutReportController::class, 'latePunchInOut']);
+
+    // department route
+    Route::get('/department/create',[DepartmentController::class, 'create']);
+    Route::post('/department',[DepartmentController::class, 'store']);
+    Route::get('/department',[DepartmentController::class, 'index']);
+    Route::get('/department/edit/{id}',[DepartmentController::class, 'edit']);
+    Route::put('/department/{id}',[DepartmentController::class, 'update']);
+    Route::delete('/department/{id}',[DepartmentController::class, 'destroy']);
+
     // designation route
     Route::get('/designation/create',[DesignationController::class, 'create']);
     Route::post('/designation',[DesignationController::class, 'store']);

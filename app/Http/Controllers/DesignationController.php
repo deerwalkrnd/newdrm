@@ -105,7 +105,6 @@ class DesignationController extends Controller
     {
         $designation = Designation::findOrFail($id);
         $designation->delete();
-        $designation->update($input);
         $res = [
             'title' => 'Designation Deleted ',
             'message' => 'Designation has been successfully Deleted ',
