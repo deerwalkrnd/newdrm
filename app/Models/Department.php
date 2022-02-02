@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Department extends Model
 {
     use HasFactory;
+
+    public $fillable=[
+        'name',
+        'unit_id'
+    ];
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
 }
