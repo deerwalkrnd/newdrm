@@ -17,10 +17,10 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->integer('version')->default(0);
             // personal details
-            // $table->foreignId('employee_id')
             $table->string('first_name');
             $table->string('last_name');
             $table->string('middle_name')->nullable();
+            $table->string('employee_id');
             $table->date('date_of_birth');
             $table->string('marital_status');
             $table->string('gender');
@@ -50,8 +50,8 @@ class CreateEmployeesTable extends Migration
             $table->enum('temp_add_same_as_per_add',[0,1]);
             
             //temporary address
-            $table->string('temporary_address')->nullable();
-            $table->string('temporary_district')->nullable();
+            $table->foreignId('temporary_address')->nullable()->constrained('provinces');
+            $table->foreignId('temporary_district')->nullable()->constrained('districts');;
             $table->string('temporary_municipality')->nullable();
             $table->string('temporary_ward_no')->nullable();
             $table->string('temporary_tole')->nullable();
@@ -89,7 +89,7 @@ class CreateEmployeesTable extends Migration
 
             //emergency contact seperate model
             
-            // $table->foreignId('department_id'); //foreign
+            $table->foreignId('department_id')->constrained('departments'); //foreign
             // $table->string('filename');
             // $table->date('propmotion_date');
             // $table->string('status');
@@ -108,9 +108,9 @@ class CreateEmployeesTable extends Migration
             // $table->string('is_patient');
             // $table->string('to_date');
             // $table->string('skype_id');
-            // $table->string('terminated_date');
-            // $table->string('department_change_date');
-            // $table->string('supervisor_change_date');
+            $table->date('terminated_date')->nullable();
+            $table->string('department_change_date')->nullable();
+            $table->string('manager_change_date')->nullable();
             // $table->string('from_time');
             // $table->string('to_time');
             // $table->foreignId('tier_employee_id'); //foreign_id

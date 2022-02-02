@@ -25,7 +25,7 @@ class CreateLeaveRequestsTable extends Migration
             $table->enum('full_leave',[0,1]);
             $table->enum('half_leave',['first','second'])->nullable();
             $table->longText('reason');
-            $table->enum('acceptance',['pending','accepted','rejected']);
+            $table->enum('acceptance',['pending','accepted','rejected','divided','cancelled']);
             $table->foreignId('requested_by')->constrained('employees');
             $table->foreignId('accepted_by')->nullable()->constrained('employees'); 
             $table->timestamps();
