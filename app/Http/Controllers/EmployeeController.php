@@ -209,6 +209,8 @@ class EmployeeController extends Controller
     public function update(EmployeeRequest $request, $id)
     {
         $employee = Employee::findOrFail($id);
+        $user = User::where('employee_id',$id)->first();
+        // dd($user);
         $input = $request->validated();
 
         // reset temporary address
@@ -228,7 +230,7 @@ class EmployeeController extends Controller
                 $input['end_time']=NULL;
         }
 
-        $user = [];
+        $userData = [];
         $emergency_contact =[];
         //store image
         $image = $request->file('image');
@@ -243,8 +245,9 @@ class EmployeeController extends Controller
         }
 
         //add data to user
-        $user['username'] = $request->username;
-        $user['role_id'] = $request->role;
+        // $user
+        $userData['username'] = $request->username;
+        $userData['role_id'] = $request->role;
         
         $emergency_contact['first_name'] = $input['emg_first_name'];
         $emergency_contact['last_name'] =  $input['emg_last_name'];
@@ -260,7 +263,7 @@ class EmployeeController extends Controller
         DB::beginTransaction();
         try {
             $employee->update($input);
-            
+            $user->update($userData);
             EmergencyContact::updateOrCreate(
                 $emergency_contact,
                 ['employee_id' => $id]
@@ -306,7 +309,11 @@ class EmployeeController extends Controller
     */ 
     public function search(Request $request)
     {
-        $employees = Employee::take(50)->where('contract_status','active')->get();
+        if(\Auth::user()->role->authority == 'manager')
+            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',\Auth::user()->employee_id)->get();
+        else
+            $employees = Employee::take(50)->where('contract_status','active')->get();
+
         if($request->has('q'))
         {
             $keyword = $request->q;

@@ -38,7 +38,7 @@ class LeaveRequestRequest extends FormRequest
         }else{
             $remainingDays = Helper::getRemainingCarryOverLeave();
         }
-
+        // dd($remainingDays);
         if(\Request::input('leave_time') != 'full')
             $remainingDays = $remainingDays * 2;
 

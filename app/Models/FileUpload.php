@@ -24,4 +24,8 @@ class FileUpload extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+    public function uploader()
+    {
+        return $this->belongsTo(Employee::class,'uploaded_by','id');
+    }
 }

@@ -27,13 +27,12 @@ class LeaveRequestController extends Controller
      public function index()
     {
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
-        ->with(['employee:id,first_name,last_name','leaveType:id,name'])
+        ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
         ->where('employee_id',\Auth::user()->employee_id)
         ->orderBy('created_at')
         ->orderBy('updated_at')
         ->get();
         $table_title = 'Employee Leave Details';
-        
         return view('admin.leaveRequest.index')->with(compact('leaveRequests','table_title'));
     }
 
@@ -293,7 +292,7 @@ class LeaveRequestController extends Controller
     }
 
     private function calculateRemainingTime($allowed_leave,$leave_type_id,$requested_leave_days,$user_id){
-        $year = date('Y');
+        $year = $this->getNepaliYear(date('Y-m-d'));
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance','full_leave')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
@@ -322,9 +321,6 @@ class LeaveRequestController extends Controller
                 $query->where('manager_id',\Auth::user()->employee_id);
             });
         }
-
-
-      
         if($request->d)
             $leaveRequests = $leaveRequests->where('start_date',$request->d)->orderBy('created_at')->orderBy('updated_at')->get();
         else

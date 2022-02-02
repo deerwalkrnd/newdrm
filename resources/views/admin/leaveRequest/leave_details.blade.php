@@ -38,7 +38,7 @@
             <td>{{ $leaveRequest->half_leave }}</td>
             <td>{{ $leaveRequest->reason }}</td>
             <td>{{ $leaveRequest->acceptance }}</td>
-            <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:'' }}</td>
+            <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:'--' }}</td>
             @if($leaveRequest->accepted_by_detail != NULL)
             <td>{{ ucfirst($leaveRequest->accepted_by_detail->first_name).' '.ucfirst($leaveRequest->accepted_by_detail->middle_name).' '.ucfirst($leaveRequest->accepted_by_detail->last_name) }}</td>
             @else

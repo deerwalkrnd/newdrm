@@ -32,6 +32,7 @@ class UniqueYearlyLeaveType implements Rule, DataAwareRule
         $yearlyLeave = YearlyLeave::select('id','unit_id','year','leave_type_id')
                             ->where('unit_id',$this->data['unit_id'])
                             ->where('year',$this->data['year'])
+                            ->where('id','!=',\Request::route('id'))
                             ->where('leave_type_id',$this->data['leave_type_id'])
                             ->count();
 

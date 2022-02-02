@@ -17,7 +17,7 @@ class CreateFileUploadsTable extends Migration
             $table->id();
             $table->foreignId('file_category_id')->constrained('file_categories')->onDelete('restrict');
             $table->String('file_name');
-            $table->String('uploaded_by');
+            $table->foreignId('uploaded_by')->constrained('employees')->onDelete('restrict');
             $table->foreignId('employee_id')->constrained('employees')->onDelete('restrict');
             $table->timestamps();
         });

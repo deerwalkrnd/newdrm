@@ -117,6 +117,7 @@ class YearlyLeaveController extends Controller
      */
     public function update(YearlyLeaveRequest $request, $id)
     {
+        
         $yearlyLeave = YearlyLeave::findOrFail($id);
 
         //get validated input and merge input fields

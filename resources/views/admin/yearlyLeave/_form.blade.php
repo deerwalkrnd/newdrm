@@ -4,7 +4,7 @@
             <label for="unit_id">Unit</label>
             <select class="form-control" id="unit_id" name="unit_id">
                 <option value="" disabled="disabled" selected="selected">-- Choose Unit --</option>
-                <option value="">All</option>
+                <option value="" {{empty(old('unit_id')) ? 'selected':''}}>All</option>
                 @forelse($units as $unit)
                 <option 
                     value="{{ $unit->id}}" 
@@ -96,7 +96,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label for="year">Year: </label>
+            <!-- <label for="year">Year: </label> -->
         <!-- <select class="form-control" name="year"  id="year">
             @for($i=$thisYear-5; $i<= $thisYear+10; $i++)
                 <option value="{{$i}}" {{ !empty(old('year')) ? old('year') : $yearlyLeaves->year ?? '' }}>{{ $i }}</option>
