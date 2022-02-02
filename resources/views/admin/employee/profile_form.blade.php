@@ -544,6 +544,21 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
+            <label class="form-label" for="department_id">Department*</label>
+            <select disabled class="form-control" id="department_id" name="department_id">
+                <option value="" disabled="disabled" selected="selected">{{ ucfirst($employee->department->name) }}</option>
+            </select>
+            @error('department_id')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- department_id -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
             <label class="form-label" for="email">Email*</label>
             <input type="text" class="form-control" id="email" placeholder="None" disabled name="email" value="{{ !empty(old('email')) ? old('email') : $employee->email ?? '' }}">
             @error('email')
@@ -645,7 +660,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_first_name">First Name*</label>
-                <input type="text" class="form-control" id="emg_first_name" placeholder="None" disabled name="emg_first_name" value="{{ $employee->emergency_contact != NULL ?? $employee->emergency_contact->first_name }}">
+                <input type="text" class="form-control" id="emg_first_name" placeholder="None" disabled name="emg_first_name" value="{{ isset($employee->emergencyContact)? $employee->emergencyContact->first_name:'None' }}">
                 @error('emg_first_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -657,7 +672,7 @@
         <div class="col-md-6">
                 <div class="mb-4">
                 <label class="form-label" for="emg_middle_name">Middle Name</label>
-                <input type="text" class="form-control" id="emg_middle_name"placeholder="None" disabled name="emg_middle_name" value="{{ $employee->emergency_contact != NULL ?? $employee->emergency_contact->middle_name }}">
+                <input type="text" class="form-control" id="emg_middle_name"placeholder="None" disabled name="emg_middle_name" value="{{ isset($employee->emergencyContact)? $employee->emergencyContact->middle_name:'None' }}">
                 @error('emg_middle_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -670,7 +685,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_last_name">Last Name*</label>
-                <input type="text" class="form-control" id="emg_last_name" placeholder="None" disabled name="emg_last_name" value="{{ $employee->emergency_contact != NULL ?? $employee->emergency_contact->last_name }}">
+                <input type="text" class="form-control" id="emg_last_name" placeholder="None" disabled name="emg_last_name" value="{{ isset($employee->emergencyContact)? $employee->emergencyContact->last_name:'None' }}">
                 @error('emg_last_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -682,7 +697,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_relationship">Relationship*</label>
-                <input type="text" class="form-control" id="emg_relationship" placeholder="None" disabled name="emg_relationship" value="{{ $employee->emergency_contact != NULL ?? $employee->emergency_contact->relationship }}">
+                <input type="text" class="form-control" id="emg_relationship" placeholder="None" disabled name="emg_relationship" value="{{ isset($employee->emergencyContact)? $employee->emergencyContact->relationship:'None' }}">
                 @error('emg_relationship')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -697,7 +712,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_contact">Emergency Contact*</label>
-                <input type="text" class="form-control" id="emg_contact" placeholder="None" disabled name="emg_contact" value="{{ $employee->emergency_contact != NULL ?? $employee->emergency_contact->phone_no }}">
+                <input type="text" class="form-control" id="emg_contact" placeholder="None" disabled name="emg_contact" value="{{ isset($employee->emergencyContact)? $employee->emergencyContact->phone_no:'None' }}">
                 @error('emg_contact')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -709,7 +724,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_alternate_contact">Alternate Contact</label>
-                <input type="text" class="form-control" id="emg_alternate_contact" placeholder="None" disabled name="emg_alternate_contact" value="{{ $employee->emergency_contact != NULL ?? $employee->emergency_contact->alternate_phone_no }}">
+                <input type="text" class="form-control" id="emg_alternate_contact" placeholder="None" disabled name="emg_alternate_contact" value="{{ isset($employee->emergencyContact)? $employee->emergencyContact->alternate_phone_no:'None' }}">
                 @error('emg_alternate_contact')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror

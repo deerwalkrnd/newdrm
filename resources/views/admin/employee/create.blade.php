@@ -139,5 +139,34 @@
         }
     });
 
+    $('.department-livesearch').select2({
+        ajax: {
+            url: '/department/search',
+            data: function (params) {
+                var query = {
+                    q: params.term,
+                    p: $('#unit_id').val() 
+                    // t: $('#temporary_address').val() 
+                }
+                    // Query parameters will be ?search=[term]
+                return query;
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            text: item.name ,
+                            id: item.id
+                        }
+                    })
+                };
+                
+                // console.log(query);
+            },
+            cache: false
+        }
+    });
 </script>
 @endsection

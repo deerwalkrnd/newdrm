@@ -49,6 +49,7 @@
         <th scope="col">Title</th>
         <th scope="col">Manager</th>
         <th scope="col">Join Date</th>
+        <th scope="col">Terminated Date</th>
         <th scope="col">Status</th>
     </tr>
     </thead>
@@ -60,6 +61,7 @@
         <td>{{ $employee->designation->job_title_name }}</td>
         <td>{{ $employee->manager != NULL ? $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name : "N/A"}} </td>
         <td>{{ $employee->join_date }}</td>
+        <td>{{ $employee->terminated_date }}</td>
         <td class="text-center">
             <button type="button" class="btn btn-danger">Terminated</button>
         </td>

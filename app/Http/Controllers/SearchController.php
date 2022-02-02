@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\District;
+use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Province;
 
@@ -43,5 +44,23 @@ class SearchController extends Controller
         }
 
         return response()->json($employees);
+    }
+
+    public function searchDepartment(Request $request)
+    {
+        $departments = [];
+       
+        if($request->has('p') && $request->p != NULL){
+            $unit_id=(int)$request->p;
+            if($request->has('q'))
+            {
+                $keyword = $request->q;
+                $departments = Department::select('id','name','unit_id')->where('unit_id',(int)$request->p)->where('name','like',"%$keyword%")->take(5)->get();
+            }else{
+                $departments = Department::select('id','name','unit_id')->where('unit_id',$unit_id)->take(5)->get();
+            }
+        }
+        
+        return response()->json($departments);
     }
 }
