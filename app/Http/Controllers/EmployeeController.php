@@ -215,7 +215,6 @@ class EmployeeController extends Controller
         $user = User::where('employee_id',$id)->first();
         // dd($user);
         $input = $request->validated();
-
         // reset temporary address
         if($input['temp_add_same_as_per_add'] == 1)
         {
@@ -236,8 +235,9 @@ class EmployeeController extends Controller
 
         // dd($employee['manager_id'], $input['manager_id'], $employee['designation_id'], $input['designation_id']);
         //update manager change date/ designation change date
-        if($employee['manager_id'] != $input['manager_id'])
-            $employee['manager_change_date'] = date('Y-m-d');
+        if(array_key_exists('manager_id',$input))
+            if($employee['manager_id'] != $input['manager_id'])
+                $employee['manager_change_date'] = date('Y-m-d');
 
         if($employee['designation_id'] != $input['designation_id'])
             $employee['designation_change_date'] = date('Y-m-d');
@@ -366,7 +366,7 @@ class EmployeeController extends Controller
         $terminatedEmployees = Employee::select('id','first_name','last_name','middle_name','manager_id', 'designation_id','terminated_date','join_date')
                     ->where('contract_status','terminated')
                     ->with('designation')
-                    ->with('manager:id,first_name,last_name,middle_name,is_active')
+                    ->with('manager:id,first_name,last_name,middle_name')
                     ->get();
        
         return view('admin.employee.terminate')->with(compact('terminatedEmployees'));

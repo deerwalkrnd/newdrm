@@ -141,16 +141,23 @@ class ManagerController extends Controller
             $manager = Manager::findOrFail($id);
             $employee = [];
             $employee_id = $manager->employee_id;
+            $employees_under_manager  = Employee::select('id','manager_id','first_name')->where('manager_id',$manager->employee_id)->get();
+            // $employees_of_manager = [];
 
-            //update user role according to manager status
-            if($manager->delete())
+            // dd($manager,$employees_under_manager);
+
+            //update user role and employees manager_id status under particular manager according to manager deletion
+            if($manager->delete()){
                 $employee['role_id'] = '3';     //3-employee
-            else
+                foreach($employees_under_manager as $employee_under_manager){
+                    $employee_under_manager->update(['manager_id' => NULL]);   
+                }
+            }else
                 $employee['role_id'] = '2';     //2-manager
 
             $user = User::where('employee_id',$employee_id)->first();
             $user->update($employee);
-
+            // dd($employees_under_manager);
             $res = [
                 'title' => 'Manager Deleted',
                 'message' => 'Manager has been successfully Deleted',
