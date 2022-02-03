@@ -732,7 +732,7 @@
                     value="{{$role->id}}" 
                     {{ (!empty(old('role')) && old('role') == $role->id) ? 'selected': ''}}
                     {{ (isset($employee) && $employee->role == $role->id && empty(old('role'))) ? 'selected' : '' }} 
-                    >{{$role->authority}}</option>
+                    >{{ucfirst($role->authority)}}</option>
                 @endforeach
             </select>
             @error('role')

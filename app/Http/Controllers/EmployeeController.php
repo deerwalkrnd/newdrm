@@ -76,9 +76,8 @@ class EmployeeController extends Controller
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name','time_required')->get();
-        $roles = Role::select('id','authority')->get();
+        $roles = Role::select('id','authority')->where('id','!=','2')->get();
         $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
-
         return view('admin.employee.create')->with(compact('managers','units','departments','organizations','designations','provinces','districts','serviceTypes','shifts','roles'));
     }
 
@@ -93,6 +92,9 @@ class EmployeeController extends Controller
         //get validated input
         // dd($request);
         $input = $request->validated();
+
+        $input['unit_id'] = Department::findOrFail($input['department_id'])->unit_id;
+
         // reset temporary address
         if($input['temp_add_same_as_per_add'] == 1)
         {
@@ -197,7 +199,7 @@ class EmployeeController extends Controller
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name','time_required')->get();
         $user = User::select('id','username')->where('employee_id',$id)->get();
-        $roles = Role::select('id','authority')->get();
+        $roles = Role::select('id','authority')->where('id','!=','2')->get();
         $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
         return view('admin.employee.edit')->with(compact('employee','user','departments','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
     }
@@ -215,6 +217,11 @@ class EmployeeController extends Controller
         $user = User::where('employee_id',$id)->first();
         // dd($user);
         $input = $request->validated();
+        // dd($input);
+        // dd($input['role'],$user->role_id);
+
+        $input['unit_id'] = Department::findOrFail($input['department_id'])->unit_id;
+
         // reset temporary address
         if($input['temp_add_same_as_per_add'] == 1)
         {
@@ -262,7 +269,7 @@ class EmployeeController extends Controller
         //add data to user
         // $user
         $userData['username'] = $request->username;
-        $userData['role_id'] = $request->role;
+        $userData['role_id'] = $input['role'];
         
         $emergency_contact['first_name'] = $input['emg_first_name'];
         $emergency_contact['last_name'] =  $input['emg_last_name'];
@@ -375,7 +382,11 @@ class EmployeeController extends Controller
     public function terminate(Request $request)
     {
         $id = (int) $request->employee_id;
+        if(User::select('id','role_id')->where('employee_id',$id)->first()->role_id == '2')
+            Manager::select('id','employee_id')->where('employee_id',$id)->update(['is_active'=>'inactive']);
+
         Employee::findOrFail($id)->update(['contract_status' => 'terminated','terminated_date' => date('Y-m-d'),]);
+
         $res = [
             'title' => 'Employee Terminated ',
             'message' => 'Employee has been successfully Terminated ',
