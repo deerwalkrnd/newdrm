@@ -604,7 +604,7 @@
 </div>
 <!-- designation_id -->
 
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="designation_change_date">Designation Change Date</label>
@@ -614,7 +614,7 @@
             @enderror
         </div>
     </div>
-</div>
+</div> -->
 <!-- designation_change_date -->
 
 <div class="row">

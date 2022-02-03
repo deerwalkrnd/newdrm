@@ -486,6 +486,19 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
+            <label class="form-label" for="manager_change_date">Manager Change Date</label>
+            <input type="date" class="form-control" id="manager_change_date" placeholder="None" disabled name="manager_change_date" value="{{ $employee->manager_change_date ?? '' }}">
+            @error('manager_change_date')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- manager_change_date -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
             <label class="form-label" for="designation_id">Designation*</label>
             <select disabled class="form-control" id="designation_id" name="designation_id">
                 <option value="" disabled="disabled" selected="selected">{{ $employee->designation->job_title_name }}</option>
@@ -555,6 +568,19 @@
     </div>
 </div>
 <!-- department_id -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="department_change_date">Department Change Date</label>
+            <input type="date" class="form-control" id="department_change_date" placeholder="None" disabled name="department_change_date" value="{{ $employee->department_change_date ?? '' }}">
+            @error('department_change_date')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- department_change_date -->
 
 <div class="row">
     <div class="col-md-12">

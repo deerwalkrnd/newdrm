@@ -77,7 +77,7 @@ class EmployeeController extends Controller
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name','time_required')->get();
         $roles = Role::select('id','authority')->get();
-        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
+        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
 
         return view('admin.employee.create')->with(compact('managers','units','departments','organizations','designations','provinces','districts','serviceTypes','shifts','roles'));
     }
@@ -198,8 +198,7 @@ class EmployeeController extends Controller
         $shifts = Shift::select('id','name','time_required')->get();
         $user = User::select('id','username')->where('employee_id',$id)->get();
         $roles = Role::select('id','authority')->get();
-        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
-        // dd($employee);
+        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
         return view('admin.employee.edit')->with(compact('employee','user','departments','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
     }
 
@@ -228,11 +227,23 @@ class EmployeeController extends Controller
                 );            
         }
 
+        //shift setting
         $shift = Shift::findOrFail($input['shift_id']);
         if(!$shift->time_required){
                 $input['start_time']=NULL;
                 $input['end_time']=NULL;
         }
+
+        // dd($employee['manager_id'], $input['manager_id'], $employee['designation_id'], $input['designation_id']);
+        //update manager change date/ designation change date
+        if($employee['manager_id'] != $input['manager_id'])
+            $employee['manager_change_date'] = date('Y-m-d');
+
+        if($employee['designation_id'] != $input['designation_id'])
+            $employee['designation_change_date'] = date('Y-m-d');
+        
+        if($employee['department_id'] != $input['department_id'])
+            $employee['department_change_date'] = date('Y-m-d');
 
         $userData = [];
         $emergency_contact =[];
@@ -355,7 +366,7 @@ class EmployeeController extends Controller
         $terminatedEmployees = Employee::select('id','first_name','last_name','middle_name','manager_id', 'designation_id','terminated_date','join_date')
                     ->where('contract_status','terminated')
                     ->with('designation')
-                    ->with('manager:id,first_name,last_name,middle_name')
+                    ->with('manager:id,first_name,last_name,middle_name,is_active')
                     ->get();
        
         return view('admin.employee.terminate')->with(compact('terminatedEmployees'));

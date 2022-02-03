@@ -36,7 +36,7 @@ class SearchController extends Controller
     */ 
     public function searchEmployee(Request $request)
     {
-        $employees = Employee::take(50)->get();
+        $employees = Employee::where('contract_status','active')->take(50)->get();
         if($request->has('q'))
         {
             $keyword = $request->q;
