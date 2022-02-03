@@ -56,6 +56,10 @@ class Employee extends Model
         'end_time',
         'contract_status',
         'remarks',
+        'terminated_date',
+        'department_id',
+        'department_change_date',
+        'manager_change_date',
     ];
 
     public function serviceType()
@@ -69,6 +73,10 @@ class Employee extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
     // public function managers()
     // {

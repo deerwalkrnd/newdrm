@@ -397,6 +397,8 @@ Route::middleware(['hr'])->group(function(){
 
     //Search District
     Route::get('/district/search/{id?}',[SearchController::class, 'searchDistrict']);
+    //Search Department
+    Route::get('/department/search/{id?}',[SearchController::class, 'searchDepartment']);
 
     //Leave Report
     Route::get('/leave-balance-report',[LeaveReportController::class, 'leaveBalance']);

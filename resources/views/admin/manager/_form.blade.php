@@ -62,14 +62,14 @@
                 <option 
                     value="active" 
                     {{ (!empty(old('is_active')) && old('is_active') == 'active') ? 'selected': ''}}
-                    {{ (isset($manager) && $manager->is_active == $manager->is_active && empty(old('is_active'))) ? 'selected' : '' }} 
+                    {{ (isset($manager) && $manager->is_active == 'active' && empty(old('is_active'))) ? 'selected' : '' }} 
                     >
                     Active
                 </option>
                 <option 
                     value="inactive" 
                     {{ (!empty(old('is_active')) && old('is_active') == 'inactive') ? 'selected': ''}}
-                    {{ (isset($manager) && $manager->is_active == $manager->is_active && empty(old('is_active'))) ? 'selected' : '' }} 
+                    {{ (isset($manager) && $manager->is_active == 'inactive' && empty(old('is_active'))) ? 'selected' : '' }} 
                     >
                     Inactive
                 </option>

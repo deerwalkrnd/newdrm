@@ -147,8 +147,8 @@
                                                     Punch In
                                                     No Leave Report
                                                 </a></td>
-                                            <td class="hr_menu_content"><a href="/file-category"><img class="img-fluid"
-                                                        src="/assets/images/icons/list.png">File Category Setting</a>
+                                            <td class="hr_menu_content"><a href="/department"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">Department</a>
                                             </td>
                                         </tr>
 
@@ -176,6 +176,13 @@
                                             <td class="hr_menu_content"><a href="/time"><img class="img-fluid"
                                                 src="/assets/images/icons/time.png">Time Setting
                                             </a></td>
+                                        </tr>
+                                         <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="hr_menu_content"><a href="/file-category"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">File Category Setting</a>
+                                            </td>
                                         </tr>
 
                                     </table>

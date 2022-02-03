@@ -20,6 +20,7 @@
         <th scope="col">Manager</th>
         <th scope="col">Organization</th>
         <th scope="col">Unit</th>
+        <th scope="col">Department</th>
         <th scope="col">Internship/Trainee Date</th>
         <th scope="col">Join Date</th>
         <th scope="col">Y Since Date</th>
@@ -38,6 +39,7 @@
         <td>{{ $employee->manager != NULL ? $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name : "N/A"}} </td>
         <td>{{ $employee->organization->name }}</td>
         <td>{{ $employee->unit->unit_name }}</td>
+        <td>{{ $employee->department->name }}</td>
         <td>{{ $employee->intern_trainee_ship_date }}</td>
         <td>{{ $employee->join_date }}</td>
         <td>{{ $join_year[$i]}}</td>

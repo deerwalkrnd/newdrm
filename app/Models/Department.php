@@ -18,4 +18,8 @@ class Department extends Model
     {
         return $this->belongsTo(Unit::class);
     }
+    public function employees()
+    {
+        return $this->hasMany(Employee::class,'department_id');
+    }
 }

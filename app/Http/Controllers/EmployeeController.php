@@ -10,6 +10,7 @@ use App\Http\Requests\EmployeeRequest;
 
 use App\Models\Organization;
 use App\Models\Unit;
+use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Province;
 use App\Models\District;
@@ -33,10 +34,11 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','intern_trainee_ship_date','join_date')
+        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date')
         ->with('designation:id,job_title_name')
         ->with('organization:id,name')
         ->with('unit:id,unit_name')
+        ->with('department:id,name,unit_id')
         ->with('serviceType:id,service_type_name')
         ->where('contract_status','active')
         ->orderBy('first_name') 
@@ -55,7 +57,7 @@ class EmployeeController extends Controller
             }
         }
         
-        // dd($join_year);
+        // dd($employee->department);
         return view('admin.employee.index')->with(compact('employees','join_year'));
     }
 
@@ -68,15 +70,16 @@ class EmployeeController extends Controller
     {
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
+        $departments = Department::select('id','name','unit_id')->get();
         $designations = Designation::select('id','job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name','time_required')->get();
         $roles = Role::select('id','authority')->get();
-        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
+        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
 
-        return view('admin.employee.create')->with(compact('managers','units','organizations','designations','provinces','districts','serviceTypes','shifts','roles'));
+        return view('admin.employee.create')->with(compact('managers','units','departments','organizations','designations','provinces','districts','serviceTypes','shifts','roles'));
     }
 
     /**
@@ -187,6 +190,7 @@ class EmployeeController extends Controller
         $employee = Employee::with('emergencyContact')->findOrFail($id);
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
+        $departments = Department::select('id','name','unit_id')->get();
         $designations = Designation::select('id','job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
@@ -194,9 +198,8 @@ class EmployeeController extends Controller
         $shifts = Shift::select('id','name','time_required')->get();
         $user = User::select('id','username')->where('employee_id',$id)->get();
         $roles = Role::select('id','authority')->get();
-        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->get();
-        // dd($employee);
-        return view('admin.employee.edit')->with(compact('employee','user','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
+        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
+        return view('admin.employee.edit')->with(compact('employee','user','departments','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
     }
 
     /**
@@ -224,11 +227,23 @@ class EmployeeController extends Controller
                 );            
         }
 
+        //shift setting
         $shift = Shift::findOrFail($input['shift_id']);
         if(!$shift->time_required){
                 $input['start_time']=NULL;
                 $input['end_time']=NULL;
         }
+
+        // dd($employee['manager_id'], $input['manager_id'], $employee['designation_id'], $input['designation_id']);
+        //update manager change date/ designation change date
+        if($employee['manager_id'] != $input['manager_id'])
+            $employee['manager_change_date'] = date('Y-m-d');
+
+        if($employee['designation_id'] != $input['designation_id'])
+            $employee['designation_change_date'] = date('Y-m-d');
+        
+        if($employee['department_id'] != $input['department_id'])
+            $employee['department_change_date'] = date('Y-m-d');
 
         $userData = [];
         $emergency_contact =[];
@@ -342,16 +357,16 @@ class EmployeeController extends Controller
                         ->with('manager:id,first_name,middle_name,last_name')
                         ->with('emergencyContact:employee_id,first_name,middle_name,last_name,relationship,phone_no,alternate_phone_no')
                         ->findOrFail($user);
-        
+        // dd($employee->emergencyContact->first_name);
         return view('admin.employee.profile')->with('employee',$employee);
     }
 
     public function terminated()
     {
-        $terminatedEmployees = Employee::select('id','first_name','last_name','middle_name','manager_id', 'designation_id')
+        $terminatedEmployees = Employee::select('id','first_name','last_name','middle_name','manager_id', 'designation_id','terminated_date','join_date')
                     ->where('contract_status','terminated')
                     ->with('designation')
-                    ->with('manager:id,first_name,last_name,middle_name')
+                    ->with('manager:id,first_name,last_name,middle_name,is_active')
                     ->get();
        
         return view('admin.employee.terminate')->with(compact('terminatedEmployees'));
@@ -360,7 +375,7 @@ class EmployeeController extends Controller
     public function terminate(Request $request)
     {
         $id = (int) $request->employee_id;
-        Employee::findOrFail($id)->update(['contract_status' => 'terminated']);
+        Employee::findOrFail($id)->update(['contract_status' => 'terminated','terminated_date' => date('Y-m-d'),]);
         $res = [
             'title' => 'Employee Terminated ',
             'message' => 'Employee has been successfully Terminated ',

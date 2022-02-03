@@ -604,7 +604,7 @@
 </div>
 <!-- designation_id -->
 
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="designation_change_date">Designation Change Date</label>
@@ -614,7 +614,7 @@
             @enderror
         </div>
     </div>
-</div>
+</div> -->
 <!-- designation_change_date -->
 
 <div class="row">
@@ -668,6 +668,29 @@
     </div>
 </div>
 <!-- unit_id -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="department_id">Department*</label>
+            <select class="department-livesearch form-control p-3" name="department_id" id="department_id" data-placeholder="-- Choose Department --">
+            <option value="" selected disabled>--Select Department--</option>
+            @foreach($departments as $department)
+            <option value="{{ $department->id }}" 
+                {{ (!empty(old('department_id')) && old('department_id') == $department->id) ? 'selected': ''}}
+                    {{ (isset($employee) && $employee->department_id == $department->id && empty(old('department_id'))) ? 'selected' : '' }} 
+                    >{{$department->name}}
+            </option>    
+            @endforeach
+            </select>
+            @error('department_id')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- Unit wise Department -->
 
 <div class="row">
     <div class="col-md-12">
