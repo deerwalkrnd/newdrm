@@ -33,7 +33,7 @@
                 <div class="col-md-12">
                     <div class="mb-4">
                         <label class="form-label" for="password">New Password*</label>
-                        <input type="password" class="form-control" id="password" placeholder="Enter Old Password" name="password">
+                        <input type="password" class="form-control" id="password" placeholder="Enter New Password" name="password">
                         <p class="text-danger">{{ $errors->updatePassword->first('password') }}</p>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                 <div class="col-md-12">
                     <div class="mb-4">
                         <label class="form-label" for="password_confirmation">Confirm password*</label>
-                        <input type="password" class="form-control" id="password_confirmation" placeholder="Enter Old confirm_password" name="password_confirmation">
+                        <input type="password" class="form-control" id="password_confirmation" placeholder="Re-enter New Password" name="password_confirmation">
                     </div>
                 </div>
             </div>
