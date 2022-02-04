@@ -388,7 +388,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temp_add_same_as_per_add">Temporary Add Same As Permanent*</label>
+            <label class="form-label" for="temp_add_same_as_per_add">Is Temporary Address Same As Permanent Address*</label>
             <br>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="temp_add_same_as_per_add" id="yes" value="1" 

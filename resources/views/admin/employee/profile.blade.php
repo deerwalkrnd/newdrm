@@ -37,7 +37,12 @@
         var end_time = $('#end_time').val();
         if(start_time && end_time)
             $('#shift_time').show();
-    })
-    
+         
+        if($('input[name="temp_add_same_as_per_add"]:checked').val() != 1){
+            $('#tempBlock').show();
+        }else{
+            $('#tempBlock').hide();
+        }
+    })    
 </script>
 @endsection

@@ -204,8 +204,6 @@ class EmployeeController extends Controller
         $shifts = Shift::select('id','name','time_required')->get();
         $user = User::select('id','username')->where('employee_id',$id)->get();
         $roles = Role::select('id','authority')->where('id','!=','2')->get();
-        // dd($roles);
-        // dd($employee->user->role_id);
         $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
         return view('admin.employee.edit')->with(compact('employee','user','departments','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
     }
