@@ -13,6 +13,17 @@
 <div class="row">
     <div class="col-md-6">
         <div class="mb-4">
+            <label class="form-label" for="employee_id">Employee ID</label>
+            <input type="number" class="form-control" id="employee_id" placeholder="Enter Employee ID" name="employee_id" value="{{ !empty(old('employee_id')) ? old('employee_id') : $employee->employee_id ?? '' }}">
+            @error('employee_id')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- Employee Id -->
+
+     <div class="col-md-6">
+        <div class="mb-4">
             <label class="form-label" for="first_name">First Name*</label>
             <input type="text" class="form-control" id="first_name" placeholder="Enter Employee First Name" name="first_name" value="{{ !empty(old('first_name')) ? old('first_name') : $employee->first_name ?? '' }}">
             @error('first_name')
@@ -21,18 +32,7 @@
         </div>
     </div>
 <!-- firstname -->
-
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label class="form-label" for="last_name">Last Name*</label>
-            <input type="text" class="form-control" id="last_name" placeholder="Enter Employee Last Name" name="last_name" value="{{ !empty(old('last_name')) ? old('last_name') : $employee->last_name ?? '' }}">
-            @error('last_name')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
 </div>
-<!-- lastname -->
 
 <div class="row">
     <div class="col-md-6">
@@ -45,7 +45,20 @@
         </div>
     </div>
 <!-- middlename -->
+    <div class="col-md-6">
+        <div class="mb-4">
+            <label class="form-label" for="last_name">Last Name*</label>
+            <input type="text" class="form-control" id="last_name" placeholder="Enter Employee Last Name" name="last_name" value="{{ !empty(old('last_name')) ? old('last_name') : $employee->last_name ?? '' }}">
+            @error('last_name')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- lastname -->
+    
+</div>
 
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label for="date_of_birth" class="form-label">DOB*</label>
@@ -54,12 +67,9 @@
                 <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>
-        </div>
-</div>
-
+    </div>
 <!-- dob -->
 
-<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="marital_status">Marital Status*</label>
@@ -92,9 +102,11 @@
             @enderror
         </div>
     </div>
-
 <!-- marital-status -->
+</div>
 
+
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="gender">Gender*</label>
@@ -122,9 +134,20 @@
             @enderror
         </div>
     </div>
+<!-- gender -->
+  <div class="col-md-6">
+        <div class="mb-4">
+            <label  class="form-label" for="grand_father">Grandfather Name</label>
+            <input type="text" class="form-control" id="grand_father" placeholder="Enter Employee grand_father" name="grand_father" value="{{ !empty(old('grand_father')) ? old('grand_father') : $employee->grand_father ?? '' }}">
+            @error('grand_father')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- grand_father -->
+
 </div>
 
-<!-- gender -->
 
 <div class="row">
     <div class="col-md-6">
@@ -149,20 +172,6 @@
     </div>
 </div>
 <!-- mother_name -->
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label  class="form-label" for="grand_father">Grandfather Name</label>
-            <input type="text" class="form-control" id="grand_father" placeholder="Enter Employee grand_father" name="grand_father" value="{{ !empty(old('grand_father')) ? old('grand_father') : $employee->grand_father ?? '' }}">
-            @error('grand_father')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-</div>
-
-<!-- grand_father -->
 
 <div class="row">
     <div class="col-md-6">
@@ -379,7 +388,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="temp_add_same_as_per_add">Temporary Add Same As Permanent*</label>
+            <label class="form-label" for="temp_add_same_as_per_add">Is Temporary Address Same As Permanent Address*</label>
             <br>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="temp_add_same_as_per_add" id="yes" value="1" 
@@ -731,8 +740,8 @@
                 <option 
                     value="{{$role->id}}" 
                     {{ (!empty(old('role')) && old('role') == $role->id) ? 'selected': ''}}
-                    {{ (isset($employee) && $employee->role == $role->id && empty(old('role'))) ? 'selected' : '' }} 
-                    >{{$role->authority}}</option>
+                    {{ (isset($employee) && $employee->user->role_id == $role->id && empty(old('role'))) ? 'selected' : '' }} 
+                    >{{ucfirst($role->authority)}}</option>
                 @endforeach
             </select>
             @error('role')

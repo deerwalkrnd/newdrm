@@ -11,7 +11,7 @@ class Employee extends Model
 
     public $fillable = [
         'version',
-        // 'employee_id',
+        'employee_id',
         'first_name',
         'last_name',
         'middle_name',

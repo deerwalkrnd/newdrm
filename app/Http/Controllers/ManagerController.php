@@ -104,10 +104,19 @@ class ManagerController extends Controller
     public function update(ManagerRequest $request, $id)
     {
         $manager = Manager::findOrFail($id);
-        
+        $employees_under_manager  = Employee::select('id','manager_id','first_name')->where('manager_id',$manager->employee_id)->get();
+        // dd(count($employees_under_manager));
+
         //get validated input and merge input fields
         $input = $request->validated();
         $input['version'] = DB::raw('version+1');
+        if($input['employee_id'] != $manager->employee_id)
+            if(count($employees_under_manager)>0){
+                foreach($employees_under_manager as $employee_under_manager){
+                    $employee_under_manager->update(['manager_id' => $input['employee_id']]);   
+                }
+            }
+            
         $manager->update($input);
         
         //update user role according to manager status
@@ -141,28 +150,27 @@ class ManagerController extends Controller
             $manager = Manager::findOrFail($id);
             $employee = [];
             $employee_id = $manager->employee_id;
-            $employees_under_manager  = Employee::select('id','manager_id','first_name')->where('manager_id',$manager->employee_id)->get();
-            // $employees_of_manager = [];
-
-            // dd($manager,$employees_under_manager);
+            $employees_under_manager  = Employee::select('id','manager_id','first_name')->where('manager_id',$manager->employee_id)->get()->count();
 
             //update user role and employees manager_id status under particular manager according to manager deletion
-            if($manager->delete()){
-                $employee['role_id'] = '3';     //3-employee
-                foreach($employees_under_manager as $employee_under_manager){
-                    $employee_under_manager->update(['manager_id' => NULL]);   
-                }
-            }else
-                $employee['role_id'] = '2';     //2-manager
+            if($employees_under_manager == 0){
+                $manager->delete();
+                $employee['role_id'] = '3';  //3-employee
+                $user = User::where('employee_id',$employee_id)->first();
+                $user->update($employee);
 
-            $user = User::where('employee_id',$employee_id)->first();
-            $user->update($employee);
-            // dd($employees_under_manager);
-            $res = [
-                'title' => 'Manager Deleted',
-                'message' => 'Manager has been successfully Deleted',
-                'icon' => 'success'
-            ];
+                 $res = [
+                    'title' => 'Manager Deleted',
+                    'message' => 'Manager has been successfully Deleted',
+                    'icon' => 'success'
+                ];
+            }else{
+                 $res = [
+                    'title' => 'Manager Deletion Error',
+                    'message' => 'Manager in charge of employees cannot be deleted',
+                    'icon' => 'warning'
+                ];
+            }          
             return redirect('/manager')->with(compact('res'));
         }
         catch(\Illuminate\Database\QueryException $e){

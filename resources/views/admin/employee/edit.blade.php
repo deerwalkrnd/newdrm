@@ -41,6 +41,7 @@
 <script>
     $(document).ready(function() {
         shiftTime();
+        tempAddressSameAsPermanent();
     })
     function shiftTime(){
         var ddl = document.getElementById("shift_id");
@@ -55,12 +56,25 @@
                     break;
                 }else{
                     $('#shift_time').hide();
+                    return true;
                 }
             }
         }else{
             $('#shift_time').hide();
+            return true;
         }
+        return true;
     }
+
+    function tempAddressSameAsPermanent(){
+        if($('input[name="temp_add_same_as_per_add"]:checked').val() != 1){
+            $('#tempBlock').show();
+        }else{
+            $('#tempBlock').hide();
+        }
+        return true;
+    }
+
     $('.manager-livesearch').select2({    
         ajax: {
             url: '/employee/search',
