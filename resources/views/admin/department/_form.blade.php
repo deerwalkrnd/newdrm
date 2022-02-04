@@ -16,7 +16,6 @@
             <label for="unit_id">Unit</label>
             <select class="form-control" id="unit_id" name="unit_id">
                 <option value="" disabled="disabled" selected="selected">-- Choose Unit --</option>
-                <option value="" {{empty(old('unit_id')) ? 'selected':''}}>All</option>
                 @forelse($units as $unit)
                 <option 
                     value="{{ $unit->id}}" 

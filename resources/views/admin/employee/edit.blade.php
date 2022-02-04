@@ -56,12 +56,10 @@
                     break;
                 }else{
                     $('#shift_time').hide();
-                    return true;
                 }
             }
         }else{
             $('#shift_time').hide();
-            return true;
         }
         return true;
     }

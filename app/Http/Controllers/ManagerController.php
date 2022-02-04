@@ -113,7 +113,7 @@ class ManagerController extends Controller
         if($input['employee_id'] != $manager->employee_id)
             if(count($employees_under_manager)>0){
                 foreach($employees_under_manager as $employee_under_manager){
-                    $employee_under_manager->update(['manager_id' => $input['employee_id']]);   
+                    $employee_under_manager->update(['manager_id' => $input['employee_id'],'manager_change_date'=> date('Y-m-d')]);   
                 }
             }
             
