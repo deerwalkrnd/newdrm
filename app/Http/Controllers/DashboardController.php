@@ -33,8 +33,14 @@ class DashboardController extends Controller
         $leaveBalance = $this->getLeaveBalance();
         $birthdayList = $this->getBirthdayList();
         $leaveList = $this->getLeaveList();
+
+        if(\Auth::user()->password_expired != '0')
+        {
+            return redirect('/change-password');
+        }else{
+            return view('admin.dashboard.index')->with(compact('leaveBalance','birthdayList','leaveList'));
+        }
         
-        return view('admin.dashboard.index')->with(compact('leaveBalance','birthdayList','leaveList'));
     }
 
     private function getLeaveList()

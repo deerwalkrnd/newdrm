@@ -209,6 +209,10 @@
                         <a class="nav-link navigation_link" href="/contact"><i class="fas fa-address-book icon"></i>
                             Contacts</a>
                     </li>
+                    <li class="nav-item navigation_item">
+                        <a class="nav-link navigation_link" href="/change-password"><i class="fas fa-key"></i>
+                            Change Password</a>
+                    </li>
                     <!-- for mobile -->
                     <div class="nav_mobile">
                         <li class="nav-item navigation_item">

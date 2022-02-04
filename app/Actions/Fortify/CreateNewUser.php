@@ -36,7 +36,7 @@ class CreateNewUser implements CreatesNewUsers
         $user=['username'=>$input['username'],
             'role_id'=>$input['role_id'],
             'employee_id'=>$input['employee_id'],
-            // 'organization_id'=>$input['organization_id'], 
+            'password_expired'=>'1', 
             'password'=>Hash::make('Deerwa1k@DRM')];
             // dd($user);
         return(User::create($user));
