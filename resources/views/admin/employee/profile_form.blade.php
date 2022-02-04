@@ -2,6 +2,16 @@
 <div class="row">
     <div class="col-md-6">
         <div class="mb-4">
+            <label class="form-label" for="employee_id">Employee ID</label>
+            <input type="number" disabled class="form-control" id="employee_id" placeholder="Enter Employee ID" name="employee_id" value="{{ !empty(old('employee_id')) ? old('employee_id') : $employee->employee_id ?? '' }}">
+            @error('employee_id')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- Employee Id -->
+    <div class="col-md-6">
+        <div class="mb-4">
             <label class="form-label" for="first_name">First Name*</label>
             <input type="text" disabled class="form-control" id="first_name"  name="first_name" value="{{ ucfirst($employee->first_name) }}">
             @error('first_name')
@@ -10,19 +20,6 @@
         </div>
     </div>
 <!-- firstname -->
-
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label class="form-label" for="last_name">Last Name*</label>
-            <input type="text" class="form-control" id="last_name" disabled placeholder="None" name="last_name" value="{{ !empty(old('last_name')) ? old('last_name') : ucfirst($employee->last_name) ?? '' }}">
-            @error('last_name')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-</div>
-<!-- lastname -->
-
 <div class="row">
     <div class="col-md-6">
         <div class="mb-4">
@@ -34,7 +31,19 @@
         </div>
     </div>
 <!-- middlename -->
+    <div class="col-md-6">
+        <div class="mb-4">
+            <label class="form-label" for="last_name">Last Name*</label>
+            <input type="text" class="form-control" id="last_name" disabled placeholder="None" name="last_name" value="{{ !empty(old('last_name')) ? old('last_name') : ucfirst($employee->last_name) ?? '' }}">
+            @error('last_name')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- lastname -->
+</div>   
 
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label for="date_of_birth" class="form-label">DOB*</label>
@@ -43,13 +52,9 @@
                 <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>
-        </div>
-</div>
-
+    </div>
 <!-- dob -->
-
-<div class="row">
-    <div class="col-md-6">
+  <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="marital_status">Marital Status*</label>
             <input type="text" class="form-control" id="marital_status" disabled name="marital_status" value="{{ !empty(old('marital_status')) ? old('marital_status') : ucfirst($employee->marital_status) ?? '' }}">
@@ -58,9 +63,12 @@
             @enderror
         </div>
     </div>
-
 <!-- marital-status -->
 
+</div>
+
+
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="gender">Gender*</label>
@@ -89,9 +97,20 @@
             @enderror
         </div>
     </div>
+<!-- gender -->
+
+    <div class="col-md-6">
+        <div class="mb-4">
+            <label  class="form-label" for="grand_father">Grandfather Name</label>
+            <input type="text" class="form-control" id="grand_father" placeholder="None" disabled name="grand_father" value="{{ !empty(old('grand_father')) ? old('grand_father') : ucfirst($employee->grand_father) ?? '' }}">
+            @error('grand_father')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+    <!-- grand_father -->
 </div>
 
-<!-- gender -->
 
 <div class="row">
     <div class="col-md-6">
@@ -117,19 +136,6 @@
 </div>
 <!-- mother_name -->
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label  class="form-label" for="grand_father">Grandfather Name</label>
-            <input type="text" class="form-control" id="grand_father" placeholder="None" disabled name="grand_father" value="{{ !empty(old('grand_father')) ? old('grand_father') : ucfirst($employee->grand_father) ?? '' }}">
-            @error('grand_father')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-</div>
-
-<!-- grand_father -->
 
 <div class="row">
     <div class="col-md-6">

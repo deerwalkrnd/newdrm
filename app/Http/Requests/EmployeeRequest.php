@@ -26,7 +26,7 @@ class EmployeeRequest extends FormRequest
     {
         return [
             // 'employee_id' => 'required',
-            // 'employee_id' => 'required|unique:employees,employee_id,'.$this->id,
+            'employee_id' => 'required|unique:employees,employee_id,'.$this->id,
             'first_name' => 'required|max:255|string',
             'last_name' => 'required|max:255|string',
             'middle_name' => 'nullable|max:255|string',
