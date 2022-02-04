@@ -124,6 +124,6 @@ class Employee extends Model
     }
     
     public function workers(){
-        return $this->hasMany(Employee::class,'manager_id','id')->select('id','first_name','middle_name','last_name','manager_id');
+        return $this->hasMany(Employee::class,'manager_id','id')->select('id','first_name','middle_name','last_name','manager_id','contract_status');
     }
 }
