@@ -33,7 +33,7 @@ class Unit extends Model
     }
     public function topEmployees()
     {
-        return $this->hasMany(Employee::class,'unit_id')->select('id','first_name','middle_name','last_name','manager_id')->where('manager_id',null);
+        return $this->hasMany(Employee::class,'unit_id')->select('id','first_name','middle_name','last_name','manager_id','contract_status')->where('manager_id',null);
     }
     public function departments()
     {

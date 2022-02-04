@@ -13,21 +13,21 @@
                 @foreach($unit->topEmployees as $manager)
                     @if($manager->contract_status=='active')
                         <li style="list-style:none;"><i class="fas fa-user-tie"></i> {{ $manager->first_name." ".$manager->middle_name." ".$manager->last_name }}</li>
-                    @endif
                         <ul>
                         @foreach($manager->workers as $worker)
                             @if($worker->contract_status=='active')
                                 <li style="list-style:none;"><i class="fas fa-user"></i> {{ $worker->first_name." ".$worker->middle_name." ".$worker->last_name }}</li>
-                            @endif
                             <ul>
                             @foreach($worker->workers as $worker1)
                                 @if($worker1->contract_status=='active')
                                     <li style="list-style:none;"><i class="far fa-user"></i> {{ $worker1->first_name." ".$worker1->middle_name." ".$worker1->last_name }}</li>                               
                                 @endif
                             @endforeach
-                            </ul>                               
+                            </ul>
+                            @endif
                         @endforeach
                         </ul>
+                    @endif
                 @endforeach
                 </ul>
             @endforeach
