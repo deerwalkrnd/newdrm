@@ -144,6 +144,7 @@ class FileUploadController extends Controller
         $path = $fileUpload['file_name'];
         $uploaded_by = $fileUpload['uploaded_by'];
         $employee_id = $fileUpload['employee_id'];
+        $res=[];
 
         if((\Auth::user()->role->authority == "hr") || ($employee_id  == \Auth::user()->employee_id ))
         {
@@ -152,13 +153,12 @@ class FileUploadController extends Controller
                 Storage::delete($path);
             }
             $fileUpload->delete();
-             $res = [
-            'title' => 'File Deleted ',
-            'message' => 'File  has been successfully Deleted ',
-            'icon' => 'success'
-            ];
+            $res = [
+                'title' => 'File Deleted ',
+                'message' => 'File  has been successfully Deleted ',
+                'icon' => 'success'
+                ];
         }
-        return redirect()->back();
         if((\Auth::user()->role->authority == "hr") )
         {
            return redirect()->back()->with(compact('res'));
