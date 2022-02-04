@@ -109,6 +109,7 @@
 					<div class="col-md-12 col-lg-12">
 					<form action="{{ route('login') }}" method="POST">
 					{{ csrf_field() }}
+					<p class="text-danger">{{ $errors->first('username') }}</p>
 						<div class="row">
 							<div class="col-md-3 col-lg-4 col-sm-4 col-6 mt-1 text-right">
 								<span class="title">Username: </span>

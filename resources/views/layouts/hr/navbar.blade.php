@@ -92,9 +92,8 @@
                                         </tr>
 
                                         <tr>
-                                             <td class="hr_menu_content"><a href="#"><img class="img-fluid"
-                                                        src="/assets/images/icons/skills.png">My
-                                                    Skill</a>
+                                             <td class="hr_menu_content"><a href="/change-password"><img class="img-fluid"
+                                                        src="/assets/images/icons/skills.png">Change Password</a>
                                             </td>
                                             <td class="hr_menu_content"><a href="/leave-request/create/subordinate-leave"><img class="img-fluid"
                                                         src="/assets/images/icons/exit (1).png">Create
