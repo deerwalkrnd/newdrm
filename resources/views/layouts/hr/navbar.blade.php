@@ -71,9 +71,14 @@
                                             <td class="hr_menu_content"><a href="/file-upload"><img class="img-fluid"
                                                         src="/assets/images/icons/list.png">Upload Files
                                                 </a></td>
-                                            <td class="hr_menu_content"><a href="#"><img class="img-fluid"
+                                            <td class="hr_menu_content">
+                                            <a href="/info"><img class="img-fluid"
+                                                        src="/assets/images/icons/logout.png">Calculate Carry Over Leave
+                                                </a>
+                                                <!-- <a href="#"><img class="img-fluid"
                                                         src="/assets/images/icons/report.png">Monthly Leave
-                                                    Report</a></td>
+                                                    Report</a> -->
+                                                </td>
 
                                             <td class="hr_menu_content"><a href="/unit"><img class="img-fluid"
                                                         src="/assets/images/icons/pie-chart.png">Unit</a></td>
@@ -106,9 +111,12 @@
 
                                         <tr>
                                             <td></td>
-                                            <td class="hr_menu_content"><a href="/info"><img class="img-fluid"
+                                            <!-- <td class="hr_menu_content">
+                                                <a href="/info"><img class="img-fluid"
                                                         src="/assets/images/icons/logout.png">Calculate Carry Over Leave
-                                                </a></td>
+                                                </a>
+                                            </td> -->
+                                            <td></td>
                                             <td class="hr_menu_content"><a href="/serviceType"><img class="img-fluid"
                                                         src="/assets/images/icons/service.png">Service
                                                     Type</a></td>
