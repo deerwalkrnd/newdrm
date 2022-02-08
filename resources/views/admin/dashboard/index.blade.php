@@ -16,7 +16,7 @@
         @endif
     </div>
 
-    @if(env('IP') == session('userIp'))
+    @if(1==1)
         @if(session('punchIn') == 2)
         <div class="col">
             <span class="punch_out_container" style="position: relative;">
