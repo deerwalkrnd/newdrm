@@ -28,7 +28,7 @@
     	}
 
     	.login-header{
-    		background: url({{ asset('assets/images/login/loginHeader.png') }}) repeat-x scroll left top transparent;
+    		background: url({{ asset('assets/images/login/loginheader.png') }}) repeat-x scroll left top transparent;
     		color: #ffffff;
     		font-weight: bold;
     		font-size: 18px;

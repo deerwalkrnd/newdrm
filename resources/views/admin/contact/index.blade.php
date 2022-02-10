@@ -3,7 +3,11 @@
 @section('title','Contact')
 
 @section('content')
-@include('layouts.basic.tableHead',["table_title" => "Contact List", "url" => "/contact/create"])
+@if(Auth::user()->role->authority == 'hr')
+    @include('layouts.basic.tableHead',["table_title" => "Contact List", "url" => "/contact/create"])
+@else
+    @include('layouts.basic.tableHead',["table_title" => "Contact List"])
+@endif
 <table class="unit_table mx-auto drmDataTable">
     <thead>
         <tr class="table_title" style="background-color: #0f5288;">

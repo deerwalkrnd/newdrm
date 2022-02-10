@@ -37,7 +37,10 @@
                     <form class="punch_out_form" action="/punch-in" method="POST">
                         @csrf
                         <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
+                        <p class="text-white">{{ session('userIp') }} | {{ env('IP') }}</p>
+                        @if(session('isLate') == 1)
                         <input placeholder="Punch In/Out Remarks" name="reason">
+                        @endif
                         <span class="punch_out_button">
                             <button>Punch In</button>
                         </span>

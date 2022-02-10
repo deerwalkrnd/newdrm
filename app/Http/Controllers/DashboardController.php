@@ -11,6 +11,9 @@ use App\Models\Employee;
 use App\Models\Attendance;
 use App\Models\CarryOverLeave;
 use App\Helpers\NepaliCalendarHelper;
+use App\Models\Time;
+use Carbon\Carbon;
+
 
 class DashboardController extends Controller
 {
@@ -26,9 +29,13 @@ class DashboardController extends Controller
             }
         }
 
+        $maxTime = Time::select('id','time')->where('id','1')->first()->time;
+        $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
+
         //set punch-in state;
         \Session::put('punchIn', $state);
         \Session::put('userIp', request()->ip());
+        \Session::put('isLate', $isLate);
 
         $leaveBalance = $this->getLeaveBalance();
         $birthdayList = $this->getBirthdayList();
@@ -61,22 +68,21 @@ class DashboardController extends Controller
         $curr_month = date('m');
         $curr_day = date('d');
 
-        $next_month = date('m', strtotime("+30 days"));
-        $next_day = date('d', strtotime("+30 days"));
+        $next_month = $curr_month + 1;
 
         $birthdayList = Employee::select('first_name','last_name','middle_name','date_of_birth')
                                 ->where('contract_status','active')
-                                ->whereMonth('date_of_birth','>',$curr_month)
-                                ->orWhere(function($query) use($curr_month,$curr_day){
-                                    $query->whereMonth('date_of_birth',$curr_month)
-                                        ->whereDay('date_of_birth','>',$curr_day);
+                                ->where(function($query) use($curr_month,$curr_day){
+                                    $query->whereMonth('date_of_birth','>',$curr_month)
+                                            ->orWhere(function($query) use($curr_month,$curr_day){
+                                                $query->whereMonth('date_of_birth',$curr_month)
+                                                    ->whereDay('date_of_birth','>',$curr_day);
+                                            });   
                                 })
-                                ->whereMonth('date_of_birth','<=',$next_month)
-                                ->orWhere(function($query) use($next_month,$next_day){
-                                    $query->whereMonth('date_of_birth',$next_month)
-                                        ->whereDay('date_of_birth','<=',$next_day);
+                                ->where(function($query) use($next_month){
+                                    $query->whereMonth('date_of_birth','<=',$next_month); 
                                 })
-                                ->orderByRaw("DATE_FORMAT(date_of_birth,'%d-%M-%Y')")
+                                ->orderByRaw("DATE_FORMAT(date_of_birth,'%M-%d-%Y')")
                                 ->get();
 
         return $birthdayList;
