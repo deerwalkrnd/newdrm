@@ -44,14 +44,15 @@ class LeaveRequestController extends Controller
         ->with('accepted_by_detail:id,first_name,last_name')
         ->where('acceptance','accepted')
         // ->orWhere('acceptance','rejected')
+        ->orderBy('start_date','desc')
         ->orderBy('created_at')
         ->orderBy('updated_at');
         // dd($leaveRequests->get());
 
         if($request->d){
-            $leaveRequests = $leaveRequests->where('start_date',$request->d)->get();
+            $leaveRequests = $leaveRequests->where('start_date',$request->d)->paginate(30);
         }else{
-            $leaveRequests = $leaveRequests->orderBy('start_date')->get();
+            $leaveRequests = $leaveRequests->orderBy('start_date')->paginate(30);
         }
 
         $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
