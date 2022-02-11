@@ -115,7 +115,7 @@
 								<span class="title">Username: </span>
 							</div>	
 							<div class="col-md-6 col-lg-5 col-sm-6 col-5 p-0">
-								<input type="text" name="username" class="border-right-0 border-1 form-control border-dark custom-input">
+								<input type="text" name="username" class="border-right-0 border-1 form-control border-dark custom-input" autocomplete="on">
 							</div>
 							<div class="col-md-1 col-sm-1 col-1 text-left border p-0 border-dark text-center border-left-0 form-icons">
 								<i class="fas fa-user-tie align-bottom"></i>

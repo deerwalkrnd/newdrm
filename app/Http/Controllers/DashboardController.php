@@ -100,7 +100,6 @@ class DashboardController extends Controller
         {
             print_r($e->getMessage());
         }
-        // dd($year,$month);
 
         $unit_id = \Auth::user()->employee->unit_id;
         $leaveTypes = LeaveType::select('name','id')->where('gender','all')->orWhere('gender',ucfirst(\Auth::user()->employee->gender))->get();
@@ -110,6 +109,8 @@ class DashboardController extends Controller
         {
             $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year);
             $acquiredLeave = $allowedLeave / 12 * $month;
+
+            // dd($year);
             
             $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave','year')
                                         ->where('acceptance','accepted')
@@ -118,6 +119,8 @@ class DashboardController extends Controller
                                         ->where('leave_type_id',$leaveType->id)
                                         ->where('full_leave',"1")
                                         ->sum('days');
+
+            // dd($fullLeaveTaken);
 
             $halfLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
                                         ->where('acceptance','accepted')

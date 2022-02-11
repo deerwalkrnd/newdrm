@@ -29,8 +29,9 @@ class LeaveRequestController extends Controller
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
         ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
         ->where('employee_id',\Auth::user()->employee_id)
-        ->orderBy('created_at')
-        ->orderBy('updated_at')
+        ->orderBy('start_date','desc')
+        ->orderBy('created_at','desc')
+        ->orderBy('updated_at','desc')
         ->get();
         $table_title = 'Employee Leave Details';
         return view('admin.leaveRequest.index')->with(compact('leaveRequests','table_title'));
