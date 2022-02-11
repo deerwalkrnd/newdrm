@@ -33,9 +33,9 @@ class LeaveReportController extends Controller
         $thisYear = $this->getNepaliYear(date('Y-m-d'));
        
         if(isset($request->e))
-            $employees = Employee::where('contract_status','active')->where('id',$request->e)->get();
+            $employees = Employee::where('contract_status','active')->where('id',$request->e)->paginate(3);
         else
-            $employees = Employee::where('contract_status','active')->get();
+            $employees = Employee::where('contract_status','active')->paginate(3);
 
         // dd($employees);
         $leaveTypes = LeaveType::select('name','id','gender')->get();
@@ -111,7 +111,7 @@ class LeaveReportController extends Controller
             
         }
         // dd("records",$records);
-        return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear'));
+        return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear','employees'));
     }
 
     private function getEmployeeLeaveBalance($employee,$type,$year){

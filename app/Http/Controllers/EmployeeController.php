@@ -378,6 +378,7 @@ class EmployeeController extends Controller
                     ->where('contract_status','terminated')
                     ->with('designation')
                     ->with('manager:id,first_name,last_name,middle_name')
+                    ->orderBy('terminated_date','desc')
                     ->get();
        
         return view('admin.employee.terminate')->with(compact('terminatedEmployees'));

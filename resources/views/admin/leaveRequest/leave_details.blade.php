@@ -65,7 +65,7 @@
         @endforelse
     </tbody>
 </table>
-{{-- $leaveRequests->links() --}}
+{{ $leaveRequests->links() }}
 
 @include('layouts.basic.tableFoot')
 @endsection

@@ -48,7 +48,7 @@
             @foreach($leaveTypes as $leaveType)
             <th scope="col" colspan=4>{{ $leaveType->name }}</th>
             @endforeach
-            <th scope="col" colspan=1>Unpaid</th>z
+            <th scope="col" colspan=1>Unpaid</th>
             <th scope="col" colspan=2>Carry Over</th>
         </tr>
         <tr class="table_title" style="background-color: #0f5288;">
@@ -102,7 +102,7 @@
         @endforeach
     </tbody>    
 </table>
-
+{{ $employees->links() }}
 
 @include('layouts.basic.tableFoot')
 @endsection
