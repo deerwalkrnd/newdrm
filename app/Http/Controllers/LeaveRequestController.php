@@ -32,6 +32,7 @@ class LeaveRequestController extends Controller
         ->orderBy('start_date','desc')
         ->orderBy('created_at','desc')
         ->orderBy('updated_at','desc')
+        // ->paginate(30);
         ->get();
         $table_title = 'Employee Leave Details';
         return view('admin.leaveRequest.index')->with(compact('leaveRequests','table_title'));

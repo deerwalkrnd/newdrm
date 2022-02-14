@@ -38,12 +38,16 @@
                         @csrf
                         <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
                         <p class="text-white">{{ session('userIp') }} | {{ env('IP') }}</p>
-                        @if(session('isLate') == 1)
-                        <input placeholder="Punch In/Out Remarks" name="reason">
+                        @if(!session('late_within_ten_days'))
+                            @if(session('isLate') == 1)
+                            <input placeholder="Punch In/Out Remarks" name="reason">
+                            @endif
+                            <span class="punch_out_button">
+                                <button>Punch In</button>
+                            </span>
+                        @else
+                        <p class="text-danger">Multiple Late Punch In. Please Contact HR.</p>
                         @endif
-                        <span class="punch_out_button">
-                            <button>Punch In</button>
-                        </span>
                     </form>
                 </span>
             </div>
