@@ -116,7 +116,11 @@
                                                         src="/assets/images/icons/logout.png">Calculate Carry Over Leave
                                                 </a>
                                             </td> -->
-                                            <td></td>
+                                            <td class="hr_menu_content">
+                                                <a href="/leave-request/forced"><img class="img-fluid"
+                                                        src="/assets/images/icons/logout.png">Forced Leave
+                                                </a>
+                                            </td>
                                             <td class="hr_menu_content"><a href="/serviceType"><img class="img-fluid"
                                                         src="/assets/images/icons/service.png">Service
                                                     Type</a></td>

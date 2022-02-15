@@ -349,7 +349,22 @@ class LeaveRequestController extends Controller
 
     public function getForcedLeave()
     {
-        $leaveList = LeaveRequest::where('reason','Forced (System)')->orderBy('end_date','desc')->paginate(20);
+        if(\Auth::user()->role->authority == 'hr')
+        {
+            $leaveList = LeaveRequest::where('reason','Forced (System)')->orderBy('end_date','desc')->paginate(20);
+        }
+        elseif(\Auth::user()->role->authority == 'manager'){
+            $leaveList = LeaveRequest::whereHas('employee',function($query){
+                                                $query->where('manager_id',\Auth::user()->employee_id);
+                                        })
+                                        ->where('reason','Forced (System)')
+                                        ->orderBy('end_date','desc')
+                                        ->paginate(20);
+        }
+        else{
+            return abort('403');
+        }
+
         return view('admin.leaveRequest.forcedLeave')->with(compact('leaveList'));
     }
 }
