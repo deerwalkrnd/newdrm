@@ -237,6 +237,8 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/leave-request/create',[LeaveRequestController::class, 'create']);
     Route::post('/leave-request',[LeaveRequestController::class, 'store']);
     Route::get('/leave-request',[LeaveRequestController::class, 'index']);
+    Route::get('/leave-request/forced',[LeaveRequestController::class, 'getForcedLeave']);
+    Route::delete('/leave-request/force/{id}',[LeaveRequestController::class, 'forceDestroy']);
     Route::delete('/leave-request/{id}',[LeaveRequestController::class, 'destroy']);
   
     //employee profile

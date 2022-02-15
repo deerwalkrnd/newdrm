@@ -1,9 +1,9 @@
 @extends('layouts.hr.app')
 
-@section('title','Leave Request')
+@section('title','Forced Leave Request')
 
 @section('content')
-@include('layouts.basic.tableHead',["table_title" => $table_title])
+@include('layouts.basic.tableHead',["table_title" => 'Force Leave'])
 
 <table class="unit_table mx-auto drmDataTable">
     <thead>
@@ -12,60 +12,38 @@
             <th scope="col">Employee</th>
             <th scope="col">Leave Type</th>
             <th scope="col">Year</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
+            <th scope="col">Date</th>
             <th scope="col">Days</th>
-            <th scope="col">Half</th>
             <th scope="col">Reason</th>
-            <th scope="col">State</th>
-            <th scope="col">Manager</th>
-            <th scope="col">Approved By</th>
-            @if(strtolower($table_title)!='employee leave details lists')
-                <th scope="col" class="text-center">Action</th>    
-            @endif
+            <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody>
-        @forelse($leaveRequests as $leaveRequest)
+        @forelse($leaveList as $leave)
         <tr>
             <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
-            <td>{{ $leaveRequest->employee->first_name.' '.$leaveRequest->employee->last_name }}</td>
-            <td>{{ $leaveRequest->leaveType->name }}</td>
-            <td>{{ $leaveRequest->year }}</td>
-            <td>{{ $leaveRequest->start_date }}</td>
-            <td>{{ $leaveRequest->end_date }}</td>
-            <td>{{ $leaveRequest->days * ($leaveRequest->full_leave == 1 ? 1 : 0.5) }}</td>
-            <td>{{ $leaveRequest->half_leave }}</td>
-            <td>{{ $leaveRequest->reason }}</td>
-            <td>{{ $leaveRequest->acceptance }}</td>
-            <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:'--' }}</td>
-            @if($leaveRequest->accepted_by_detail != NULL)
-            <td>{{ ucfirst($leaveRequest->accepted_by_detail->first_name).' '.ucfirst($leaveRequest->accepted_by_detail->middle_name).' '.ucfirst($leaveRequest->accepted_by_detail->last_name) }}</td>
-            @else
-            <td> -- </td>
-            @endif            
-            @if(!($leaveRequest->start_date == date('Y-m-d')) && strtolower($table_title)!='employee leave details lists')
-            <td class="text-center">
-                
-                <a href="/leave-request/edit/{{ $leaveRequest->id }}"><i class="far fa-edit"></i></a> 
-                | 
-                <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
+            <td>{{ $leave->employee->first_name.' '.$leave->employee->last_name }}</td>
+            <td>{{ $leave->leaveType->name }}</td>
+            <td>{{ $leave->year }}</td>
+            <td>{{ $leave->end_date }}</td>
+            <td>{{ $leave->days * ($leave->full_leave == 1 ? 1 : 0.5) }}</td>
+            <td>{{ $leave->reason }}</td>
+            <td>
+                <form action="/leave-request/force/{{ $leave->id }}" method="POST" class="d-inline" onsubmit="return confirm('Do you want to delete?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="delete action border-0"><i class="fas fa-trash-alt action"></i></button>
                 </form>
             </td>
-
-            @endif
         </tr>
         @empty
         <tr>
-            <th colspan=12 class="text-center text-dark">No LeaveRequest Found</th>
+            <th colspan=12 class="text-center text-dark">No Force Leave Found</th>
         </tr>
         @endforelse
     </tbody>
 </table>
-{{ $leaveRequests->links() }}
+{{ $leaveList->links() }}
 
 @include('layouts.basic.tableFoot')
 @endsection

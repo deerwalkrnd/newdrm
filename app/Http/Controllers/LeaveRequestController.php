@@ -271,6 +271,22 @@ class LeaveRequestController extends Controller
             return redirect('/leave-request')->with(compact('res'));
     }
 
+    public function forceDestroy($id)
+    {
+        $leaveRequest = LeaveRequest::where('reason','Forced (System)')->findOrFail($id);
+        $leaveRequest->delete();
+        $res = [
+            'title' => 'Forced Leave Deleted',
+            'message' => 'Force Leave has been successfully Deleted',
+            'icon' => 'success'
+        ];
+        $role = \Auth::user()->role->authority;
+        if($role == 'hr' || $role == 'manager')
+            return back()->with(compact('res'));
+        else
+            return redirect('/leave-request')->with(compact('res'));
+    }
+
     public function accept($id)
     {
         $leaveRequest = LeaveRequest::findOrFail($id)
@@ -329,5 +345,11 @@ class LeaveRequestController extends Controller
             $leaveRequests = $leaveRequests->orderBy('start_date')->orderBy('created_at')->orderBy('updated_at')->get();
         // dd($leaveRequests[0]->employee->manager);
         return view('admin.leaveRequest.approve_leave')->with(compact('leaveRequests'));
+    }
+
+    public function getForcedLeave()
+    {
+        $leaveList = LeaveRequest::where('reason','Forced (System)')->orderBy('end_date','desc')->paginate(20);
+        return view('admin.leaveRequest.forcedLeave')->with(compact('leaveList'));
     }
 }
