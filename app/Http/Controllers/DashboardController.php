@@ -102,7 +102,13 @@ class DashboardController extends Controller
         }
 
         $unit_id = \Auth::user()->employee->unit_id;
-        $leaveTypes = LeaveType::select('name','id')->where('gender','all')->orWhere('gender',ucfirst(\Auth::user()->employee->gender))->get();
+        $leaveTypes = LeaveType::select('name','id')
+                                ->where('status','active')
+                                ->where(function($query){
+                                    $query->where('gender','all')
+                                    ->orWhere('gender',ucfirst(\Auth::user()->employee->gender));
+                                })
+                                ->get();
 
         $lists = array();
         foreach($leaveTypes as $leaveType)

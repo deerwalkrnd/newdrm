@@ -14,6 +14,7 @@ class LeaveType extends Model
         'name',
         'gender',
         'paid_unpaid',
-        'include_holiday'
+        'include_holiday',
+        'status'
     ];
 }

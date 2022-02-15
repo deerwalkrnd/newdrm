@@ -80,3 +80,31 @@
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label for="status">Status*</label>
+            <select class="form-control" id="status" name="status">
+                <option 
+                    value="active" selected
+                    {{ (!empty(old('status')) && old('status') == 'active') ? 'selected': ''}}
+                    {{ (isset($leaveType) && $leaveType->status == 'active' && empty(old('status'))) ? 'selected' : '' }} 
+                    >
+                    Active
+                </option>
+                <option 
+                    value="inactive" 
+                    {{ (!empty(old('status')) && old('status') == 'inactive') ? 'selected': ''}}
+                    {{ (isset($leaveType) && $leaveType->status == 'inactive' && empty(old('status'))) ? 'selected' : '' }} 
+                    >
+                    Inactive
+                </option>
+            </select>
+            @error('status')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- status -->

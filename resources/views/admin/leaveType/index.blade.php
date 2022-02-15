@@ -11,6 +11,7 @@
             <th scope="col">Type</th>
             <th scope="col">Payment Status</th>
             <th scope="col">Count Holidays as Leave</th>
+            <th scope="col">Status</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -21,6 +22,7 @@
             <td>{{ $leaveType->name }}</td>
             <td> {{ $leaveType->paid_unpaid == 1? 'Paid':'Unpaid'}} </td>
             <td>{{ $leaveType->include_holiday == 1 ? 'Yes' : 'No' }}</td>
+            <td>{{ ucfirst($leaveType->status) }}</td>
             <td class="text-center">
                 <a href="/leaveType/edit/{{ $leaveType->id }}"><i class="far fa-edit"></i></a> 
                 | 

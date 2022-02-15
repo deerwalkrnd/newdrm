@@ -17,7 +17,7 @@ class LeaveTypeController extends Controller
      */
     public function index()
     {
-        $leaveTypes = LeaveType::select('id', 'name','paid_unpaid','include_holiday')
+        $leaveTypes = LeaveType::select('id', 'name','paid_unpaid','include_holiday','status')
                         ->orderBy('name')
                         ->get();
         // dd($leaveTypes);
@@ -70,7 +70,7 @@ class LeaveTypeController extends Controller
      */
     public function edit($id)
     {
-        $leaveType = LeaveType::select('id', 'name', 'gender','paid_unpaid','include_holiday')->findOrFail($id);
+        $leaveType = LeaveType::select('id', 'name', 'gender','paid_unpaid','include_holiday','status')->findOrFail($id);
         return view('admin.leaveType.edit')->with(compact('leaveType'));
     }
 
