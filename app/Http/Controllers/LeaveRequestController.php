@@ -68,12 +68,12 @@ class LeaveRequestController extends Controller
      */
     public function create()
     {
-        $leaveTypes = LeaveType::select('id','name')->get();
+        $leaveTypes = LeaveType::select('id','name')->where('status','active')->get();
         return view('admin.leaveRequest.create')->with(compact('leaveTypes'));
     }
 
     public function createSubOrdinateLeave(){
-        $leaveTypes = LeaveType::select('id','name')->get();
+        $leaveTypes = LeaveType::select('id','name')->where('status','active')->get();
         return view('admin.leaveRequest.createSubOrdinateLeave')->with(compact('leaveTypes'));
     }
 
