@@ -67,7 +67,7 @@ class EmployeeRequest extends FormRequest
             'unit_id'  => 'required|max:255|integer|exists:units,id',
             'department_id'  => 'required|max:255|integer|exists:departments,id',
             'email' => 'required|email|max:255',
-            'username' => 'required|string|max:255|unique:users,username,'.$this->id,
+            'username' => 'required|string|max:255|unique:users,username,'.$this->id.',employee_id',
             'role' => 'required|exists:roles,id',
             'shift_id' => 'required|max:255|integer',
             'start_time' => 'date_format:H:i|nullable',

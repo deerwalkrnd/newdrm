@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\MissedPunchOut::class,
+        Commands\PendingLeaveNotification::class,
     ];
 
     /**
@@ -26,9 +27,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('leave:pending')->dailyAt('22:00');
         $send_mail = Mail::select('send_mail')->where('name','Missed Punch Out')->first()->send_mail;
         if($send_mail)
-            $schedule->command('punchOut:missed')->everyMinute();
+            $schedule->command('punchOut:missed')->dailyAt('23:50');
     }
 
     /**

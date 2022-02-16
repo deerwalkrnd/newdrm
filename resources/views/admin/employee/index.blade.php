@@ -26,6 +26,7 @@
         <th scope="col">Y Since Date</th>
         <th scope="col">Status</th>
         <th scope="col">Position</th>
+        <th scope="col">Punch In</th>
         <th scope="col">Action</th>
     </tr>
     </thead>
@@ -45,6 +46,18 @@
         <td>{{ $join_year[$i]}}</td>
         <td>{{ $employee->serviceType->service_type_name }}</td>
         <td>{{ $employee->designation->job_title_name }}</td>
+        @if($employee->attendances_count > 0)
+        <td>Already Punched In</td>
+        @else
+        <td>
+            
+            <form action="/punch-in/{{ $employee->id }}" method="POST" class="d-inline">
+                @csrf
+                <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
+                <button type="submit" class="border-0 text-primary">Punch In</button>
+            </form> 
+        </td>
+        @endif
         <td class="text-center">
             <a href="/employee/edit/{{$employee->id}}"><i class="far fa-edit"></i></a> 
             <!-- | 
