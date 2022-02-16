@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TimeRequest;
 use App\Models\Time;
+use App\Helpers\MailHelper;
 class TimeController extends Controller
 {
     /**
@@ -39,6 +40,7 @@ class TimeController extends Controller
         $input = $request->validated();
         $time = Time::findOrFail($id);
         $time->update($input);
+        MailHelper::timeChangeMail($time);
         $res = [
             'title' => 'Time Updated',
             'message' => 'Time has been successfully Updated',
