@@ -79,6 +79,36 @@ class MailHelper{
         return true;
     }
 
+
+    //pending leave notification email
+    public static function sendPendingLeaveMail(){
+        $sendMailController = new SendMailController;
+
+        $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
+        ->with(['employee:id,first_name,last_name,manager_id,email','leaveType:id,name'])
+        ->where('acceptance','pending')
+        ->whereDate('start_date',date('Y-m-d',strtotime('+1 day')))
+        ->get();
+
+        $hr_user = User::where('role_id','1')->with('employee:id,first_name,last_name,middle_name,email')->first();
+        $hr = $hr_user->employee->email;
+
+        foreach($leaveRequests as $leaveRequest){
+            $to = $leaveRequest->employee->email;
+            $name = $leaveRequest->employee->first_name;
+
+            if($leaveRequest->employee->manager)
+                $cc = [$hr,$leaveRequest->employee->manager->email];
+            else
+                $cc = [$hr];
+
+            $message = 'You have pending leave request of tommorow.';
+            $subject = 'Pending Leave Request Notification';
+            $sendMailController->sendMail($to, $hr ,$name, $subject, $message, $cc);
+        }
+        return true;
+    }
+
 }
 
 ?>

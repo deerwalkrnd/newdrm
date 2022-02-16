@@ -40,11 +40,19 @@
                         <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
                         <p class="text-white">{{ session('userIp') }} | {{ env('IP') }}</p>
                         @if(session('isLate') == 1)
-                        <input placeholder="Punch In/Out Remarks" name="reason">
-                        @endif
+                            @if(session('late_within_ten_days') > 0 )
+                                <p class="text-danger">Multiple Late Punch In. Please Contact HR.</p>
+                            @else
+                            <input placeholder="Punch In/Out Remarks" name="reason">
+                            <span class="punch_out_button">
+                                <button>Punch In</button>
+                            </span> 
+                            @endif
+                        @else
                         <span class="punch_out_button">
                             <button>Punch In</button>
-                        </span>
+                        </span>    
+                        @endif
                     </form>
                 </span>
             </div>

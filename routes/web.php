@@ -226,7 +226,7 @@ Route::middleware(['logged-in'])->group(function(){
 
     //punch-in-out
     Route::get('/punch-in',[AttendanceController::class, 'index']);
-    Route::post('/punch-in',[AttendanceController::class, 'punchIn']);
+    Route::post('/punch-in/{id?}',[AttendanceController::class, 'punchIn']);
     Route::post('/punch-out',[AttendanceController::class, 'punchOut']);
     Route::get('/myPunchIn',[AttendanceController::class,'myPunchIn']);
    

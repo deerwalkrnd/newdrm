@@ -11,6 +11,7 @@ use App\Models\Employee;
 use App\Models\Attendance;
 use App\Models\CarryOverLeave;
 use App\Helpers\NepaliCalendarHelper;
+use App\Helpers\MailHelper;
 use App\Models\Time;
 use Carbon\Carbon;
 
@@ -28,14 +29,22 @@ class DashboardController extends Controller
                 $state = 3;
             }
         }
+        // MailHelper::sendPendingLeaveMail();
 
         $maxTime = Time::select('id','time')->where('id','1')->first()->time;
-        $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
-
+        $isLate = strtotime(Carbon::now()) <= strtotime($maxTime) ? '0' : '1';
+        
+        $late_within_ten_days = Attendance::select('late_punch_in','punch_in_time')
+            ->where('employee_id', \Auth::user()->employee_id)
+            ->whereDate('punch_in_time','>=',date('Y-m-d',strtotime("-10 days")))
+            ->where('late_punch_in','1')
+            ->count();
+         
         //set punch-in state;
         \Session::put('punchIn', $state);
         \Session::put('userIp', request()->ip());
         \Session::put('isLate', $isLate);
+        \Session::put('late_within_ten_days',$late_within_ten_days);
 
         $leaveBalance = $this->getLeaveBalance();
         $birthdayList = $this->getBirthdayList();
