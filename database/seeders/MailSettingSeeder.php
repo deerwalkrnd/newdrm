@@ -20,6 +20,10 @@ class MailSettingSeeder extends Seeder
             'send_mail'=> '1'
         ]);
         DB::table('mails')->insert([
+            'name' => 'Pending Leave Request',
+            'send_mail'=> '1'
+        ]);
+        DB::table('mails')->insert([
             'name' => 'Late Punch In',
             'send_mail'=> '1'
         ]);

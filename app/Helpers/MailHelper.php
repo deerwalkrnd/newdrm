@@ -109,6 +109,25 @@ class MailHelper{
         return true;
     }
 
+
+    //time change email
+    public static function timeChangeMail($time){
+        $sendMailController = new SendMailController;
+
+        $hr_user = User::where('role_id','1')->with('employee:id,email')->first();
+        $hr = $hr_user->employee->email;
+        // dd(date("h:i A",strtotime($time->time)));
+        $employees = Employee::select('email')->where('contract_status', 'active')->where('middle_name','as')->pluck('email')->all();
+        $to = $hr;
+        $name = "All";
+        $bcc = $employees;
+        $message = $time->name.' has been changed to '.date("h:i A",strtotime($time->time)).'.';
+        $regards ='HR';
+        $subject = $time->name.' Changed';
+        $sendMailController->sendMail($to, $hr ,$name, $subject, $message,$cc=false,$bcc);
+        return true;
+    }
+
 }
 
 ?>

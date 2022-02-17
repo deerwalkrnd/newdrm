@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TimeRequest;
 use App\Models\Time;
+use App\Models\Mail;
+use App\Helpers\MailHelper;
 class TimeController extends Controller
 {
     /**
@@ -39,6 +41,10 @@ class TimeController extends Controller
         $input = $request->validated();
         $time = Time::findOrFail($id);
         $time->update($input);
+        $send_mail = Mail::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
+        // dd($send_mail);
+        if($send_mail)
+            MailHelper::timeChangeMail($time);
         $res = [
             'title' => 'Time Updated',
             'message' => 'Time has been successfully Updated',
