@@ -22,23 +22,31 @@
             <th scope="col">Employee</th>
             <th scope="col">Manager</th>
             <th scope="col">Date</th>
+            <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody>
-        @forelse($noRecordList as $record)
+        @forelse($records as $record)
             <tr>
                 <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
-                <td>{{ $record->first_name.' '.substr($record->middle_name,0,1).' '.$record->last_name }}</td>
-                @if($record->manager != NULL)
-                    <td>{{ $record->manager->first_name.' '.substr($record->manager->middle_name,0,1).' '.$record->manager->last_name }}</td>
+                <td>{{ $record->employee->first_name.' '.substr($record->employee->middle_name,0,1).' '.$record->employee->last_name }}</td>
+                @if($record->employee->manager != NULL)
+                    <td>{{ $record->employee->manager->first_name.' '.substr($record->employee->manager->middle_name,0,1).' '.$record->employee->manager->last_name }}</td>
                 @else
                     <td> -- </td>
                 @endif
                 <td>{{ $date }}</td>
+                <td>
+                    <form action="/force-punch-in/{{ $record->employee_id }}" onsubmit="return confirm('Are you sure?')" method="POST" class="d-inline">
+                        @csrf
+                        <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
+                        <button type="submit"  class="border-0 btn btn-primary">Force Punch In</button>
+                    </form>
+                </td>
             </tr>          
         @empty
         <tr>
-            <th colspan=11 class="text-center text-dark">No Any Accepted Leave Requests Yet</th>
+            <th colspan=11 class="text-center text-dark">No Records of No Punch In No Leave Request</th>
         </tr>
         @endforelse
     </tbody>  

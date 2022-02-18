@@ -18,10 +18,12 @@ use App\Models\ServiceType;
 use App\Models\Shift;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Mail;
 use App\Models\EmergencyContact;
 use App\Models\Manager;
 use App\Models\CarryOverLeave;
 use App\Helpers\NepaliCalendarHelper;
+use App\Helpers\MailHelper;
 
 use App\Actions\Fortify\CreateNewUser;
 
@@ -72,8 +74,6 @@ class EmployeeController extends Controller
         // dd($employees);
         // dd($employee->department);->with(['code' => $this->verificationCode]);
         $code = 'OXqSTexF5zn4uXSp';
-        // foreach ($employees as $employee)
-        //     dd($employee->attendances->last()->punch_in_time);
         return view('admin.employee.index')->with(compact('employees','join_year','res','code'));
     }
 
@@ -162,7 +162,7 @@ class EmployeeController extends Controller
             $user['employee_id'] = Employee::create($input)->id;
             $emergency_contact['employee_id']=$user['employee_id'];
             $createUser = new CreateNewUser();
-            $createUser->create($user);
+            $created_user = $createUser->create($user);
             EmergencyContact::create($emergency_contact);
             
             $carryOverLeave = [
@@ -182,6 +182,11 @@ class EmployeeController extends Controller
             'message' => 'Employee has been successfully Created ',
             'icon' => 'success'
         ];
+        // dd($input,$created_user);
+        $send_mail = Mail::select('send_mail')->where('name','Employee Credentials')->first()->send_mail;
+        if($send_mail){
+            MailHelper::employeeCredentialMail($input,$created_user);
+        }
         return redirect('/employee')->with(compact('res'));
     }
 

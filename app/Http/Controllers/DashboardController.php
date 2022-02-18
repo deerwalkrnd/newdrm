@@ -12,6 +12,7 @@ use App\Models\Attendance;
 use App\Models\CarryOverLeave;
 use App\Helpers\NepaliCalendarHelper;
 use App\Helpers\MailHelper;
+use App\Helpers\NoPunchInNoLeave;
 use App\Models\Time;
 use Carbon\Carbon;
 
@@ -39,7 +40,11 @@ class DashboardController extends Controller
             ->whereDate('punch_in_time','>=',date('Y-m-d',strtotime("-10 days")))
             ->where('late_punch_in','1')
             ->count();
-         
+        // dd(NoPunchInNoLeave::whereDate('date',date('Y-m-d',strtotime("-1 day")))->count());
+        // $noPunchInNoLeaveRecords = NoPunchInNoLeave::where('employee_id',\Auth::user()->employee_id)
+        //                             ->whereDate('date',date('Y-m-d',strtotime("-1 day")))->count();
+        // dd($noPunchInNoLeaveRecords);
+    
         //set punch-in state;
         \Session::put('punchIn', $state);
         \Session::put('userIp', request()->ip());
