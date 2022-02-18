@@ -12,7 +12,7 @@ use App\Models\Attendance;
 use App\Models\CarryOverLeave;
 use App\Helpers\NepaliCalendarHelper;
 use App\Helpers\MailHelper;
-use App\Helpers\NoPunchInNoLeave;
+use App\Models\NoPunchInNoLeave;
 use App\Models\Time;
 use Carbon\Carbon;
 
@@ -40,16 +40,16 @@ class DashboardController extends Controller
             ->whereDate('punch_in_time','>=',date('Y-m-d',strtotime("-10 days")))
             ->where('late_punch_in','1')
             ->count();
-        // dd(NoPunchInNoLeave::whereDate('date',date('Y-m-d',strtotime("-1 day")))->count());
-        // $noPunchInNoLeaveRecords = NoPunchInNoLeave::where('employee_id',\Auth::user()->employee_id)
-        //                             ->whereDate('date',date('Y-m-d',strtotime("-1 day")))->count();
-        // dd($noPunchInNoLeaveRecords);
+
+        //check if there exists no punch in no leave record
+        $noPunchInNoLeaveRecords = NoPunchInNoLeave::where('employee_id',\Auth::user()->employee_id)->get()->count();
     
         //set punch-in state;
         \Session::put('punchIn', $state);
         \Session::put('userIp', request()->ip());
         \Session::put('isLate', $isLate);
         \Session::put('late_within_ten_days',$late_within_ten_days);
+        \Session::put('noPunchInNoLeaveRecords',$noPunchInNoLeaveRecords);
 
         $leaveBalance = $this->getLeaveBalance();
         $birthdayList = $this->getBirthdayList();
@@ -204,7 +204,7 @@ class DashboardController extends Controller
         $employee_id = \Auth::user()->employee_id;
         $today = date('Y-m-d');
         $rowExists = Attendance::where('employee_id',$employee_id)
-        ->whereDate('created_at',$today)
+        ->whereDate('punch_in_time',$today)
         ->count();
 
         if($rowExists == 0)
@@ -219,7 +219,7 @@ class DashboardController extends Controller
         $today = date('Y-m-d');
         $punchOutTime = Attendance::select('punch_out_time')
         ->where('employee_id',$employee_id)
-        ->whereDate('created_at',$today)
+        ->whereDate('punch_in_time',$today)
         ->first();
 
         if($punchOutTime->punch_out_time == null)

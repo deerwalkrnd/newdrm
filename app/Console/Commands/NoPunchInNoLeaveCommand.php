@@ -44,7 +44,6 @@ class NoPunchInNoLeaveCommand extends Command
     {
         $noPunchInNoLeave = new NoPunchInNoLeaveController;
         $create = $noPunchInNoLeave->create();
-        $remove = $noPunchInNoLeave->remove();
         return true;
     }
 }

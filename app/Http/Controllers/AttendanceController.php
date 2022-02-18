@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Attendance;
 use App\Models\MailControl;
 use App\Models\LeaveRequest;
+use App\Models\NoPunchInNoLeave;
 use App\Http\Controllers\SendMailController;
 use App\Helpers\MailHelper;
 use App\Helpers\NepaliCalendarHelper;
@@ -26,7 +27,7 @@ class AttendanceController extends Controller
         // $employee_id = \Auth::user()->employee_id;
         $today = date('Y-m-d');
         $rowExists = Attendance::where('employee_id',$employee_id)
-        ->whereDate('created_at',$today)
+        ->whereDate('punch_in_time',$today)
         ->count();
 
         if($rowExists == 0)
@@ -41,7 +42,7 @@ class AttendanceController extends Controller
         $today = date('Y-m-d');
         $punchOutTime = Attendance::select('punch_out_time')
         ->where('employee_id',$employee_id)
-        ->whereDate('created_at',$today)
+        ->whereDate('punch_in_time',$today)
         ->first();
 
         if($punchOutTime->punch_out_time == null)
@@ -82,24 +83,27 @@ class AttendanceController extends Controller
 
     public function punchIn(Request $request)
     {
-        // dd($request->id);
+        $successfull_punch_in_res = [
+                    'title' => 'Employee Punched In',
+                    'message' => 'Employee has been successfully Punched In',
+                    'icon' => 'success'
+                    ];
+        
+        $failure_punch_in_res = [
+                    'title' => 'Employee Punch In Failed',
+                    'message' => 'Employee cannot be Punched In',
+                    'icon' => 'warning'
+                    ];
+
         //Employee punch in by HR
         if($request->id){
             $employee_id = $request->id;
             $reason = "HR Punch In";
             $attendance = $this->takeAttendance($employee_id,$request,$reason);
             if($attendance){
-                $res = [
-                    'title' => 'Employee Punched In',
-                    'message' => 'Employee has been successfully Punched In',
-                    'icon' => 'success'
-                ];
+                $res = $successfull_punch_in_res;
             }else{
-                $res = [
-                    'title' => 'Employee Punch In Failed',
-                    'message' => 'Employee cannot be Punched In',
-                    'icon' => 'warning'
-                    ];
+                $res = $failure_punch_in_res;
             }
             return redirect('/employee')->with(compact('res'));
         }else{
@@ -111,17 +115,9 @@ class AttendanceController extends Controller
                 $reason = false;
             $attendance = $this->takeAttendance($employee_id,$request,$reason);
             if($attendance){
-                $res = [
-                    'title' => 'Punch In Sucessfull',
-                    'message' => 'You have been successfully Punched In',
-                    'icon' => 'success'
-                    ];
+                $res = $successfull_punch_in_res;
             }else{
-                $res = [
-                    'title' => 'Employee Punch In Failed',
-                    'message' => 'Employee cannot be Punched In',
-                    'icon' => 'warning'
-                    ];
+                $res = $failure_punch_in_res;
             }
             return redirect($this->redirect_to)->with(compact('res'));
 
@@ -131,7 +127,7 @@ class AttendanceController extends Controller
     public function forcePunchIn(Request $request, $id)
     {
         //Employee punch in by HR
-        $employee_id = $id;
+        $employee_id = $request->employee_id;
         $reason = "Forced Punch In";
         $attendance = $this->takeAttendance($employee_id,$request,$reason);
         if($attendance){
@@ -140,6 +136,8 @@ class AttendanceController extends Controller
                 'message' => 'Employee has been successfully Punched In',
                 'icon' => 'success'
             ];
+            $noPunchInNoLeaveRecord = NoPunchInNoLeave::findOrFail($id);
+            $noPunchInNoLeaveRecord->delete();
         }else{
             $res = [
                 'title' => 'Employee Punch In Failed',
@@ -154,9 +152,10 @@ class AttendanceController extends Controller
         if(!$this->recordRowExists($employee_id)){
             if($request->code == $this->verificationCode)
             {
+                //no punch-in no leave
                 if(strtolower($reason) == "forced punch in"){
                     $presentTime = Carbon::yesterday()->format('Y-m-d');
-                    $punch_in_time = Carbon::yesterday()->toDateTimeString();
+                    $punch_in_time =  Carbon::yesterday()->addHours(10);
                 }
                 else{
                     $presentTime = Carbon::now()->format('Y-m-d');
@@ -200,21 +199,35 @@ class AttendanceController extends Controller
 
                 // if reason is null for isLate true throw error
                 // dd(request()->ip());
-                $attendance = Attendance::create([
-                    'employee_id' => $employee_id,
-                    'punch_in_time' => $punch_in_time,
-                    'punch_in_ip' => request()->ip(),
-                    'late_punch_in' => $isLate,
-                    'reason' => $reason
-                ]);
+                if(strtolower($reason) == "forced punch in"){
+                    $attendance = Attendance::create([
+                        'employee_id' => $employee_id,
+                        'punch_in_time' => $punch_in_time,
+                        'punch_out_time' =>  Carbon::yesterday()->addHours(18),
+                        'punch_in_ip' => request()->ip(),
+                        'punch_out_ip' => request()->ip(),
+                        'late_punch_in' => $isLate,
+                        'reason' => $reason
+                    ]);
+                    \Session::put('punchIn', '1');
+                    // dd(|Session)
 
+                }else{
+                    $attendance = Attendance::create([
+                        'employee_id' => $employee_id,
+                        'punch_in_time' => $punch_in_time,
+                        'punch_in_ip' => request()->ip(),
+                        'late_punch_in' => $isLate,
+                        'reason' => $reason
+                    ]);
+                    \Session::put('punchIn', '2');
+                }
                 //Send Mail to manager,hr and employee after late punch in 
                 $subject = "Late Punch In";
                 $send_mail = MailControl::select('send_mail')->where('name','Late Punch In')->first()->send_mail;
                 if($attendance->late_punch_in && $send_mail){
                     MailHelper::sendEmail($type=2,$attendance,$subject);
                 }
-                \Session::put('punchIn', '2');
             }
             return true;
         }
@@ -261,7 +274,7 @@ class AttendanceController extends Controller
             $issueForcedLeave = strtotime(Carbon::now()) < $minTime ? '1' : '0';
             $attendance = Attendance::select('punch_out_time')
                         ->where('employee_id',$employee_id)
-                        ->whereDate('created_at',$today)
+                        ->whereDate('punch_in_time',$today)
                         ->update([
                             'punch_out_time' => Carbon::now()->toDateTimeString(),
                             'punch_out_ip' => request()->ip(),
