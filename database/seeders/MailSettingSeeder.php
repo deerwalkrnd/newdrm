@@ -15,35 +15,33 @@ class MailSettingSeeder extends Seeder
     public function run()
     {
         //All Mail Settings Required
-        DB::table('mails')->insert([
+        DB::table('mail_controls')->insert([
             'name' => 'Leave Request',
             'send_mail'=> '1'
         ]);
-        DB::table('mails')->insert([
+        DB::table('mail_controls')->insert([
             'name' => 'Pending Leave Request',
             'send_mail'=> '1'
         ]);
-        DB::table('mails')->insert([
+        DB::table('mail_controls')->insert([
             'name' => 'Timing Change',
             'send_mail'=> '1'
         ]);
-        DB::table('mails')->insert([
+        DB::table('mail_controls')->insert([
             'name' => 'Late Punch In',
             'send_mail'=> '1'
         ]);
-        DB::table('mails')->insert([
+        DB::table('mail_controls')->insert([
             'name' => 'Missed Punch Out',
             'send_mail'=> '1'
         ]);
-        DB::table('mails')->insert([
+        DB::table('mail_controls')->insert([
             'name' => 'Subordinate Leave',
             'send_mail'=> '1'
         ]);
-         DB::table('mails')->insert([
+         DB::table('mail_controls')->insert([
             'name' => 'Employee Credentials',
             'send_mail'=> '1'
         ]);
-        
-       
     }
 }

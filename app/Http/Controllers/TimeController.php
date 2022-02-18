@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TimeRequest;
 use App\Models\Time;
-use App\Models\Mail;
+use App\Models\MailControl;
 use App\Helpers\MailHelper;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TimerChangeNotificationMail;
+
 class TimeController extends Controller
 {
     /**
@@ -41,10 +44,14 @@ class TimeController extends Controller
         $input = $request->validated();
         $time = Time::findOrFail($id);
         $time->update($input);
-        $send_mail = Mail::select('send_mail')->where('name','Timing Change')->first()->send_mail;
+        $send_mail = MailControl::select('send_mail')->where('name','Timing Change')->first()->send_mail;
         // dd($send_mail);
         if($send_mail)
-            MailHelper::timeChangeMail($time);
+        {
+            // MailHelper::timeChangeMail($time);
+            Mail::to(\Auth::user()->employee->email)->cc(env('GP_EMAIL'))
+                ->send(new TimerChangeNotificationMail($time));
+        }
         $res = [
             'title' => 'Time Updated',
             'message' => 'Time has been successfully Updated',

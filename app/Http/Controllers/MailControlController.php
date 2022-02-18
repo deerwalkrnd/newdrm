@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Mail;
-use App\Http\Requests\MailRequest;
+use App\Models\MailControl;
+use App\Http\Requests\MailControlRequest;
 
-class MailController extends Controller
+class MailControlController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class MailController extends Controller
      */
     public function index()
     {
-        $mails = Mail::select('id','name','send_mail')->get();
+        $mails = MailControl::select('id','name','send_mail')->get();
         // dd($mails);
         return view('admin.mailSetting.index')->with(compact('mails'));
     }
@@ -38,10 +38,10 @@ class MailController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MailRequest $request,$id)
+    public function store(MailControlRequest $request,$id)
     {
         $input = $request->validated();
-        $send_mail = Mail::findOrFail($id);
+        $send_mail = MailControl::findOrFail($id);
         $send_mail->update($input);
         $res = [
             'title' => 'Send Mail Updated',

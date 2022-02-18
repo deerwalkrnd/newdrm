@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\Employee;
-use App\Models\Mail;
 use App\Models\NoPunchInNoLeave;
+use App\Models\MailControl;
 use App\Models\YearlyLeave;
 use App\Http\Requests\LeaveRequestRequest;
 use App\Http\Requests\SubordinateLeaveRequestRequest;
@@ -17,6 +17,9 @@ use App\Http\Controllers\SendMailController;
 use App\Helpers\NepaliCalendarHelper;
 use App\Helpers\MailHelper;
 use App\Helpers\Helper;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LeaveRequestMail;
+use App\Mail\SubOrdinateLeaveRequestMail;
 
 class LeaveRequestController extends Controller
 {
@@ -145,10 +148,14 @@ class LeaveRequestController extends Controller
        $leaveRequest = LeaveRequest::create($data);
         // dd($data,);
         //Send Mail to manager,hr and employee after successful leave request 
-        $send_mail = Mail::select('send_mail')->where('name','Leave Request')->first()->send_mail;
+        $send_mail = MailControl::select('send_mail')->where('name','Leave Request')->first()->send_mail;
         $subject = "Leave Request";
         if($send_mail){
-            MailHelper::sendEmail($type=1,$leaveRequest,$subject);
+            Mail::to(MailHelper::getManagerEmail($leaveRequest->employee_id))
+                ->cc(MailHelper::getHrEmail())
+                ->cc($leaveRequest->employee->email)
+                ->send(new LeaveRequestMail($leaveRequest));
+            // MailHelper::sendEmail($type=1,$leaveRequest,$subject);
         }
 
         $res = [
@@ -195,10 +202,14 @@ class LeaveRequestController extends Controller
         $leaveRequest = LeaveRequest::create($data);
         //send mail
         $subject = "Subordinate Leave Request";
-        $send_mail = Mail::select('send_mail')->where('name','Subordinate Leave')->first()->send_mail;
-        if($send_mail)
-            MailHelper::sendEmail($type=1,$leaveRequest,$subject);
-        $res = [
+        $send_mail = MailControl::select('send_mail')->where('name','Subordinate Leave')->first()->send_mail;
+        if($send_mail){
+            Mail::to($leaveRequest->employee->email)
+                ->cc($leaveRequest->requested_by_detail->email)
+                ->cc(MailHelper::getManagerEmail($leaveRequest->employee_id))
+                ->cc(MailHelper::getHrEmail())
+                ->send(new SubordinateLeaveRequestMail($leaveRequest));
+        }$res = [
             'title' => 'Subordinate Leave Request Created',
             'message' => 'Subordinate Leave Request has been successfully Created',
             'icon' => 'success'

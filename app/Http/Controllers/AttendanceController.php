@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
-use App\Models\Mail;
+use App\Models\MailControl;
 use App\Models\LeaveRequest;
 use App\Models\NoPunchInNoLeave;
 use App\Http\Controllers\SendMailController;
@@ -16,6 +16,9 @@ use App\Helpers\NepaliCalendarHelper;
 use App\Models\LeaveType;
 use App\Models\Time;
 use Carbon\Carbon;
+use App\Mail\LatePunchInMail;
+Use Illuminate\Support\Facades\Mail;
+
 
 class AttendanceController extends Controller
 {
@@ -192,10 +195,9 @@ class AttendanceController extends Controller
                 // dd($isLate,$request->reason);
                 if($isLate)
                 {
-                    // if($request->reason)
-                        $request->validate([
+                    $request->validate([
                         'reason' => 'required|string|min:25',
-                        ]); 
+                    ]); 
                 }
                 // if reason is null for isLate true throw error
                 // dd(request()->ip());
@@ -224,9 +226,13 @@ class AttendanceController extends Controller
                 }
                 //Send Mail to manager,hr and employee after late punch in 
                 $subject = "Late Punch In";
-                $send_mail = Mail::select('send_mail')->where('name','Late Punch In')->first()->send_mail;
+                $send_mail = MailControl::select('send_mail')->where('name','Late Punch In')->first()->send_mail;
                 if($attendance->late_punch_in && $send_mail){
-                    MailHelper::sendEmail($type=2,$attendance,$subject);
+                    Mail::to(\Auth::user()->employee->email)
+                        ->cc(MailHelper::getManagerEmail($attendance->employee_id))
+                        ->cc(MailHelper::getHrEmail())
+                        ->send(new LatePunchInMail($attendance));
+                    // MailHelper::sendEmail($type=2,$attendance,$subject);
                 }
             }
             return true;
