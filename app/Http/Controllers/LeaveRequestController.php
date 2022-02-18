@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\Employee;
-use App\Models\Mail;
+use App\Models\MailControl;
 use App\Models\YearlyLeave;
 use App\Http\Requests\LeaveRequestRequest;
 use App\Http\Requests\SubordinateLeaveRequestRequest;
@@ -143,7 +143,7 @@ class LeaveRequestController extends Controller
        $leaveRequest = LeaveRequest::create($data);
         // dd($data,);
         //Send Mail to manager,hr and employee after successful leave request 
-        $send_mail = Mail::select('send_mail')->where('name','Leave Request')->first()->send_mail;
+        $send_mail = MailControl::select('send_mail')->where('name','Leave Request')->first()->send_mail;
         $subject = "Leave Request";
         if($send_mail){
             MailHelper::sendEmail($type=1,$leaveRequest,$subject);
