@@ -28,6 +28,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\NoPunchInNoLeaveController;
 use App\Http\Controllers\TimeController;
+use App\Http\Helpers\Helper;
 
 
 /*
@@ -230,11 +231,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::post('/punch-in/{id?}',[AttendanceController::class, 'punchIn']);
     Route::post('/punch-out',[AttendanceController::class, 'punchOut']);
     Route::get('/myPunchIn',[AttendanceController::class,'myPunchIn']);
-    Route::post('/force-punch-in/{id}',[AttendanceController::class, 'forcePunchIn']);
-
-    Route::get('/test',[NoPunchInNoLeaveController::class, 'create']);
-    Route::get('/test-remove',[NoPunchInNoLeaveController::class, 'remove']);
-   
+      
     //contact
     Route::get('/contact',[ContactController::class, 'index']);
 
@@ -245,6 +242,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/leave-request/forced',[LeaveRequestController::class, 'getForcedLeave']);
     Route::delete('/leave-request/force/{id}',[LeaveRequestController::class, 'forceDestroy']);
     Route::delete('/leave-request/{id}',[LeaveRequestController::class, 'destroy']);
+    Route::post('/calculate-leave-days',[LeaveRequestController::class,'getLeaveDays']);
   
     //employee profile
     Route::get('/employee/profile/{id?}',[EmployeeController::class, 'profile']);
@@ -294,6 +292,8 @@ Route::middleware(['hr'])->group(function(){
     Route::get('/punch-in-detail',[PunchInOutReportController::class,'getPunchInOut']);
     // late-punch-in missed-punch-out
     Route::get('/late-missed-punch',[PunchInOutReportController::class, 'latePunchInOut']);
+    Route::post('/force-punch-in/{id}',[AttendanceController::class, 'forcePunchIn']);
+
 
     // department route
     Route::get('/department/create',[DepartmentController::class, 'create']);

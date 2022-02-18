@@ -189,14 +189,14 @@ class AttendanceController extends Controller
                 }
 
                 $isLate = strtotime(Carbon::now()) <= strtotime($maxTime) ? '0' : '1';
+                // dd($isLate,$request->reason);
                 if($isLate)
                 {
-                    if($request->reason)
+                    // if($request->reason)
                         $request->validate([
                         'reason' => 'required|string|min:25',
                         ]); 
                 }
-
                 // if reason is null for isLate true throw error
                 // dd(request()->ip());
                 if(strtolower($reason) == "forced punch in"){

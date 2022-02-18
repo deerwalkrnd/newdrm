@@ -16,6 +16,7 @@ use App\Http\Requests\SubordinateLeaveRequestRequest;
 use App\Http\Controllers\SendMailController;
 use App\Helpers\NepaliCalendarHelper;
 use App\Helpers\MailHelper;
+use App\Helpers\Helper;
 
 class LeaveRequestController extends Controller
 {
@@ -373,5 +374,31 @@ class LeaveRequestController extends Controller
         }
 
         return view('admin.leaveRequest.forcedLeave')->with(compact('leaveList'));
+    }
+
+    public function getLeaveDays(Request $request){
+        $today = date('Y-m-d');
+        $start_date =   \Request::input('start_date');
+        // return $start_date;
+        $end_date = \Request::input('end_date');
+        $leave_type_id = \Request::input('leave_type_id');
+        
+        $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id);
+       
+        //if leave_type is carry_over leave make seperate calculation carry over leave id is 2
+        if($leave_type_id != 2)
+        {
+            $remainingDays = Helper::getRemainingDays($leave_type_id);
+        }else{
+            $remainingDays = Helper::getRemainingCarryOverLeave();
+        }
+        // dd($remainingDays);
+        if(\Request::input('leave_time') != 'full')
+            $remainingDays = $remainingDays * 2;
+        // return [$leave_type_id,$start_date,$end_date,$remainingDays,$calcDay];
+        if($calcDay <= $remainingDays){
+            return ['days'=>$calcDay];
+        }else 
+            return ['days'=>'allowed days maxed out'];     
     }
 }

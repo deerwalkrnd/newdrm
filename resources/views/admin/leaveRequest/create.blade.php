@@ -28,23 +28,37 @@
 
 @section('scripts')
 <script>
-    
-    
+    //calculate leave days
     function calculateLeaveDays(){
-        var start_date = new Date(document.getElementById('start_date').value);
-        var end_date = new Date(document.getElementById('end_date').value);
-
-
-        // $.ajax
-
-        // var days = document.getElementById('days').value;
-        // var leave_days;
-
-        // if(start_date != '' && end_date != ''){
-        //     leave_days = (end_date - start_date)/(1000 * 3600 * 24) + 1;
-        // }
-        // document.getElementById('days').innerHTML = leave_days;
-        // console.log(leave_days);
+        var start_date = document.getElementById('start_date').value;
+        var end_date = document.getElementById('end_date').value;
+        var leave_type_id = document.getElementById('leave_type_id').value;
+        var leave_time = document.getElementsByName('leave_time').value;
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type:'POST',
+            url: "/calculate-leave-days",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "start_date":start_date, 
+                "end_date":end_date, 
+                "leave_type_id":leave_type_id,
+                "leave_time":leave_time,
+                },
+            dataType:'json',
+            success: function(data) {
+                document.getElementById('days').setAttribute('value',data.days);
+                console.log(data.days);
+            },
+             error: function (data) {
+                console.log(data);
+            }
+        });
     }
 
 </script>
