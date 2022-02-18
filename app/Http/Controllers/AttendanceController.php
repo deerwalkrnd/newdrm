@@ -89,47 +89,91 @@ class AttendanceController extends Controller
             $reason = "HR Punch In";
             $attendance = $this->takeAttendance($employee_id,$request,$reason);
             if($attendance){
-                 $res = [
+                $res = [
                     'title' => 'Employee Punched In',
                     'message' => 'Employee has been successfully Punched In',
                     'icon' => 'success'
                 ];
-                return redirect('/employee')->with(compact('res'));
+            }else{
+                $res = [
+                    'title' => 'Employee Punch In Failed',
+                    'message' => 'Employee cannot be Punched In',
+                    'icon' => 'warning'
+                    ];
             }
+            return redirect('/employee')->with(compact('res'));
         }else{
             //Individual Punch In
             $employee_id = \Auth::user()->employee_id;
-            $reason = $request->reason;
+            if($request->reason)
+                $reason = $request->reason;
+            else
+                $reason = false;
             $attendance = $this->takeAttendance($employee_id,$request,$reason);
             if($attendance){
-                 $res = [
+                $res = [
                     'title' => 'Punch In Sucessfull',
                     'message' => 'You have been successfully Punched In',
                     'icon' => 'success'
-                ];
-                return redirect($this->redirect_to)->with(compact('res'));
+                    ];
+            }else{
+                $res = [
+                    'title' => 'Employee Punch In Failed',
+                    'message' => 'Employee cannot be Punched In',
+                    'icon' => 'warning'
+                    ];
             }
+            return redirect($this->redirect_to)->with(compact('res'));
+
         }   
+    } 
+    //force punch in for no-punch-in-no-leave request
+    public function forcePunchIn(Request $request, $id)
+    {
+        //Employee punch in by HR
+        $employee_id = $id;
+        $reason = "Forced Punch In";
+        $attendance = $this->takeAttendance($employee_id,$request,$reason);
+        if($attendance){
+            $res = [
+                'title' => 'Employee Punched In',
+                'message' => 'Employee has been successfully Punched In',
+                'icon' => 'success'
+            ];
+        }else{
+            $res = [
+                'title' => 'Employee Punch In Failed',
+                'message' => 'Employee cannot be Punched In',
+                'icon' => 'warning'
+            ];
+        }
+        return redirect()->back()->with(compact('res'));
     } 
 
     public function takeAttendance($employee_id, $request, $reason){
         if(!$this->recordRowExists($employee_id)){
             if($request->code == $this->verificationCode)
             {
-                $presentTime = Carbon::now()->format('Y-m-d');
-                // $presentTime = strtotime(Carbon::now());
-                // dd(LeaveRequest::whereDate('start_date','<=',$presentTime)->first());
-                // dd(strtotime(LeaveRequest::select('start_date')->where('id','5')->first()->start_date) <= $presentTime ?'yes':'no');
+                if(strtolower($reason) == "forced punch in"){
+                    $presentTime = Carbon::yesterday()->format('Y-m-d');
+                    $punch_in_time = Carbon::yesterday()->toDateTimeString();
+                }
+                else{
+                    $presentTime = Carbon::now()->format('Y-m-d');
+                    $punch_in_time = Carbon::now()->toDateTimeString();
+                }
+
+                // dd($presentTime,$punch_in_time);
                 $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                             ->whereDate('end_date', '>=', $presentTime)
                             ->where('employee_id', $employee_id)->count();
                 
-                $max_punch_in_time = Time::select('id','time')->where('id','1')->first()->time;
+                $maxTime = Time::select('id','time')->where('id','1')->first()->time;
                 $first_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
                 
                 if($hasAnyLeave == 0)
                 {
-                    $maxTime = strtotime(date('Y-m-d').' '.$max_punch_in_time);
+                    $maxTime = strtotime(date('Y-m-d').' '.$maxTime);
                 }else{
                     $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                             ->whereDate('end_date', '>=', $presentTime)
@@ -144,9 +188,8 @@ class AttendanceController extends Controller
                         }
                     }
                 }
-                
-                $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
-                
+
+                $isLate = strtotime(Carbon::now()) <= strtotime($maxTime) ? '0' : '1';
                 if($isLate)
                 {
                     if($request->reason)
@@ -159,7 +202,7 @@ class AttendanceController extends Controller
                 // dd(request()->ip());
                 $attendance = Attendance::create([
                     'employee_id' => $employee_id,
-                    'punch_in_time' => Carbon::now()->toDateTimeString(),
+                    'punch_in_time' => $punch_in_time,
                     'punch_in_ip' => request()->ip(),
                     'late_punch_in' => $isLate,
                     'reason' => $reason
@@ -173,8 +216,9 @@ class AttendanceController extends Controller
                 }
                 \Session::put('punchIn', '2');
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     public function punchOut(Request $request)

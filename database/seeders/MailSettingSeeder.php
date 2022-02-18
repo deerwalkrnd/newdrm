@@ -24,6 +24,10 @@ class MailSettingSeeder extends Seeder
             'send_mail'=> '1'
         ]);
         DB::table('mails')->insert([
+            'name' => 'Timing Change',
+            'send_mail'=> '1'
+        ]);
+        DB::table('mails')->insert([
             'name' => 'Late Punch In',
             'send_mail'=> '1'
         ]);
@@ -33,6 +37,10 @@ class MailSettingSeeder extends Seeder
         ]);
         DB::table('mails')->insert([
             'name' => 'Subordinate Leave',
+            'send_mail'=> '1'
+        ]);
+         DB::table('mails')->insert([
+            'name' => 'Employee Credentials',
             'send_mail'=> '1'
         ]);
         

@@ -8,6 +8,8 @@ use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\YearlyLeave;
 use App\Models\Employee;
+use App\Models\Holiday;
+use App\Models\NoPunchInNoLeave;
 use App\Http\Controllers\DashboardController;
 use App\Helpers\NepaliCalendarHelper;
 
@@ -194,18 +196,11 @@ class LeaveReportController extends Controller
         else
             $date = date('Y-m-d');
 
-        $noRecordList = Employee::select('id','first_name','last_name','middle_name','manager_id','contract_status')
-                ->with('manager:id,first_name,last_name')
-                ->where('contract_status','active')
-                ->whereDoesntHave('attendances', function ($query) use ($date) {
-                        $query->whereDate('created_at', $date);
-                    })
-                ->whereDoesntHave('leaveRequest', function($query) use ($date){
-                    $query->whereDate('start_date','<=',$date)
-                        ->whereDate('end_date','>=',$date);
-                })
-                ->get();
-        // dd($noRecordList);
-        return view('admin.report.noPunchInNoLeave')->with(compact('noRecordList','date'));
+        //fetch data from table
+        $records = NoPunchInNoLeave::select('employee_id','date')
+                                        ->with('employee:id,first_name,middle_name,last_name,manager_id')
+                                        ->whereDate('date',$date)->get();
+        $code = 'OXqSTexF5zn4uXSp';
+        return view('admin.report.noPunchInNoLeave')->with(compact('records','date','code'));
     }
 }

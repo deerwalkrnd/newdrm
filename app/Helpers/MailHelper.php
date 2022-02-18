@@ -128,6 +128,23 @@ class MailHelper{
         return true;
     }
 
+    //employee credential email
+    public static function employeeCredentialMail($input,$created_user){
+        $sendMailController = new SendMailController;
+
+        $hr_user = User::where('role_id','1')->with('employee:id,email')->first();
+        $hr = $hr_user->employee->email;
+        // dd(date("h:i A",strtotime($time->time)));
+        $employee = $input['email'];
+        $to = $employee;
+        $name = $input['first_name'].' '.$input['middle_name'].' '.$input['last_name'];
+        $message = "Your employee_id is ".$input['employee_id'].". And your credentials for the DRM System is:"."<br>"."Username:'".$created_user->username."<br>'Password: 'Deerwa1k@DRM'";
+        $regards ='HR';
+        $subject = 'DRM Credentials';
+        $sendMailController->sendMail($to, $hr ,$name, $subject, $message);
+        return true;
+    }
+
 }
 
 ?>

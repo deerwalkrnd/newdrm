@@ -26,6 +26,7 @@ use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\PunchInOutReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\NoPunchInNoLeaveController;
 use App\Http\Controllers\TimeController;
 
 
@@ -229,6 +230,10 @@ Route::middleware(['logged-in'])->group(function(){
     Route::post('/punch-in/{id?}',[AttendanceController::class, 'punchIn']);
     Route::post('/punch-out',[AttendanceController::class, 'punchOut']);
     Route::get('/myPunchIn',[AttendanceController::class,'myPunchIn']);
+    Route::post('/force-punch-in/{id}',[AttendanceController::class, 'forcePunchIn']);
+
+    Route::get('/test',[NoPunchInNoLeaveController::class, 'create']);
+    Route::get('/test-remove',[NoPunchInNoLeaveController::class, 'remove']);
    
     //contact
     Route::get('/contact',[ContactController::class, 'index']);

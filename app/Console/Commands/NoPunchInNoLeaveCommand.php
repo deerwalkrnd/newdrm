@@ -3,16 +3,20 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Helpers\MailHelper;
+use App\Models\NoPunchInNoLeave;
+use App\Models\Holiday;
+use App\Models\Employee;
+use App\Http\Controllers\NoPunchInNoLeaveController;
 
-class PendingLeaveNotification extends Command
+
+class NoPunchInNoLeaveCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'leave:pending';
+    protected $signature = 'no:punchInLeave';
 
     /**
      * The console command description.
@@ -38,9 +42,9 @@ class PendingLeaveNotification extends Command
      */
     public function handle()
     {
-        $send_mail = Mail::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
-        if($send_mail)
-            MailHelper::sendPendingLeaveMail();
+        $noPunchInNoLeave = new NoPunchInNoLeaveController;
+        $create = $noPunchInNoLeave->create();
+        $remove = $noPunchInNoLeave->remove();
         return true;
     }
 }

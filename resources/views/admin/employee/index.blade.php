@@ -54,7 +54,7 @@
             <form action="/punch-in/{{ $employee->id }}" method="POST" class="d-inline">
                 @csrf
                 <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
-                <button type="submit" class="border-0 text-primary">Punch In</button>
+                <button type="submit" class="border-0 btn btn-primary">Punch In</button>
             </form> 
         </td>
         @endif
