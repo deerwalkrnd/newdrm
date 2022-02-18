@@ -55,23 +55,12 @@
     </div>
 </div>
 <hr>
-<div class="row">
-    <div class="col-md-12">
-        <div class="mb-4">
-            <label for="days">Leave Days*</label>
-            <input type="number" class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : $leaveRequest->days ?? '' }}">
-            @error('days')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
             <label for="start_date">Start Date*</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ !empty(old('start_date')) ? old('start_date') : $leaveRequest->start_date ?? '' }}">
+            <input type="date" class="form-control" onchange="calculateLeaveDays()" id="start_date" name="start_date" value="{{ !empty(old('start_date')) ? old('start_date') : $leaveRequest->start_date ?? '' }}">
             @error('start_date')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -83,8 +72,20 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label for="end_date">End Date*</label>
-            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ !empty(old('end_date')) ? old('end_date') : $leaveRequest->end_date ?? '' }}">
+            <input type="date" class="form-control" onchange="calculateLeaveDays()"  id="end_date" name="end_date" value="{{ !empty(old('end_date')) ? old('end_date') : $leaveRequest->end_date ?? '' }}">
             @error('end_date')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label for="days">Leave Days*</label>
+            <input type="number" class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : $leaveRequest->days ?? '' }}">
+            @error('days')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>

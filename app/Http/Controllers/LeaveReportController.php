@@ -197,7 +197,7 @@ class LeaveReportController extends Controller
             $date = date('Y-m-d');
 
         //fetch data from table
-        $records = NoPunchInNoLeave::select('employee_id','date')
+        $records = NoPunchInNoLeave::select('id','employee_id','date')
                                         ->with('employee:id,first_name,middle_name,last_name,manager_id')
                                         ->whereDate('date',$date)->get();
         $code = 'OXqSTexF5zn4uXSp';

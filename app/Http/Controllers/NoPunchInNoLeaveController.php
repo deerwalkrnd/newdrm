@@ -80,16 +80,16 @@ class NoPunchInNoLeaveController extends Controller
     }
 
 
-    public function remove(){
-        // dd("jer");
-        $attendances = Attendance::select('id','employee_id','reason','punch_in_time')->whereDate('created_at',date('Y-m-d'))->where('reason','Forced Punch In')->get();
-        foreach($attendances as $attendance){
-            $noPunchInNoLeave = NoPunchInNoLeave::where('employee_id',$attendance->employee_id)->whereDate('date',$attendance->punch_in_time)->first();
-            // if($noPunchInNoLeave)
-            $noPunchInNoLeave->delete();
-        }
-        return true;
-    }
+    // public function remove(){
+    //     // dd("jer");
+    //     $attendances = Attendance::select('id','employee_id','reason','punch_in_time')->whereDate('created_at',date('Y-m-d'))->where('reason','Forced Punch In')->get();
+    //     foreach($attendances as $attendance){
+    //         $noPunchInNoLeave = NoPunchInNoLeave::where('employee_id',$attendance->employee_id)->whereDate('date',$attendance->punch_in_time)->first();
+    //         // if($noPunchInNoLeave)
+    //         $noPunchInNoLeave->delete();
+    //     }
+    //     return true;
+    // }
     /**
      * Store a newly created resource in storage.
      *

@@ -37,9 +37,10 @@
                 @endif
                 <td>{{ $date }}</td>
                 <td>
-                    <form action="/force-punch-in/{{ $record->employee_id }}" onsubmit="return confirm('Are you sure?')" method="POST" class="d-inline">
+                    <form action="/force-punch-in/{{ $record->id }}" onsubmit="return confirm('Are you sure?')" method="POST" class="d-inline">
                         @csrf
                         <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
+                        <input type="hidden" name="employee_id" value="{{$record->employee_id}}">
                         <button type="submit"  class="border-0 btn btn-primary">Force Punch In</button>
                     </form>
                 </td>

@@ -24,3 +24,28 @@
 </section>
 <!-- form end -->
 @endsection
+
+
+@section('scripts')
+<script>
+    
+    
+    function calculateLeaveDays(){
+        var start_date = new Date(document.getElementById('start_date').value);
+        var end_date = new Date(document.getElementById('end_date').value);
+
+
+        // $.ajax
+
+        // var days = document.getElementById('days').value;
+        // var leave_days;
+
+        // if(start_date != '' && end_date != ''){
+        //     leave_days = (end_date - start_date)/(1000 * 3600 * 24) + 1;
+        // }
+        // document.getElementById('days').innerHTML = leave_days;
+        // console.log(leave_days);
+    }
+
+</script>
+@endsection

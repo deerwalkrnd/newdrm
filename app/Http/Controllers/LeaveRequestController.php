@@ -9,6 +9,7 @@ use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\Employee;
 use App\Models\Mail;
+use App\Models\NoPunchInNoLeave;
 use App\Models\YearlyLeave;
 use App\Http\Requests\LeaveRequestRequest;
 use App\Http\Requests\SubordinateLeaveRequestRequest;
@@ -290,11 +291,16 @@ class LeaveRequestController extends Controller
 
     public function accept($id)
     {
-        $leaveRequest = LeaveRequest::findOrFail($id)
-        ->update([
+        $leaveRequest = LeaveRequest::findOrFail($id);
+        $leaveRequest->update([
             'acceptance' => 'accepted',
             'accepted_by' => \Auth::user()->employee_id
         ]);
+
+        $noPunchInNoLeaveRecord = NoPunchInNoLeave::where('employee_id',$leaveRequest->employee_id)->whereDate('date','<=',$leaveRequest->start_date)->first();
+        if($noPunchInNoLeaveRecord->count() >= 1)
+            $noPunchInNoLeaveRecord->delete();
+
 
         return redirect('/leave-request/approve');
     }
