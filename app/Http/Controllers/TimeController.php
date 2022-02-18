@@ -41,7 +41,7 @@ class TimeController extends Controller
         $input = $request->validated();
         $time = Time::findOrFail($id);
         $time->update($input);
-        $send_mail = Mail::select('send_mail')->where('name','Timing Change')->first()->send_mail;
+        $send_mail = MailControl::select('send_mail')->where('name','Timing Change')->first()->send_mail;
         // dd($send_mail);
         if($send_mail)
             MailHelper::timeChangeMail($time);

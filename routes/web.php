@@ -25,7 +25,7 @@ use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\PunchInOutReportController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\MailController;
+use App\Http\Controllers\MailControlController;
 use App\Http\Controllers\NoPunchInNoLeaveController;
 use App\Http\Controllers\TimeController;
 
@@ -286,8 +286,8 @@ Route::middleware(['hr'])->group(function(){
     Route::post('/time/{id}',[TimeController::class,'store']);
 
     //mailSetting
-    Route::get('/mail',[MailController::class,'index']);
-    Route::post('/mail/{id}',[MailController::class,'store']);
+    Route::get('/mail',[MailControlController::class,'index']);
+    Route::post('/mail/{id}',[MailControlController::class,'store']);
 
 
     //get punch in and out report

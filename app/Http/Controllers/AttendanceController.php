@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Attendance;
-use App\Models\Mail;
+use App\Models\MailControl;
 use App\Models\LeaveRequest;
 use App\Models\NoPunchInNoLeave;
 use App\Http\Controllers\SendMailController;
@@ -224,7 +224,7 @@ class AttendanceController extends Controller
                 }
                 //Send Mail to manager,hr and employee after late punch in 
                 $subject = "Late Punch In";
-                $send_mail = Mail::select('send_mail')->where('name','Late Punch In')->first()->send_mail;
+                $send_mail = MailControl::select('send_mail')->where('name','Late Punch In')->first()->send_mail;
                 if($attendance->late_punch_in && $send_mail){
                     MailHelper::sendEmail($type=2,$attendance,$subject);
                 }
