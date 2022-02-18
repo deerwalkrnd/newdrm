@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 use App\Models\Employee;
 use App\Http\Requests\EmployeeRequest;
+use App\Mail\EmployeeCredentialMail;
 
 use App\Models\Organization;
 use App\Models\Unit;
@@ -18,7 +20,7 @@ use App\Models\ServiceType;
 use App\Models\Shift;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Mail;
+use App\Models\MailControl;
 use App\Models\EmergencyContact;
 use App\Models\Manager;
 use App\Models\CarryOverLeave;
@@ -105,21 +107,19 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeRequest $request)
     {
-        //get validated input
-        // dd($request);
         $input = $request->validated();
-
         $input['unit_id'] = Department::findOrFail($input['department_id'])->unit_id;
 
         // reset temporary address
         if($input['temp_add_same_as_per_add'] == 1)
         {
-            unset(  $input['temporary_address'],
-                    $input['temporary_district'],
-                    $input['temporary_municipality'],
-                    $input['temporary_ward_no'],
-                    $input['temporary_tole']
-                );            
+            unset(
+                $input['temporary_address'],
+                $input['temporary_district'],
+                $input['temporary_municipality'],
+                $input['temporary_ward_no'],
+                $input['temporary_tole']
+            );            
         }
 
         $shift = Shift::findOrFail($input['shift_id']);
@@ -129,6 +129,7 @@ class EmployeeController extends Controller
                 $input['end_time']
             );
         }
+
         $user = [];
         $emergency_contact =[];
 
@@ -159,7 +160,8 @@ class EmployeeController extends Controller
         unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
         DB::beginTransaction();
         try {
-            $user['employee_id'] = Employee::create($input)->id;
+            $employee = Employee::create($input);
+            $user['employee_id'] = $employee->id;
             $emergency_contact['employee_id']=$user['employee_id'];
             $createUser = new CreateNewUser();
             $created_user = $createUser->create($user);
@@ -183,9 +185,10 @@ class EmployeeController extends Controller
             'icon' => 'success'
         ];
         // dd($input,$created_user);
-        $send_mail = Mail::select('send_mail')->where('name','Employee Credentials')->first()->send_mail;
+        $send_mail = MailControl::select('send_mail')->where('name','Employee Credentials')->first()->send_mail;
+        
         if($send_mail){
-            MailHelper::employeeCredentialMail($input,$created_user);
+            Mail::to($employee->email)->send(new EmployeeCredentialMail($created_user));
         }
         return redirect('/employee')->with(compact('res'));
     }
