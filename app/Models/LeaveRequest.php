@@ -38,4 +38,9 @@ class LeaveRequest extends Model
     {
         return $this->hasOne(Employee::class,'id','accepted_by');
     }
+
+    public function requested_by_detail()
+    {
+        return $this->hasOne(Employee::class,'id','requested_by');
+    }
 }

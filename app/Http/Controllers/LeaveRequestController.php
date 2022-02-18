@@ -15,6 +15,10 @@ use App\Http\Requests\SubordinateLeaveRequestRequest;
 use App\Http\Controllers\SendMailController;
 use App\Helpers\NepaliCalendarHelper;
 use App\Helpers\MailHelper;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LeaveRequestMail;
+use App\Mail\SubOrdinateLeaveRequestMail;
+
 
 class LeaveRequestController extends Controller
 {
@@ -146,7 +150,11 @@ class LeaveRequestController extends Controller
         $send_mail = MailControl::select('send_mail')->where('name','Leave Request')->first()->send_mail;
         $subject = "Leave Request";
         if($send_mail){
-            MailHelper::sendEmail($type=1,$leaveRequest,$subject);
+            Mail::to(MailHelper::getManagerEmail($leaveRequest->employee_id))
+                ->cc(MailHelper::getHrEmail())
+                ->cc($leaveRequest->employee->email)
+                ->send(new LeaveRequestMail($leaveRequest));
+            // MailHelper::sendEmail($type=1,$leaveRequest,$subject);
         }
 
         $res = [
@@ -193,10 +201,14 @@ class LeaveRequestController extends Controller
         $leaveRequest = LeaveRequest::create($data);
         //send mail
         $subject = "Subordinate Leave Request";
-        $send_mail = Mail::select('send_mail')->where('name','Subordinate Leave')->first()->send_mail;
-        if($send_mail)
-            MailHelper::sendEmail($type=1,$leaveRequest,$subject);
-        $res = [
+        $send_mail = MailControl::select('send_mail')->where('name','Subordinate Leave')->first()->send_mail;
+        if($send_mail){
+            Mail::to($leaveRequest->employee->email)
+                ->cc($leaveRequest->requested_by_detail->email)
+                ->cc(MailHelper::getManagerEmail($leaveRequest->employee_id))
+                ->cc(MailHelper::getHrEmail())
+                ->send(new SubordinateLeaveRequestMail($leaveRequest));
+        }$res = [
             'title' => 'Subordinate Leave Request Created',
             'message' => 'Subordinate Leave Request has been successfully Created',
             'icon' => 'success'
