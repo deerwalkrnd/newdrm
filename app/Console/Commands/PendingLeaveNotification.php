@@ -38,9 +38,7 @@ class PendingLeaveNotification extends Command
      */
     public function handle()
     {
-        $send_mail = Mail::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
-        if($send_mail)
-            MailHelper::sendPendingLeaveMail();
+        MailHelper::sendPendingLeaveMail();
         return true;
     }
 }
