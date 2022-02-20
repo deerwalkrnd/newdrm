@@ -31,7 +31,7 @@ class DashboardController extends Controller
             }
         }
         // MailHelper::sendPendingLeaveMail();
-
+        // MailHelper::sendMissedPunchOutMail();
         //check if late
         $maxTime = Time::select('id','time')->where('id','1')->first()->time;
         $first_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
