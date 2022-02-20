@@ -20,7 +20,7 @@ class TimeSettingSeeder extends Seeder
             'time' => '09:20:00',
         ]);
         DB::table('times')->insert([
-            'name'=>'Second Half Leave Maximum Punch in Time',
+            'name'=>'First Half Leave Maximum Punch in Time',
             'time' => '13:30:00',
         ]);
         DB::table('times')->insert([
@@ -28,7 +28,7 @@ class TimeSettingSeeder extends Seeder
             'time' => '18:00:00',
         ]);
         DB::table('times')->insert([
-            'name'=>'First Half Leave Minimum Punch Out Time',
+            'name'=>'Second Half Leave Minimum Punch Out Time',
             'time' => '13:30:00',
         ]);
     }

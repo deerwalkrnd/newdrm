@@ -1,32 +1,16 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="employee_id">Employee</label>
-            <select class="form-control" id="employee_id" name="employee_id">
-                <option value="" disabled="disabled" selected="selected">-- Choose employee --</option>
-                @forelse($employees as $employee)
-                @if(\Auth::user()->role->authority == 'employee'){
-                    <option 
-                    selected
-                    value="{{ \Auth::user()->employee_id}}" 
-                    {{ (!empty(old('employee_id')) && old('employee_id') == $employee->id) ? 'selected': ''}}
-                    {{ (isset($fileUpload) && $fileUpload->employee_id == $employee->id && empty(old('employee_id'))) ? 'selected' : '' }} 
-                    >
-                    {{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}
-                </option>
-                @break
-                }@endif
-                <option 
-                    value="{{ $employee->id}}" 
-                    {{ (!empty(old('employee_id')) && old('employee_id') == $employee->id) ? 'selected': ''}}
-                    {{ (isset($fileUpload) && $fileUpload->employee_id == $employee->id && empty(old('employee_id'))) ? 'selected' : '' }} 
-                    >
-                    {{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}
-                </option>
-                @empty
-                <!-- no options -->
-                @endforelse
+           
+            <label class="form-label" for="employee_id">Employee Name</label>
+             @if(\Auth::user()->role->authority == 'hr')
+            <select class="employee-livesearch form-control p-3 mb-2" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --"></select>           
+            @else
+            <select name="employee_id" class="form-control p-2" id="">
+                <option value="{{$employee->id}}">{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</option>
             </select>
+            @endif
+            
             @error('employee_id')
                 <p class="text-danger">{{ $message }}</p>
             @enderror

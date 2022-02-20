@@ -32,9 +32,36 @@ class DashboardController extends Controller
         }
         // MailHelper::sendPendingLeaveMail();
 
+        //check if late
         $maxTime = Time::select('id','time')->where('id','1')->first()->time;
-        $isLate = strtotime(Carbon::now()) <= strtotime($maxTime) ? '0' : '1';
-        
+        $first_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
+        $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', date('Y-m-d'))
+                        ->whereDate('end_date', '>=', date('Y-m-d'))
+                        ->where('employee_id', \Auth::user()->employee_id)
+                        ->where('acceptance','accepted')
+                        ->count();
+        if($hasAnyLeave == 0)
+        {
+            $maxTime = strtotime(date('Y-m-d').' '.$maxTime);
+        }else{
+            $leave = LeaveRequest::whereDate('start_date', '<=', date('Y-m-d'))
+                    ->whereDate('end_date', '>=', date('Y-m-d'))
+                    ->where('employee_id', \Auth::user()->employee_id)
+                    ->where('acceptance','accepted')
+                    ->first();
+
+            $full_leave = $leave->full_leave;
+            if($full_leave == 0){
+                $half = $leave->half_leave;
+                if($half == 'first')
+                {
+                    $maxTime = strtotime(date('Y-m-d').' '.$first_half_leave_max_punch_in_time);
+                }
+            }
+        }
+        // dd(date('Y-m-d H:i:s',$maxTime),strtotime($maxTime), strtotime(Carbon::now()));
+        $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
+        // dd($isLate);
         $late_within_ten_days = Attendance::select('late_punch_in','punch_in_time')
             ->where('employee_id', \Auth::user()->employee_id)
             ->whereDate('punch_in_time','>=',date('Y-m-d',strtotime("-10 days")))
@@ -123,7 +150,7 @@ class DashboardController extends Controller
                                     ->orWhere('gender',ucfirst(\Auth::user()->employee->gender));
                                 })
                                 ->get();
-
+                                
         $lists = array();
         foreach($leaveTypes as $leaveType)
         {

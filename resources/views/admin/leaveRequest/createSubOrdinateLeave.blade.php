@@ -66,6 +66,8 @@
         var end_date = document.getElementById('end_date').value;
         var leave_type_id = document.getElementById('leave_type_id').value;
         var leave_time = document.getElementsByName('leave_time').value;
+        var reason = document.getElementById('reason');
+        reason.style.visibility = "hidden";
         
         $.ajaxSetup({
             headers: {
@@ -85,7 +87,12 @@
             dataType:'json',
             success: function(data) {
                 document.getElementById('days').setAttribute('value',data.days);
-                console.log(data.days);
+                if(data.reason){
+                    reason.innerHTML = data.reason;
+                    reason.style.visibility = "visible";
+                }
+
+                console.log(data.days,data.reason);
             },
              error: function (data) {
                 console.log(data);
