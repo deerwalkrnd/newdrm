@@ -233,12 +233,16 @@ class AttendanceController extends Controller
                 //Send Mail to manager,hr and employee after late punch in 
                 $subject = "Late Punch In";
                 $send_mail = MailControl::select('send_mail')->where('name','Late Punch In')->first()->send_mail;
+                $ccList = MailHelper::getHrEmail();
+                array_push($ccList,MailHelper::getManagerEmail($attendance->employee_id));
                 
                 if($attendance->late_punch_in && $send_mail){
                     Mail::to(\Auth::user()->employee->email)
-                        ->cc(MailHelper::getManagerEmail($attendance->employee_id))
-                        ->cc(MailHelper::getHrEmail())
+                        ->cc($ccList)
                         ->send(new LatePunchInMail($attendance));
+
+                        // ->cc(MailHelper::getManagerEmail($attendance->employee_id))
+                        // ->cc(MailHelper::getHrEmail())
                     // MailHelper::sendEmail($type=2,$attendance,$subject);
                 }
             }

@@ -45,11 +45,14 @@ class TimeController extends Controller
         $time = Time::findOrFail($id);
         $time->update($input);
         $send_mail = MailControl::select('send_mail')->where('name','Timing Change')->first()->send_mail;
-        // dd($send_mail);
+        // dd($send_mail,env('GP_EMAIL'));
+
         if($send_mail)
         {
             // MailHelper::timeChangeMail($time);
-            Mail::to(\Auth::user()->employee->email)->cc(env('GP_EMAIL'))
+            Mail::to(\Auth::user()->employee->email)
+                // ->cc(env('GP_EMAIL'))
+                ->cc('deena.sitikhu@deerwalk.edu.np')
                 ->send(new TimerChangeNotificationMail($time));
         }
         $res = [
