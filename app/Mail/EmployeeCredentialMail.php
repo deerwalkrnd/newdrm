@@ -23,7 +23,7 @@ class EmployeeCredentialMail extends Mailable
      */
     public function __construct(User $user)
     {
-        $this->name = $user->employee->first_name.' '.$user->employee->middel_name.' '.$user->employee->last_name;
+        $this->name = $user->employee->first_name.' '.$user->employee->middle_name.' '.$user->employee->last_name;
         $this->employee_id = $user->employee->employee_id;
         $this->username = $user->username;
     }

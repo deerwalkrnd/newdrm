@@ -212,7 +212,6 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        // dd($id);
         $employee = Employee::with('emergencyContact')->findOrFail($id);
         $organizations = Organization::select('id','name')->get();
         $units = Unit::select('id','unit_name')->get();
@@ -365,7 +364,7 @@ class EmployeeController extends Controller
         if($request->has('q'))
         {
             $keyword = $request->q;
-            $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->get();
+            $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->where('contract_status','active')->get();
         }
 
         return response()->json($employees);

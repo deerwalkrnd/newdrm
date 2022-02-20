@@ -150,6 +150,8 @@ class LeaveRequestController extends Controller
         //Send Mail to manager,hr and employee after successful leave request 
         $send_mail = MailControl::select('send_mail')->where('name','Leave Request')->first()->send_mail;
         $subject = "Leave Request";
+        // dd(MailHelper::getHrEmail(),MailHelper::getManagerEmail($leaveRequest->employee_id),$leaveRequest->employee->email);
+
         if($send_mail){
             Mail::to(MailHelper::getManagerEmail($leaveRequest->employee_id))
                 ->cc(MailHelper::getHrEmail())
@@ -310,11 +312,15 @@ class LeaveRequestController extends Controller
         ]);
 
         $noPunchInNoLeaveRecord = NoPunchInNoLeave::where('employee_id',$leaveRequest->employee_id)->whereDate('date','<=',$leaveRequest->start_date)->first();
-        if($noPunchInNoLeaveRecord->count() >= 1)
-            $noPunchInNoLeaveRecord->delete();
-
-
-        return redirect('/leave-request/approve');
+        if($noPunchInNoLeaveRecord)
+            if($noPunchInNoLeaveRecord->count() >= 1)
+                $noPunchInNoLeaveRecord->delete();  
+        $res = [
+            'title' => 'Leave Request Accepted',
+            'message' => 'Leave Request has been successfully Accepted',
+            'icon' => 'success'
+        ];
+        return redirect('/leave-request/approve')->with(compact('res'));
     }
 
     public function reject($id)
@@ -324,8 +330,13 @@ class LeaveRequestController extends Controller
             'acceptance' => 'rejected',
             'accepted_by' => \Auth::user()->employee_id
         ]);
+          $res = [
+            'title' => 'Leave Request Rejected',
+            'message' => 'Leave Request has been successfully Rejected',
+            'icon' => 'success'
+        ];
 
-        return redirect('/leave-request/approve');
+        return redirect('/leave-request/approve')->with(compact('res'));
     }
 
     private function calculateRemainingTime($allowed_leave,$leave_type_id,$requested_leave_days,$user_id){
@@ -368,6 +379,7 @@ class LeaveRequestController extends Controller
 
     public function getForcedLeave()
     {
+        // dd(\Auth::user()->role->authority);
         if(\Auth::user()->role->authority == 'hr')
         {
             $leaveList = LeaveRequest::where('reason','Forced (System)')->orderBy('end_date','desc')->paginate(20);
@@ -380,7 +392,12 @@ class LeaveRequestController extends Controller
                                         ->orderBy('end_date','desc')
                                         ->paginate(20);
         }
-        else{
+        elseif(\Auth::user()->role->authority == 'employee'){
+            $leaveList = LeaveRequest::where('employee_id',\Auth::user()->employee_id)
+                                        ->where('reason','Forced (System)')
+                                        ->orderBy('end_date','desc')
+                                        ->paginate(20);
+        }else{
             return abort('403');
         }
 
@@ -410,6 +427,6 @@ class LeaveRequestController extends Controller
         if($calcDay <= $remainingDays){
             return ['days'=>$calcDay];
         }else 
-            return ['days'=>'allowed days maxed out'];     
+            return ['days'=>'0','reason'=>'Allowed leave days has been maxed out for selected leave type.'];     
     }
 }
