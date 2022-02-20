@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 use App\Helpers\Helper;
+use App\Models\Employee;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Helpers\NepaliCalendarHelper;
 
@@ -24,21 +25,25 @@ class LeaveRequestRequest extends FormRequest
      */
     public function rules()
     {
+        if(\Request::input('employee_id')!=null)
+            $employee_id = \Request::input('employee_id');
+        else
+            $employee_id = \Auth::user()->employee_id;
+            
         $today = date('Y-m-d');
         $start_date = \Request::input('start_date');
         $end_date = \Request::input('end_date');
         $leave_type_id = \Request::input('leave_type_id');
-        
-        $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id);
-       
+        $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id, $employee_id);
+        $employee = Employee::select('id','unit_id')->where('id', $employee_id)->first();
+
         //if leave_type is carry_over leave make seperate calculation carry over leave id is 2
         if($leave_type_id != 2)
         {
-            $remainingDays = Helper::getRemainingDays($leave_type_id);
+            $remainingDays = Helper::getRemainingDays($leave_type_id,$employee);
         }else{
-            $remainingDays = Helper::getRemainingCarryOverLeave();
+            $remainingDays = Helper::getRemainingCarryOverLeave($employee);
         }
-        // dd($remainingDays);
         if(\Request::input('leave_time') != 'full')
             $remainingDays = $remainingDays * 2;
 

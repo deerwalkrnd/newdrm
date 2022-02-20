@@ -30,7 +30,7 @@ class SubordinateLeaveRequestRequest extends FormRequest
         $start_date = \Request::input('start_date');
         $end_date = \Request::input('end_date');
         $leave_type_id = \Request::input('leave_type_id');
-        $calcDay = Helper::getDays($start_date, $end_date,$leave_type_id);
+        $calcDay = Helper::getDays($start_date, $end_date,$leave_type_id,\Request::input('employee_id'));
         // dd($start_date,$end_date,$calcDay);
         return [
             'employee_id' => 'required|exists:employees,id',

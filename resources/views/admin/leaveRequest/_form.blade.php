@@ -84,7 +84,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label for="days">Leave Days*</label>
-            <input type="number" class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : $leaveRequest->days ?? '' }}">
+            <input type="number"  class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : $leaveRequest->days ?? '' }}">
             <span id="reason" class="action"></span>
             @error('days')
                 <p class="text-danger">{{ $message }}</p>

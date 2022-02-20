@@ -122,7 +122,6 @@ class LeaveRequestController extends Controller
         // dd($start_year,$end_year);
 
         
-        // dd($data['year']);
         if($start_year != $end_year){
             $res = [
                 'title' => 'Leave Request Error',
@@ -145,18 +144,21 @@ class LeaveRequestController extends Controller
                 $data['half_leave'] = 'second';
             }
         }
+        // dd("here");
        $leaveRequest = LeaveRequest::create($data);
-        // dd($data,);
+        // dd($leaveRequest);
+
         //Send Mail to manager,hr and employee after successful leave request 
         $send_mail = MailControl::select('send_mail')->where('name','Leave Request')->first()->send_mail;
         $subject = "Leave Request";
         // dd(MailHelper::getHrEmail(),MailHelper::getManagerEmail($leaveRequest->employee_id),$leaveRequest->employee->email);
 
+        $ccList=MailHelper::getHrEmail();
+        array_push($ccList,$leaveRequest->employee->email);
         if($send_mail){
-            Mail::to(MailHelper::getManagerEmail($leaveRequest->employee_id))
-                ->cc(MailHelper::getHrEmail())
-                ->cc($leaveRequest->employee->email)
-                ->send(new LeaveRequestMail($leaveRequest));
+           Mail::to(MailHelper::getManagerEmail($leaveRequest->employee_id))
+           ->cc($ccList)
+            ->send(new LeaveRequestMail($leaveRequest));
             // MailHelper::sendEmail($type=1,$leaveRequest,$subject);
         }
 
@@ -170,7 +172,9 @@ class LeaveRequestController extends Controller
 
     public function storeSubOrdinateLeave(SubordinateLeaveRequestRequest $request)
     {
+        // dd($request);
         $data = $request->validated();
+        // dd($data);
         $data['employee_id'] = $data['employee_id'];
         $data['requested_by'] = \Auth::user()->employee_id;
         
@@ -200,17 +204,24 @@ class LeaveRequestController extends Controller
             $data['year'] = $start_year;
         }
 
-
+        // dd("here");
         $leaveRequest = LeaveRequest::create($data);
+        // dd($leaveRequest);
         //send mail
         $subject = "Subordinate Leave Request";
         $send_mail = MailControl::select('send_mail')->where('name','Subordinate Leave')->first()->send_mail;
+        
+        $ccList=MailHelper::getHrEmail();
+        array_push($ccList,$leaveRequest->requested_by_detail->email,MailHelper::getManagerEmail($leaveRequest->employee_id));
+
         if($send_mail){
             Mail::to($leaveRequest->employee->email)
-                ->cc($leaveRequest->requested_by_detail->email)
-                ->cc(MailHelper::getManagerEmail($leaveRequest->employee_id))
-                ->cc(MailHelper::getHrEmail())
+                ->cc($ccList)
                 ->send(new SubordinateLeaveRequestMail($leaveRequest));
+
+                // ->cc($leaveRequest->requested_by_detail->email)
+                // ->cc(MailHelper::getManagerEmail($leaveRequest->employee_id))
+                // ->cc(MailHelper::getHrEmail())
         }$res = [
             'title' => 'Subordinate Leave Request Created',
             'message' => 'Subordinate Leave Request has been successfully Created',
@@ -311,7 +322,9 @@ class LeaveRequestController extends Controller
             'accepted_by' => \Auth::user()->employee_id
         ]);
 
-        $noPunchInNoLeaveRecord = NoPunchInNoLeave::where('employee_id',$leaveRequest->employee_id)->whereDate('date','<=',$leaveRequest->start_date)->first();
+        $noPunchInNoLeaveRecord = NoPunchInNoLeave::where('employee_id',$leaveRequest->employee_id)
+                                                    ->whereDate('date','<=',$leaveRequest->start_date)
+                                                    ->first();
         if($noPunchInNoLeaveRecord)
             if($noPunchInNoLeaveRecord->count() >= 1)
                 $noPunchInNoLeaveRecord->delete();  
@@ -359,8 +372,8 @@ class LeaveRequestController extends Controller
             return abort(401);
 
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
-        ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
-        ->where('acceptance','pending');
+                                        ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
+                                        ->where('acceptance','pending');
 
         // dd("Here");
 
@@ -370,9 +383,15 @@ class LeaveRequestController extends Controller
             });
         }
         if($request->d)
-            $leaveRequests = $leaveRequests->where('start_date',$request->d)->orderBy('created_at')->orderBy('updated_at')->get();
+            $leaveRequests = $leaveRequests->where('start_date',$request->d)
+                                            ->orderBy('created_at')
+                                            ->orderBy('updated_at')
+                                            ->get();
         else
-            $leaveRequests = $leaveRequests->orderBy('start_date')->orderBy('created_at')->orderBy('updated_at')->get();
+            $leaveRequests = $leaveRequests->orderBy('start_date')
+                                            ->orderBy('created_at')
+                                            ->orderBy('updated_at')
+                                            ->get();
         // dd($leaveRequests[0]->employee->manager);
         return view('admin.leaveRequest.approve_leave')->with(compact('leaveRequests'));
     }
@@ -404,21 +423,27 @@ class LeaveRequestController extends Controller
         return view('admin.leaveRequest.forcedLeave')->with(compact('leaveList'));
     }
 
+    //get leave days for dyanmic days calculation in form
     public function getLeaveDays(Request $request){
+        // return \Request::input('employee_id');
+        if(\Request::input('employee_id'))
+            $employee_id = \Request::input('employee_id');
+        else
+            $employee_id = \Auth::user()->employee_id;
+
         $today = date('Y-m-d');
         $start_date =   \Request::input('start_date');
-        // return $start_date;
         $end_date = \Request::input('end_date');
         $leave_type_id = \Request::input('leave_type_id');
-        
-        $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id);
+        $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id,$employee_id);
+        $employee = Employee::select('id','unit_id')->where('id',$employee_id)->first();
        
         //if leave_type is carry_over leave make seperate calculation carry over leave id is 2
         if($leave_type_id != 2)
         {
-            $remainingDays = Helper::getRemainingDays($leave_type_id);
+            $remainingDays = Helper::getRemainingDays($leave_type_id,$employee);
         }else{
-            $remainingDays = Helper::getRemainingCarryOverLeave();
+            $remainingDays = Helper::getRemainingCarryOverLeave($employee);
         }
         // dd($remainingDays);
         if(\Request::input('leave_time') != 'full')

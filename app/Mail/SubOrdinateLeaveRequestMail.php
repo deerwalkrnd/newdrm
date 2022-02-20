@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\LeaveRequest;
+use App\Models\User;
 
 class SubOrdinateLeaveRequestMail extends Mailable
 {
@@ -27,6 +28,7 @@ class SubOrdinateLeaveRequestMail extends Mailable
      */
     public function __construct(LeaveRequest $leaveRequest)
     {
+        // dd($leaveRequest);
         $this->employee = $leaveRequest->employee->first_name . ' ' . $leaveRequest->employee->middle_name. ' ' . $leaveRequest->employee->last_name;
         if($leaveRequest->employee->manager != null){
             $this->manager = $leaveRequest->employee->manager->first_name . ' ' . $leaveRequest->employee->manager->middle_name. ' ' . $leaveRequest->employee->manager->last_name;
@@ -34,10 +36,10 @@ class SubOrdinateLeaveRequestMail extends Mailable
             $hr = User::whereHas('role',function($q){
                 $q->where('authority','hr');
             })->with('employee:id,first_name,last_name,middle_name,email')->first();
-
+ 
             $this->manager = $hr->employee->first_name.' '.$hr->employee->middle_name.' '.$hr->employee->last_name;
         }
-            
+
         $this->start_date = $leaveRequest->start_date;
         $this->end_date = $leaveRequest->end_date;
         $this->days = $leaveRequest->days;
