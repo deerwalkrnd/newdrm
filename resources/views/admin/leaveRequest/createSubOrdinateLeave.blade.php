@@ -67,7 +67,11 @@
         var leave_type_id = document.getElementById('leave_type_id').value;
         var leave_time = document.getElementsByName('leave_time').value;
         var reason = document.getElementById('reason');
+        var employee_id = document.getElementById('employee_id').value;
         reason.style.visibility = "hidden";
+        // var strUser = e.options[e.selectedIndex].text;
+        // console.log(employee_id);
+        
         
         $.ajaxSetup({
             headers: {
@@ -83,6 +87,7 @@
                 "end_date":end_date, 
                 "leave_type_id":leave_type_id,
                 "leave_time":leave_time,
+                "employee_id":employee_id,
                 },
             dataType:'json',
             success: function(data) {
@@ -91,7 +96,6 @@
                     reason.innerHTML = data.reason;
                     reason.style.visibility = "visible";
                 }
-
                 console.log(data.days,data.reason);
             },
              error: function (data) {

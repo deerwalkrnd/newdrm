@@ -15,8 +15,8 @@ final class Helper
 {
     private $weekend = ['SUN','SAT'];
 
-    public static function getDays($start_date, $end_date, $leave_type_id){
-        $employee = Employee::select('gender')->where('contract_status','active')->findOrFail(\Auth::user()->employee_id);
+    public static function getDays($start_date, $end_date, $leave_type_id,$employee_id){
+        $employee = Employee::select('id','gender','unit_id')->where('contract_status','active')->findOrFail($employee_id);
         $includeHoliday = LeaveType::select('include_holiday')->where('id',$leave_type_id)->get()->first();
         $s_date = date('Y-m-d',strtotime($start_date));
         $e_date = date('Y-m-d',strtotime($end_date));
@@ -24,7 +24,7 @@ final class Helper
         {
             return (new self)->calculateTotalLeaveDays($s_date,$e_date);      
         }else{
-            return (new self)->calculateLeaveDays($s_date,$e_date, $employee->gender);      
+            return (new self)->calculateLeaveDays($s_date,$e_date, $employee);      
         }
     }
 
@@ -43,21 +43,22 @@ final class Helper
         return $day;
     }
 
-    private function calculateLeaveDays($start_date, $end_date, $gender)
+    private function calculateLeaveDays($start_date, $end_date, $employee)
     {
+        $unit_id = $employee->unit_id;
         $holidayDates = Holiday::select('date')
-                                ->where(function($query){
-                                    $query->where('unit_id',\Auth::user()->employee->unit_id)
+                                ->where(function($query) use ($unit_id){
+                                    $query->where('unit_id',$unit_id)
                                             ->orWhere('unit_id',null);
                                 })
                                 ->where('female_only','0')
                                 ->whereYear('date',date('Y',strtotime($start_date)))
                                 ->get()
                                 ->toArray();
-
+        
         $femaleHolidayDates = Holiday::select('date')
-                                        ->where(function($query){
-                                            $query->where('unit_id',\Auth::user()->employee->unit_id)
+                                        ->where(function($query) use ($unit_id){
+                                            $query->where('unit_id',$unit_id)
                                                     ->orWhere('unit_id',null);
                                         })
                                         ->whereYear('date',date('Y',strtotime($start_date)))
@@ -73,7 +74,7 @@ final class Helper
         do{
             $weekDay = strtoupper(date('D',strtotime($start_date)));
             if(!(in_array($start_date,$holidayDates) || in_array($weekDay,$this->weekend))){
-                if(!(strtolower($gender) == "female" && in_array($start_date,$femaleHolidayDates))){
+                if(!(strtolower($employee->gender) == "female" && in_array($start_date,$femaleHolidayDates))){
                     $day++;
                 }
             }
@@ -95,17 +96,17 @@ final class Helper
             print_r($e->getMessage());
         }
     }
-    public static function getRemainingDays($leave_type_id){
+    public static function getRemainingDays($leave_type_id,$employee){
         $year = (new self)->getNepaliYear(date('Y-m-d'));
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
-                                        ->where('employee_id', \Auth::user()->employee_id)
+                                        ->where('employee_id', $employee->id)
                                         ->where('leave_type_id',$leave_type_id)
                                         ->sum('days');
 
         $allowed_leave = YearlyLeave::select('days')
-                                        ->where('unit_id', \Auth::user()->employee->unit_id)
+                                        ->where('unit_id', $employee->unit_id)
                                         ->where('leave_type_id',$leave_type_id)
                                         ->where('year',$year)
                                         ->first();
@@ -125,23 +126,23 @@ final class Helper
             $allowed_leave = 0;
 
         $remaining_leave = $allowed_leave - $already_taken_leaves;
-       
+
         return $remaining_leave;     
     }
 
-    public static function getRemainingCarryOverLeave()
+    public static function getRemainingCarryOverLeave($employee)
     {
         $year = (new self)->getNepaliYear(date('Y-m-d'));
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
-                                        ->where('employee_id', \Auth::user()->employee_id)
+                                        ->where('employee_id', $employee->id)
                                         ->where('leave_type_id',2) // 2 for carry_over leave
                                         ->sum('days');
 
         $allowed_leave = CarryOverLeave::select('days')
                                         ->where('year',$year-1)
-                                        ->where('employee_id',\Auth::user()->employee_id)
+                                        ->where('employee_id',$employee->id)
                                         ->first();
         if($allowed_leave)
             $allowed_leave = $allowed_leave->days;
