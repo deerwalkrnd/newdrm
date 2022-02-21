@@ -55,15 +55,16 @@ class SubOrdinateLeaveRequestMail extends Mailable
      */
     public function build()
     {
-        return $this->view('layouts.email.subOrdinateLeave')->with([
-            'employee' => $this->employee, 
-            'manager' => $this->manager, 
-            'start_date' => $this->start_date, 
-            'end_date' => $this->end_date, 
-            'days' => $this->days, 
-            'leave_type' => $this->leave_type, 
-            'leave_half' => $this->leave_half,
-            'requested_by' => $this->requested_by
+        return $this->subject('Sub-Ordinate Leave Request')
+                    ->view('layouts.email.subOrdinateLeave')->with([
+                        'employee' => $this->employee, 
+                        'manager' => $this->manager, 
+                        'start_date' => $this->start_date, 
+                        'end_date' => $this->end_date, 
+                        'days' => $this->days, 
+                        'leave_type' => $this->leave_type, 
+                        'leave_half' => $this->leave_half,
+                        'requested_by' => $this->requested_by
         ]);
     }
 }

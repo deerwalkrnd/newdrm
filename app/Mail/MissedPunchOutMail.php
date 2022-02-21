@@ -30,7 +30,8 @@ class MissedPunchOutMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('layouts.email.missedPunchOut')
+        return $this->subject('Missed Punch Out | '.date('d M, D'))
+                    ->view('layouts.email.missedPunchOut')
                     ->with('employee',$this->employee);
     }
 }

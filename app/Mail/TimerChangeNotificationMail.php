@@ -33,7 +33,8 @@ class TimerChangeNotificationMail extends Mailable
      */
     public function build()
     {
-        return $this->view('layouts.email.timerChangeNotification')
+        return $this->subject('Time Change Notification')
+                    ->view('layouts.email.timerChangeNotification')
                     ->with([
                         'name' => $this->name,
                         'time' => $this->time,
