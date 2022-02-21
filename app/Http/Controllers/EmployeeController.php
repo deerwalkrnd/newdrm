@@ -239,7 +239,9 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($id);
         $user = User::where('employee_id',$id)->first();
         $input = $request->validated();
-        // dd($input['role'],$user->role_id);
+        
+        if($user['role_id'] == '2')
+            $input['role']=2;
 
         $input['unit_id'] = Department::findOrFail($input['department_id'])->unit_id;
 

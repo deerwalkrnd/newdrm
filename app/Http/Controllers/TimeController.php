@@ -51,8 +51,7 @@ class TimeController extends Controller
         {
             // MailHelper::timeChangeMail($time);
             Mail::to(\Auth::user()->employee->email)
-                // ->cc(env('GP_EMAIL'))
-                ->cc('deena.sitikhu@deerwalk.edu.np')
+                ->cc(env('GP_EMAIL'))
                 ->send(new TimerChangeNotificationMail($time));
         }
         $res = [

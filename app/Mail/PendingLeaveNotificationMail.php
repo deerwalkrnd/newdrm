@@ -30,7 +30,8 @@ class PendingLeaveNotificationMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('layouts.email.pendingLeaveNotification')
+        return $this->subject('Pending Leave Notification')
+                    ->view('layouts.email.pendingLeaveNotification')
                     ->with('employee',$this->employee);
     }
 }

@@ -35,7 +35,8 @@ class LatePunchInMail extends Mailable
      */
     public function build()
     {
-        return $this->view('layouts.email.latePunchIn')
+        return $this->subject('Late Punch In | '.date('d M, D'))
+                    ->view('layouts.email.latePunchIn')
                     ->with([
                         'name' => $this->name,
                         'time' => $this->time,

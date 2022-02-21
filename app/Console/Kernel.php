@@ -28,19 +28,19 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //No Punch In No Leave Request Record Update
-        $schedule->command('no:punchInLeave')->dailyAt('20:07'); //dailyAt('23:50')
+        $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50')
 
         //Pending Leave request of tommorow Notification
         $send_mail_pending_leave_request = MailControl::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
         if($send_mail_pending_leave_request)
-            $schedule->command('leave:pending')->dailyAt('20:18');
-        // ->dailyAt('22:00');
+            $schedule->command('leave:pending')->dailyAt('21:00');
+        // ->dailyAt('21:00');
         
         //Today's Missed Punch Out Notification 
         $send_mail_missed_punch_out = MailControl::select('send_mail')->where('name','Missed Punch Out')->first()->send_mail;
         if($send_mail_missed_punch_out)
-            $schedule->command('punchOut:missed')->dailyAt('20:18');
-            // ->dailyAt('23:50');
+            $schedule->command('punchOut:missed')->dailyAt('23:40');
+            // ->dailyAt('23:40');
     }
 
     /**

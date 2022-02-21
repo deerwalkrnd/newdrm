@@ -35,10 +35,11 @@ class EmployeeCredentialMail extends Mailable
      */
     public function build()
     {
-        return $this->view('layouts.email.employeeCredential')->with([
-            'username' => $this->username,
-            'employee_id' => $this->employee_id,
-            'name' => $this->name
+        return $this->subject('Emplopyee Credentials')
+                    ->view('layouts.email.employeeCredential')->with([
+                        'username' => $this->username,
+                        'employee_id' => $this->employee_id,
+                        'name' => $this->name
         ]);
     }
 }
