@@ -398,7 +398,6 @@ class LeaveRequestController extends Controller
 
     public function getForcedLeave()
     {
-        // dd(\Auth::user()->role->authority);
         if(\Auth::user()->role->authority == 'hr')
         {
             $leaveList = LeaveRequest::where('reason','Forced (System)')->orderBy('end_date','desc')->paginate(20);
@@ -409,19 +408,23 @@ class LeaveRequestController extends Controller
                                         })
                                         ->where('reason','Forced (System)')
                                         ->orderBy('end_date','desc')
-                                        ->paginate(20);
-        }
-        elseif(\Auth::user()->role->authority == 'employee'){
-            $leaveList = LeaveRequest::where('employee_id',\Auth::user()->employee_id)
-                                        ->where('reason','Forced (System)')
-                                        ->orderBy('end_date','desc')
-                                        ->paginate(20);
+                                        ->paginate(20); 
         }else{
             return abort('403');
         }
 
         return view('admin.leaveRequest.forcedLeave')->with(compact('leaveList'));
     }
+
+    public function getMyForcedLeave()
+    {
+        $leaveList = LeaveRequest::where('employee_id',\Auth::user()->employee_id)
+                                    ->where('reason','Forced (System)')
+                                    ->orderBy('end_date','desc')
+                                    ->paginate(20);
+        return view('admin.leaveRequest.myForcedLeave')->with(compact('leaveList'));
+    }
+
 
     //get leave days for dyanmic days calculation in form
     public function getLeaveDays(Request $request){

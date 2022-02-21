@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-md-6">
         <div class="mb-4">
-            <label class="form-label" for="employee_id">Employee ID</label>
+            <label class="form-label" for="employee_id">Employee ID*</label>
             <input type="number" class="form-control" id="employee_id" placeholder="Enter Employee ID" name="employee_id" value="{{ !empty(old('employee_id')) ? old('employee_id') : $employee->employee_id ?? '' }}">
             @error('employee_id')
                 <p class="text-danger">{{ $message }}</p>

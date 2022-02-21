@@ -15,7 +15,6 @@
             <th scope="col">Date</th>
             <th scope="col">Days</th>
             <th scope="col">Reason</th>
-            <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -28,13 +27,6 @@
             <td>{{ $leave->end_date }}</td>
             <td>{{ $leave->days * ($leave->full_leave == 1 ? 1 : 0.5) }}</td>
             <td>{{ $leave->reason }}</td>
-            <td>
-                <form action="/leave-request/force/{{ $leave->id }}" method="POST" class="d-inline" onsubmit="return confirm('Do you want to delete?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="delete action border-0"><i class="fas fa-trash-alt action"></i></button>
-                </form>
-            </td>
         </tr>
         @empty
         <tr>

@@ -8,7 +8,7 @@
     <div class="col">
         <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
         <a href="/leave-request"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button></a>
-        <a href="/leave-request/forced"><button type="button" class="btn btn-md applyLeave_btn mb-2">Forced Leave Details</button></a>
+        <a href="/leave-request/my-forced"><button type="button" class="btn btn-md applyLeave_btn mb-2">Forced Leave Details</button></a>
         <a href="/myPunchIn"><button type="button" class="btn btn-md applyLeave_btn mb-2">My Punch In</button></a>
         <a href="/employee/profile"><button type="button" class="btn btn-md applyLeave_btn mb-2">My Profile</button></a>
 
