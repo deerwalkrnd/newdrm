@@ -103,13 +103,25 @@ class DesignationController extends Controller
      */
     public function destroy($id)
     {
-        $designation = Designation::findOrFail($id);
-        $designation->delete();
-        $res = [
-            'title' => 'Designation Deleted ',
-            'message' => 'Designation has been successfully Deleted ',
-            'icon' => 'success'
-        ];
-        return redirect('/designation')->with(compact('res'));
+        try{
+            $designation = Designation::findOrFail($id);
+            $designation->delete();
+            $res = [
+                'title' => 'Designation Deleted ',
+                'message' => 'Designation has been successfully Deleted ',
+                'icon' => 'success'
+            ];
+            return redirect('/designation')->with(compact('res'));
+        }
+        catch(\Illuminate\Database\QueryException $e){
+             if($e->getCode() == "23000"){
+                $res = [
+                    'title' => 'Designation Deletion Failed',
+                    'message' => 'Designation cannot be deleted as it is in Use.',
+                    'icon' => 'warning'
+                ];
+                return redirect('/designation')->with(compact('res'));
+            }
+        }
     }
 }

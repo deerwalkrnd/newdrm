@@ -11,4 +11,7 @@
         <b>Leave Half: </b>{{ $leave_half }}<br>
     <p>
     <p>Thank you,</p>
+    --<br>
+    HR | <span style="color:#0b5394;"><b>DRM SYSTEM</b></span> | Deerwalk Education Group, Sifal, Kathmandu, Nepal.<br>
+    <a href="deerwalk.edu.np">deerwalk.edu.np</a>
 </div>

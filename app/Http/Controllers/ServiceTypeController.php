@@ -113,7 +113,12 @@ class ServiceTypeController extends Controller
         }
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
-                return redirect()->back();
+                $res = [
+                'title' => 'Service Type Deletion Failed',
+                'message' => 'Service Type cannot be deleted as it is in Use.',
+                'icon' => 'warning'
+            ];
+                return redirect()->back()->with(compact('res'));
             }
         }
     }

@@ -114,9 +114,9 @@ class FileCategoryController extends Controller
         catch(\Illuminate\Database\QueryException $e){
              if($e->getCode() == "23000"){
                 $res = [
-                    'title' => 'File Category Creation Fail',
-                    'message' => 'File Category is being Used',
-                    'icon' => 'error'
+                    'title' => 'File Category Deletion Failed',
+                    'message' => 'File Category cannot be deleted as it is in Use.',
+                    'icon' => 'warning'
                 ];
                 return redirect('/file-category')->with(compact('res'));
             }

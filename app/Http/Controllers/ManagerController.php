@@ -166,8 +166,8 @@ class ManagerController extends Controller
                 ];
             }else{
                  $res = [
-                    'title' => 'Manager Deletion Error',
-                    'message' => 'Manager in charge of employees cannot be deleted',
+                    'title' => 'Manager Deletion Failed',
+                    'message' => 'Manager in charge of Employees cannot be deleted.',
                     'icon' => 'warning'
                 ];
             }          
