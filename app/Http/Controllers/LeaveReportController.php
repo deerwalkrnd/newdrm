@@ -40,7 +40,7 @@ class LeaveReportController extends Controller
             $employees = Employee::where('contract_status','active')->paginate(3);
 
         // dd($employees);
-        $leaveTypes = LeaveType::select('name','id','gender')->get();
+        $leaveTypes = LeaveType::select('name','id','gender')->where('status','active')->get();
         $leaveTypesCount = $leaveTypes->count();
         $records = [];
         $dashboardController = new DashboardController;

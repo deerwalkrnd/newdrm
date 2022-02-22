@@ -145,8 +145,8 @@ class YearlyLeaveController extends Controller
             $yearlyLeave = YearlyLeave::findOrFail($id);
             $yearlyLeave->delete();
             $res = [
-                'title' => 'Yearly Leave Updated',
-                'message' => 'Yearly Leave has been successfully Updated',
+                'title' => 'Yearly Leave Deleted',
+                'message' => 'Yearly Leave has been successfully Deleted',
                 'icon' => 'success'
             ];
             return redirect()->back()->with(compact('res'));

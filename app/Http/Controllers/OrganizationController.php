@@ -120,7 +120,7 @@ class OrganizationController extends Controller
             if($e->getCode() == "23000"){
                 $res = [
                 'title' => 'Organization Deletion Failed',
-                'message' => 'Organization cannot be deleted as there are Units and Employees under it.',
+                'message' => 'Organization cannot be deleted as it is in Use.',
                 'icon' => 'warning'
                 ];
                 return redirect()->back()->with(compact('res'));

@@ -123,7 +123,7 @@ class UnitController extends Controller
             if($e->getCode() == "23000"){
                  $res = [
                 'title' => 'Unit Deletion Failed',
-                'message' => 'Unit cannot be deleted as there are Departments and Employees under it.',
+                'message' => 'Unit cannot be deleted as it is in Use.',
                 'icon' => 'warning'
             ];
                 return redirect()->back()->with(compact('res'));
