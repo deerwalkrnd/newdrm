@@ -42,9 +42,12 @@ class MailHelper{
 
     //Missed Punch Out Mail
     public static function sendMissedPunchOutMail(){
+
+        Attendance::where('punch_out_time',NULL)->whereDate('punch_in_time',date('Y-m-d'))->update(['missed_punch_out'=>'1','punch_out_time'=>date('Y-m-d H:i:s')]);
+        
         $attendances = Attendance::where('missed_punch_out','1')
                                 ->with('employee:id,first_name,middle_name,last_name,manager_id,email')
-                                // ->whereDate('punch_in_time',date('Y-m-d',strtotime('yesterday')))        //for cron job
+                                ->whereDate('punch_in_time',date('Y-m-d'))        //for cron job
                                 ->get();
         
         foreach($attendances as $attendance){
