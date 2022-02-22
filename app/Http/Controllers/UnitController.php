@@ -110,13 +110,24 @@ class UnitController extends Controller
      */
     public function destroy($id)
     {
-        $unit = Unit::findOrFail($id);
-        $unit->delete();
-        $res = [
-            'title' => 'Unit Deleted',
-            'message' => 'Unit has been successfully Deleted',
-            'icon' => 'success'
-        ];
-        return redirect('/unit')->with(compact('res'));
+        try{
+            $unit = Unit::findOrFail($id);
+            $unit->delete();
+            $res = [
+                'title' => 'Unit Deleted',
+                'message' => 'Unit has been successfully Deleted',
+                'icon' => 'success'
+            ];
+            return redirect('/unit')->with(compact('res'));
+        }catch(\Illuminate\Database\QueryException $e){
+            if($e->getCode() == "23000"){
+                 $res = [
+                'title' => 'Unit Deletion Failed',
+                'message' => 'Unit cannot be deleted as there are Departments and Employees under it.',
+                'icon' => 'warning'
+            ];
+                return redirect()->back()->with(compact('res'));
+            }
+        }
     }
 }

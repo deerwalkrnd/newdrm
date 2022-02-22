@@ -119,9 +119,9 @@ class LeaveTypeController extends Controller
             // dd($e,$e->getCode(),$e->getCode()=="23000");
             if($e->getCode() == "23000"){
                  $res = [
-                    'title' => 'Deletion Failed',
-                    'message' => 'Leave Type is being Used',
-                    'icon' => 'error'
+                    'title' => 'Leave Type Deletion Failed',
+                    'message' => 'Leave Type cannot be deleted as it is in Use.',
+                    'icon' => 'warning'
                 ];
                 return redirect('/leaveType')->with(compact('res'));
             }

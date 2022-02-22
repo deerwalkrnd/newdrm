@@ -113,7 +113,12 @@ class RoleController extends Controller
             return redirect('/role')->with(compact('res'));
         }catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
-                return redirect()->back();
+                $res = [
+                'title' => 'Role Deletion Failed',
+                'message' => 'Role cannot be deleted as it is in Use.',
+                'icon' => 'warning'
+            ];
+                return redirect()->back()->with(compact('res'));
             }
         }
     }

@@ -153,6 +153,11 @@ class YearlyLeaveController extends Controller
         }
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
+                $res = [
+                    'title' => 'Yearly Leave Deletion Failed',
+                    'message' => 'Yearly Leave cannot be deleted as it is in Use.',
+                    'icon' => 'success'
+                    ];
                 return redirect()->back();
             }
         }

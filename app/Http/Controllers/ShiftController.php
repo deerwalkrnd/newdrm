@@ -114,8 +114,8 @@ class ShiftController extends Controller
         catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
                 $res = [
-                    'title' => 'Deletion Failed',
-                    'message' => 'Shift is Being Used',
+                    'title' => 'Shift Deletion Failed',
+                    'message' => 'Shift cannot be deleted as it is in Use.',
                     'icon' => 'error'
                 ];
 

@@ -1,8 +1,10 @@
 <div>
     <p>Dear {{$name}},</p>
-    <p>Your EmployeeID is {{$employee_id}}. And your credentials for the DRM System is:</p>
+    <p>Your Employee ID is {{$employee_id}}. And your credentials for the DRM System is:</p>
     <p>Username: {{$username}}</p>
     <p>Password: 'Deerwa1k@DRM'</p>
     <p>Regards,</p>
-    <p>HR</p>
+    --<br>
+    HR | <span style="color:#0b5394;"><b>DRM SYSTEM</b></span> | Deerwalk Education Group, Sifal, Kathmandu, Nepal.<br>
+    <a href="deerwalk.edu.np">deerwalk.edu.np</a>
 </div>

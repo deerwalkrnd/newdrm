@@ -118,7 +118,12 @@ class OrganizationController extends Controller
             return redirect('/organization')->with(compact('res'));
         }catch(\Illuminate\Database\QueryException $e){
             if($e->getCode() == "23000"){
-                return redirect()->back();
+                $res = [
+                'title' => 'Organization Deletion Failed',
+                'message' => 'Organization cannot be deleted as there are Units and Employees under it.',
+                'icon' => 'warning'
+                ];
+                return redirect()->back()->with(compact('res'));
             }
         }
     }  

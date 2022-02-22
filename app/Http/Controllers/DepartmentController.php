@@ -105,13 +105,25 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        $department = Department::findOrFail($id);
-        $department->delete();
-        $res = [
-            'title' => 'Department Deleted ',
-            'message' => 'Department has been successfully Deleted ',
-            'icon' => 'success'
-        ];
-        return redirect('/department')->with(compact('res'));
+        try{
+            $department = Department::findOrFail($id);
+            $department->delete();
+            $res = [
+                'title' => 'Department Deleted ',
+                'message' => 'Department has been successfully Deleted ',
+                'icon' => 'success'
+            ];
+            return redirect('/department')->with(compact('res'));
+        }
+        catch(\Illuminate\Database\QueryException $e){
+             if($e->getCode() == "23000"){
+                $res = [
+                    'title' => 'Department Deletion Failed',
+                    'message' => 'Department cannot be deleted as it is in Use.',
+                    'icon' => 'warning'
+                ];
+                return redirect('/department')->with(compact('res'));
+            }
+        }
     }
 }
