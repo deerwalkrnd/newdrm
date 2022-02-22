@@ -15,7 +15,7 @@ class HrEmployeeSeeder extends Seeder
     public function run()
     {              
         //Employees, users and emergency contacts
-         DB::table('employees')->insert([
+        $emp = DB::table('employees')->insertGetId([
             'first_name' => 'DMT',
             'last_name' => 'Developer',
             'date_of_birth' => '1990-01-01',
@@ -41,13 +41,13 @@ class HrEmployeeSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'employee_id' => '1',
+            'employee_id' => $emp,
             'role_id' => '1',
             'username' => 'dmt',
             'password' => \Hash::make('newDrm3@')
         ]);
         DB::table('emergency_contacts')->insert([
-            'employee_id' => '1',
+            'employee_id' => $emp,
             'first_name' => 'R&D',
             'last_name' => 'Team',
             'relationship'=>'common',
