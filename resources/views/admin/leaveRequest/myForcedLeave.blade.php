@@ -3,8 +3,19 @@
 @section('title','Forced Leave Request')
 
 @section('content')
-@include('layouts.basic.tableHead',["table_title" => 'Force Leave'])
+@include('layouts.basic.tableHead',["table_title" => 'My Forced Leave'])
+@if(\Auth::user()->role->authority == 'manager')
 
+<div class="d-flex justify-content-between flex-row">
+    <div class="w-25">
+        <a href="/leave-request/forced"><button class="btn border-0 text-white" style="background-color:#0f5288">Employee's Forced Leave</button></a> 
+    </div> 
+    <!-- <div >
+        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288">Reset</button>
+    </div> -->
+</div>
+<br>
+@endif
 <table class="unit_table mx-auto drmDataTable">
     <thead>
      <tr class="table_title" style="background-color: #0f5288;">

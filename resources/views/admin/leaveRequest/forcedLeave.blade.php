@@ -3,7 +3,7 @@
 @section('title','Forced Leave Request')
 
 @section('content')
-@include('layouts.basic.tableHead',["table_title" => 'Force Leave'])
+@include('layouts.basic.tableHead',["table_title" => 'Employee Forced Leave'])
 
 <table class="unit_table mx-auto drmDataTable">
     <thead>
