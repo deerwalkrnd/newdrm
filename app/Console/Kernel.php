@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
         //Today's Missed Punch Out Notification 
         $send_mail_missed_punch_out = MailControl::select('send_mail')->where('name','Missed Punch Out')->first()->send_mail;
         if($send_mail_missed_punch_out)
-            $schedule->command('punchOut:missed')->dailyAt('23:40');
+            $schedule->command('punchOut:missed')->dailyAt('09:23');
             // ->dailyAt('23:40');
     }
 
