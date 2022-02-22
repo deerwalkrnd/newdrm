@@ -14,7 +14,7 @@
 <section class="form_container mx-auto">
     <div class="row mx-auto">
         <div class="col-md-12 col-sm-8" style="background-color:aliceblue; padding: 20px 40px;">
-            <form class="main_form p-4" method="POST" action="/employee/terminate" onsubmit="return confirm('Do you want to terminate?');" enctype='multipart/form-data'>
+            <form class="main_form p-4" method="POST" action="/employee/terminate" onsubmit="return verify()" enctype='multipart/form-data'>
                 <legend>
                     <center>Terminate Employee</center>
                 </legend>    
@@ -110,5 +110,10 @@
             cache: true
         }
     });
+
+    function verify(){
+        let employee = document.getElementById('employee_id').innerText;
+        return (confirm('Do you want to terminate?') && prompt('Enter Employee\'s Name to be Terminated') === employee);
+    }
 </script>
 @endsection
