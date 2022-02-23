@@ -26,6 +26,9 @@ class SubordinateLeaveRequestRequest extends FormRequest
      */
     public function rules()
     {
+        if(array_key_exists('employee_id',\Request::input()) == false)
+            return ['employee_id' => 'required|exists:employees,id'];
+        
         $today = date('Y-m-d');
         $start_date = \Request::input('start_date');
         $end_date = \Request::input('end_date');

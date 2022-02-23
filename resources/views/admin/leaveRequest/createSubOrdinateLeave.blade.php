@@ -17,7 +17,7 @@
     <div class="row mx-auto">
     <form method="POST"class="main_form p-4" class="main_form p-4" action="/leave-request/subordinate-leave">
         @csrf
-            <label for="employee_id">Employee Name</label>
+            <label for="employee_id">Employee Name*</label>
             <select class="manager-livesearch form-control p-3 mb-2" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --"></select>
             @error('employee_id')
                 <p class="text-danger">{{ $message }}</p>
