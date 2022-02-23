@@ -61,7 +61,7 @@ class CreateEmployeesTable extends Migration
             //password
 
             $table->date('join_date');
-            $table->string('intern_trainee_ship_date')->nullable();
+            $table->date('intern_trainee_ship_date')->nullable();
             $table->foreignId('service_type')->constrained('service_types');
             // $table->foreignId('service_type')->constrained('service_types')->onDelete('restrict');
             //service change date missing
