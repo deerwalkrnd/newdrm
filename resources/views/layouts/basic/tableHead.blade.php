@@ -7,7 +7,7 @@
 </section>
 <!-- page title end -->
 
-<div class="table_container table-responsive">
+<div class="table_container">
     @if(isset($url))
     <!-- add button start -->
     <div class="button_div">

@@ -39,6 +39,7 @@
     <em>Note: AC-Accrued, A-Allowed, T-Taken, B-Balance</em>
 </div>
 <br>
+<div class="table-responsive">
 <table class="unit_table mx-auto">
     <thead></thead>
         <tr class="table_title" style="background-color: #0f5288;">
@@ -102,6 +103,7 @@
         @endforeach
     </tbody>    
 </table>
+</div>
 {{ $employees->links() }}
 
 @include('layouts.basic.tableFoot')
