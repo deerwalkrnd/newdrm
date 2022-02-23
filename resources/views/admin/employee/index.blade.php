@@ -16,14 +16,14 @@
     <tr class="table_title" style="background-color: #0f5288;">
        <th scope="col" class="ps-4">S.N</th>
         <th scope="col">Name</th>
-        <th scope="col">Title</th>
+        <!-- <th scope="col">Title</th> -->
         <th scope="col">Manager</th>
         <th scope="col">Organization</th>
         <th scope="col">Unit</th>
         <th scope="col">Department</th>
         <th scope="col">Internship/Trainee Date</th>
         <th scope="col">Join Date</th>
-        <th scope="col">Y Since Date</th>
+        <th scope="col">Since Year</th>
         <th scope="col">Status</th>
         <th scope="col">Position</th>
         <th scope="col">Punch In</th>
@@ -36,7 +36,7 @@
     <tr>
         <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
         <td><a href="/employee/profile/{{$employee->id}}">{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</a></td>
-        <td>Title</td>
+        <!-- <td>title</td> -->
         <td>{{ $employee->manager != NULL ? $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name : "N/A"}} </td>
         <td>{{ $employee->organization->name }}</td>
         <td>{{ $employee->unit->unit_name }}</td>

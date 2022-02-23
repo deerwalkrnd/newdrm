@@ -557,13 +557,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <!-- <label class="form-label" for="manager_id">Manager</label>
-            <input type="text" class="form-control" id="manager_id" placeholder="Enter Employee manager_id" name="manager_id" value="{{ !empty(old('manager_id')) ? old('manager_id') : $employee->manager_id ?? '' }}">
-            @error('manager_id')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror -->
-
-
             <label class="form-label" for="manager_id">Manager</label>
             <select class="form-control" id="manager_id" name="manager_id">
                 <option value="" disabled="disabled" selected="selected">-- Choose Manager --</option>
