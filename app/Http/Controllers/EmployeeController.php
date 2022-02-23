@@ -95,7 +95,12 @@ class EmployeeController extends Controller
         $serviceTypes = ServiceType::select('id','service_type_name')->get();
         $shifts = Shift::select('id','name','time_required')->get();
         $roles = Role::select('id','authority')->where('id','!=','2')->get();
-        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
+        $managers = Manager::select('id','employee_id')
+                    ->with('employee:id,first_name,middle_name,last_name,contract_status')
+                    ->whereHas('employee',function($query){
+                        $query->where('contract_status','active');
+                    })
+                    ->where('is_active','active')->get();
         return view('admin.employee.create')->with(compact('managers','units','departments','organizations','designations','provinces','districts','serviceTypes','shifts','roles'));
     }
 
