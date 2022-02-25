@@ -154,11 +154,9 @@ class DashboardController extends Controller
         $lists = array();
         foreach($leaveTypes as $leaveType)
         {
-            $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year);
+            $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year-1,\Auth::user()->employee_id);
             $acquiredLeave = $allowedLeave / 12 * $month;
-
-            // dd($year);
-            
+           
             $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave','year')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
@@ -191,15 +189,17 @@ class DashboardController extends Controller
         return $lists;
     }
 
-    public function getAllowedLeaveDays($unit_id,$leaveType,$year)
+    public function getAllowedLeaveDays($unit_id,$leaveType,$year,$employee_id)
     {
         // if carry Over Leave // carry over is set to 1
         if($leaveType == 2)
         {
-            $allowedLeave = CarryOverLeave::select('id','year','days','employee_id')
-                                            ->where('year',$year-1)
-                                            ->where('employee_id',\Auth::user()->employee_id)
+            $employee_id = strval($employee_id);
+            $allowedLeave = CarryOverLeave::where('employee_id',$employee_id)
+                                            ->where('year',$year)
+                                            // ->get();
                                             ->first();
+            
         }else{
             $allowedLeave = YearlyLeave::select('days')
                                         ->where('year',$year)

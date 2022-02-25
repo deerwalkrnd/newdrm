@@ -9,6 +9,7 @@ use App\Models\LeaveType;
 use App\Models\YearlyLeave;
 use App\Models\Employee;
 use App\Models\Holiday;
+use App\Models\CarryOverLeave;
 use App\Models\NoPunchInNoLeave;
 use App\Http\Controllers\DashboardController;
 use App\Helpers\NepaliCalendarHelper;
@@ -48,6 +49,7 @@ class LeaveReportController extends Controller
         foreach($employees as $employee)
         {
             $temp = array();
+            $temp['employee_id'] = $employee->id;
             $temp['name'] = $employee->first_name." ".$employee->last_name;
             $temp['leaves'] = array();
             // dd($request->d);
@@ -97,17 +99,9 @@ class LeaveReportController extends Controller
                                         ->whereDoesntHave('leaveType',function($query){
                                             $query->where('paid_unpaid','1');
                                         })
-                                        // ->get();
                                         ->sum('days');
                 // dd($total_unpaid_leaves);
                 $temp['total_unpaid_leaves'] = $total_unpaid_leaves;
-                // dd($total_unpaid_leaves,$employee->first_name,$year);
-                
-                // $yearlyLeave = YearlyLeave::select('days','leave_type_id')
-                //                     ->with('leaveType:id,name')
-                //                     ->where('year',$year)
-                //                     // ->where()
-                //                     ->get();
                 array_push($records,$temp);
             }
             
@@ -119,7 +113,7 @@ class LeaveReportController extends Controller
     private function getEmployeeLeaveBalance($employee,$type,$year){
         $dashboardController = new DashboardController;
         //gives carryover
-        $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
+        $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year-1,$employee->id);
 
         //for carryover = 0
         // $allowedLeave = $this->getAllowedLeaveDays($employee->unit_id,$type->id,$year);

@@ -16,17 +16,16 @@ class CarryOverLeaveController extends Controller
     {
        //previous year
         try{
-            $previous_year = date('Y-m-d');
-            $date = new NepaliCalendarHelper($previous_year,1);
+            $present_year = date('Y-m-d');
+            $date = new NepaliCalendarHelper($present_year,1);
             $nepaliDate = $date->in_bs();
             $nepaliDateArray = explode('-',$nepaliDate);
             $year = $nepaliDateArray[0] - 1; //previous Year  
-            // dd($year);
         }catch(Exception $e)
         {
             print_r($e->getMessage());
         }
-        // $year = date('Y') - 1; 
+        // dd($year); 
         //add the year column in leave request section
         $maxPersonalLeave = 13;
         $carryOverLeaveList = LeaveRequest::select('employee_id',\DB::raw('SUM(days) as days'))
@@ -36,7 +35,6 @@ class CarryOverLeaveController extends Controller
                                             ->groupBy('employee_id')
                                             ->get();
 
-        // dd($carryOverLeaveList);
 
         $carryOverLeaveList = collect($carryOverLeaveList)->map(function($record) use($maxPersonalLeave, $year){
             $remainingLeave = $maxPersonalLeave - $record['days'];
@@ -44,6 +42,8 @@ class CarryOverLeaveController extends Controller
             $record['year'] = $year;
             return $record;
         })->toArray();
+
+        // dd($carryOverLeaveList);
 
         CarryOverLeave::upsert($carryOverLeaveList,['employee_id','year'],['days']);
         // return $carryOverLeaveList;
