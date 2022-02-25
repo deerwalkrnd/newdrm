@@ -37,6 +37,8 @@ class LeaveReportController extends Controller
        
         if(isset($request->e))
             $employees = Employee::where('contract_status','active')->where('id',$request->e)->paginate(3);
+        elseif(isset($request->d))
+            $employees = Employee::where('contract_status','active')->paginate(10);
         else
             $employees = Employee::where('contract_status','active')->paginate(3);
 
