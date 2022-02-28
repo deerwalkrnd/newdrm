@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\LeaveRequest;
+use App\Models\YearlyLeave;
+use App\Models\Unit;
+use App\Models\Employee;
 use App\Models\CarryOverLeave;
 use App\Helpers\NepaliCalendarHelper;
 
@@ -25,27 +28,43 @@ class CarryOverLeaveController extends Controller
         {
             print_r($e->getMessage());
         }
-        // dd($year); 
+         
         //add the year column in leave request section
-        $maxPersonalLeave = 13;
-        $carryOverLeaveList = LeaveRequest::select('employee_id',\DB::raw('SUM(days) as days'))
+        $maxPersonalLeave =13;
+        $units = Unit::select('id')->get(); 
+    
+        foreach($units as $unit){
+            $carryOverLeaveList = LeaveRequest::select('employee_id',\DB::raw('SUM(days) as days'))
+                                        ->where('year',$year)
+                                        ->where('acceptance','accepted')
+                                        ->where('leave_type_id',1) //leave_type_id is seeded as 1 for personal leave
+                                        ->whereHas('employee',function($query) use($unit){
+                                            $query->where('unit_id',$unit->id);
+                                        })
+                                        ->groupBy('employee_id')
+                                        ->get();
+
+            //unit and year wise max personal leave type                        
+            $maxPersonalLeave = YearlyLeave::select('days')
+                                            ->where('leave_type_id',1)
+                                            ->where(function($query) use ($unit){
+                                                $query->where('unit_id',$unit)
+                                                        ->orWhere('unit_id',null);
+                                                })
                                             ->where('year',$year)
-                                            ->where('acceptance','accepted')
-                                            ->where('leave_type_id',1) //leave_type_id is seeded as 1 for personal leave
-                                            ->groupBy('employee_id')
-                                            ->get();
+                                            ->first()->days;
+
+            $carryOverLeaveList = collect($carryOverLeaveList)->map(function($record) use($maxPersonalLeave,$year){
+                $remainingLeave = $maxPersonalLeave - $record['days'];
+                $record['days'] = max(min($remainingLeave,8),0);
+                $record['year'] = $year;
+                return $record;
+            })->toArray();
+
+            CarryOverLeave::upsert($carryOverLeaveList,['employee_id','year'],['days']);
+        }
 
 
-        $carryOverLeaveList = collect($carryOverLeaveList)->map(function($record) use($maxPersonalLeave, $year){
-            $remainingLeave = $maxPersonalLeave - $record['days'];
-            $record['days'] = min($remainingLeave,8);
-            $record['year'] = $year;
-            return $record;
-        })->toArray();
-
-        // dd($carryOverLeaveList);
-
-        CarryOverLeave::upsert($carryOverLeaveList,['employee_id','year'],['days']);
         // return $carryOverLeaveList;
         return redirect('/dashboard');
     }
