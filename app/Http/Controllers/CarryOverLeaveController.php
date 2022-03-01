@@ -30,7 +30,6 @@ class CarryOverLeaveController extends Controller
         }
          
         //add the year column in leave request section
-        $maxPersonalLeave =13;
         $units = Unit::select('id')->get(); 
     
         foreach($units as $unit){
