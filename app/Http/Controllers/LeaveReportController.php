@@ -115,7 +115,7 @@ class LeaveReportController extends Controller
     private function getEmployeeLeaveBalance($employee,$type,$year){
         $dashboardController = new DashboardController;
         //gives carryover
-        $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year-1,$employee->id);
+        $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year,$employee->id);
 
         //for carryover = 0
         // $allowedLeave = $this->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
@@ -141,7 +141,7 @@ class LeaveReportController extends Controller
         $balance = $acquiredLeave - $leaveTaken;
 
         $lists=[
-             'allowed' => $allowedLeave,
+            'allowed' => $allowedLeave,
             'accrued' => round($acquiredLeave,2),
             'taken' => $leaveTaken,
             'balance' => round($balance,2)

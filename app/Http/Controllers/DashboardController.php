@@ -196,7 +196,7 @@ class DashboardController extends Controller
         {
             $employee_id = strval($employee_id);
             $allowedLeave = CarryOverLeave::where('employee_id',$employee_id)
-                                            ->where('year',$year)
+                                            ->where('year',$year-1)
                                             // ->get();
                                             ->first();
             

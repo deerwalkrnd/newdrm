@@ -32,7 +32,7 @@ class CarryOverLeaveController extends Controller
         //add the year column in leave request section
         $units = Unit::select('id')->get(); 
     
-        foreach($units as $unit){
+        foreach($units as $unit){           //full leave-0 => days = days/2
             $carryOverLeaveList = LeaveRequest::select('employee_id',\DB::raw('SUM(days) as days'))
                                         ->where('year',$year)
                                         ->where('acceptance','accepted')
@@ -42,8 +42,8 @@ class CarryOverLeaveController extends Controller
                                         })
                                         ->groupBy('employee_id')
                                         ->get();
-
-            //unit and year wise max personal leave type                        
+                                        
+            // unit and year wise max personal leave type                        
             $maxPersonalLeave = YearlyLeave::select('days')
                                             ->where('leave_type_id',1)
                                             ->where(function($query) use ($unit){
@@ -62,9 +62,22 @@ class CarryOverLeaveController extends Controller
 
             CarryOverLeave::upsert($carryOverLeaveList,['employee_id','year'],['days']);
         }
-
-
         // return $carryOverLeaveList;
         return redirect('/dashboard');
+    }
+
+    //calculate leave days ofeach employee usign both half and full leave
+    private function calculateDays($carryOverLeaveList){
+        $days = 0;
+        if($carryOverLeaveList){
+            foreach($carryOverLeaveList as $leaveRequestList){
+                if($leaveRequestList->full_leave == 1){
+                    $days = $days + $leaveRequestList->days; 
+                }else{
+                    $days = $days + $leaveRequestList->days * 0.5; 
+                }
+            }
+        }
+        // dd($days);
     }
 }
