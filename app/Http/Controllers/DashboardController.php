@@ -154,7 +154,7 @@ class DashboardController extends Controller
         $lists = array();
         foreach($leaveTypes as $leaveType)
         {
-            $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year-1,\Auth::user()->employee_id);
+            $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year,\Auth::user()->employee_id);
             $acquiredLeave = $allowedLeave / 12 * $month;
            
             $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave','year')
