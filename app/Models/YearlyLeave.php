@@ -23,6 +23,6 @@ class YearlyLeave extends Model
     }
     public function leaveType()
     {
-        return $this->belongsTo(leaveType::class);
+        return $this->belongsTo(LeaveType::class);
     }
 }
