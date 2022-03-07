@@ -172,7 +172,6 @@ class LeaveRequestController extends Controller
 
     public function storeSubOrdinateLeave(SubordinateLeaveRequestRequest $request)
     {
-        dd($request);
         $data = $request->validated();
         // dd($data);
         $data['employee_id'] = $data['employee_id'];
