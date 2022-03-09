@@ -107,15 +107,15 @@
 
 				<div class="row box-content m-1 p-3">
 					<div class="col-md-12 col-lg-12">
-					<form action="{{ route('login') }}" method="POST">
+					<form action="{{ route('password.force') }}" method="POST">
 					{{ csrf_field() }}
 					<p class="text-danger">{{ $errors->first('username') }}</p>
 						<div class="row">
-							<div class="col-md-3 col-lg-4 col-sm-4 col-6 mt-1 text-right">
-								<span class="title">Username: </span>
+							<div class="col-md-3 col-lg-5 col-sm-4 col-6 mt-1 text-right">
+								<span class="title">Email: </span>
 							</div>	
-							<div class="col-md-6 col-lg-5 col-sm-6 col-5 p-0">
-								<input type="text" name="username" class="border-right-0 border-1 form-control border-dark custom-input" autocomplete="on">
+							<div class="col-md-6 col-lg-6 col-sm-6 col-5 p-0">
+								<input type="email" name="email" class="border-right-0 border-1 form-control border-dark custom-input" autocomplete="on">
 							</div>
 							<div class="col-md-1 col-sm-1 col-1 text-left border p-0 border-dark text-center border-left-0 form-icons">
 								<i class="fas fa-user-tie align-bottom"></i>
@@ -124,10 +124,10 @@
 						<!-- username -->
 
 						<div class="row mt-4">
-							<div class="col-md-3 col-lg-4 col-sm-4 col-6 mt-1 text-right">
-								<span class="title">Password: </span>
+							<div class="col-md-3 col-lg-5 col-sm-4 col-6 mt-1 text-right">
+								<span class="title">New Password: </span>
 							</div>	
-							<div class="col-md-6 col-lg-5 col-sm-6 col-5 p-0">
+							<div class="col-md-6 col-lg-6 col-sm-6 col-5 p-0">
 								<input type="password" name="password" class="border-right-0 border-1 form-control border-dark custom-input">
 							</div>
 							<div class="col-md-1 col-sm-1 col-1 p-0 border border-dark text-center border-left-0 form-icons" style="-webkit-writing-mode: vertical-rl;">
@@ -135,15 +135,30 @@
 							</div>
 						</div>
 						<!-- password -->
+
+                        <div class="row mt-4">
+							<div class="col-md-3 col-lg-5 col-sm-4 col-6 mt-1 text-right">
+								<span class="title">Re-Password: </span>
+							</div>	
+							<div class="col-md-6 col-lg-6 col-sm-6 col-5 p-0">
+								<input type="password" name="password" class="border-right-0 border-1 form-control border-dark custom-input">
+							</div>
+							<div class="col-md-1 col-sm-1 col-1 p-0 border border-dark text-center border-left-0 form-icons" style="-webkit-writing-mode: vertical-rl;">
+								<i class="fas fa-key"></i>
+							</div>
+						</div>
+						<!-- password-confirm -->
 					</div>	
 				</div>
 				<!-- row 2 -->
+
+                <input type="hidden" value="{{ $token }}">
 
 				<div class="row box-footer py-3">
 					<div class="col-md-12 col-lg-12 col-sm-12">
 						<div class="row justify-content-between">
 							<div class="col-md-5 col-sm-4 col-6 forgot-password">
-								<span class="align-middle"><a href="{{ route('password.forgot') }}">Forgot Password</a></span>
+								<!-- <span class="align-middle"><a href="#">Forgot Password</a></span> -->
 							</div>
 							<div class="col-md-4 col-sm-5 col-5 text-right login">
 								<button type="submit" class="btn btn-primary btn-custom">LOGIN</button>
