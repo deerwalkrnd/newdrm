@@ -28,6 +28,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MailControlController;
 use App\Http\Controllers\NoPunchInNoLeaveController;
 use App\Http\Controllers\TimeController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Helpers\Helper;
 
 
@@ -217,10 +218,18 @@ Route::get('/', function () {
 //     Route::view('/table','admin.dashboard.table');    
 // });
 
+
+
+// //Any One
+Route::get('/forgot-password',[PasswordController::class,'getForgotPassword']);
+Route::post('/forgot-password',[PasswordController::class,'postForgotPassword']);
+// Route::view('/forgot-password','auth.forgotPassword');
+
 // lowest level employee
 Route::middleware(['logged-in'])->group(function(){
     //change-password
     Route::view('change-password','auth.changePassword');
+    
     //dashboard
     Route::get('/dashboard',[DashboardController::class, 'index']);
     Route::view('/form','admin.dashboard.form');

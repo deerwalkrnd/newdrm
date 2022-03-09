@@ -100,15 +100,15 @@
 			<div class="col-md-8 col-xl-5 col-lg-6 col-sm-10 col-10 border border-dark login">
 				<div class="row login-header">
 					<div class="col-md-12 my-2">
-						<span>Login<span>
+						<span>Reset Password<span>
 					</div>
 				</div>
 				<!-- row 1 -->
 
 				<div class="row box-content m-1 p-3">
 					<div class="col-md-12 col-lg-12">
-					<form action="{{ route('login') }}" method="POST">
-					{{ csrf_field() }}
+					<form action="/forgot-password" method="POST">
+					@csrf
 					<p class="text-danger">{{ $errors->first('username') }}</p>
 						<div class="row">
 							<div class="col-md-3 col-lg-4 col-sm-4 col-6 mt-1 text-right">
@@ -122,25 +122,6 @@
 							</div>
 						</div>
 						<!-- username -->
-
-						<div class="row mt-4">
-							<div class="col-md-3 col-lg-4 col-sm-4 col-6 mt-1 text-right">
-								<span class="title">Password: </span>
-							</div>	
-							<div class="col-md-6 col-lg-5 col-sm-6 col-5 p-0">
-								<input type="password" name="password" class="border-right-0 border-1 form-control border-dark custom-input">
-							</div>
-							<div class="col-md-1 col-sm-1 col-1 p-0 border border-dark text-center border-left-0 form-icons" style="-webkit-writing-mode: vertical-rl;">
-								<i class="fas fa-key"></i>
-							</div>
-						</div>
-						<!-- password -->
-
-						<div class="row mt-4">
-							<div class="col-md-12 col-lg-12 col-sm-12 col-12 mt-1 text-right">
-								<center><a href="/forgot-password">Forgot Password?</a></center>
-							</div>
-						</div>
 					</div>	
 				</div>
 				<!-- row 2 -->
@@ -152,7 +133,7 @@
 								<!-- <span class="align-middle"><a href="#">Forgot Password</a></span> -->
 							</div>
 							<div class="col-md-4 col-sm-5 col-5 text-right login">
-								<button type="submit" class="btn btn-primary btn-custom">LOGIN</button>
+								<button type="submit" class="btn btn-primary btn-custom">Reset Password</button>
 							</div>	
 						</div>
 					</div>
