@@ -123,7 +123,7 @@ class DashboardController extends Controller
                                 ->where(function($query) use($next_month){
                                     $query->whereMonth('date_of_birth','<=',$next_month); 
                                 })
-                                ->orderByRaw("DATE_FORMAT(date_of_birth,'%M-%d-%Y')")
+                                ->orderByRaw("DATE_FORMAT(date_of_birth,'%m-%d-%Y')")
                                 ->get();
 
         return $birthdayList;
