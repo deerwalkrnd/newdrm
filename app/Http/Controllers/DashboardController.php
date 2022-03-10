@@ -154,8 +154,12 @@ class DashboardController extends Controller
         $lists = array();
         foreach($leaveTypes as $leaveType)
         {
+            // get employee join date
+            // if year < this year no change
+            // else months remaining in year i.e 13 - join month
+            // allowe leave = allow / 12 * remaining months
             $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year,\Auth::user()->employee_id);
-            $acquiredLeave = $allowedLeave / 12 * $month;
+            $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
            
             $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave','year')
                                         ->where('acceptance','accepted')
@@ -180,9 +184,9 @@ class DashboardController extends Controller
 
             $lists[$leaveType->name] = [
                 'allowed' => $allowedLeave,
-                'accrued' => round($acquiredLeave,2),
+                'accrued' => $acquiredLeave,
                 'taken' => $leaveTaken,
-                'balance' => round($balance,2)
+                'balance' => $balance,
             ];
         }
 
