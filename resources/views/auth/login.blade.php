@@ -135,12 +135,6 @@
 							</div>
 						</div>
 						<!-- password -->
-
-						<div class="row mt-4">
-							<div class="col-md-12 col-lg-12 col-sm-12 col-12 mt-1 text-right">
-								<center><a href="/forgot-password">Forgot Password?</a></center>
-							</div>
-						</div>
 					</div>	
 				</div>
 				<!-- row 2 -->

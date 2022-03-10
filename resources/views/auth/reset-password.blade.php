@@ -96,7 +96,6 @@
 
 	<div class="container mt-3">
 		<div class="row justify-content-center">
-		
 			<div class="col-md-8 col-xl-5 col-lg-6 col-sm-10 col-10 border border-dark login">
 				<div class="row login-header">
 					<div class="col-md-12 my-2">
@@ -107,6 +106,16 @@
 
 				<div class="row box-content m-1 p-3">
 					<div class="col-md-12 col-lg-12">
+					@if($errors->any())
+						<div class="alert alert-danger">
+							<p><strong>Opps Something went wrong</strong></p>
+							<ul>
+							@foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+							@endforeach
+							</ul>
+						</div>
+					@endif
 					<form action="{{ route('password.force') }}" method="POST">
 					{{ csrf_field() }}
 					<p class="text-danger">{{ $errors->first('username') }}</p>
@@ -141,7 +150,7 @@
 								<span class="title">Re-Password: </span>
 							</div>	
 							<div class="col-md-6 col-lg-6 col-sm-6 col-5 p-0">
-								<input type="password" name="password" class="border-right-0 border-1 form-control border-dark custom-input">
+								<input type="password" name="password_confirmation" class="border-right-0 border-1 form-control border-dark custom-input">
 							</div>
 							<div class="col-md-1 col-sm-1 col-1 p-0 border border-dark text-center border-left-0 form-icons" style="-webkit-writing-mode: vertical-rl;">
 								<i class="fas fa-key"></i>

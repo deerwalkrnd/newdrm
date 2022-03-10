@@ -51,18 +51,18 @@ class PasswordResetController extends Controller
         if (!$user) {
             return redirect()->back()->with('error', 'No user found with this email');
         }else{
-            $this->resetPassword($user,['password' => $request->password]);
+            if($this->resetPassword($user,['password' => $request->password]))
+                return redirect('/');
+            else    
+                return redirect()->back();
         }
     }
 
     private function resetPassword($user, array $input)
     {
-        Validator::make($input, [
-            'password' => $this->passwordRules(),
-        ])->validate();
-
-        $user->forceFill([
-            'password' => Hash::make($input['password']),
-        ])->save();
+        $status = $user->update([
+            'password' => \Hash::make($input['password']),
+        ]);
+        return $status;
     }
 }
