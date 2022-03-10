@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'hr' => \App\Http\Middleware\IsHR::class,
         'manager' => \App\Http\Middleware\IsManager::class,
         'employee' => \App\Http\Middleware\IsEmployee::class,
+        'token.verify' => \App\Http\Middleware\VerifyToken::class,
         'pre.process.manager.request' => \App\Http\Middleware\ProcessManagerRequest::class,
     ];
 }

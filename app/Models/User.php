@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
+
 
 class User extends Authenticatable
 {
@@ -58,5 +60,25 @@ class User extends Authenticatable
     public function employee()
     {
         return $this->belongsTo(Employee::class,'employee_id');
+    }
+
+    public function getEmailForPasswordReset()
+    {
+        return $this->employee->email;
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
+    public function getFullnameAttribute()
+    {
+        return $this->attributes['fullname'] = ucfirst($this->employee->first_name) . ' ' . $this->employee->middle_name . ' ' . ucfirst($this->employee->last_name);
+    }
+
+    public function routeNotificationForMail($notification)
+    { 
+        return [$this->employee->email => $this->fullname];
     }
 }
