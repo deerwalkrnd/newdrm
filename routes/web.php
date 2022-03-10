@@ -51,6 +51,7 @@ Route::get('/', function () {
 Route::middleware(['logged-in'])->group(function(){
     //change-password
     Route::view('change-password','auth.changePassword');
+    
     //dashboard
     Route::get('/dashboard',[DashboardController::class, 'index']);
     Route::view('/form','admin.dashboard.form');
