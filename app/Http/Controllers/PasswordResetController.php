@@ -44,17 +44,6 @@ class PasswordResetController extends Controller
 
     public function reset(Request $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:6'
-        ]);
-
-        //check if token is granted to the email and created_at + 1day > now
-
-        // else response with mismatched email and token 
-        // or with expired token
-    
         $user = User::whereHas('employee', function ($query) use ($request) {
             $query->where('email', $request->email);
         })->first();
@@ -76,8 +65,4 @@ class PasswordResetController extends Controller
             'password' => Hash::make($input['password']),
         ])->save();
     }
-
-
-
-
 }

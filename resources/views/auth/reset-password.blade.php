@@ -152,7 +152,7 @@
 				</div>
 				<!-- row 2 -->
 
-                <input type="hidden" value="{{ $token }}">
+                <input type="hidden" name="reset_token" value="{{ $token }}">
 
 				<div class="row box-footer py-3">
 					<div class="col-md-12 col-lg-12 col-sm-12">
