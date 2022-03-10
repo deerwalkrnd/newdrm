@@ -3,24 +3,38 @@
 @section('title','Dashboard')
 
 @section('content')
+
+
+
+
 <!-- section with top buttons start -->
-<div class="row top_buttons mx-4">
-    <div class="col">
-        <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
-        <a href="/leave-request"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button></a>
-        <a href="/leave-request/my-forced"><button type="button" class="btn btn-md applyLeave_btn mb-2">Forced Leave Details</button></a>
-        <a href="/myPunchIn"><button type="button" class="btn btn-md applyLeave_btn mb-2">My Punch In</button></a>
-        <a href="/employee/profile"><button type="button" class="btn btn-md applyLeave_btn mb-2">My Profile</button></a>
+<div class="topbutton_group">
 
-        @if(Auth::user()->role->authority == 'manager')
-            <a href="/leave-request/approve"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Request</button></a>
-        @endif
+    <!-- section for current time start-->
+    <div class="row time_mobile">
+        <div class="col current_time" id="clock1">
+            time
+        </div>
     </div>
+    <!-- section for current time end-->
 
-    @if(in_array(session('userIp'), explode(',',env('IP')) ))
+    <div class="row top_buttons mx-4">
+        <div class="col">
+            <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
+            <a href="/leave-request"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Details</button></a>
+            <a href="/myPunchIn"><button type="button" class="btn btn-md applyLeave_btn mb-2">My Punch In</button></a>
+            <a href="/employee/profile"><button type="button" class="btn btn-md applyLeave_btn mb-2">My Profile</button></a>
+            <a href="/leave-request/my-forced"><button type="button" class="btn btn-md applyLeave_btn mb-2">Forced Leave Details</button></a>
+
+            @if(Auth::user()->role->authority == 'manager')
+            <a href="/leave-request/approve"><button type="button" class="btn btn-md applyLeave_btn mb-2">Leave Request</button></a>
+            @endif
+        </div>
+
+        @if(in_array(session('userIp'), explode(',',env('IP')) ))
         @if(session('punchIn') == 2)
         <div class="col">
-            <span class="punch_out_container" style="position: relative;">
+            <span class="punch_out_container">
                 <form class="punch_out_form" action="/punch-out" method="POST" onsubmit="return confirm('Do you want to punch-out?');">
                     @csrf
                     <input type="hidden" placeholder="Punch In/Out Remarks">
@@ -34,26 +48,26 @@
         @if(session('punchIn') == 1)
         <div class="col">
             <div class="row">
-                <span class="punch_out_container" style="position: relative;">
+                <span class="punch_out_container">
                     <form class="punch_out_form" action="/punch-in" method="POST">
                         @csrf
                         <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
                         <p class="text-white">{{ session('userIp') }} | {{ env('IP') }}</p>
                         @if(session('noPunchInNoLeaveRecords') == 0)
-                            @if(session('isLate') == 1)
-                                @if(session('late_within_ten_days') > 0 )
-                                    <p class="text-danger">Multiple Late Punch In. Please Contact HR.</p>
-                                @else
-                                <input placeholder="Punch In/Out Remarks" name="reason">
-                                <span class="punch_out_button">
-                                    <button>Punch In</button>
-                                </span> 
-                                @endif
-                            @else
-                            <span class="punch_out_button">
-                                <button>Punch In</button>
-                            </span>    
-                            @endif
+                        @if(session('isLate') == 1)
+                        @if(session('late_within_ten_days') > 0 )
+                        <p class="text-danger">Multiple Late Punch In. Please Contact HR.</p>
+                        @else
+                        <input placeholder="Punch In/Out Remarks" name="reason">
+                        <span class="punch_out_button">
+                            <button>Punch In</button>
+                        </span>
+                        @endif
+                        @else
+                        <span class="punch_out_button">
+                            <button>Punch In</button>
+                        </span>
+                        @endif
                         @else
                         <p class="text-danger">Missed Punch In and No Leave Request Record Exists. Please Contact HR.</p>
                         @endif
@@ -63,21 +77,23 @@
             <div class="row">
                 <span class="punch_out_container" style="position: relative;">
                     <form class="punch_out_form">
-                    @error('reason')
+                        @error('reason')
                         <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                        @enderror
                     </form>
                 </span>
             </div>
         </div>
         @endif
         <!-- punch-in/punch-out col -->
-    @endif
+        @endif
+    </div>
 </div>
+
 <!-- section with top buttons end -->
 
 <!-- section for current time start-->
-<div class="row mx-4">
+<div class="row mx-4 time_laptop">
     <div class="col current_time mx-4" id="clock">
         time
     </div>
@@ -99,7 +115,7 @@
         </div>
         <div class="col-md-2 mb-2 total_count_box">
             Total Count
-            <input type="text" placeholder="" value="{{ $leaveList->count() }}" disabled  style="width:55px; text-align:center;">
+            <input type="text" placeholder="" value="{{ $leaveList->count() }}" disabled style="width:55px; text-align:center;">
         </div>
     </div>
     <div class="row empOnLeave_table_container mx-3">
@@ -129,7 +145,9 @@
             </tr>
             @empty
             <tr>
-                <td colspan="7"><center>No Record Found</center></td>
+                <td colspan="7">
+                    <center>No Record Found</center>
+                </td>
             </tr>
             @endforelse
         </table>

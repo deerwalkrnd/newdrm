@@ -8,18 +8,16 @@
     <title>DRM - @yield('title')</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- css file -->
     <link rel="stylesheet" href="/assets/css/styles.css">
 
     <!-- fontawesome icon -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
-        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 
     <link href="/assets/images/login/favicon.gif" rel="shortcut icon">
-    
+
     <!-- Select 2 assets -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
@@ -41,12 +39,8 @@
 
     <script src="/assets/js/main.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 
     <!-- sweet alert script -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
@@ -56,12 +50,16 @@
     @yield('scripts')
     <script>
         function currentTime() {
-            let date = new Date(); let hh = date.getHours(); let mm = date.getMinutes(); let ss = date.getSeconds(); let session = "AM";
+            let date = new Date();
+            let hh = date.getHours();
+            let mm = date.getMinutes();
+            let ss = date.getSeconds();
+            let session = "AM";
 
-            if(hh == 0){
+            if (hh == 0) {
                 hh = 12;
             }
-            if(hh > 12){
+            if (hh > 12) {
                 hh = hh - 12;
                 session = "PM";
             }
@@ -69,11 +67,14 @@
             hh = (hh < 10) ? "0" + hh : hh;
             mm = (mm < 10) ? "0" + mm : mm;
             ss = (ss < 10) ? "0" + ss : ss;
-                
+
             let time = hh + ":" + mm + ":" + ss + " " + session;
 
-            document.getElementById("clock").innerText = time; 
-            let t = setTimeout(function(){ currentTime() }, 1000);
+            document.getElementById("clock").innerText = time;
+            document.getElementById("clock1").innerText = time;
+            let t = setTimeout(function() {
+                currentTime()
+            }, 1000);
         }
 
         currentTime();
@@ -83,11 +84,11 @@
     <script>
         //check if res is received
         @if(Session::get('res'))
-            Swal.fire(
-                "{{ Session::get('res')['title'] }}",
-                "{{ Session::get('res')['message'] }}",
-                "{{ Session::get('res')['icon'] }}",
-            );
+        Swal.fire(
+            "{{ Session::get('res')['title'] }}",
+            "{{ Session::get('res')['message'] }}",
+            "{{ Session::get('res')['icon'] }}",
+        );
         @endif
     </script>
 </body>
