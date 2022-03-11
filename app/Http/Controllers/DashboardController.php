@@ -131,16 +131,9 @@ class DashboardController extends Controller
 
     private function getLeaveBalance()
     {
-        try{
-            $date = new NepaliCalendarHelper(date('Y-m-d'),1);
-            $nepaliDate = $date->in_bs();
-            $nepaliDateArray = explode('-',$nepaliDate);
-            $year = $nepaliDateArray[0];
-            $month = $nepaliDateArray[1];
-        }catch(Exception $e)
-        {
-            print_r($e->getMessage());
-        }
+        $currentYearMonth = $this->getNepaliYear(date('Y-m-d'));
+        $year = $currentYearMonth[0];
+        $month = $currentYearMonth[1];
 
         $unit_id = \Auth::user()->employee->unit_id;
         $leaveTypes = LeaveType::select('name','id')
@@ -158,8 +151,20 @@ class DashboardController extends Controller
             // if year < this year no change
             // else months remaining in year i.e 13 - join month
             // allowe leave = allow / 12 * remaining months
+            $join_date = Employee::select('id','join_date')->where('id',\Auth::user()->employee_id)->first()->join_date;
+            $joinYearMonth = $this->getNepaliYear($join_date);
+            $joinYear = $joinYearMonth[0];
+            $joinMonth = $joinYearMonth[1];
+
             $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year,\Auth::user()->employee_id);
+            //if joinyear is this year or greater than this year, leave allowance is calculated from joined month
+            if($joinYear >= $year){
+                $remaining_month = 13-$joinMonth;
+                $allowedLeave = round(($allowedLeave/12*$remaining_month)*2)/2;
+            }
+
             $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
+            
            
             $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave','year')
                                         ->where('acceptance','accepted')
@@ -258,6 +263,19 @@ class DashboardController extends Controller
             return false;
         }else{
             return true;
+        }
+    }
+    
+    private function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1]];
+            return $year_month;
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
         }
     }
 }
