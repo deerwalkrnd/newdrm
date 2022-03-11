@@ -14,7 +14,7 @@
                 @foreach($leaveBalance as $leaveType => $balance)
                 <tr>
                     <td>{{ $leaveType }}</td>
-                    <td>{{ round($balance['accrued']) }}</td>
+                    <td>{{ $balance['accrued'] }}</td>
                     <td>{{ $balance['allowed'] }}</td>
                     <td>{{ $balance['taken'] }}</td>
                     <td>{{ $balance['balance'] }}</td>
