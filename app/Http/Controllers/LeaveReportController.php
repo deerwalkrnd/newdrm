@@ -16,25 +16,33 @@ use App\Helpers\NepaliCalendarHelper;
 
 class LeaveReportController extends Controller
 {
-    public function getNepaliYear($year){
+    protected $employee_join_month;
+    protected $employee_join_year;
+    protected $thisYear;
+
+    private function getNepaliYear($year){
         try{
             $date = new NepaliCalendarHelper($year,1);
             $nepaliDate = $date->in_bs();
             $nepaliDateArray = explode('-',$nepaliDate);
-            return $nepaliDateArray[0];
+            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1]];
+            return $year_month;
         }catch(Exception $e)
         {
             print_r($e->getMessage());
         }
     }
+
     public function leaveBalance(Request $request)
     {
         // return  view('admin.leaveBalance.index');
         // dd($request->e);
         
         //this year
-        $thisYear = $this->getNepaliYear(date('Y-m-d'));
-       
+        $thisYearMonth = $this->getNepaliYear(date('Y-m-d'));
+        $this->thisYear = $thisYearMonth[0];
+        $thisYear = $this->thisYear;
+        
         if(isset($request->e))
             $employees = Employee::where('contract_status','active')->where('id',$request->e)->paginate(3);
         elseif(isset($request->d))
@@ -42,7 +50,6 @@ class LeaveReportController extends Controller
         else
             $employees = Employee::where('contract_status','active')->paginate(3);
 
-        // dd($employees);
         $leaveTypes = LeaveType::select('name','id','gender')->where('status','active')->get();
         $leaveTypesCount = $leaveTypes->count();
         $records = [];
@@ -54,13 +61,17 @@ class LeaveReportController extends Controller
             $temp['employee_id'] = $employee->id;
             $temp['name'] = $employee->first_name." ".$employee->last_name;
             $temp['leaves'] = array();
-            // dd($request->d);
+           
+            $join_year_month = $this->getNepaliYear($employee->join_date);
+            $this->employee_join_year = $join_year_month[0];
+            $this->employee_join_month = $join_year_month[1];
+            
             if(isset($request->d)){
                 $start_year = $request->d;
                 $end_year = $request->d;
             }else{
-                $start_year = $this->getNepaliYear($employee->join_date);
-                $end_year = $thisYear;
+                $start_year = $join_year_month[0];
+                $end_year = $this->thisYear;
             }
             for($year=$start_year; $year <= $end_year; $year++)
             {
@@ -77,7 +88,7 @@ class LeaveReportController extends Controller
                         ];
                        
                     }elseif(strtolower($type->gender) == 'female' && strtolower($employee->gender) == 'female'){
-                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);                        
                         $temp['leaves'][$type->name]= [
                             'allowed' => $leaveTypeBalance['allowed'],
                             'accrued' => $leaveTypeBalance['accrued'],
@@ -102,20 +113,26 @@ class LeaveReportController extends Controller
                                             $query->where('paid_unpaid','1');
                                         })
                                         ->sum('days');
-                // dd($total_unpaid_leaves);
+                
                 $temp['total_unpaid_leaves'] = $total_unpaid_leaves;
                 array_push($records,$temp);
             }
             
         }
-        // dd("records",$records);
+
         return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear','employees'));
     }
 
     private function getEmployeeLeaveBalance($employee,$type,$year){
         $dashboardController = new DashboardController;
+        
         //gives carryover
         $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year,$employee->id);
+        
+        if($this->employee_join_year == $year){
+            $remaining_month = 13-$this->employee_join_month;
+            $allowedLeave = round(($allowedLeave/12*$remaining_month)*2)/2;
+        }
 
         //for carryover = 0
         // $allowedLeave = $this->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
@@ -146,7 +163,6 @@ class LeaveReportController extends Controller
             'taken' => $leaveTaken,
             'balance' => round($balance,2)
         ];
-
         return $lists;
     }
 

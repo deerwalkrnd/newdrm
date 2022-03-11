@@ -52,6 +52,9 @@ class FortifyServiceProvider extends ServiceProvider
         // });
 
         Fortify::loginView(function () {
+            if(\Auth::check()) {
+                return redirect('/dashboard');
+            }
             return view('auth.login');
         });
     }
