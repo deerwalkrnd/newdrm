@@ -6,10 +6,10 @@
             <table class="unit_table mx-auto w-100">
                 <tr class="table_title" style="background-color: #3573A3;">
                     <th>Leave Type</th>
-                    <th>Accrued</th>
-                    <th>Allowed</th>
-                    <th>Leave Taken</th>
-                    <th>Balance</th>
+                    <th>Accrued <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Leaves collected upto this month"></i></th>
+                    <th>Allowed <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Total leaves allowed in a year"></i></th>
+                    <th>Leave Taken <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Total leaves taken this year"></i></th>
+                    <th>Balance <i class="fa fa-question-circle" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="(Accured - Leave Taken)"></i></th>
                 </tr>
                 @foreach($leaveBalance as $leaveType => $balance)
                 <tr>

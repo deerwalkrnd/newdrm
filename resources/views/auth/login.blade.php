@@ -107,6 +107,9 @@
 
 				<div class="row box-content m-1 p-3">
 					<div class="col-md-12 col-lg-12">
+					@if(session('icon') != null)
+						<p class="{{ 'text-'.session('icon') }}">{{ session('message') }}</p>
+					@endif
 					<form action="{{ route('login') }}" method="POST">
 					{{ csrf_field() }}
 					<p class="text-danger">{{ $errors->first('username') }}</p>
@@ -135,12 +138,6 @@
 							</div>
 						</div>
 						<!-- password -->
-
-						<div class="row mt-4">
-							<div class="col-md-12 col-lg-12 col-sm-12 col-12 mt-1 text-right">
-								<center><a href="/forgot-password">Forgot Password?</a></center>
-							</div>
-						</div>
 					</div>	
 				</div>
 				<!-- row 2 -->
@@ -149,7 +146,7 @@
 					<div class="col-md-12 col-lg-12 col-sm-12">
 						<div class="row justify-content-between">
 							<div class="col-md-5 col-sm-4 col-6 forgot-password">
-								<!-- <span class="align-middle"><a href="#">Forgot Password</a></span> -->
+								<span class="align-middle"><a href="{{ route('password.forgot') }}">Forgot Password</a></span>
 							</div>
 							<div class="col-md-4 col-sm-5 col-5 text-right login">
 								<button type="submit" class="btn btn-primary btn-custom">LOGIN</button>
