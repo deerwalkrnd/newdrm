@@ -203,7 +203,6 @@ class LeaveRequestController extends Controller
             $data['year'] = $start_year;
         }
 
-        // dd("here");
         $leaveRequest = LeaveRequest::create($data);
         // dd($leaveRequest);
         //send mail
@@ -217,10 +216,6 @@ class LeaveRequestController extends Controller
             Mail::to($leaveRequest->employee->email)
                 ->cc($ccList)
                 ->send(new SubordinateLeaveRequestMail($leaveRequest));
-
-                // ->cc($leaveRequest->requested_by_detail->email)
-                // ->cc(MailHelper::getManagerEmail($leaveRequest->employee_id))
-                // ->cc(MailHelper::getHrEmail())
         }$res = [
             'title' => 'Subordinate Leave Request Created',
             'message' => 'Subordinate Leave Request has been successfully Created',
@@ -438,7 +433,7 @@ class LeaveRequestController extends Controller
         $end_date = \Request::input('end_date');
         $leave_type_id = \Request::input('leave_type_id');
         $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id,$employee_id);
-        $employee = Employee::select('id','unit_id')->where('id',$employee_id)->first();
+        $employee = Employee::select('id','unit_id','join_date')->where('id',$employee_id)->first();
        
         //if leave_type is carry_over leave make seperate calculation carry over leave id is 2
         if($leave_type_id != 2)

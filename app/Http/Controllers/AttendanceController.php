@@ -17,7 +17,7 @@ use App\Models\LeaveType;
 use App\Models\Time;
 use Carbon\Carbon;
 use App\Mail\LatePunchInMail;
-Use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Mail;
 
 
 class AttendanceController extends Controller
@@ -177,8 +177,13 @@ class AttendanceController extends Controller
 
                  //Custom shift Employee
                 $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',\Auth::user()->employee_id)->first(); 
+                $weekdays = true;
                 
-                if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
+                if(date('D') == 'Sat' || date('D') == 'Sun'){ //weekend punch in
+                    $maxTime = date('H:i:s',strtotime('+60seconds'));
+                    $weekdays = false;
+                }
+                else if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
                     $maxTime = $employee_shift_time->start_time;    //maxPunch in time for custom shift employees
                 else
                     $maxTime = Time::select('id','time')->where('id','1')->first()->time;    //max punch in time for other shifts
@@ -205,15 +210,21 @@ class AttendanceController extends Controller
                 }
 
                 $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
+                // dd($isLate,$weekdays,$maxTime);
 
                 // if reason is null for isLate true throw error
-                if($isLate)
+                if($isLate && $weekdays)
                 {
+                    // dd($isLate,$weekdays,"jhere");
                     $request->validate([
                         'reason' => 'required|string|min:25',
                     ]); 
+                }else if(!$weekdays){
+                    $request->validate([
+                        'reason' => 'required|string',
+                    ]); 
                 }
-                
+                // dd("late punch in and no no remarks validation in weekend",$isLate, $request->reason);
                 if($state == 3){
                     $attendance = Attendance::create([
                         'employee_id' => $employee_id,
@@ -246,10 +257,6 @@ class AttendanceController extends Controller
                     Mail::to(\Auth::user()->employee->email)
                         ->cc($ccList)
                         ->send(new LatePunchInMail($attendance));
-
-                        // ->cc(MailHelper::getManagerEmail($attendance->employee_id))
-                        // ->cc(MailHelper::getHrEmail())
-                    // MailHelper::sendEmail($type=2,$attendance,$subject);
                 }
             }
             return true;
@@ -275,7 +282,9 @@ class AttendanceController extends Controller
             //Custom shift Employee
             $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',\Auth::user()->employee_id)->first(); 
             
-            if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
+            if(date('D') == 'Sat' || date('D') == 'Sun') //weekend punch out
+                $min_punch_out_time = date('H:i:s');
+            else if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
                 $min_punch_out_time = $employee_shift_time->end_time;    //maxPunchOut time for custom shift employees
             else
                 $min_punch_out_time = Time::select('id','time')->where('id','3')->first()->time;    //max punch out time for other shifts
@@ -300,7 +309,7 @@ class AttendanceController extends Controller
                 }else
                     $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
             }
-            // dd(date('Y-m-d H:i:s',$minTime));
+
             $issueForcedLeave = strtotime(Carbon::now()) < $minTime ? '1' : '0';
             $attendance = Attendance::select('punch_out_time')
                         ->where('employee_id',$employee_id)

@@ -30,11 +30,16 @@ class DashboardController extends Controller
                 $state = 3;
             }
         }
-        
+
         //Custom shift Employee
         $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',\Auth::user()->employee_id)->first(); 
+        $isWeekend = 0;
         
-        if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
+        if(date('D') == 'Sat' || date('D') == 'Sun'){    //weekend punchin
+            $maxTime = date('H:i:s',strtotime('+60seconds'));       //works by isLate but just to understand
+            $isWeekend = 1;                                      //isWeekend is introduced
+        }
+        else if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
             $maxTime = $employee_shift_time->start_time;    //maxPunch in time for custom shift employees
         else
             $maxTime = Time::select('id','time')->where('id','1')->first()->time;    //max punch in time for other shifts
@@ -65,7 +70,7 @@ class DashboardController extends Controller
                 }
             }
         }
-        // dd(date('Y-m-d H:i:s',$maxTime),strtotime($maxTime), strtotime(Carbon::now()));
+
         $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
         // dd($isLate);
         $late_within_ten_days = Attendance::select('late_punch_in','punch_in_time')
@@ -76,11 +81,12 @@ class DashboardController extends Controller
 
         //check if there exists no punch in no leave record
         $noPunchInNoLeaveRecords = NoPunchInNoLeave::where('employee_id',\Auth::user()->employee_id)->get()->count();
-    
+
         //set punch-in state;
         \Session::put('punchIn', $state);
         \Session::put('userIp', request()->ip());
         \Session::put('isLate', $isLate);
+        \Session::put('isWeekend', $isWeekend);
         \Session::put('late_within_ten_days',$late_within_ten_days);
         \Session::put('noPunchInNoLeaveRecords',$noPunchInNoLeaveRecords);
 
