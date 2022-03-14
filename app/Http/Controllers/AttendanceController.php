@@ -12,7 +12,7 @@ use App\Models\NoPunchInNoLeave;
 use App\Http\Controllers\SendMailController;
 use App\Helpers\MailHelper;
 use App\Helpers\NepaliCalendarHelper;
-
+use App\Models\Employee;
 use App\Models\LeaveType;
 use App\Models\Time;
 use Carbon\Carbon;
@@ -175,9 +175,15 @@ class AttendanceController extends Controller
                             ->where('acceptance','accepted')
                             ->count();
 
-                $maxTime = Time::select('id','time')->where('id','1')->first()->time;
+                 //Custom shift Employee
+                $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',\Auth::user()->employee_id)->first(); 
+                
+                if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
+                    $maxTime = $employee_shift_time->start_time;    //maxPunch in time for custom shift employees
+                else
+                    $maxTime = Time::select('id','time')->where('id','1')->first()->time;    //max punch in time for other shifts
+
                 $first_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
-                // dd($first_half_leave_max_punch_in_time);
                 if($hasAnyLeave == 0)
                 {
                     $maxTime = strtotime(date('Y-m-d').' '.$maxTime);
@@ -265,10 +271,16 @@ class AttendanceController extends Controller
                         ->where('employee_id', \Auth::user()->employee_id)
                         ->where('acceptance','accepted')
                         ->count();
-            // dd($hasAnyLeave);
-            $min_punch_out_time = Time::select('id','time')->where('id','3')->first()->time;
+            
+            //Custom shift Employee
+            $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',\Auth::user()->employee_id)->first(); 
+            
+            if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
+                $min_punch_out_time = $employee_shift_time->end_time;    //maxPunchOut time for custom shift employees
+            else
+                $min_punch_out_time = Time::select('id','time')->where('id','3')->first()->time;    //max punch out time for other shifts
+
             $second_half_leave_min_punch_out_time = Time::select('id','time')->where('id','4')->first()->time;
-            // dd($min_punch_out_time);
             if($hasAnyLeave == 0)
             {
                 $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
@@ -302,7 +314,6 @@ class AttendanceController extends Controller
             if($issueForcedLeave == 1)
             {
                 try{
-                    // dd("fefe");
                 $LeaveRequests = LeaveRequest::create([
                     'employee_id' => \Auth::user()->employee_id,
                     'start_date' => date('Y-m-d'),
@@ -317,11 +328,9 @@ class AttendanceController extends Controller
                     'requested_by' => \Auth::user()->employee_id,
                     'accepted_by' => NULL
                 ]);
-            }catch(Exception $e)
-            {
-                dd($e);
-            }
-                // dd("hereee2");
+                }catch(Exception $e){
+                    dd($e);
+                }
             }
         }
 
@@ -347,5 +356,9 @@ class AttendanceController extends Controller
         {
             print_r($e->getMessage());
         }
+    }
+
+    public function getMaxPunchInTime(){
+
     }
 }

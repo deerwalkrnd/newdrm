@@ -30,10 +30,16 @@ class DashboardController extends Controller
                 $state = 3;
             }
         }
-        // MailHelper::sendPendingLeaveMail();
-        // MailHelper::sendMissedPunchOutMail();
+        
+        //Custom shift Employee
+        $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',\Auth::user()->employee_id)->first(); 
+        
+        if($employee_shift_time->shift_id == '2')   //shift_id = 2 ->custom shift
+            $maxTime = $employee_shift_time->start_time;    //maxPunch in time for custom shift employees
+        else
+            $maxTime = Time::select('id','time')->where('id','1')->first()->time;    //max punch in time for other shifts
+
         //check if late
-        $maxTime = Time::select('id','time')->where('id','1')->first()->time;
         $first_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
         $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', date('Y-m-d'))
                         ->whereDate('end_date', '>=', date('Y-m-d'))
