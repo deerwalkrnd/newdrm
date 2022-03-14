@@ -35,7 +35,7 @@ class LeaveRequestRequest extends FormRequest
         $end_date = \Request::input('end_date');
         $leave_type_id = \Request::input('leave_type_id');
         $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id, $employee_id);
-        $employee = Employee::select('id','unit_id')->where('id', $employee_id)->first();
+        $employee = Employee::select('id','unit_id','join_date')->where('id', $employee_id)->first();
 
         //if leave_type is carry_over leave make seperate calculation carry over leave id is 2
         if($leave_type_id != 2)

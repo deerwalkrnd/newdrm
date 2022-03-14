@@ -16,7 +16,7 @@ final class Helper
     private $weekend = ['SUN','SAT'];
 
     public static function getDays($start_date, $end_date, $leave_type_id,$employee_id){
-        $employee = Employee::select('id','gender','unit_id')->where('contract_status','active')->findOrFail($employee_id);
+        $employee = Employee::select('id','gender','unit_id','join_date')->where('contract_status','active')->findOrFail($employee_id);
         $includeHoliday = LeaveType::select('include_holiday')->where('id',$leave_type_id)->get()->first();
         $s_date = date('Y-m-d',strtotime($start_date));
         $e_date = date('Y-m-d',strtotime($end_date));
@@ -85,32 +85,32 @@ final class Helper
         return $day;
     }
 
-    private function getNepaliYear($year){
-        try{
-            $date = new NepaliCalendarHelper($year,1);
-            $nepaliDate = $date->in_bs();
-            $nepaliDateArray = explode('-',$nepaliDate);
-            return $nepaliDateArray[0];
-        }catch(Exception $e)
-        {
-            print_r($e->getMessage());
-        }
-    }
     public static function getRemainingDays($leave_type_id,$employee){
-        $year = (new self)->getNepaliYear(date('Y-m-d'));
+        $year = (new self)->getNepaliYear(date('Y-m-d'))[0];
+        
+        // $employee_join_year_month = (new self)->getNepaliYear($employee->join_date);
+        // $employee_join_year = $employee_join_year_month[0];
+        // $employee_join_month = $employee_join_year_month[1];
+
+        // dd($year,$employee_join_year,$employee_join_month,'remaining days');  
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
                                         ->where('employee_id', $employee->id)
                                         ->where('leave_type_id',$leave_type_id)
                                         ->sum('days');
-
+        
         $allowed_leave = YearlyLeave::select('days')
                                         ->where('unit_id', $employee->unit_id)
                                         ->where('leave_type_id',$leave_type_id)
                                         ->where('year',$year)
                                         ->first();
 
+        // if($employee_join_year >= $year){
+        //         $remaining_month = 13-$employee_join_month;
+        //         $allowed_leave = round(($allowed_leave/12*$remaining_month)*2)/2;
+        // }
+        // dd($allowed_leave);
         if(!$allowed_leave)
         {
             $allowed_leave = YearlyLeave::select('days')
@@ -119,7 +119,7 @@ final class Helper
                                         ->where('year',$year)
                                         ->first();
         }
-
+        // dd($allowed_leave);
         if($allowed_leave)
             $allowed_leave = $allowed_leave->days;
         else
@@ -132,7 +132,10 @@ final class Helper
 
     public static function getRemainingCarryOverLeave($employee)
     {
-        $year = (new self)->getNepaliYear(date('Y-m-d'));
+        $year = (new self)->getNepaliYear(date('Y-m-d'))[0];
+        // if((new self)->getNepaliYear($employee->join_date ) == $year)   //if joined thhis year then carry over = 0
+        //     $remaining_leave = 0;
+        // else{
         $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
@@ -148,10 +151,23 @@ final class Helper
             $allowed_leave = $allowed_leave->days;
         else
             $allowed_leave = 0;
-                               
+                            
         $remaining_leave = $allowed_leave - $already_taken_leaves;
-       
+        // }
         return $remaining_leave;     
+    }
+
+    private function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1]];
+            return $year_month;
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
     }
 }
 ?>
