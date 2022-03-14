@@ -112,7 +112,11 @@
 					@endif
 					<form action="{{ route('password.request') }}" method="POST">
 					{{ csrf_field() }}
-					<p class="text-danger">{{ $errors->first('email') }}</p>
+					@if($errors->any())
+						<div class="alert alert-danger">
+							<p class="text-danger">{{ $errors->first('email') }}</p>
+						</div>
+					@endif
                     <p class="text-success"></p>
 						<div class="row">
 							<div class="col-md-3 col-lg-3 col-sm-4 col-6 mt-1 text-right">
