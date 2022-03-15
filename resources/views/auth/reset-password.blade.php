@@ -150,7 +150,6 @@
 								<span class="title">Re-Password: </span>
 							</div>	
 							<div class="col-md-6 col-lg-6 col-sm-6 col-5 p-0">
-								<input type="password" name="password" class="border-right-0 border-1 form-control border-dark custom-input">
 								<input type="password" name="password_confirmation" class="border-right-0 border-1 form-control border-dark custom-input">
 							</div>
 							<div class="col-md-1 col-sm-1 col-1 p-0 border border-dark text-center border-left-0 form-icons" style="-webkit-writing-mode: vertical-rl;">
