@@ -32,6 +32,7 @@
         </div>
 
         @if(in_array(session('userIp'), explode(',',env('IP')) ))
+        <p>IP Found</p>
         @if(session('punchIn') == 2)
         <div class="col">
             <span class="punch_out_container">
