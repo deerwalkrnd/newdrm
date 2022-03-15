@@ -96,10 +96,6 @@
 
 	<div class="container mt-3">
 		<div class="row justify-content-center">
-<<<<<<< HEAD
-		
-=======
->>>>>>> 37c6be020984f25e6fabb748dc7cffa7a55a0bdd
 			<div class="col-md-8 col-xl-5 col-lg-6 col-sm-10 col-10 border border-dark login">
 				<div class="row login-header">
 					<div class="col-md-12 my-2">
@@ -110,8 +106,6 @@
 
 				<div class="row box-content m-1 p-3">
 					<div class="col-md-12 col-lg-12">
-<<<<<<< HEAD
-=======
 					@if($errors->any())
 						<div class="alert alert-danger">
 							<p><strong>Opps Something went wrong</strong></p>
@@ -122,7 +116,6 @@
 							</ul>
 						</div>
 					@endif
->>>>>>> 37c6be020984f25e6fabb748dc7cffa7a55a0bdd
 					<form action="{{ route('password.force') }}" method="POST">
 					{{ csrf_field() }}
 					<p class="text-danger">{{ $errors->first('username') }}</p>
@@ -157,11 +150,8 @@
 								<span class="title">Re-Password: </span>
 							</div>	
 							<div class="col-md-6 col-lg-6 col-sm-6 col-5 p-0">
-<<<<<<< HEAD
 								<input type="password" name="password" class="border-right-0 border-1 form-control border-dark custom-input">
-=======
 								<input type="password" name="password_confirmation" class="border-right-0 border-1 form-control border-dark custom-input">
->>>>>>> 37c6be020984f25e6fabb748dc7cffa7a55a0bdd
 							</div>
 							<div class="col-md-1 col-sm-1 col-1 p-0 border border-dark text-center border-left-0 form-icons" style="-webkit-writing-mode: vertical-rl;">
 								<i class="fas fa-key"></i>
@@ -172,12 +162,7 @@
 				</div>
 				<!-- row 2 -->
 
-<<<<<<< HEAD
-                <input type="hidden" value="{{ $token }}">
-=======
                 <input type="hidden" name="reset_token" value="{{ $token }}">
->>>>>>> 37c6be020984f25e6fabb748dc7cffa7a55a0bdd
-
 				<div class="row box-footer py-3">
 					<div class="col-md-12 col-lg-12 col-sm-12">
 						<div class="row justify-content-between">
