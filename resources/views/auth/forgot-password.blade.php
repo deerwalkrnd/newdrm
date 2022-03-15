@@ -107,9 +107,9 @@
 
 				<div class="row box-content m-1 p-3">
 					<div class="col-md-12 col-lg-12">
-					@if(session('icon') != null)
-						<p class="{{ 'text-'.session('icon') }}">{{ session('message') }}</p>
-					@endif
+					{{-- @if(session('icon') != null) --}}
+						{{-- <p class="{{ 'text-'.session('icon') }}">{{ session('message') }}</p> --}}
+					{{-- @endif --}}
 					<form action="{{ route('password.request') }}" method="POST">
 					{{ csrf_field() }}
 					@if($errors->any())
