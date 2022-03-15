@@ -99,7 +99,7 @@
 			<div class="col-md-8 col-xl-5 col-lg-6 col-sm-10 col-10 border border-dark login">
 				<div class="row login-header">
 					<div class="col-md-12 my-2">
-						<span>Login<span>
+						<span>Reset Password<span>
 					</div>
 				</div>
 				<!-- row 1 -->
@@ -170,7 +170,7 @@
 								<!-- <span class="align-middle"><a href="#">Forgot Password</a></span> -->
 							</div>
 							<div class="col-md-4 col-sm-5 col-5 text-right login">
-								<button type="submit" class="btn btn-primary btn-custom">LOGIN</button>
+								<button type="submit" class="btn btn-primary btn-custom">RESET</button>
 							</div>	
 						</div>
 					</div>

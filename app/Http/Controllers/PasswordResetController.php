@@ -27,13 +27,15 @@ class PasswordResetController extends Controller
         })->first();
 
         if (!$user) {
-            return redirect()->route('password.forgot')->with(['message' => 'No user found with this email', 'icon' => 'danger']);
+            return redirect()->route('password.forgot');
+            // ->with(['message' => 'No user found with this email', 'icon' => 'danger']);
         }
 
         $token = app(PasswordBroker::class)->createToken($user);
         $status = $user->sendPasswordResetNotification($token);
 
-        return redirect()->to('/forgot-password')->with(['message' => 'Password reset link has been sent to your email', 'icon' => 'success']);
+        return redirect()->to('/forgot-password');
+        // ->with(['message' => 'Password reset link has been sent to your email', 'icon' => 'success']);
     }
 
     public function showResetForm(Request $request, $token)
@@ -49,10 +51,12 @@ class PasswordResetController extends Controller
         })->first();
 
         if (!$user) {
-            return redirect()->back()->with(['message' => 'No user found with this email', 'icon' => 'danger']);
+            return redirect()->back();
+            // ->with(['message' => 'No user found with this email', 'icon' => 'danger']);
         }else{
             if($this->resetPassword($user,['password' => $request->password]))
-                return redirect('/')->with(['message' => 'Your password has been reset successfully', 'icon' => 'success']);
+                return redirect('/');
+                // ->with(['message' => 'Your password has been reset successfully', 'icon' => 'success']);
             else    
                 return redirect()->back();
         }
