@@ -293,7 +293,7 @@ class AttendanceController extends Controller
             if($hasAnyLeave == 0)
             {
                 $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
-                dd($minTime,'noleave');
+                // dd($minTime,'noleave');
             }else{
                 $leave = LeaveRequest::whereDate('start_date', '<=', $presentTime)
                         ->whereDate('end_date', '>=', $presentTime)
@@ -313,7 +313,7 @@ class AttendanceController extends Controller
                     $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
                     // dd($minTime,'first');
             }
-            dd(date('Y-m-d H:i',$minTime),'outside');
+            // dd(date('Y-m-d H:i',$minTime),'outside');
             $issueForcedLeave = strtotime(Carbon::now()) < $minTime ? '1' : '0';
             $attendance = Attendance::select('punch_out_time')
                         ->where('employee_id',$employee_id)
