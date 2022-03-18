@@ -137,14 +137,20 @@ class LeaveRequestController extends Controller
         {
             $data['full_leave'] = '1';
             $not_eligible_dates = LeaveRequest::select('id','start_date','end_date')
-                                    ->whereDate('start_date','<=',$data['start_date'])
-                                    ->whereDate('end_date','>=',$data['end_date'])
-                                    ->orWhereDate('end_date','=',$data['start_date'])
-                                    ->orWhereDate('start_date','=',$data['end_date'])
+                                    ->where(function($query) use($data){
+                                        $query->where('start_date','>=',$data['start_date'])
+                                        ->where('start_date','<=',$data['end_date']);
+                                    })
+                                        
+                                    ->orWhere(function($query) use($data){
+                                        $query->where('end_date','>=',$data['start_date'])
+                                        ->where('end_date','<=',$data['end_date']);
+                                        })
+                                    // ->orWhereDate('end_date','=',$data['start_date'])
+                                    // ->orWhereDate('start_date','=',$data['end_date'])
                                     ->where('employee_id',\Auth::user()->employee_id)->get();
-            dd($not_eligible_dates,$data);
+            // dd($not_eligible_dates);
             if(!$not_eligible_dates->isEmpty()){
-
                 $res = [
                     'title' => 'Leave Request Warning',
                     'message' => 'Leave Request has been already applied for given date. Please look into your leave deatils.',
