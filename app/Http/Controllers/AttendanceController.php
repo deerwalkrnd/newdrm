@@ -311,9 +311,9 @@ class AttendanceController extends Controller
                         $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
                 }else
                     $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
-                    dd($minTime,'first');
+                    // dd($minTime,'first');
             }
-            dd($minTime,'outside');
+            dd(date('Y-m-d',$minTime),'outside');
             $issueForcedLeave = strtotime(Carbon::now()) < $minTime ? '1' : '0';
             $attendance = Attendance::select('punch_out_time')
                         ->where('employee_id',$employee_id)
