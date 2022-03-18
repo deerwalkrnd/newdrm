@@ -307,6 +307,8 @@ class AttendanceController extends Controller
                     $half = $leave->half_leave;
                     if($half == 'second')
                         $minTime = strtotime(date('Y-m-d').' '.$second_half_leave_min_punch_out_time);
+                    else
+                        $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
                 }else
                     $minTime = strtotime(date('Y-m-d').' '.$min_punch_out_time);
                     dd($minTime,'first');
