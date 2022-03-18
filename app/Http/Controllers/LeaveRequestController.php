@@ -136,6 +136,23 @@ class LeaveRequestController extends Controller
         if($data['leave_time'] == 'full')
         {
             $data['full_leave'] = '1';
+            $not_eligible_dates = LeaveRequest::select('id','start_date','end_date')
+                                    ->whereDate('start_date','<=',$data['start_date'])
+                                    ->whereDate('end_date','>=',$data['end_date'])
+                                    ->orWhereDate('end_date','=',$data['start_date'])
+                                    ->orWhereDate('start_date','=',$data['end_date'])
+                                    ->where('employee_id',\Auth::user()->employee_id)->get();
+            dd($not_eligible_dates,$data);
+            if(!$not_eligible_dates->isEmpty()){
+
+                $res = [
+                    'title' => 'Leave Request Warning',
+                    'message' => 'Leave Request has been already applied for given date. Please look into your leave deatils.',
+                    'icon' => 'warning'
+                ];
+                return redirect('/leave-request')->with(compact('res'));
+            }
+
         }else{
             $data['full_leave'] = '0';
             if($data['leave_time'] == 'first'){
