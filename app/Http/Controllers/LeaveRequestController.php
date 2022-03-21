@@ -136,20 +136,19 @@ class LeaveRequestController extends Controller
         if($data['leave_time'] == 'full')
         {
             $data['full_leave'] = '1';
-            $not_eligible_dates = LeaveRequest::select('id','start_date','end_date')
+            $not_eligible_dates = LeaveRequest::select('id','start_date','end_date','employee_id')
+                                    ->where('employee_id',\Auth::user()->employee_id)
                                     ->where(function($query) use($data){
                                         $query->where('start_date','>=',$data['start_date'])
-                                        ->where('start_date','<=',$data['end_date']);
-                                    })
-                                        
+                                                ->where('start_date','<=',$data['end_date']);
+                                    })    
                                     ->orWhere(function($query) use($data){
-                                        $query->where('end_date','>=',$data['start_date'])
-                                        ->where('end_date','<=',$data['end_date']);
+                                        $query->where('employee_id',\Auth::user()->employee_id)
+                                                ->where('end_date','>=',$data['start_date'])
+                                                ->where('end_date','<=',$data['end_date']);
                                         })
-                                    // ->orWhereDate('end_date','=',$data['start_date'])
-                                    // ->orWhereDate('start_date','=',$data['end_date'])
-                                    ->where('employee_id',\Auth::user()->employee_id)->get();
-            // dd($not_eligible_dates);
+                                    ->get();
+            // dd($not_eligible_dates,\Auth::user()->employee_id);
             if(!$not_eligible_dates->isEmpty()){
                 $res = [
                     'title' => 'Leave Request Warning',
