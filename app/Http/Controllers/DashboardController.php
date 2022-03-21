@@ -93,7 +93,20 @@ class DashboardController extends Controller
         $leaveBalance = $this->getLeaveBalance();
         $birthdayList = $this->getBirthdayList();
         $leaveList = $this->getLeaveList();
-
+        $res=[];
+        if(\Auth::user()->role->authority == 'manager'){
+            $employees_under_manager = Employee::select('id')->where('manager_id',\Auth::user()->employee_id)->get();
+            foreach($employees_under_manager as $employee){
+                if(LeaveRequest::where('employee_id',$employee->id)->where('acceptance','pending')->first()){
+                    $res = [
+                        'title' => 'Leave Acceptance Pending',
+                        'message' => 'You have pending leave request of employees. Please perform the required action.',
+                        'icon' => 'warning'
+                    ];
+                    session(['res'=>$res]);
+                }
+            }
+        }
         if(\Auth::user()->password_expired != '0')
         {
             return redirect('/change-password');
