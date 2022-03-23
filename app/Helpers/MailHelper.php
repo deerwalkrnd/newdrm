@@ -87,6 +87,14 @@ class MailHelper{
         }
         return true;
     }
+
+    public static function testMail(){
+        $name = 'deena';
+        Mail::to('deena.sitikhu@deerwalk.edu.np')
+                ->cc(['satyadeep.neupane@deerwalk.edu.np'])
+                ->queue(new PendingLeaveNotificationMail($name));
+                
+    }
 }
 
 ?>
