@@ -71,7 +71,7 @@ class DashboardController extends Controller
             }
         }
 
-        $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
+        $isLate = time() <= $maxTime ? '0' : '1';
         // dd($isLate);
         $late_within_ten_days = Attendance::select('late_punch_in','punch_in_time')
             ->where('employee_id', \Auth::user()->employee_id)

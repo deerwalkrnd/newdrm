@@ -54,6 +54,7 @@ class CarryOverLeaveController extends Controller
                                             ->first()->days;
 
             $carryOverLeaveList = collect($carryOverLeaveList)->map(function($record) use($maxPersonalLeave,$year){
+                // if join date is in previous year calculate myPersonalLeave else mypersonalLeave = $maxPersonalLeave
                 $remainingLeave = $maxPersonalLeave - $record['days'];
                 $record['days'] = max(min($remainingLeave,8),0);
                 $record['year'] = $year;
