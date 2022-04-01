@@ -84,7 +84,16 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        $('.drmDataTable').DataTable();
+        let table = $('.drmDataTable').DataTable({
+            search: {
+                return: true
+            },
+        });
+
+        $('input[type="search"]').on("input", function(){
+            let searchTerm = $('input[type="search"]').val();
+            table.column(1).search(searchTerm).draw();
+        });
     })
 </script>
 @endsection
