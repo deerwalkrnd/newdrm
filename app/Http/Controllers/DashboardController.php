@@ -225,7 +225,7 @@ class DashboardController extends Controller
 
     public function getAllowedLeaveDays($unit_id,$leaveType,$year,$employee_id)
     {
-        // if carry Over Leave // carry over is set to 1
+        // if carry Over Leave // carry over is set to 2
         if($leaveType == 2)
         {
             $employee_id = strval($employee_id);

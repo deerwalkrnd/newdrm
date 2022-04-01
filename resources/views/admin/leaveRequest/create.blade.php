@@ -33,10 +33,18 @@
         var start_date = document.getElementById('start_date').value;
         var end_date = document.getElementById('end_date').value;
         var leave_type_id = document.getElementById('leave_type_id').value;
-        var leave_time = document.getElementsByName('leave_time').value;
+        var leave_times = document.getElementsByName('leave_time');
         var reason = document.getElementById('reason');
         reason.style.visibility = "hidden";
-        
+        var leave_time;
+
+
+        leave_times.forEach((leaveTime)=>{
+            if(leaveTime.checked){
+                leave_time = leaveTime.value;
+            }
+        });
+        // console.log('leave time is:',leave_time);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -60,7 +68,7 @@
                     reason.style.visibility = "visible";
                 }
 
-                console.log(data.days,data.reason);
+                console.log('in create form',data.days,data.reason);
             },
              error: function (data) {
                 console.log(data);
