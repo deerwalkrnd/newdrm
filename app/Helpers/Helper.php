@@ -85,32 +85,40 @@ final class Helper
         return $day;
     }
 
+    // returns the total remaining days of particular leave type of an employee
     public static function getRemainingDays($leave_type_id,$employee){
         $year = (new self)->getNepaliYear(date('Y-m-d'))[0];
         
-        // $employee_join_year_month = (new self)->getNepaliYear($employee->join_date);
-        // $employee_join_year = $employee_join_year_month[0];
-        // $employee_join_month = $employee_join_year_month[1];
+        $employee_join_year_month = (new self)->getNepaliYear($employee->join_date);
+        $employee_join_year = $employee_join_year_month[0];
+        $employee_join_month = $employee_join_year_month[1];
 
         // dd($year,$employee_join_year,$employee_join_month,'remaining days');  
-        $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
+        $already_taken_full_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
+                                        ->where('full_leave','1')
                                         ->where('employee_id', $employee->id)
                                         ->where('leave_type_id',$leave_type_id)
                                         ->sum('days');
-        
+        $already_taken_half_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
+                                        ->where('acceptance','accepted')
+                                        ->where('year',$year)
+                                        ->where('half_leave','!=','null')
+                                        ->where('employee_id', $employee->id)
+                                        ->where('leave_type_id',$leave_type_id)
+                                        ->sum('days');
+
         $allowed_leave = YearlyLeave::select('days')
                                         ->where('unit_id', $employee->unit_id)
                                         ->where('leave_type_id',$leave_type_id)
                                         ->where('year',$year)
                                         ->first();
 
-        // if($employee_join_year >= $year){
-        //         $remaining_month = 13-$employee_join_month;
-        //         $allowed_leave = round(($allowed_leave/12*$remaining_month)*2)/2;
-        // }
-        // dd($allowed_leave);
+        
+        // dd('allowed leaves',$allowed_leave.'remaining_month',$remaining_month,'join month',$employee_join_month);
+        
+        //null unit id
         if(!$allowed_leave)
         {
             $allowed_leave = YearlyLeave::select('days')
@@ -119,13 +127,20 @@ final class Helper
                                         ->where('year',$year)
                                         ->first();
         }
-        // dd($allowed_leave);
+        
         if($allowed_leave)
             $allowed_leave = $allowed_leave->days;
         else
             $allowed_leave = 0;
 
-        $remaining_leave = $allowed_leave - $already_taken_leaves;
+        if($employee_join_year >= $year){
+            $remaining_month = 13-$employee_join_month;
+            $allowed_leave = round(($allowed_leave/12*$remaining_month)*2)/2;
+        }
+
+        $already_taken_total_leaves = $already_taken_full_leaves + $already_taken_half_leaves/2;
+        $remaining_leave = $allowed_leave - $already_taken_total_leaves;
+        // dd('allowed leave',$allowed_leave,$already_taken_total_leaves,$remaining_leave);
 
         return $remaining_leave;     
     }
@@ -133,28 +148,28 @@ final class Helper
     public static function getRemainingCarryOverLeave($employee)
     {
         $year = (new self)->getNepaliYear(date('Y-m-d'))[0];
-        // if((new self)->getNepaliYear($employee->join_date ) == $year)   //if joined thhis year then carry over = 0
-        //     $remaining_leave = 0;
-        // else{
-        $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
-                                        ->where('acceptance','accepted')
-                                        ->where('year',$year)
-                                        ->where('employee_id', $employee->id)
-                                        ->where('leave_type_id',2) // 2 for carry_over leave
-                                        ->sum('days');
+        if((new self)->getNepaliYear($employee->join_date ) == $year)   //if joined thhis year then carry over = 0
+            $remaining_leave = 0;
+        else{
+            $already_taken_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
+                                            ->where('acceptance','accepted')
+                                            ->where('year',$year)
+                                            ->where('employee_id', $employee->id)
+                                            ->where('leave_type_id',2) // 2 for carry_over leave
+                                            ->sum('days');
 
-        $allowed_leave = CarryOverLeave::select('days')
-                                        ->where('year',$year-1)
-                                        ->where('employee_id',$employee->id)
-                                        ->first();
-        if($allowed_leave)
-            $allowed_leave = $allowed_leave->days;
-        else
-            $allowed_leave = 0;
-                            
-        $remaining_leave = $allowed_leave - $already_taken_leaves;
-        // }
-        return $remaining_leave;     
+            $allowed_leave = CarryOverLeave::select('days')
+                                            ->where('year',$year-1)
+                                            ->where('employee_id',$employee->id)
+                                            ->first();
+            if($allowed_leave)
+                $allowed_leave = $allowed_leave->days;
+            else
+                $allowed_leave = 0;
+                                
+            $remaining_leave = $allowed_leave - $already_taken_leaves;
+            }
+            return $remaining_leave;     
     }
 
     private function getNepaliYear($year){

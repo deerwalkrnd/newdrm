@@ -48,7 +48,7 @@ class LeaveRequestRequest extends FormRequest
             $remainingDays = $remainingDays * 2;
             $calcDay = $calcDay/2;
         }
-        // dd($calcDay,$remainingDays);
+        // dd('applied leave days: ',$calcDay,'reamining leave days: ',$remainingDays);
         return [
             'start_date' => 'required|date|after_or_equal:'.$today,
             'end_date' => 'required|date|after_or_equal:start_date',
