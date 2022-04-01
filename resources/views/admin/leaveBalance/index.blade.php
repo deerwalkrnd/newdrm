@@ -73,10 +73,17 @@
                 <!-- Personal/Home -->
                 @forelse($leaveTypes as $leaveType)
                     @if(array_key_exists($leaveType->name,$record['leaves']))
-                        <td>{{$record['leaves'][$leaveType->name]['accrued']}}</td>
-                        <td>{{$record['leaves'][$leaveType->name]['allowed']}}</td>
-                        <td>{{$record['leaves'][$leaveType->name]['taken']}}</td>
-                        <td>{{$record['leaves'][$leaveType->name]['balance']}}</td>
+                        @if($record['leaves'][$leaveType->name]['balance'] < 0)
+                            <td class="bg-danger">{{$record['leaves'][$leaveType->name]['accrued']}}</td>
+                            <td class="bg-danger">{{$record['leaves'][$leaveType->name]['allowed']}}</td>
+                            <td class="bg-danger">{{$record['leaves'][$leaveType->name]['taken']}}</td>
+                            <td class="bg-danger">{{$record['leaves'][$leaveType->name]['balance']}}</td>
+                        @else
+                            <td>{{$record['leaves'][$leaveType->name]['accrued']}}</td>
+                            <td>{{$record['leaves'][$leaveType->name]['allowed']}}</td>
+                            <td>{{$record['leaves'][$leaveType->name]['taken']}}</td>
+                            <td>{{$record['leaves'][$leaveType->name]['balance']}}</td>
+                        @endif
                     @else
                         <td>0.0</td>
                         <td>0.0</td>

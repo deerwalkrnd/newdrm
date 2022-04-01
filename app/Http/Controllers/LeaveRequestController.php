@@ -104,7 +104,7 @@ class LeaveRequestController extends Controller
     public function store(LeaveRequestRequest $request)
     {
         $data = $request->validated();
-        // dd($data);
+
         $leave_type_id = $data['leave_type_id'];
         $requested_leave_days = $data['days'];
         $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('unit_id',\Auth::user()->employee->unit_id)->get()->first();
@@ -119,7 +119,6 @@ class LeaveRequestController extends Controller
         //nepali date
         $start_year = $this->getNepaliYear($data['start_date']);
         $end_year = $this->getNepaliYear($data['end_date']);
-        // dd($start_year,$end_year);
 
         
         if($start_year != $end_year){
@@ -136,19 +135,8 @@ class LeaveRequestController extends Controller
         if($data['leave_time'] == 'full')
         {
             $data['full_leave'] = '1';
-            $not_eligible_dates = LeaveRequest::select('id','start_date','end_date','employee_id')
-                                    ->where('employee_id',\Auth::user()->employee_id)
-                                    ->where(function($query) use($data){
-                                        $query->where('start_date','>=',$data['start_date'])
-                                                ->where('start_date','<=',$data['end_date']);
-                                    })    
-                                    ->orWhere(function($query) use($data){
-                                        $query->where('employee_id',\Auth::user()->employee_id)
-                                                ->where('end_date','>=',$data['start_date'])
-                                                ->where('end_date','<=',$data['end_date']);
-                                        })
-                                    ->get();
-            // dd($not_eligible_dates,\Auth::user()->employee_id);
+
+            $not_eligible_dates = $this->nonEligibleFullLeaveDays($data,\Auth::user()->employee_id);
             if(!$not_eligible_dates->isEmpty()){
                 $res = [
                     'title' => 'Leave Request Warning',
@@ -160,15 +148,32 @@ class LeaveRequestController extends Controller
 
         }else{
             $data['full_leave'] = '0';
+            $not_eligible_dates = $this->nonEligibleFullLeaveDays($data,\Auth::user()->employee_id);
             if($data['leave_time'] == 'first'){
                 $data['half_leave'] = 'first';
+                if(!$not_eligible_dates->isEmpty()){
+                    $res = [
+                        'title' => 'Leave Request Warning',
+                        'message' => 'First Half Leave Request has been already applied for given date. Please look into your leave deatils.',
+                        'icon' => 'warning'
+                    ];
+                    return redirect('/leave-request')->with(compact('res'));
+                }
             }else{
                 $data['half_leave'] = 'second';
+                if(!$not_eligible_dates->isEmpty()){
+                $res = [
+                    'title' => 'Leave Request Warning',
+                    'message' => 'Second Half Leave Request has been already applied for given date. Please look into your leave deatils.',
+                    'icon' => 'warning'
+                ];
+                return redirect('/leave-request')->with(compact('res'));
+            }
             }
         }
-        // dd("here");
+        // dd($not_eligible_dates);
+        // dd("successfully");
        $leaveRequest = LeaveRequest::create($data);
-        // dd($leaveRequest);
 
         //Send Mail to manager,hr and employee after successful leave request 
         $send_mail = MailControl::select('send_mail')->where('name','Leave Request')->first()->send_mail;
@@ -181,7 +186,6 @@ class LeaveRequestController extends Controller
            Mail::to(MailHelper::getManagerEmail($leaveRequest->employee_id))
            ->cc($ccList)
             ->send(new LeaveRequestMail($leaveRequest));
-            // MailHelper::sendEmail($type=1,$leaveRequest,$subject);
         }
 
         $res = [
@@ -444,7 +448,6 @@ class LeaveRequestController extends Controller
 
     //get leave days for dyanmic days calculation in form
     public function getLeaveDays(Request $request){
-        // return \Request::input('employee_id');
         if(\Request::input('employee_id'))
             $employee_id = \Request::input('employee_id');
         else
@@ -456,21 +459,79 @@ class LeaveRequestController extends Controller
         $leave_type_id = \Request::input('leave_type_id');
         $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id,$employee_id);
         $employee = Employee::select('id','unit_id','join_date')->where('id',$employee_id)->first();
-       
-        //if leave_type is carry_over leave make seperate calculation carry over leave id is 2
-        if($leave_type_id != 2)
-        {
-            $remainingDays = Helper::getRemainingDays($leave_type_id,$employee);
-        }else{
-            $remainingDays = Helper::getRemainingCarryOverLeave($employee);
+
+        if(\Request::input('leave_time') != 'full'){
+            // $remainingDays = $remainingDays*2;
+            $calcDay = $calcDay/2;
         }
-        // dd($remainingDays);
-        if(\Request::input('leave_time') != 'full')
-            $remainingDays = $remainingDays * 2;
         // return [$leave_type_id,$start_date,$end_date,$remainingDays,$calcDay];
+            return ['days'=>$calcDay];
+
         if($calcDay <= $remainingDays){
             return ['days'=>$calcDay];
         }else 
             return ['days'=>'0','reason'=>'Allowed leave days has been maxed out for selected leave type.'];     
+    }
+
+
+    private function nonEligibleFullLeaveDays($data,$employee_id)
+    {   
+        // dd($data['leave_time']);
+        if($data['leave_time']=='full'){
+            $not_eligible_dates = LeaveRequest::select('id','start_date','end_date','employee_id')
+                                    ->where(function($query) use($data,$employee_id){
+                                        $query->where('employee_id',$employee_id)
+                                                ->where('start_date','>=',$data['start_date'])
+                                                ->where('start_date','<=',$data['end_date']);
+                                    })    
+                                    ->orWhere(function($query) use($data,$employee_id){
+                                        $query->where('employee_id',$employee_id)
+                                                ->where('end_date','>=',$data['start_date'])
+                                                ->where('end_date','<=',$data['end_date']);
+                                        })
+                                    ->get();
+        }else{
+            if($data['leave_time']=='first'){
+                $not_eligible_dates = LeaveRequest::select('id','start_date','end_date','employee_id','full_leave','half_leave')
+                                    ->where('employee_id',$employee_id)
+                                    ->where(function($query) use($data,$employee_id){
+                                         $query->where('employee_id',$employee_id)
+                                                ->where('half_leave','first');
+                                     })
+                                    ->where(function($query) use($data,$employee_id){
+                                        $query->where('employee_id',$employee_id)
+                                                ->where('start_date','>=',$data['start_date'])
+                                                ->where('start_date','<=',$data['end_date']);
+                                    })    
+                                    ->orWhere(function($query) use($data,$employee_id){
+                                        $query->where('employee_id',$employee_id)
+                                                ->where('full_leave','1')
+                                                ->where('end_date','>=',$data['start_date'])
+                                                ->where('end_date','<=',$data['end_date']);
+                                        })
+                                    ->get();
+            }
+            else if($data['leave_time']=='second'){
+                $not_eligible_dates = LeaveRequest::select('id','start_date','end_date','employee_id','full_leave','half_leave')
+                                    ->where('employee_id',$employee_id)
+                                     ->where(function($query) use($data,$employee_id){
+                                         $query->where('employee_id',$employee_id)
+                                                ->where('half_leave','second');
+                                     })
+                                    ->where(function($query) use($data,$employee_id){
+                                        $query->where('employee_id',$employee_id)
+                                                ->where('start_date','>=',$data['start_date'])
+                                                ->where('start_date','<=',$data['end_date']);
+                                    })    
+                                    ->orWhere(function($query) use($data,$employee_id){
+                                        $query->where('employee_id',$employee_id)
+                                                ->where('full_leave','1')
+                                                ->where('end_date','>=',$data['start_date'])
+                                                ->where('end_date','<=',$data['end_date']);
+                                        })
+                                    ->get();
+            }
+        }
+       return $not_eligible_dates;
     }
 }
