@@ -78,18 +78,11 @@ class Employee extends Model
     {
         return $this->belongsTo(Department::class);
     }
-    // public function managers()
-    // {
-    //     return $this->hasMany(Manager::class,'manager_id');
-    // }
 
     public function manager(){
         return $this->hasOne(Employee::class,'id','manager_id');
     }
-    // public function manager()
-    // {
-    //     return $this->belongsTo(Manager::class,'manager_id');
-    // }
+
     public function designation()
     {
         return $this->hasOne(Designation::class,'id','designation_id');
@@ -99,13 +92,16 @@ class Employee extends Model
     {
         return $this->hasMany(LeaveRequest::class);
     }
+
     public function emergencyContact()
     {
         return $this->hasOne(EmergencyContact::class,'employee_id','id');
     }
+
     public function user(){
         return $this->hasOne(User::class,'employee_id','id');
     }
+
     public function fileUploads(){
         return $this->hasMany(FileUpload::class,'employee_id','id');
     }
@@ -113,17 +109,40 @@ class Employee extends Model
     public function attendances(){
         return $this->hasMany(Attendance::class,'employee_id','id')->orderBy('punch_in_time');
     }
+
     public function province(){
         return $this->hasOne(Province::class,'id','permanent_address');
     }
+
     public function district(){
         return $this->hasOne(District::class,'id','permanent_district');
     }
+
     public function shift(){
         return $this->hasOne(Shift::class,'id','shift_id');
     }
     
     public function workers(){
         return $this->hasMany(Employee::class,'manager_id','id')->select('id','first_name','middle_name','last_name','manager_id','contract_status');
+    }
+
+    public function maxPunchInTime()
+    {
+        if(strtolower($this->shift->name) == 'custom')
+        {
+            return $this->start_time;
+        }else{
+            return Time::where('name', Time::MAX_PUNCH_IN)->first()->time;
+        }
+    }
+
+    public function minPunchOutTime()
+    {    
+        if(strtolower($this->shift->name) == 'custom')
+        {
+            return $this->end_time;
+        }else{
+            return Time::where('name', Time::MIN_PUNCH_OUT)->first()->time;
+        }
     }
 }

@@ -270,3 +270,6 @@ Route::get('/forgot-password',[PasswordResetController::class, 'create'])->name(
 Route::post('/forgot-password',[PasswordResetController::class, 'store'])->name('password.request');
 Route::get('/reset-password/{token}',[PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password',[PasswordResetController::class, 'reset'])->name('password.force')->middleware('token.verify');
+
+
+Route::get('/test/{employee}',[AttendanceController::class, 'getMaxPunchInTime']);

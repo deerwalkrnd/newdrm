@@ -90,17 +90,8 @@ class AttendanceController extends Controller
         // $state=2  individual punch in
         // $state=3 force punch in
 
-        $successful_punch_in_res = [
-                    'title' => 'Employee Punched In',
-                    'message' => 'Employee has been successfully Punched In',
-                    'icon' => 'success'
-                    ];
-        
-        $failure_punch_in_res = [
-                    'title' => 'Employee Punch In Failed',
-                    'message' => 'Employee cannot be Punched In',
-                    'icon' => 'warning'
-                    ];
+        $successful_punch_in_res = $this->getResponse("Employee Punched In", "Employee has been successfully Punched In", "success"); 
+        $failure_punch_in_res = $this->getResponse("Employee Punch In Failed", "Employee Cannot be Punched In", "warning");
 
         //Employee punch in by HR
         if($request->id){
@@ -128,6 +119,24 @@ class AttendanceController extends Controller
 
         }   
     } 
+
+    public function pnIn(Request $request)
+    {
+        Attendance::create([
+            'employee_id' => $request->employee_id,
+            'punch_in_time' => Carbon::now()->toDateTimeString(),
+            'punch_in_ip' => request()->ip(),
+            'late_punch_in' => isLate(),
+            'reason' => $request->reason
+        ]);
+    }
+
+    private function isLate(Employee $employee)
+    {
+        return strtotime($employee->maxPunchIn()) > time();
+    }
+
+
     //force punch in for no-punch-in-no-leave request
     public function forcePunchIn(Request $request, $id)
     {
@@ -367,7 +376,18 @@ class AttendanceController extends Controller
         }
     }
 
-    public function getMaxPunchInTime(){
-
+    public function getMaxPunchInTime(Employee $employee)
+    {
+        dd($employee->minPunchOutTime(),time(),strtotime($employee->minPunchOutTime()));
     }
+
+    protected function getResponse($title,$message,$icon)
+    {
+        return [
+            'title' => $title,
+            'message' => $message,
+            'icon' => $icon
+        ];
+    }
+
 }
