@@ -130,19 +130,15 @@
         width: auto;
         font-size: 0.55rem;
     }
-
     .hr_menu_title {
         font-size: 0.85rem;
     }
-
     .nav_right {
         display: none;
     }
-
     .nav_mobile {
         display: block;
     }
-
     .button_div {
         margin-right: 0;
     }
@@ -278,7 +274,7 @@ legend {
 }
 
 .text-white {
-    font-size: 0;
+    /* font-size: 0; */
 }
 
 .dashboard_container .row {
@@ -409,12 +405,10 @@ legend {
     .time_laptop {
         display: none;
     }
-
     .topbutton_group .row {
         display: flex;
         flex-flow: column-reverse;
     }
-
     .top_buttons .col {
         margin-top: 1.5%;
         display: flex;
@@ -423,21 +417,17 @@ legend {
         justify-content: space-around;
         flex-wrap: wrap;
     }
-
     .employees_leave {
         margin: 0;
     }
-
     .empOnLeave_table_container {
         margin: 0 1vw;
     }
-
     .birthday_person {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-
     .topRow_empleave {
         padding-left: 4vw;
     }

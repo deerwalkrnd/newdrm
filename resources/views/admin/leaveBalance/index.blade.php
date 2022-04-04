@@ -30,7 +30,6 @@
     </div> 
     <!-- <div class="col-md-3"></div> -->
     <div class="col-md-4">
-        <label for=""></label>
         <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;">Reset</button>
     </div>
 </div>

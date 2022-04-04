@@ -52,7 +52,7 @@
                     <form class="punch_out_form" action="/punch-in" method="POST">
                         @csrf
                         <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
-                        <p class="text-white">{{ session('userIp') }} | {{ env('IP') }}</p>
+                        <p class="text-white d-none">{{ session('userIp') }} | {{ env('IP') }}</p>
                         @if(session('isWeekend') == 1)
                         <input placeholder="Punch In/Out Remarks" name="reason">
                         <span class="punch_out_button">
