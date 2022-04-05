@@ -273,9 +273,10 @@ legend {
     justify-content: center;
 }
 
-.text-white {
-    /* font-size: 0; */
-}
+
+/* .text-white {
+    font-size: 0;
+} */
 
 .dashboard_container .row {
     align-items: start;
@@ -462,3 +463,13 @@ legend {
 
 
 /* select-2 customization ends */
+
+.error-text {
+    text-align: right;
+}
+
+@media screen and (max-width: 767px) {
+    .error-text {
+        text-align: center;
+    }
+}

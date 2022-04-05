@@ -1,12 +1,7 @@
 @extends('layouts.hr.app')
-
 @section('title','Dashboard')
 
 @section('content')
-
-
-
-
 <!-- section with top buttons start -->
 <div class="topbutton_group">
 
@@ -31,70 +26,11 @@
             @endif
         </div>
 
-        @if(in_array(session('userIp'), explode(',',env('IP')) ))
-        @if(session('punchIn') == 2)
-        <div class="col">
-            <span class="punch_out_container">
-                <form class="punch_out_form" action="/punch-out" method="POST" onsubmit="return confirm('Do you want to punch-out?');">
-                    @csrf
-                    <input type="hidden" placeholder="Punch In/Out Remarks">
-                    <span class="punch_out_button">
-                        <button>Punch Out</button>
-                    </span>
-                </form>
-            </span>
-        </div>
-        @endif
-        @if(session('punchIn') == 1)
-        <div class="col">
-            <div class="row">
-                <span class="punch_out_container">
-                    <form class="punch_out_form" action="/punch-in" method="POST">
-                        @csrf
-                        <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
-                        <p class="text-white d-none">{{ session('userIp') }} | {{ env('IP') }}</p>
-                        @if(session('isWeekend') == 1)
-                        <input placeholder="Punch In/Out Remarks" name="reason">
-                        <span class="punch_out_button">
-                            <button>Punch In</button>
-                        </span>
-                        @elseif(session('noPunchInNoLeaveRecords') == 0)
-                        @if(session('isLate') == 1)
-                        @if(session('late_within_ten_days') > 0 )
-                        <p class="text-danger">Multiple Late Punch In. Please Contact HR.</p>
-                        @else
-                        <input placeholder="Punch In/Out Remarks" name="reason">
-                        <span class="punch_out_button">
-                            <button>Punch In</button>
-                        </span>
-                        @endif
-                        @else
-                        <span class="punch_out_button">
-                            <button>Punch In</button>
-                        </span>
-                        @endif
-                        @else
-                        <p class="text-danger">Missed Punch In and No Leave Request Record Exists. Please Contact HR.</p>
-                        @endif
-                    </form>
-                </span>
-            </div>
-            <div class="row">
-                <span class="punch_out_container" style="position: relative;">
-                    <form class="punch_out_form">
-                        @error('reason')
-                        <p class="text-danger">{{ $message }}</p>
-                        @enderror
-                    </form>
-                </span>
-            </div>
-        </div>
-        @endif
-        <!-- punch-in/punch-out col -->
-        @endif
+        <!-- new code -->
+            @include('layouts.basic.punchInPunchOut')
+        <!-- new code ends here -->
     </div>
 </div>
-
 <!-- section with top buttons end -->
 
 <!-- section for current time start-->

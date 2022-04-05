@@ -32,6 +32,10 @@ class DashboardController extends Controller
 
         $late_within_ten_days = $this->isLateWithinTenDays();
         $max_punch_in_time = $this->getMaxPunchInTime();
+        $noPunchInNoLeaveRecordExists = NoPunchInNoLeave::where('employee_id',\Auth::user()->employee_id)->get()->count() > 0;
+
+        if($this->hasPendingLeaveRequest())
+            $this->setManagerNotification();
 
         return view('admin.dashboard.index')
                 ->with(compact(
@@ -41,7 +45,8 @@ class DashboardController extends Controller
                     'state',
                     'userIp',
                     'late_within_ten_days',
-                    'max_punch_in_time'
+                    'max_punch_in_time',
+                    'noPunchInNoLeaveRecordExists'
                 ));      
     }
 
@@ -112,7 +117,7 @@ class DashboardController extends Controller
     private function getMaxPunchInTime()
     {
         // if employee is on any holiday - no time is required
-        if($this->isHoliday || $this->isEmployeeOnLeave() == "full")
+        if($this->isHoliday() || $this->isEmployeeOnLeave() == "full")
         {
             return false;
         }else{
@@ -138,7 +143,7 @@ class DashboardController extends Controller
         return $maxTime;
     }
 
-    protected function isLateWithinTenDays()
+    private function isLateWithinTenDays()
     {
         $late_within_ten_days = Attendance::select('late_punch_in','punch_in_time')
             ->where('employee_id', \Auth::user()->employee_id)
@@ -150,6 +155,33 @@ class DashboardController extends Controller
             return true;
         else
             return false;
+    }
+
+    private function hasPendingLeaveRequest()
+    {
+        if(\Auth::user()->role->authority != 'manager'){
+            return false;
+        }else{
+            $count = LeaveRequest::whereHas('employee',function($query){
+                $query->where('manager_id',\Auth::user()->employee_id);
+            })->where('acceptance','pending')->count();
+            
+            if($count > 0)
+                return true;
+            else
+                return false;
+        }
+    }
+
+    private function setManagerNotification()
+    {
+        $res = [
+            'title' => 'Leave Acceptance Pending',
+            'message' => 'You have pending leave request of employees. Please perform the required action.',
+            'icon' => 'warning'
+        ];
+        
+        session(['res'=>$res]);
     }
 
 
