@@ -45,14 +45,14 @@ class LeaveRequestRequest extends FormRequest
             $remainingDays = Helper::getRemainingCarryOverLeave($employee);
         }
         if(\Request::input('leave_time') != 'full'){
-            $remainingDays = $remainingDays * 2;
             $calcDay = $calcDay/2;
         }
-        // dd('applied leave days: ',$calcDay,'reamining leave days: ',$remainingDays);
+        
+        // dd('applied leave days: ',$calcDay,'remaining leave days: ',$remainingDays,'days',\Request::input('days'));
         return [
             'start_date' => 'required|date|after_or_equal:'.$today,
             'end_date' => 'required|date|after_or_equal:start_date',
-            'days' => 'required|in:'.$calcDay.'|max:'.$remainingDays,
+            'days' => 'required|numeric|in:'.$calcDay.'|between:0,'.$remainingDays,
             'leave_type_id' => 'required|integer',
             'leave_time' => 'required|in:full,first,second',
             'reason' => 'required|string',

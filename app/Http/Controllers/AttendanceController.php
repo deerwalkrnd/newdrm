@@ -101,11 +101,21 @@ class AttendanceController extends Controller
                     'message' => 'Employee cannot be Punched In',
                     'icon' => 'warning'
                     ];
-
         //Employee punch in by HR
         if($request->id){
-            $state = 1;
             $employee_id = $request->id;
+            $no_punch_in_no_leave_record = NoPunchInNoLeave::select('id')->where('employee_id',$employee_id)->get();  
+            // dd($no_punch_in_no_leave_record);
+            if($no_punch_in_no_leave_record){
+                $res = [
+                    'title' => 'Employee Punch In Failed',
+                    'message' => 'Employee has No Punch-In and No Leave Record. Please clear the record first.',
+                    'icon' => 'warning'
+                    ];
+                return redirect('/employee')->with(compact('res'));
+            }          
+
+            $state = 1;
             $request->merge(['reason'=>'HR Punch In Due to Multiple late Punch In']);
             $attendance = $this->takeAttendance($employee_id,$request,$state);
             if($attendance){
