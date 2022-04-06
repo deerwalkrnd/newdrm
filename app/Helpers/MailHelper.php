@@ -91,7 +91,7 @@ class MailHelper{
     public static function testMail(){
         $name = 'deena';
         Mail::to('deena.sitikhu@deerwalk.edu.np')
-                ->cc(['satyadeep.neupane@deerwalk.edu.np'])
+                ->cc(['satyadeep.neupane@deerwalk.edu.np','samil.shrestha@deerwalk.edu.np'])
                 ->queue(new PendingLeaveNotificationMail($name));
                 
     }
