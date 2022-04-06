@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('test:mail')->everyFiveMinutes(); //dailyAt('23:50')
 
         //No Punch In No Leave Request Record Update
-        $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50')
+        $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50') test mail
 
         //Pending Leave request of tommorow Notification
         $send_mail_pending_leave_request = MailControl::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
