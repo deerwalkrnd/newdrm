@@ -68,7 +68,7 @@ class NoPunchInNoLeaveController extends Controller
                 }              
             }
         }
-        // dd($units);
+        
         $employees = $employees->get();
         foreach($employees as $employee){
             NoPunchInNoLeave::create([
@@ -96,10 +96,6 @@ class NoPunchInNoLeaveController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
