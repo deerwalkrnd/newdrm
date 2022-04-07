@@ -27,9 +27,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+<<<<<<< HEAD
 
         $schedule->command('test:mail')->dailyAt('14:20'); //dailyAt('23:50')
         $schedule->command('test:mail')->everyFiveMinutes(); //dailyAt('23:50')
+=======
+        // $schedule->command('test:mail')->everyTwoMinutes(); //dailyAt('23:50')
+>>>>>>> debb04d4cf230cdaf675d72e772d062d5c862c54
 
         //No Punch In No Leave Request Record Update
         $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50') test mail
