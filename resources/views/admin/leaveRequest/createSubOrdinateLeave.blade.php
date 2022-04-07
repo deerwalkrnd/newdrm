@@ -65,14 +65,18 @@
         var start_date = document.getElementById('start_date').value;
         var end_date = document.getElementById('end_date').value;
         var leave_type_id = document.getElementById('leave_type_id').value;
-        var leave_time = document.getElementsByName('leave_time').value;
+        var leave_times = document.getElementsByName('leave_time');
         var reason = document.getElementById('reason');
-        var employee_id = document.getElementById('employee_id').value;
         reason.style.visibility = "hidden";
-        // var strUser = e.options[e.selectedIndex].text;
-        // console.log(employee_id);
-        
-        
+        var leave_time;
+
+
+        leave_times.forEach((leaveTime)=>{
+            if(leaveTime.checked){
+                leave_time = leaveTime.value;
+            }
+        });
+        // console.log('leave time is:',leave_time);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -87,7 +91,6 @@
                 "end_date":end_date, 
                 "leave_type_id":leave_type_id,
                 "leave_time":leave_time,
-                "employee_id":employee_id,
                 },
             dataType:'json',
             success: function(data) {
@@ -96,7 +99,8 @@
                     reason.innerHTML = data.reason;
                     reason.style.visibility = "visible";
                 }
-                console.log(data.days,data.reason);
+
+                console.log('in create form',data.days,data.reason);
             },
              error: function (data) {
                 console.log(data);
