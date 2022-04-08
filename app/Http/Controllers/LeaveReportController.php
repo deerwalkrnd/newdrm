@@ -203,16 +203,21 @@ class LeaveReportController extends Controller
 
     public function noPunchInNoLeave(Request $request)
     {
-        if(isset($request->d))
-            $date = $request->d;
-        else
-            $date = date('Y-m-d');
-
-        //fetch data from table
-        $records = NoPunchInNoLeave::select('id','employee_id','date')
-                                        ->with('employee:id,first_name,middle_name,last_name,manager_id')
-                                        ->whereDate('date',$date)->get();
         $code = 'OXqSTexF5zn4uXSp';
-        return view('admin.report.noPunchInNoLeave')->with(compact('records','date','code'));
+
+        $records = NoPunchInNoLeave::select('id','employee_id','date')->with('employee:id,first_name,middle_name,last_name,manager_id');
+        if(isset($request->e))
+            $records =  $records->where('employee_id',$request->e);
+        elseif(isset($request->d))
+            $records =  $records->whereDate('date',$request->d);
+        else
+            $records = $records->whereDate('date',date('Y-m-d'));
+                
+        $records = $records->orderBy('date','desc')->get();
+
+        $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->where('id',$request->e)->get();
+        // ->first();
+        
+        return view('admin.report.noPunchInNoLeave')->with(compact('records','code','employeeSearch'));
     }
 }
