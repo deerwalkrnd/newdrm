@@ -35,7 +35,7 @@
         <!-- include punch out option -->
         @include('layouts.basic.punchOut')
     @else
-        <p class="text-danger error-text">Already Punched Out</p>
+        <p class="text-danger error-text">Punch Out Successful</p>
     @endif
 @else
     <p class="text-danger error-text">Invalid IP Address Detected</p>
