@@ -37,6 +37,17 @@ class DashboardController extends Controller
         if($this->hasPendingLeaveRequest())
             $this->setManagerNotification();
 
+            // dd(compact(
+            //     'leaveBalance',
+            //     'birthdayList',
+            //     'leaveList',
+            //     'state',
+            //     'userIp',
+            //     'late_within_ten_days',
+            //     'max_punch_in_time',
+            //     'noPunchInNoLeaveRecordExists'
+            // ));
+
         return view('admin.dashboard.index')
                 ->with(compact(
                     'leaveBalance',

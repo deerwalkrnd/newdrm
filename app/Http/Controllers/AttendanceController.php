@@ -105,8 +105,7 @@ class AttendanceController extends Controller
         if($request->id){
             $employee_id = $request->id;
             $no_punch_in_no_leave_record = NoPunchInNoLeave::select('id')->where('employee_id',$employee_id)->get();  
-            // dd($no_punch_in_no_leave_record);
-            if($no_punch_in_no_leave_record){
+            if(!$no_punch_in_no_leave_record->isEmpty()){
                 $res = [
                     'title' => 'Employee Punch In Failed',
                     'message' => 'Employee has No Punch-In and No Leave Record. Please clear the record first.',
