@@ -5,13 +5,23 @@
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => "No Punch In No Leave Report"])
 
-<div class="d-flex justify-content-between flex-row">
-    <div class="w-25">
-        <label for="date">Date: </label>
-        <input type="date" name="date" id="date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
+<div class="row">
+    <div class="col-md-4">
+        <label class="form-label" for="employee_id">Employee:</label>
+        <select class="employee-livesearch form-control p-3" onchange="test()"  name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
+            @if(!empty(old('employee_id')))
+                <option value="{{ request()->get('e') }}" selected="selected">{{ old('$employeeSearch->first_name') }}</option>
+            @elseif(isset($employeeSearch) && !empty($employeeSearch->id))
+                <option value="{{ $employeeSearch->id }}" selected="selected">{{ $employeeSearch->first_name.' '.$employeeSearch->last_name }}</option>
+            @endif
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="date">Date: </label>
+        <input class="form-control p-2"  type="date" name="date" id="date" onchange="test()" value="{{ request()->get('d') ?? request()->get('d') }}" >
     </div> 
-    <div >
-        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288">Reset</button>
+    <div class="col-md-4">
+        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;">Reset</button>
     </div>
 </div>
 <br>
@@ -35,7 +45,7 @@
                 @else
                     <td> -- </td>
                 @endif
-                <td>{{ $date }}</td>
+                <td>{{ $record->date }}</td>
                 <td>
                     <form action="/force-punch-in/{{ $record->id }}" onsubmit="return confirm('Are you sure?')" method="POST" class="d-inline">
                         @csrf
@@ -61,15 +71,45 @@
         $('.drmDataTable').DataTable();
     });
 
-    //Search leave by date 
-    function search(){
+    //Search leave by date and employee_id
+    function test(){
         let date = $('#date').val();
+        let employee_id = $('#employee_id').val();
         if(date)
             $(location).attr('href','/no-punch-in-leave?d='+date);
+        if(employee_id)
+            $(location).attr('href','/no-punch-in-leave?e='+employee_id);
     }
 
     function reset(){
         $(location).attr('href','/no-punch-in-leave');
     }
+
+    $('.employee-livesearch').select2({    
+        ajax: {
+            url: '/employee/search',
+            data: function (params) {
+                var query = {
+                    q: params.term,
+                }
+                    // Query parameters will be ?search=[term]
+                return query;
+            },
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        let full_name = (item.middle_name === null) ? item.first_name + " " + item.last_name : item.first_name + " " + item.middle_name + " " + item.last_name;
+                        return {
+                            text: full_name,
+                            id: item.id
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    });
 </script>
 @endsection
