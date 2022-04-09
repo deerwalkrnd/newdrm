@@ -9,16 +9,19 @@ use App\Models\LeaveType;
 use App\Models\YearlyLeave;
 use App\Models\Employee;
 use App\Models\Holiday;
+use App\Models\Unit;
 use App\Models\CarryOverLeave;
 use App\Models\NoPunchInNoLeave;
 use App\Http\Controllers\DashboardController;
 use App\Helpers\NepaliCalendarHelper;
-
+use App\Http\Controllers\DownloadController;
 class LeaveReportController extends Controller
 {
     protected $employee_join_month;
     protected $employee_join_year;
     protected $thisYear;
+    protected $balanceRecords;
+    // protected $leaveTypes=[];
 
     private function getNepaliYear($year){
         try{
@@ -33,40 +36,101 @@ class LeaveReportController extends Controller
         }
     }
 
-    public function leaveBalance(Request $request)
+    public function leaveBalance(Request $request){
+        $result = $this->getLeaveBalanceRecords($request);
+        $records = $result[0];
+        $leaveTypes = $result[1];
+        $leaveTypesCount = $result[2];
+        $thisYear = $result[3];
+        $employees = $result[4];
+        $employeeSearch = $result[5];
+        $units = $result[6];
+
+        return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear','employees','employeeSearch','units'));
+    }
+    public function getLeaveBalanceRecords($request,$download=0)
     {
-        // return  view('admin.leaveBalance.index');
-        // dd($request->e);
+        // $request->d  =>year;
+        // $request->u  =>unit_id;
+        // $request->e  =>employee_id;
         
-        //this year
-        $thisYearMonth = $this->getNepaliYear(date('Y-m-d'));
+        $thisYearMonth = $this->getNepaliYear(date('Y-m-d')); //current year and month
         $this->thisYear = $thisYearMonth[0];
         $thisYear = $this->thisYear;
+        $employeeSearch = 0;
+
+        $units = Unit::select('id','unit_name')->get();
         
-        if(isset($request->e))
-            $employees = Employee::where('contract_status','active')->where('id',$request->e)->paginate(3);
-        elseif(isset($request->d))
-            $employees = Employee::where('contract_status','active')->paginate(10);
-        else
-            $employees = Employee::where('contract_status','active')->paginate(3);
+        if($request->u != NULL && $request->e != NULL){     //search by unit_id and employee_id
+            $employees = Employee::where('contract_status','active')
+                                    ->where('id',$request->e)
+                                    ->with('unit:id,unit_name');
+            if($download==1)
+                $employees = $employees->get();
+            else
+                $employees = $employees->paginate(3);
+
+            $employeeSearch = Employee::select('id','first_name','middle_name','last_name','unit_id')
+                                        ->where('id',$request->e)
+                                        ->with('unit:id,unit_name')
+                                        ->first();
+            }
+        else if($request->u != NULL){        //search by only unit_id
+            $employees = Employee::where('contract_status','active')
+                                    ->where('unit_id',$request->u)
+                                    ->with('unit:id,unit_name');
+            if($download==1)
+                $employees = $employees->get();
+            else
+                $employees = $employees->paginate(3);    
+        }
+        else if($request->e != NULL){       //search by only employee_id
+            $employees = Employee::where('contract_status','active')
+                                    ->where('id',$request->e)
+                                    ->with('unit:id,unit_name');
+            if($download==1)
+                $employees = $employees->get();
+            else
+                $employees = $employees->paginate(3);
+
+            $employeeSearch = Employee::select('id','first_name','middle_name','last_name','unit_id')
+                                        ->where('id',$request->e)
+                                        ->with('unit:id,unit_name')
+                                        ->first();
+        }
+        elseif($request->d != NULL){        //search by only year
+            $employees = Employee::where('contract_status','active')->with('unit:id,unit_name');
+
+            if($download==1)
+                $employees = $employees->get();
+            else
+                $employees = $employees->paginate(3);
+        }
+        else{
+            $employees = Employee::where('contract_status','active')->with('unit:id,unit_name');
+            if($download==1)
+                $employees = $employees->get();
+            else
+                $employees = $employees->paginate(10);
+        }
 
         $leaveTypes = LeaveType::select('name','id','gender')->where('status','active')->get();
         $leaveTypesCount = $leaveTypes->count();
         $records = [];
-        $dashboardController = new DashboardController;
 
         foreach($employees as $employee)
         {
             $temp = array();
             $temp['employee_id'] = $employee->id;
             $temp['name'] = $employee->first_name." ".$employee->last_name;
+            $temp['unit'] = $employee->unit->unit_name;
             $temp['leaves'] = array();
            
             $join_year_month = $this->getNepaliYear($employee->join_date);
             $this->employee_join_year = $join_year_month[0];
             $this->employee_join_month = $join_year_month[1];
             
-            if(isset($request->d)){
+            if($request->d != NULL && $request->d != 1){
                 $start_year = $request->d;
                 $end_year = $request->d;
             }else{
@@ -116,11 +180,14 @@ class LeaveReportController extends Controller
                 
                 $temp['total_unpaid_leaves'] = $total_unpaid_leaves;
                 array_push($records,$temp);
-            }
-            
+            }         
         }
-
-        return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear','employees'));
+        
+        //check if the record is for download or display
+        if($download == 1)
+            return $records;
+        else
+            return [$records,$leaveTypes,$leaveTypesCount,$thisYear,$employees,$employeeSearch,$units];
     }
 
     private function getEmployeeLeaveBalance($employee,$type,$year){
@@ -216,7 +283,6 @@ class LeaveReportController extends Controller
         $records = $records->orderBy('date','desc')->get();
 
         $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->where('id',$request->e)->get();
-        // ->first();
         
         return view('admin.report.noPunchInNoLeave')->with(compact('records','code','employeeSearch'));
     }
