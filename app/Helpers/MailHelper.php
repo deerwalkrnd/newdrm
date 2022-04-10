@@ -7,6 +7,8 @@ use App\Models\LeaveRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PendingLeaveNotificationMail;
+use App\Mail\TestMail;
+use App\Mail\SendMail;
 use App\Mail\MissedPunchOutMail;
 
 class MailHelper{
@@ -88,12 +90,21 @@ class MailHelper{
         return true;
     }
 
-    public static function testMail(){
-        $name = 'deena';
+    public static function testMail1(){
+        $name = "Test Mail1";
         Mail::to('deena.sitikhu@deerwalk.edu.np')
                 ->cc(['satyadeep.neupane@deerwalk.edu.np','samil.shrestha@deerwalk.edu.np'])
-                ->queue(new PendingLeaveNotificationMail($name));
+                ->queue(new TestMail($name));
+        return true;   
                 
+    }
+
+    public static function testMail2(){
+        $name = "Test Mail2";
+        Mail::to('deena.sitikhu@deerwalk.edu.np')
+                ->cc(['satyadeep.neupane@deerwalk.edu.np','samil.shrestha@deerwalk.edu.np'])
+                ->queue(new SendMail($name));
+        return true;       
     }
 }
 

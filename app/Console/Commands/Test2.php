@@ -3,17 +3,17 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 use App\Helpers\MailHelper;
+use Illuminate\Support\Facades\Mail;
 
-class Test extends Command
+class Test2 extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'test:mail';
+    protected $signature = 'send:mail';
 
     /**
      * The console command description.
@@ -39,7 +39,7 @@ class Test extends Command
      */
     public function handle()
     {
-        MailHelper::testMail1();
+        MailHelper::testMail2();
         return true;
     }
 }

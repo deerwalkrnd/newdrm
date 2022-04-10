@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Models\MailControl;
-
+use App\Jobs\TestJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,7 +27,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('test:mail')->everyTwoMinutes(); //dailyAt('23:50')
+        // $schedule->command('test:mail')->everyMinute(); //dailyAt('23:50')  
+        // $schedule->command('send:mail')->everyMinute(); //dailyAt('23:50')
+
+        $schedule->job(new TestJob)->everyMinute();
 
         //No Punch In No Leave Request Record Update
         $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50') test mail

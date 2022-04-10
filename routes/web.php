@@ -30,6 +30,7 @@ use App\Http\Controllers\NoPunchInNoLeaveController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\SendMailJobController;
 use App\Http\Helpers\Helper;
 
 
@@ -118,7 +119,9 @@ Route::middleware(['manager'])->group(function(){
 Route::middleware(['hr'])->group(function(){
     //Download Leave Balance report
     Route::get('/download/leave-balance-report', [DownloadController::class, 'exportLeaveBalanceReport']);
-    // Route::get('/download/leave-balance-report',[LeaveReportController::class,'exportLeaveBalanceReport']);
+    
+    //Test JOB
+    Route::get('/send-mail-job',[SendMailJobController::class,'sendMail']);
 
     //time setting
     Route::get('/time',[TimeController::class,'index']);
