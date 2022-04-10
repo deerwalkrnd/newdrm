@@ -7,31 +7,49 @@
 
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label class="form-label" for="employee_id">Employee:</label>
-        <select class="employee-livesearch form-control p-3" onchange="search()"  name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
+        <select class="employee-livesearch form-control p-3" onchange="search()"  name="employee_id" id="employee_id" data-placeholder="-- Choosee Employee --">
             @if(!empty(old('employee_id')))
-                <option value="{{ request()->get('e') }}" selected="selected">{{ old('$employeeSearch->first_name') }}</option>
+                <option value="{{ request()->get('e') }}" selected="selected">{{ old("$employeeSearch->first_name.' '.$employeeSearch->middle_name.' '.$employeeSearch->last_name") }}</option>
             @elseif(isset($employeeSearch) && !empty($employeeSearch->id))
-                <option value="{{ $employeeSearch->id }}" selected="selected">{{ $employeeSearch->first_name }}</option>
+                <option value="{{ $employeeSearch->id }}" selected="selected">{{ $employeeSearch->first_name.' '.$employeeSearch->middle_name.' '.$employeeSearch->last_name }}</option>
             @endif
         </select>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label class="form-label" for="year">Year: </label>
         <select class="form-control p-2" name="year" onchange="search()" id="year">
+            <option value="0" disabled selected>-- Choose Year --</option>
+            <option value="1" selected>Since Joined Year</option>
             @for($i=2067; $i<= $thisYear; $i++)
                 <option value="{{$i}}" {{ (request()->get('d')) ? (request()->get('d')==$i ? 'selected':'') :($i == $thisYear ? 'selected':'') }}>{{ $i }}</option>
             @endfor
-            <!-- @for($i=2011; $i<= date('Y'); $i++)
-                <option value="{{$i}}" {{ (request()->get('d')) ? (request()->get('d')==$i ? 'selected':'') :($i == date('Y') ? 'selected':'') }}>{{ $i }}</option>
-            @endfor -->
         </select>
     </div> 
-    <!-- <div class="col-md-3"></div> -->
-    <div class="col-md-4">
-        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;">Reset</button>
+    <div class="col-md-3">
+        <label class="form-label" for="unit_id">Unit: </label>
+        <select class="form-control p-2" name="unit_id" onchange="search()" id="unit_id" data-placeholder="-- Choosee Employee --">
+            <option value="0"  selected disabled>-- Choose Unit --</option>
+            @foreach($units as $unit)
+                <option value="{{$unit->id}}"
+                    {{ (!empty(old('unit_id')) && old('unit_id') == $unit->id) ? 'selected': ''}}
+                    {{ ((request()->get('u')) && (request()->get('u')) == $unit->id && empty(old('unit_id'))) ? 'selected' : ''}}>{{ $unit->unit_name }}
+                </option>
+            @endforeach
+        </select>
+    </div> 
+    
+    <div class="col-md-3 row">
+        <div class="mb-1 mt-1">
+            <a href="{{ '/download/leave-balance-report?'.request()->getQueryString() }}"  id="export" class="btn btn-success border-0 text-white" style="float:right;width:100px;">Export</a>
+        </div>
+        <div>
+            <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;width:100px;">Reset</button>
+        </div>
     </div>
+    <!-- <p>{{ '/download/leave-balance-report?'.request()->getQueryString() }}</p>
+    <a href="{{ '/download/leave-balance-report?'.request()->getQueryString() }}" class="btn btn-success btn-sm" >Export</a> -->
 </div>
 <br>
  <div class="col-md-4">
@@ -45,6 +63,7 @@
             <th scope="col" class="ps-4" rowspan=2>S.N</th>
             <th scope="col" rowspan=2>Employee</th>
             <th scope="col" rowspan=2>Year</th>
+            <th scope="col" rowspan=2>Unit</th>
             @foreach($leaveTypes as $leaveType)
             <th scope="col" colspan=4>{{ $leaveType->name }}</th>
             @endforeach
@@ -69,6 +88,7 @@
                 <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
                 <td>{{$record['name']}}</td>
                 <td>{{$record['leaves']['year']}}</td>
+                <td>{{$record['unit']}}</td>
                 <!-- Personal/Home -->
                 @forelse($leaveTypes as $leaveType)
                     @if(array_key_exists($leaveType->name,$record['leaves']))
@@ -127,17 +147,45 @@
         $(location).attr('href','/leave-balance-report');
     }
 
+    function exportTasks(_this) {
+      let _url = $(_this).data('href');
+      window.location.href = _url;
+    }
+
+    // function download(){
+    //     let date = $('#year').val();
+    //     let employee_id = $('#employee_id').val();
+    //     let download = 1;
+    //     $(location).attr('href','/leave-balance-report?d='+date+'&e='+employee_id'&download='+download);      
+    // }
 
     //Search by date or Employee
     function search(){
+        console.log('here');
         let date = $('#year').val();
         let employee_id = $('#employee_id').val();
-        if(date)
+        let unit_id = $("#unit_id").val();
+        // $("export").click(function{
+        //     $(location).attr('href','/leave-balance-report?d='+date+'&e='+employee_id+'&u='+unit_id+'&download=1');
+        // });
+        // console.log(date,!employee_id,unit_id);
+
+        if(unit_id && employee_id && date)
+            $(location).attr('href','/leave-balance-report?u='+unit_id+'&d='+date+'&e='+employee_id);
+        else if(unit_id && employee_id)
+            $(location).attr('href','/leave-balance-report?u='+unit_id+'&e='+employee_id);
+        else if(unit_id && date)
+            $(location).attr('href','/leave-balance-report?u='+unit_id+'&d='+date);
+        else if(employee_id && date)
+            $(location).attr('href','/leave-balance-report?d='+date+'&e='+employee_id);
+        else if(unit_id)
+            $(location).attr('href','/leave-balance-report?u='+unit_id);
+        else if(date)
             $(location).attr('href','/leave-balance-report?d='+date);
-        if(employee_id)
+        else if(employee_id)
             $(location).attr('href','/leave-balance-report?e='+employee_id);
 
-    }
+    };
 
     $('.employee-livesearch').select2({    
         ajax: {

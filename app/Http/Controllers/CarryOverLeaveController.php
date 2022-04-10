@@ -18,31 +18,34 @@ class CarryOverLeaveController extends Controller
     public function calculateCarryOverLeave()
     {
        //previous year
-        try{
-            $present_year = date('Y-m-d');
-            $date = new NepaliCalendarHelper($present_year,1);
-            $nepaliDate = $date->in_bs();
-            $nepaliDateArray = explode('-',$nepaliDate);
-            $year = $nepaliDateArray[0] - 1; //previous Year  
-        }catch(Exception $e)
-        {
-            print_r($e->getMessage());
-        }
-         
+        $thisYearMonth = $this->getNepaliYear(date('Y-m-d'));
+        $thisYear = $thisYearMonth[0];
+        $year = $thisYear-1; //previous year
+
         //add the year column in leave request section
         $units = Unit::select('id')->get(); 
-    
-        foreach($units as $unit){           //full leave-0 => days = days/2
-            $carryOverLeaveList = LeaveRequest::select('employee_id',\DB::raw('SUM(days) as days'))
-                                        ->where('year',$year)
+
+        foreach($units as $unit){           
+            $employees = Employee::select('id','unit_id','join_date')->where('contract_status','active')
+                                    ->where('unit_id',$unit->id)
+                                    ->withSum(['leaveRequest as halfLeave' => function($query) use($year){
+                                        $query->where('year',$year)
                                         ->where('acceptance','accepted')
-                                        ->where('leave_type_id',1) //leave_type_id is seeded as 1 for personal leave
-                                        ->whereHas('employee',function($query) use($unit){
-                                            $query->where('unit_id',$unit->id);
-                                        })
-                                        ->groupBy('employee_id')
-                                        ->get();
-                                        
+                                        ->where('leave_type_id','1')
+                                        ->where('full_leave','0');
+                                    }],'days')
+                                    ->withSum(['leaveRequest as fullLeave' => function($query) use($year){
+                                        $query->where('year',$year)
+                                        ->where('acceptance','accepted')
+                                        ->where('leave_type_id','1')
+                                        ->where('full_leave','1');
+                                    }],'days')
+                                    ->get()
+                                    ->map(function($employee){
+                                        $employee->days = $employee->halfLeave * 0.5 + $employee->fullLeave;
+                                        return $employee;
+                                    })->toArray();  
+
             // unit and year wise max personal leave type                        
             $maxPersonalLeave = YearlyLeave::select('days')
                                             ->where('leave_type_id',1)
@@ -53,17 +56,36 @@ class CarryOverLeaveController extends Controller
                                             ->where('year',$year)
                                             ->first()->days;
 
-            $carryOverLeaveList = collect($carryOverLeaveList)->map(function($record) use($maxPersonalLeave,$year){
+
+            $employees = collect($employees)->map(function($record) use($maxPersonalLeave,$year,$thisYear){
+                
+                $joinYearMonth = $this->getNepaliYear($record['join_date']);
+                $joinYear = $joinYearMonth[0];
+                $joinMonth = $joinYearMonth[1];
+                
+                //if joinyear is this year or greater than this year, leave allowance is calculated from joined month
+                if($joinYear < $thisYear && $joinYear == $year){
+                    $remaining_month = 13-$joinMonth;
+                    $maxPersonalLeave = round(($maxPersonalLeave/12*$remaining_month)*2)/2; 
+                }elseif($joinYear == $thisYear){    //if joinyear is this year, carry over leave should be 0
+                    $maxPersonalLeave = 0;
+                }
+                 
+                
                 // if join date is in previous year calculate myPersonalLeave else mypersonalLeave = $maxPersonalLeave
                 $remainingLeave = $maxPersonalLeave - $record['days'];
+                // if($record['id']== '1'){
+                //     dd($record,$joinYear,$joinMonth,$year,$thisYear,$maxPersonalLeave,$remainingLeave);
+                // }
+                $record['employee_id'] = $record['id'];
                 $record['days'] = max(min($remainingLeave,8),0);
                 $record['year'] = $year;
+                unset($record['unit_id'],$record['join_date'],$record['fullLeave'],$record['halfLeave'],$record['id']);
                 return $record;
             })->toArray();
-
-            CarryOverLeave::upsert($carryOverLeaveList,['employee_id','year'],['days']);
+            
+            CarryOverLeave::upsert($employees,['employee_id','year'],['days']);
         }
-        // return $carryOverLeaveList;
         return redirect('/dashboard');
     }
 
@@ -80,5 +102,19 @@ class CarryOverLeaveController extends Controller
             }
         }
         // dd($days);
+    }
+
+
+     private function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1]];
+            return $year_month;
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
     }
 }
