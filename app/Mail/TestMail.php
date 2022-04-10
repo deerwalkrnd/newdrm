@@ -2,16 +2,16 @@
 
 namespace App\Mail;
 
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMail extends Mailable
+class TestMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-    protected $nam;
+    protected $name;
     /**
      * Create a new message instance.
      *
@@ -19,9 +19,7 @@ class SendMail extends Mailable
      */
     public function __construct($name)
     {
-        // dd($details);
         $this->name = $name;
-        // dd($this->name);
     }
 
     /**
@@ -31,11 +29,9 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        // dd($this->details['subject']);
-        // dd($this->name);
-        return $this->subject('Send Mail using Queue and Job')
-                ->view('layouts.email.sendMail')
-                ->with('name');
-        // return $this->view('view.name');
-    }   
+        return $this->subject('Test Mail')
+                    ->view('layouts.email.testEmail')
+                    ->with('name', $this->name);
+    }
 }
+// D:\xampp\htdocs\NEWDRM\resources\views\layouts\email\testEmail.blade.php
