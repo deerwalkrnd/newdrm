@@ -33,7 +33,7 @@ class SendMail extends Mailable
     {
         // dd($this->details['subject']);
         // dd($this->name);
-        return $this->subject('Send Mail using Queue and Job')
+        return $this->subject('Cron Job Running')
                 ->view('layouts.email.sendMail')
                 ->with('name');
         // return $this->view('view.name');

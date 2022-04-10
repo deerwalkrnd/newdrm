@@ -28,24 +28,23 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('test:mail')->everyMinute(); //dailyAt('23:50')  
-        $schedule->command('send:mail')->everyMinute(); //dailyAt('23:50')
+        $schedule->command('send:mail')->dailyAt('16:00'); //dailyAt('16:00')
 
-        //$schedule->job(new TestJob)->everyMinute();
-
+        // $schedule->job(new TestJob)->everyMinute();
 
         //No Punch In No Leave Request Record Update
-        //$schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50') test mail
+        $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50') test mail
 
-        //Pending Leave request of tommorow Notification
-        //$send_mail_pending_leave_request = MailControl::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
-        //if($send_mail_pending_leave_request)
-           // $schedule->command('leave:pending')->dailyAt('21:00');
+        // //Pending Leave request of tommorow Notification
+        $send_mail_pending_leave_request = MailControl::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
+        if($send_mail_pending_leave_request)
+            $schedule->command('leave:pending')->dailyAt('21:00');
         // ->dailyAt('21:00');
         
-        //Today's Missed Punch Out Notification 
-        //$send_mail_missed_punch_out = MailControl::select('send_mail')->where('name','Missed Punch Out')->first()->send_mail;
-        //if($send_mail_missed_punch_out)
-            //$schedule->command('punchOut:missed')->dailyAt('23:40');
+        // //Today's Missed Punch Out Notification 
+        $send_mail_missed_punch_out = MailControl::select('send_mail')->where('name','Missed Punch Out')->first()->send_mail;
+        if($send_mail_missed_punch_out)
+            $schedule->command('punchOut:missed')->dailyAt('23:40');
             // ->dailyAt('23:40');
     }
 

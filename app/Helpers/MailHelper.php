@@ -100,7 +100,7 @@ class MailHelper{
     }
 
     public static function testMail2(){
-        $name = "Test Mail2";
+        $name = "Deena";
         Mail::to('deena.sitikhu@deerwalk.edu.np')
                 ->cc(['satyadeep.neupane@deerwalk.edu.np','samil.shrestha@deerwalk.edu.np'])
                 ->queue(new SendMail($name));

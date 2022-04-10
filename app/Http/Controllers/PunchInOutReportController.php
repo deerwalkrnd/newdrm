@@ -21,6 +21,7 @@ class PunchInOutReportController extends Controller
 
     }])
         ->with('manager:id,first_name,middle_name,last_name')
+        // ->orderBy('punch_in_time','desc')
         ->get();
 
         // dd($employees);
