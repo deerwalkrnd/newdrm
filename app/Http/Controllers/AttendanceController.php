@@ -17,6 +17,7 @@ use App\Models\LeaveType;
 use App\Models\Time;
 use Carbon\Carbon;
 use App\Mail\LatePunchInMail;
+use App\Mail\EarlyPunchOutMail;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -75,7 +76,7 @@ class AttendanceController extends Controller
 
         //set punch-in state;
         \Session::put('punchIn', $state);
-
+        // dd($state);
         if($state == 1)
         {
             return view('admin.attendance.punchIn')->with(['code' => $this->verificationCode]);
@@ -89,7 +90,7 @@ class AttendanceController extends Controller
         // $state=1 hr punch in
         // $state=2  individual punch in
         // $state=3 force punch in
-
+        
         $successful_punch_in_res = [
                     'title' => 'Employee Punched In',
                     'message' => 'Employee has been successfully Punched In',
@@ -133,8 +134,9 @@ class AttendanceController extends Controller
             }else{
                 $res = $failure_punch_in_res;
             }
-            return redirect($this->redirect_to)->with(compact('res'));
 
+            return redirect($this->redirect_to)->with(compact('res'));
+            
         }   
     } 
     //force punch in for no-punch-in-no-leave request
@@ -187,7 +189,7 @@ class AttendanceController extends Controller
                  //Custom shift Employee
                 $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',\Auth::user()->employee_id)->first(); 
                 $weekdays = true;
-                
+
                 if(date('D') == 'Sat' || date('D') == 'Sun'){ //weekend punch in
                     $maxTime = date('H:i:s',strtotime('+60seconds'));
                     $weekdays = false;
@@ -196,7 +198,7 @@ class AttendanceController extends Controller
                     $maxTime = $employee_shift_time->start_time;    //maxPunch in time for custom shift employees
                 else
                     $maxTime = Time::select('id','time')->where('id','1')->first()->time;    //max punch in time for other shifts
-
+                // dd($maxTime);
                 $first_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
                 if($hasAnyLeave == 0)
                 {
@@ -218,8 +220,8 @@ class AttendanceController extends Controller
                     }
                 }
 
-                $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
-                // dd($isLate,$weekdays,$maxTime);
+                $isLate = strtotime(Carbon::now()) <= strtotime($maxTime) ? '0' : '1';
+                // dd($isLate,$weekdays,strtotime($maxTime),strtotime(Carbon::now()));
 
                 // if reason is null for isLate true throw error
                 if($isLate && $weekdays)
@@ -255,7 +257,6 @@ class AttendanceController extends Controller
                     ]);
                     \Session::put('punchIn', '2');
                 }
-
                 //Send Mail to manager,hr and employee after late punch in 
                 $subject = "Late Punch In";
                 $send_mail = MailControl::select('send_mail')->where('name','Late Punch In')->first()->send_mail;
@@ -276,7 +277,9 @@ class AttendanceController extends Controller
     public function punchOut(Request $request)
     {
         $employee_id = \Auth::user()->employee_id;
+        $employee_full_name = \Auth::user()->employee->first_name.' '.\Auth::user()->employee->middle_name.' '.\Auth::user()->employee->last_name;
         $today = date('Y-m-d');
+        
         if($this->recordRowExists($employee_id) && !$this->hasPunchOut())
         {
             // $presentTime = strtotime(Carbon::now());
@@ -350,6 +353,17 @@ class AttendanceController extends Controller
                     'requested_by' => \Auth::user()->employee_id,
                     'accepted_by' => NULL
                 ]);
+
+                //Send Mail to manager,hr and employee after early punch out 
+                $send_mail = MailControl::select('send_mail')->where('name','Early Punch Out')->first()->send_mail;
+                $ccList = MailHelper::getHrEmail();
+                array_push($ccList,MailHelper::getManagerEmail($employee_id));
+                
+                if($send_mail){
+                    Mail::to(\Auth::user()->employee->email)
+                        ->cc($ccList)
+                        ->send(new EarlyPunchOutMail($employee_full_name));
+                }
                 }catch(Exception $e){
                     dd($e);
                 }

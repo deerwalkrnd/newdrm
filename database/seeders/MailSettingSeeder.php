@@ -39,8 +39,12 @@ class MailSettingSeeder extends Seeder
             'name' => 'Subordinate Leave',
             'send_mail'=> '1'
         ]);
-         DB::table('mail_controls')->insert([
+        DB::table('mail_controls')->insert([
             'name' => 'Employee Credentials',
+            'send_mail'=> '1'
+        ]);
+        DB::table('mail_controls')->insert([
+            'name' => 'Early Punch Out',
             'send_mail'=> '1'
         ]);
     }
