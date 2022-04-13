@@ -220,7 +220,7 @@ class AttendanceController extends Controller
                     }
                 }
 
-                $isLate = strtotime(Carbon::now()) <= strtotime($maxTime) ? '0' : '1';
+                $isLate = strtotime(Carbon::now()) <= $maxTime ? '0' : '1';
                 // dd($isLate,$weekdays,strtotime($maxTime),strtotime(Carbon::now()));
 
                 // if reason is null for isLate true throw error
