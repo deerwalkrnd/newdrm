@@ -4,7 +4,7 @@
 
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => 'My Forced Leave'])
-@if(\Auth::user()->role->authority == 'manager')
+@if((\Auth::user()->role->authority == 'manager') || (\Auth::user()->role->authority == 'hr'))
 
 <div class="d-flex justify-content-between flex-row">
     <div class="w-25">
