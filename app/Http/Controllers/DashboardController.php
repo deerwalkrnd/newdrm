@@ -337,7 +337,7 @@ class DashboardController extends Controller
         $month = $currentYearMonth[1];
 
         $unit_id = \Auth::user()->employee->unit_id;
-        $leaveTypes = LeaveType::select('name','id')
+        $leaveTypes = LeaveType::select('name','id','is_earned')
                                 ->where('status','active')
                                 ->where(function($query){
                                     $query->where('gender','all')
@@ -386,7 +386,13 @@ class DashboardController extends Controller
 
             $leaveTaken = $fullLeaveTaken + 0.5 * $halfLeaveTaken;
 
-            if($leaveType->id != '2' && $leaveType->id != '13' && $leaveType->id != '6' && $leaveType->id != '10'){
+            // if($leaveType->id != '2' && $leaveType->id != '13' && $leaveType->id != '6' && $leaveType->id != '10'){
+            //     $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
+            // }else{
+            //     $acquiredLeave = $allowedLeave;
+            // }
+
+            if($leaveType->is_earned == 1){
                 $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
             }else{
                 $acquiredLeave = $allowedLeave;

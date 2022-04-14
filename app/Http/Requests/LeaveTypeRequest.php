@@ -28,6 +28,7 @@ class LeaveTypeRequest extends FormRequest
             'gender' => 'required|string',
             'paid_unpaid'=>'required|integer',
             'include_holiday'=>'required|integer',
+            'is_earned' => 'required|integer',
             'status' => 'required|string'
         ];
     }

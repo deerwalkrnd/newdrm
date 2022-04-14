@@ -72,9 +72,26 @@
                 <input class="form-check-input" type="checkbox" name="include_holiday" id="include_holiday" value="1" 
                 {{ (isset($leaveType) && $leaveType->include_holiday == '1') ? 'checked':'' }}
                 {{ old('include_holiday') == '1' ? 'checked':'' }}>
-                <label class="form-label" class="form-check-label" for="female_only">Include Holiday Status</label>
+                <label class="form-label" class="form-check-label" for="include_holiday">Include Holiday Status</label>
             </div>
             @error('include_holiday')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <div class="form-check form-check-inline">
+                <input type="hidden" name="is_earned" value="0">
+                <input class="form-check-input" type="checkbox" name="is_earned" id="is_earned" value="1" 
+                {{ (isset($leaveType) && $leaveType->is_earned == '1') ? 'checked':'' }}
+                {{ old('is_earned') == '1' ? 'checked':'' }}>
+                <label class="form-label" class="form-check-label" for="is_earned">Need To Earn</label>
+            </div>
+            @error('is_earned')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>
