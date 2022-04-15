@@ -36,10 +36,10 @@ class AppServiceProvider extends ServiceProvider
             * To overcome this situation, we set the TMPDIR environment variable to a new value.
         */
         
-        if (class_exists('Swift_Preferences')) {
-            \Swift_Preferences::getInstance()->setTempDir(storage_path().'/tmp');
-        } else {
-            \Log::warning('Class Swift_Preferences does not exists');
-        }
+        // if (class_exists('Swift_Preferences')) {
+        //     \Swift_Preferences::getInstance()->setTempDir(storage_path().'/tmp');
+        // } else {
+        //     \Log::warning('Class Swift_Preferences does not exists');
+        // }
     }
 }
