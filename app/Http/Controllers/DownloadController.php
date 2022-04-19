@@ -64,7 +64,7 @@ class DownloadController extends Controller
         foreach($leaveTypes as $leaveType){
             array_push($columns,$leaveType->name.' Acquired',$leaveType->name.' Allowed',$leaveType->name.' Taken',$leaveType->name.' Balance');
         }               
-        array_push($columns,'Unpaid Total Leave Taken');
+        array_push($columns,'Unpaid Total Leave Taken','Exceeded Total Leave Days');
 
         $callback = function() use($records, $columns,$leaveTypes) {
             $file = fopen('php://output', 'w');
@@ -88,12 +88,14 @@ class DownloadController extends Controller
                     }
                 }
                 $row['Unpaid Total Leave Taken']  = $record['total_unpaid_leaves'];
+                $row['Exceeded Total Leave Days'] = $record['exceeded_leave_days'];
                 $data = array($row['Employee'], $row['Year'], $row['Unit']);
 
                 foreach($leaveTypes as $leaveType){
                     array_push($data,$row[$leaveType->name.' Acquired'],$row[$leaveType->name.' Allowed'],$row[$leaveType->name.' Taken'],$row[$leaveType->name.' Balance']);
                 }               
                 array_push($data,$row['Unpaid Total Leave Taken']);
+                array_push($data,$row['Exceeded Total Leave Days']);
                 fputcsv($file, $data);
             }
 

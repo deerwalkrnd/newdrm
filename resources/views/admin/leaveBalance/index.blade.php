@@ -69,6 +69,7 @@
             @endforeach
             <th scope="col" colspan=1>Unpaid</th>
             <th scope="col" colspan=2>Carry Over</th>
+            <th scope="col" colspan=2>Exceeded</th>
         </tr>
         <tr class="table_title" style="background-color: #0f5288;">
             @for($i = $leaveTypesCount; $i>0; $i--)
@@ -80,6 +81,7 @@
             <th>Total Taken</th>
             <th>A</th>
             <th>T</th>
+            <th>Total Leave Days</th>
         </tr>
     </thead>
     <tbody>
@@ -125,6 +127,9 @@
                     <td>0.0</td>
                     <td>0.0</td>
                 @endif
+                <!-- Sum of Negative Leaves -->
+                <td>{{$record['exceeded_leave_days']}}</td>
+
             </tr>
         @endforeach
     </tbody>    

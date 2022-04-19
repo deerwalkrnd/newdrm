@@ -139,6 +139,7 @@ class LeaveReportController extends Controller
             }
             for($year=$start_year; $year <= $end_year; $year++)
             {
+                $temp['exceeded_leave_days'] = 0;
                 $temp['leaves']['year'] = $year;
                 foreach($leaveTypes as $type)
                 {
@@ -150,6 +151,10 @@ class LeaveReportController extends Controller
                             'taken' => $leaveTypeBalance['taken'],
                             'balance' => $leaveTypeBalance['balance']
                         ];
+                        
+                        if($temp['leaves'][$type->name]['balance'] < 0){    //check if employee has exceeded leave days
+                            $temp['exceeded_leave_days'] += $leaveTypeBalance['balance'];
+                        }
                        
                     }elseif(strtolower($type->gender) == 'female' && strtolower($employee->gender) == 'female'){
                         $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);                        
@@ -159,6 +164,11 @@ class LeaveReportController extends Controller
                             'taken' => $leaveTypeBalance['taken'],
                             'balance' => $leaveTypeBalance['balance']
                         ];
+                        
+                        if($temp['leaves'][$type->name]['balance'] < 0){        //check if employee has exceeded leave days
+                            $temp['exceeded_leave_days'] += $leaveTypeBalance['balance'];
+                        }
+
                     }elseif(strtolower($type->gender) == 'all'){
                         $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
                         $temp['leaves'][$type->name]= [
@@ -167,7 +177,12 @@ class LeaveReportController extends Controller
                             'taken' => $leaveTypeBalance['taken'],
                             'balance' => $leaveTypeBalance['balance']
                         ];
+
+                         if($temp['leaves'][$type->name]['balance'] < 0){       //check if employee has exceeded leave days
+                            $temp['exceeded_leave_days'] += $leaveTypeBalance['balance'];
+                        }
                     }
+
                 }
                 $total_unpaid_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance','employee_id')
                                         ->where('acceptance','accepted')
@@ -177,7 +192,7 @@ class LeaveReportController extends Controller
                                             $query->where('paid_unpaid','1');
                                         })
                                         ->sum('days');
-                
+            
                 $temp['total_unpaid_leaves'] = $total_unpaid_leaves;
                 array_push($records,$temp);
             }         
