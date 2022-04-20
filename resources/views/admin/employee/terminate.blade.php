@@ -42,7 +42,7 @@
 
 @include('layouts.basic.tableHead',["table_title" => "Terminated Employee List"])
 
-<div class="row m-5">
+<div class="row m-5 d-flex aligns-items-center justify-content-center ">
     <div class="col-md-5">
         <!-- <label class="form-label" for="unit_id">Unit: </label> -->
         <select class="form-control p-2" name="unit_id" onchange="search()" id="unit_id" data-placeholder="-- Choosee Unit --">
@@ -55,14 +55,14 @@
             @endforeach
         </select>
     </div> 
-    <div class="col-md-7 mt-1">
-        <div >
+    <!-- <div class="col-md-7 mt-1"> -->
+        <div class="col-md-1 ml-3">
             <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;width:100px;">Reset</button>
         </div>
-        <div>
+        <div class="col-md-1">
             <a href="{{ '/download/employee/terminate?'.request()->getQueryString() }}"  id="export" class="btn btn-success border-0 text-white" style="float:right;width:100px;">Export</a>
         </div>
-    </div>
+    <!-- </div> -->
 </div>
 
 <table class="unit_table mx-auto drmDataTable">
