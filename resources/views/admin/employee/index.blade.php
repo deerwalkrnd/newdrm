@@ -24,15 +24,13 @@
             @endforeach
         </select>
     </div> 
-<!--<div class="col-md-7 mt-4"> -->
-        <div class="col-md-1 mt-1">
-            <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;width:100px;">Reset</button>
-        </div>
-        <div class="col-md-1 mt-1">
-            <a href="{{ '/download/employee?'.request()->getQueryString() }}"  id="export" class="btn btn-success border-0 text-white" style="float:right;width:100px;">Export</a>
-        </div>
-     
-    <!-- </div> -->
+
+    <div class="col-md-1 mt-1">
+        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;width:100px;">Reset</button>
+    </div>
+    <div class="col-md-1 mt-1">
+        <a href="{{ '/download/employee?'.request()->getQueryString() }}"  id="export" class="btn btn-success border-0 text-white" style="float:right;width:100px;">Export</a>
+    </div>
 </div>
 
 <table class="unit_table mx-auto drmDataTable">

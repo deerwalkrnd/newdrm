@@ -154,4 +154,49 @@ class DownloadController extends Controller
         // $callback();
         return response()->stream($callback, 200, $headers);
     }
+
+    public function exportTerminatedEmployeeList(Request $request){
+        $employeeController = new EmployeeController();
+        $employees = $employeeController->terminated($request,$download=1);
+        // dd($employees);
+        // $employees = $employeeDetails[0];
+        // $join_year = $employeeDetails[1];
+
+        $fileName = 'TerminatedEmployeeList.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+        $columns = array('Employee Name', 'Position', 'Manager','Join Date','Terminated Date');
+
+        $callback = function() use($employees, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+            $row=[];
+            $i=0;
+            foreach ($employees as $employee) {
+                // dd($employee->unit->name);
+                $row['Employee Name']  = $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name;
+                $row['Position'] = $employee->designation->job_title_name;
+                
+                if($employee->manager != NULL)
+                    $row['Manager'] = $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name;
+                else
+                    $row['Manager'] = 'N/A';
+                
+                $row['Join Date'] = $employee->join_date;
+                
+                $row['Terminated Date'] = $employee->terminated_date;
+                
+                $data = array($row['Employee Name'],$row['Position'], $row['Manager'], $row['Join Date'], $row['Terminated Date']);
+                fputcsv($file, $data);
+            }
+            fclose($file);
+        };
+        // $callback();
+        return response()->stream($callback, 200, $headers);
+    }
 }

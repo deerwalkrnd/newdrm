@@ -407,16 +407,24 @@ class EmployeeController extends Controller
         return view('admin.employee.profile')->with('employee',$employee);
     }
 
-    public function terminated()
+    public function terminated(Request $request,$download=0)
     {
         $terminatedEmployees = Employee::select('id','first_name','last_name','middle_name','manager_id', 'designation_id','terminated_date','join_date')
                     ->where('contract_status','terminated')
                     ->with('designation')
                     ->with('manager:id,first_name,last_name,middle_name')
-                    ->orderBy('terminated_date','desc')
-                    ->get();
-       
-        return view('admin.employee.terminate')->with(compact('terminatedEmployees'));
+                    ->orderBy('terminated_date','desc');
+                    // ->get();
+        if($request->u)
+            $terminatedEmployees = $terminatedEmployees->where('unit_id',$request->u);
+        
+        $terminatedEmployees = $terminatedEmployees->get();
+        $units = Unit::select('id','unit_name')->get();
+        
+        if($download == 1)
+            return $terminatedEmployees;
+        else
+            return view('admin.employee.terminate')->with(compact('terminatedEmployees','units'));
     }
 
     public function terminate(Request $request)

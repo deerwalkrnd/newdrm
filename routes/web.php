@@ -191,6 +191,7 @@ Route::middleware(['hr'])->group(function(){
     Route::post('/employee/terminate',[EmployeeController::class, 'terminate']);
     //Download Active Employee Report
     Route::get('/download/employee', [DownloadController::class, 'exportEmployeeList']);
+    Route::get('/download/employee/terminate', [DownloadController::class, 'exportTerminatedEmployeeList']);
     
 
     // service type route
