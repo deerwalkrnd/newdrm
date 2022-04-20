@@ -43,7 +43,7 @@
 @include('layouts.basic.tableHead',["table_title" => "Terminated Employee List"])
 
 <div class="row m-5 d-flex aligns-items-center justify-content-center ">
-    <div class="col-md-5">
+    <div class="col-md-4">
         <!-- <label class="form-label" for="unit_id">Unit: </label> -->
         <select class="form-control p-2" name="unit_id" onchange="search()" id="unit_id" data-placeholder="-- Choosee Unit --">
             <option value="0"  selected disabled class="text-center">----------   Choose Unit   -----------</option>
