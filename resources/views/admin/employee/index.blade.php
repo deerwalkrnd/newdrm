@@ -11,7 +11,7 @@
 
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => "Employee List", "url" => "/employee/create"])
-<div class="row mb-5 m-1">
+<div class="row m-4 d-flex aligns-items-center justify-content-center ">
     <div class="col-md-5">
         <!-- <label class="form-label" for="unit_id">Unit: </label> -->
         <select class="form-control p-2" name="unit_id" onchange="search()" id="unit_id" data-placeholder="-- Choosee Unit --">
@@ -25,10 +25,10 @@
         </select>
     </div> 
 
-    <div class="col-md-1 mt-1">
+    <div class="col-md-1 ml-1">
         <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;width:100px;">Reset</button>
     </div>
-    <div class="col-md-1 mt-1">
+    <div class="col-md-1">
         <a href="{{ '/download/employee?'.request()->getQueryString() }}"  id="export" class="btn btn-success border-0 text-white" style="float:right;width:100px;">Export</a>
     </div>
 </div>
