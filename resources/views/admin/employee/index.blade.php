@@ -11,6 +11,30 @@
 
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => "Employee List", "url" => "/employee/create"])
+<div class="row mb-5 m-1">
+    <div class="col-md-5">
+        <!-- <label class="form-label" for="unit_id">Unit: </label> -->
+        <select class="form-control p-2" name="unit_id" onchange="search()" id="unit_id" data-placeholder="-- Choosee Unit --">
+            <option value="0"  selected disabled class="text-center">----------   Choose Unit   -----------</option>
+            @foreach($units as $unit)
+                <option value="{{$unit->id}}"
+                    {{ (!empty(old('unit_id')) && old('unit_id') == $unit->id) ? 'selected': ''}}
+                    {{ ((request()->get('u')) && (request()->get('u')) == $unit->id && empty(old('unit_id'))) ? 'selected' : ''}}>{{ $unit->unit_name }}
+                </option>
+            @endforeach
+        </select>
+    </div> 
+<!--<div class="col-md-7 mt-4"> -->
+        <div class="col-md-1 mt-1">
+            <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;width:100px;">Reset</button>
+        </div>
+        <div class="col-md-1 mt-1">
+            <a href="{{ '/download/employee?'.request()->getQueryString() }}"  id="export" class="btn btn-success border-0 text-white" style="float:right;width:100px;">Export</a>
+        </div>
+     
+    <!-- </div> -->
+</div>
+
 <table class="unit_table mx-auto drmDataTable">
     <thead>
     <tr class="table_title" style="background-color: #0f5288;">
@@ -95,5 +119,19 @@
             table.column(1).search(searchTerm).draw();
         });
     })
+
+
+    function reset(){
+        $(location).attr('href','/employee');
+    }
+
+    //Search Unit wise
+    function search(){
+        console.log('here');
+        let unit_id = $("#unit_id").val();
+        console.log(unit_id);
+        if(unit_id)
+            $(location).attr('href','/employee?u='+unit_id);
+    };
 </script>
 @endsection

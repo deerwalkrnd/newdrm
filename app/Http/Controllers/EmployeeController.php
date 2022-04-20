@@ -36,24 +36,31 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request,$download=0)
     {
+        // $request->u => unit_id
         $date= date('Y-m-d');
         $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date')
-        ->with('designation:id,job_title_name')
-        ->with('organization:id,name')
-        ->with('unit:id,unit_name')
-        ->with('department:id,name,unit_id')
-        ->with('serviceType:id,service_type_name')
-        // ->with('attendances:id,employee_id,punch_in_time,created_at')
-        ->where('contract_status','active')
-        ->withCount(['attendances'=>function ($query) use ($date) {
-            $query->whereDate('punch_in_time', $date);
-        }])
-        ->orderBy('first_name') 
-        ->orderBy('last_name')
-        ->get();
+                                ->with('designation:id,job_title_name')
+                                ->with('organization:id,name')
+                                ->with('unit:id,unit_name')
+                                ->with('department:id,name,unit_id')
+                                ->with('serviceType:id,service_type_name')
+                                // ->with('attendances:id,employee_id,punch_in_time,created_at')
+                                ->where('contract_status','active')
+                                ->withCount(['attendances'=>function ($query) use ($date) {
+                                    $query->whereDate('punch_in_time', $date);
+                                }])
+                                ->orderBy('first_name') 
+                                ->orderBy('last_name');
+                                // ->get();
+        if($request->u)
+            $employees = $employees->where('unit_id',$request->u);
+        
+        $employees = $employees->get();
+
         $join_year =[];
+
         foreach ($employees as $employee){
             try{
                 $date = new NepaliCalendarHelper($employee->join_date,1);
@@ -70,13 +77,13 @@ class EmployeeController extends Controller
             'message' => 'Employee has been successfully Created ',
             'icon' => 'success'
         ];
-        
-        // dd($employees[0]->attendances->last()->punch_in_time != date('Y-m-d'));
-
-        // dd($employees);
-        // dd($employee->department);->with(['code' => $this->verificationCode]);
+        $units = Unit::select('id','unit_name')->get();
         $code = 'OXqSTexF5zn4uXSp';
-        return view('admin.employee.index')->with(compact('employees','join_year','res','code'));
+
+        if($download == 1)
+            return [$employees,$join_year];
+        else
+            return view('admin.employee.index')->with(compact('employees','join_year','res','code','units'));
     }
 
     /**
