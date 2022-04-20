@@ -41,6 +41,30 @@
 
 
 @include('layouts.basic.tableHead',["table_title" => "Terminated Employee List"])
+
+<div class="row m-5">
+    <div class="col-md-5">
+        <!-- <label class="form-label" for="unit_id">Unit: </label> -->
+        <select class="form-control p-2" name="unit_id" onchange="search()" id="unit_id" data-placeholder="-- Choosee Unit --">
+            <option value="0"  selected disabled class="text-center">----------   Choose Unit   -----------</option>
+            @foreach($units as $unit)
+                <option value="{{$unit->id}}"
+                    {{ (!empty(old('unit_id')) && old('unit_id') == $unit->id) ? 'selected': ''}}
+                    {{ ((request()->get('u')) && (request()->get('u')) == $unit->id && empty(old('unit_id'))) ? 'selected' : ''}}>{{ $unit->unit_name }}
+                </option>
+            @endforeach
+        </select>
+    </div> 
+    <div class="col-md-7 mt-1">
+        <div >
+            <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;width:100px;">Reset</button>
+        </div>
+        <div>
+            <a href="{{ '/download/employee/terminate?'.request()->getQueryString() }}"  id="export" class="btn btn-success border-0 text-white" style="float:right;width:100px;">Export</a>
+        </div>
+    </div>
+</div>
+
 <table class="unit_table mx-auto drmDataTable">
     <thead>
     <tr class="table_title" style="background-color: #0f5288;">
@@ -115,5 +139,18 @@
         let employee = document.getElementById('employee_id').innerText;
         return (confirm('Do you want to terminate?') && prompt('Enter Employee\'s Name to be Terminated') === employee);
     }
+
+    function reset(){
+        $(location).attr('href','/employee/terminate');
+    }
+
+    //Search Unit wise
+    function search(){
+        console.log('here');
+        let unit_id = $("#unit_id").val();
+        console.log(unit_id);
+        if(unit_id)
+            $(location).attr('href','/employee/terminate?u='+unit_id);
+    };
 </script>
 @endsection

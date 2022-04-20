@@ -189,6 +189,10 @@ Route::middleware(['hr'])->group(function(){
     Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
     Route::get('/employee/terminate',[EmployeeController::class, 'terminated']);
     Route::post('/employee/terminate',[EmployeeController::class, 'terminate']);
+    //Download Active Employee Report
+    Route::get('/download/employee', [DownloadController::class, 'exportEmployeeList']);
+    Route::get('/download/employee/terminate', [DownloadController::class, 'exportTerminatedEmployeeList']);
+    
 
     // service type route
     Route::get('/serviceType/create',[ServiceTypeController::class, 'create']);
