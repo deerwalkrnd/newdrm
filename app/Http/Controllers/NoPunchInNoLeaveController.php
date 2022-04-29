@@ -40,7 +40,8 @@ class NoPunchInNoLeaveController extends Controller
                         })
                         ->whereDoesntHave('leaveRequest', function($query) use ($date){
                             $query->whereDate('start_date','<=',$date)
-                                    ->whereDate('end_date','>=',$date);
+                                    ->whereDate('end_date','>=',$date)
+                                    ->where('acceptance','accepted');
                         });
 
         if($weekDay == 'SAT' || $weekDay == 'SUN' || $isHoliday){
