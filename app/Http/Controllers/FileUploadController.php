@@ -150,7 +150,7 @@ class FileUploadController extends Controller
 
         if((\Auth::user()->role->authority == "hr") || ($employee_id  == \Auth::user()->employee_id ))
         {
-            if(file_exists($path))
+            if(Storage::exists($path))
             {
                 Storage::delete($path);
             }

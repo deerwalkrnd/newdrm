@@ -135,7 +135,7 @@
     </tbody>    
 </table>
 </div>
-{{ $employees->links() }}
+{{ $employees->appends(Request::except('page'))->links() }}
 
 @include('layouts.basic.tableFoot')
 @endsection

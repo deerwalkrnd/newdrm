@@ -56,9 +56,9 @@ class LeaveRequestController extends Controller
         // dd($leaveRequests->get());
 
         if($request->d){
-            $leaveRequests = $leaveRequests->where('start_date',$request->d)->paginate(30);
+            $leaveRequests = $leaveRequests->where('start_date',$request->d)->paginate(30)->withQueryString();
         }else{
-            $leaveRequests = $leaveRequests->orderBy('start_date')->paginate(30);
+            $leaveRequests = $leaveRequests->orderBy('start_date')->paginate(30)->withQueryString();
         }
 
         $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
@@ -428,7 +428,7 @@ class LeaveRequestController extends Controller
                                         })
                                         ->where('reason','Forced (System)')
                                         ->orderBy('end_date','desc')
-                                        ->paginate(20); 
+                                        ->paginate(20);
         }else{
             return abort('403');
         }

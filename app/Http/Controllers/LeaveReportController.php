@@ -68,7 +68,7 @@ class LeaveReportController extends Controller
             if($download==1)
                 $employees = $employees->get();
             else
-                $employees = $employees->paginate(3);
+                $employees = $employees->paginate(10)->withQueryString();
 
             $employeeSearch = Employee::select('id','first_name','middle_name','last_name','unit_id')
                                         ->where('id',$request->e)
@@ -82,7 +82,7 @@ class LeaveReportController extends Controller
             if($download==1)
                 $employees = $employees->get();
             else
-                $employees = $employees->paginate(3);    
+                $employees = $employees->paginate(10)->withQueryString(); 
         }
         else if($request->e != NULL){       //search by only employee_id
             $employees = Employee::where('contract_status','active')
@@ -91,7 +91,7 @@ class LeaveReportController extends Controller
             if($download==1)
                 $employees = $employees->get();
             else
-                $employees = $employees->paginate(3);
+                $employees = $employees->paginate(10)->withQueryString();
 
             $employeeSearch = Employee::select('id','first_name','middle_name','last_name','unit_id')
                                         ->where('id',$request->e)
@@ -104,14 +104,14 @@ class LeaveReportController extends Controller
             if($download==1)
                 $employees = $employees->get();
             else
-                $employees = $employees->paginate(3);
+                $employees = $employees->paginate(10)->withQueryString();
         }
         else{
             $employees = Employee::where('contract_status','active')->with('unit:id,unit_name');
             if($download==1)
                 $employees = $employees->get();
             else
-                $employees = $employees->paginate(10);
+                $employees = $employees->paginate(3)->withQueryString();
         }
 
         $leaveTypes = LeaveType::select('name','id','gender')->where('status','active')->get();
@@ -280,7 +280,7 @@ class LeaveReportController extends Controller
                                     ->whereDate('end_date', '>=', $date)
                                     ->whereDate('start_date','<=',$date)        
                                     ->get();
-        return view('admin.report.employeesOnLeave')->with(compact('acceptedRequests'));;
+        return view('admin.report.employeesOnLeave')->with(compact('acceptedRequests'));
     }
 
     public function noPunchInNoLeave(Request $request)

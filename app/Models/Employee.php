@@ -111,7 +111,7 @@ class Employee extends Model
     }
 
     public function attendances(){
-        return $this->hasMany(Attendance::class,'employee_id','id')->orderBy('punch_in_time');
+        return $this->hasMany(Attendance::class,'employee_id','id')->orderBy('punch_in_time','desc');
     }
     public function province(){
         return $this->hasOne(Province::class,'id','permanent_address');

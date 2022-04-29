@@ -51,8 +51,12 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
+        // $(document).ready(function() {
+        //     $('.drmDataTable').DataTable();
+        // })
         $('.drmDataTable').DataTable({
-            "bPaginate": false
+            "bPaginate": false,
+            "searching":true
         });
     })
 
