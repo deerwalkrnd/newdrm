@@ -117,7 +117,7 @@ class DashboardController extends Controller
 
     private function isHoliday()
     {
-        if(strtolower(date('D')) == 'sat' || strtolower(date('D') == 'sun'))
+        if(strtolower(date('D')) == 'sat' || strtolower(date('D')) == 'sun')
         {
             return true;            
         }else{
