@@ -5,6 +5,26 @@
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => $table_title])
 
+<div class="row">
+    <div class="col-md-4">
+        <label class="form-label" for="employee_id">Employee:</label>
+        <select class="employee-livesearch form-control p-3" onchange="search()"  name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
+            @if(isset($employeeSearch))
+                <option value="{{ request()->get('e') ?? request()->get('e') }}" 
+                selected="selected">{{ $employeeSearch->first_name.' '.$employeeSearch->middle_name.' '.$employeeSearch->last_name }}</option>
+            @endif
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="date">Date: </label>
+        <input class="form-control p-2"  type="date" name="date" id="date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
+    </div> 
+    <div class="col-md-4">
+        <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;">Reset</button>
+    </div>
+</div>
+
+<br>
 <table class="unit_table mx-auto drmDataTable">
     <thead>
      <tr class="table_title" style="background-color: #0f5288;">
@@ -78,29 +98,33 @@
         });
     })
 
-     //Search leave by date 
-    function search(){
-        let date = $('#date').val();
-        if(date)
-            $(location).attr('href','/leave-request/approve?d='+date);
-    }
+    //  //Search leave by date 
+    // function search(){
+    //     let date = $('#date').val();
+    //     if(date)
+    //         $(location).attr('href','/leave-request/approve?d='+date);
+    // }
 
     function reset(){
         $(location).attr('href','/leave-request/approve');
     }
 
-
     //Search by date or Employee
-    // function search(){
-    //     let date = $('#punch_date').val();
-    //     let employee_id = $('#employee_id').val();
-    //     console.log(employee_id);
-    //     if(date)
-    //         $(location).attr('href','/punch-in-detail?d='+date);
-    //     if(employee_id)
-    //         $(location).attr('href','/punch-in-detail?e='+employee_id);
+    function search(){
+        let date = $('#date').val();
+        let employee_id = $('#employee_id').val();
+        console.log(employee_id);
+        if(date && employee_id)
+            $(location).attr('href','/leave-request/details?d='+date+'&e='+employee_id);
+        else if(date)
+            $(location).attr('href','/leave-request/details?d='+date);
+        else if(employee_id)
+            $(location).attr('href','/leave-request/details?e='+employee_id);
+    }
 
-    // }
+    function reset(){
+        $(location).attr('href','/leave-request/details');
+    }
 
     $('.employee-livesearch').select2({    
         ajax: {

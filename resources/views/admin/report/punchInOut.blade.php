@@ -10,11 +10,10 @@
     <div class="col-md-4">
         <label class="form-label" for="employee_id">Employee:</label>
         <select class="employee-livesearch form-control p-3" onchange="search()"  name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
-            @if(!empty(old('employee_id')))
-                <option value="{{ request()->get('e') }}" selected="selected">{{ old('$employeeSearch->first_name') }}</option>
-            @elseif(isset($employeeSearch) && !empty($employeeSearch->id))
-                <option value="{{ $employeeSearch->id }}" selected="selected">{{ $employeeSearch->first_name }}</option>
-            @endif
+            @if(isset($employeeSearch))
+                <option value="{{ request()->get('e') ?? request()->get('e') }}" 
+                selected="selected">{{ $employeeSearch->first_name.' '.$employeeSearch->middle_name.' '.$employeeSearch->last_name }}</option>
+            @endif   
         </select>
     </div>
     <div class="col-md-4">
@@ -102,9 +101,11 @@
         let date = $('#punch_date').val();
         let employee_id = $('#employee_id').val();
         console.log(employee_id);
-        if(date)
+        if(date && employee_id)
+            $(location).attr('href','/punch-in-detail?d='+date+'&e='+employee_id);
+        else if(date)
             $(location).attr('href','/punch-in-detail?d='+date);
-        if(employee_id)
+        else if(employee_id)
             $(location).attr('href','/punch-in-detail?e='+employee_id);
 
     }

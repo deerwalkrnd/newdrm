@@ -45,25 +45,28 @@ class LeaveRequestController extends Controller
 
     public function leaveDetail(Request $request)
     {
+        // dd($request->d);
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
         ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
         ->with('accepted_by_detail:id,first_name,last_name')
         ->where('acceptance','accepted')
-        // ->orWhere('acceptance','rejected')
         ->orderBy('start_date','desc')
         ->orderBy('created_at')
         ->orderBy('updated_at');
-        // dd($leaveRequests->get());
 
-        if($request->d){
+        if($request->e && $request->d)
+            $leaveRequests = $leaveRequests->where('start_date',$request->d)->where('employee_id',$request->e)->paginate(30)->withQueryString();
+        else if($request->e)
+            $leaveRequests = $leaveRequests->where('employee_id',$request->e)->paginate(30)->withQueryString();
+        else if($request->d)
             $leaveRequests = $leaveRequests->where('start_date',$request->d)->paginate(30)->withQueryString();
-        }else{
+        else
             $leaveRequests = $leaveRequests->orderBy('start_date')->paginate(30)->withQueryString();
-        }
-
-        $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->where('contract_status','active')->get();
-        $table_title = 'Employee Leave Details Lists';
         
+
+        $employeeSearch = Employee::select('id','first_name','middle_name','last_name')->where('id',$request->e)->where('contract_status','active')->first();
+        $table_title = 'Employee Leave Details Lists';
+        // dd($employeeSearch);
         return view('admin.leaveRequest.leave_details')->with(compact('leaveRequests','table_title','employeeSearch'));
     }
 
