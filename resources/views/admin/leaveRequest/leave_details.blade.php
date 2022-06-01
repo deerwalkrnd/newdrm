@@ -17,7 +17,7 @@
     </div>
     <div class="col-md-3">
         <label class="form-label" for="start_date">Start Date: </label>
-        <input class="form-control p-2"  type="date" name="start_date" id="start_date"  value="{{ request()->get('sd') ?? request()->get('sd') }}" >
+        <input class="form-control p-2"  type="date" name="start_date" id="start_date" onchange="search()"  value="{{ request()->get('sd') ?? request()->get('sd') }}" >
     </div> 
      <div class="col-md-3">
         <label class="form-label" for="end_date">End Date: </label>
