@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-3">
         <label class="form-label" for="employee_id">Employee:</label>
-        <select class="employee-livesearch form-control p-3" onchange="search()"  name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
+        <select class="employee-livesearch form-control p-3" name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
             @if(isset($employeeSearch))
                 <option value="{{ request()->get('e') ?? request()->get('e') }}" 
                 selected="selected">{{ $employeeSearch->first_name.' '.$employeeSearch->middle_name.' '.$employeeSearch->last_name }}</option>
@@ -17,13 +17,17 @@
     </div>
     <div class="col-md-3">
         <label class="form-label" for="start_date">Start Date: </label>
-        <input class="form-control p-2"  type="date" name="start_date" id="start_date" onchange="search()"  value="{{ request()->get('sd') ?? request()->get('sd') }}" >
+        <input class="form-control p-2"  type="date" name="start_date" id="start_date" value="{{ request()->get('sd') ?? request()->get('sd') }}" >
     </div> 
      <div class="col-md-3">
         <label class="form-label" for="end_date">End Date: </label>
-        <input class="form-control p-2"  type="date" name="end_date" id="end_date" onchange="search()" value="{{ request()->get('ed') ?? request()->get('ed') }}" >
+        <input class="form-control p-2"  type="date" name="end_date" id="end_date" value="{{ request()->get('ed') ?? request()->get('ed') }}" >
     </div> 
-    <div class="col-md-3">
+    <div class="col-md-1">
+        <br>
+        <button class="btn border-0 mt-2 text-white bg-success" onclick="search()" style="float:right;">Search</button>
+    </div>
+    <div class="col-md-2">
         <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;">Reset</button>
     </div>
 </div>
