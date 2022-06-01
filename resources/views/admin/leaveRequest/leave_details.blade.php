@@ -6,7 +6,7 @@
 @include('layouts.basic.tableHead',["table_title" => $table_title])
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label class="form-label" for="employee_id">Employee:</label>
         <select class="employee-livesearch form-control p-3" onchange="search()"  name="employee_id" id="employee_id" data-placeholder="-- Choose Employee --">
             @if(isset($employeeSearch))
@@ -15,16 +15,20 @@
             @endif
         </select>
     </div>
-    <div class="col-md-4">
-        <label class="form-label" for="date">Date: </label>
-        <input class="form-control p-2"  type="date" name="date" id="date" onchange="search()" value="{{ request()->get('d') ?? request()->get('d') }}" >
+    <div class="col-md-3">
+        <label class="form-label" for="start_date">Start Date: </label>
+        <input class="form-control p-2"  type="date" name="start_date" id="start_date"  value="{{ request()->get('sd') ?? request()->get('sd') }}" >
     </div> 
-    <div class="col-md-4">
+     <div class="col-md-3">
+        <label class="form-label" for="end_date">End Date: </label>
+        <input class="form-control p-2"  type="date" name="end_date" id="end_date" onchange="search()" value="{{ request()->get('ed') ?? request()->get('ed') }}" >
+    </div> 
+    <div class="col-md-3">
         <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;">Reset</button>
     </div>
 </div>
 
-<br>
+<br><br>
 <table class="unit_table mx-auto drmDataTable">
     <thead>
      <tr class="table_title" style="background-color: #0f5288;">
@@ -96,6 +100,7 @@
         $('.drmDataTable').DataTable({
             "bPaginate": false
         });
+        $('.dataTables_filter').hide();
     })
 
     //  //Search leave by date 
@@ -111,13 +116,14 @@
 
     //Search by date or Employee
     function search(){
-        let date = $('#date').val();
+        let start_date = $('#start_date').val();
+        let end_date = $('#end_date').val();
         let employee_id = $('#employee_id').val();
-        console.log(employee_id);
-        if(date && employee_id)
-            $(location).attr('href','/leave-request/details?d='+date+'&e='+employee_id);
-        else if(date)
-            $(location).attr('href','/leave-request/details?d='+date);
+        // console.log(employee_id);
+        if(end_date && start_date && employee_id)
+            $(location).attr('href','/leave-request/details?sd='+start_date+'&ed='+end_date+'&e='+employee_id);
+        else if(end_date && start_date)
+            $(location).attr('href','/leave-request/details?sd='+start_date+'&ed='+end_date);
         else if(employee_id)
             $(location).attr('href','/leave-request/details?e='+employee_id);
     }
