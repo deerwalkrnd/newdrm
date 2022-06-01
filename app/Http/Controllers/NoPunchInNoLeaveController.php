@@ -35,6 +35,7 @@ class NoPunchInNoLeaveController extends Controller
         $employees = Employee::select('id','first_name','last_name','middle_name','unit_id','gender','contract_status','manager_id','unit_id')
                         ->with('manager:id,first_name,last_name,middle_name')
                         ->where('contract_status','active')
+                        ->where('join_date','<=',date('Y-m-d'))
                         ->whereDoesntHave('attendances', function ($query) use ($date) {
                             $query->whereDate('created_at', $date);
                         })
