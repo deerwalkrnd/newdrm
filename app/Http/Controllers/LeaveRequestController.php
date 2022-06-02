@@ -58,12 +58,20 @@ class LeaveRequestController extends Controller
             $leaveRequests = $leaveRequests->whereDate('start_date','>=',$request->sd)
                                 ->whereDate('end_date','<=',$request->ed)
                                 ->where('employee_id',$request->e)->paginate(30)->withQueryString();
-        else if($request->e)
-            $leaveRequests = $leaveRequests->where('employee_id',$request->e)->paginate(30)->withQueryString();
         else if($request->sd && $request->ed)
             $leaveRequests =$leaveRequests->whereDate('start_date','>=',$request->sd)
                                 ->whereDate('end_date','<=',$request->ed)   
                                 ->paginate(30)->withQueryString();
+        else if($request->e && $request->sd)
+            $leaveRequests = $leaveRequests->where('employee_id',$request->e)
+                                ->whereDate('start_date',$request->sd)
+                                ->paginate(30)->withQueryString();
+        else if($request->e && $request->ed)
+            $leaveRequests = $leaveRequests->where('employee_id',$request->e)
+                                ->whereDate('end_date',$request->ed)  
+                                ->paginate(30)->withQueryString();
+        else if($request->e)
+            $leaveRequests = $leaveRequests->where('employee_id',$request->e)->paginate(30)->withQueryString();
         else
             $leaveRequests = $leaveRequests->orderBy('start_date')->paginate(30)->withQueryString();
         
