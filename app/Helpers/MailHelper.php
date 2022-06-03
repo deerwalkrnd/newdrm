@@ -53,15 +53,33 @@ class MailHelper{
                                 ->get();
         
         foreach($attendances as $attendance){
-            $employee_name = $attendance->employee->first_name.' '.$attendance->employee->middle_name.' '.$attendance->employee->last_name;
-            $ccList =  MailHelper::getHrEmail();
-            array_push($ccList,MailHelper::getManagerEmail($attendance->employee_id));
-            Mail::to($attendance->employee->email)
-                ->cc($ccList)
-                ->queue(new MissedPunchOutMail($employee_name));
+             try{
+                $LeaveRequests = LeaveRequest::create([
+                    'employee_id' => $attendance->employee_id,
+                    'start_date' => date('Y-m-d'),
+                    'end_date' => date('Y-m-d'),
+                    'days' => '1',
+                    'year' => (new self)->getNepaliYear(date('Y-m-d')),
+                    'leave_type_id' => '1',
+                    'full_leave' => '0',
+                    'half_leave' => 'second',
+                    'reason' => 'Forced (System) Missed Punch Out',
+                    'acceptance' => 'accepted',
+                    'requested_by' => \Auth::user()->employee_id,
+                    'accepted_by' => NULL
+                ]);
 
-                // ->cc(MailHelper::getManagerEmail($attendance->employee_id))
-                // ->cc(MailHelper::getHrEmail())
+                $employee_name = $attendance->employee->first_name.' '.$attendance->employee->middle_name.' '.$attendance->employee->last_name;
+                $ccList =  MailHelper::getHrEmail();
+                array_push($ccList,MailHelper::getManagerEmail($attendance->employee_id));
+                
+                Mail::to($attendance->employee->email)
+                    ->cc($ccList)
+                    ->queue(new MissedPunchOutMail($employee_name));
+            }catch(\Exception $e){
+                dd($e);
+                redirect()->back()->with('error',$e->getMessage());
+            }
         }
         return true;
     }
@@ -105,6 +123,18 @@ class MailHelper{
                 ->cc(['satyadeep.neupane@deerwalk.edu.np','samil.shrestha@deerwalk.edu.np'])
                 ->queue(new SendMail($name));
         return true;       
+    }
+
+    public static function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            return $nepaliDateArray[0];
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
     }
 }
 

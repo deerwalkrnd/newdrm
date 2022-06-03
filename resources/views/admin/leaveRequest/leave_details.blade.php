@@ -31,6 +31,15 @@
         <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;">Reset</button>
     </div>
 </div>
+<div class="row" style="margin-bottom:-40px">
+    <div class="col-md-3"></div>
+    <div class="col-md-3 start_date_warning" style="visibility:hidden">
+        <p class="text-danger">Please select both start date and end date. </p>
+    </div>    
+    <div class="col-md-3 end_date_warning" style="visibility:hidden">
+        <p class="text-danger">Please select both start date and end date. </p>
+    </div>  
+</div>
 
 <br><br>
 <table class="unit_table mx-auto drmDataTable">
@@ -123,15 +132,15 @@
         let start_date = $('#start_date').val();
         let end_date = $('#end_date').val();
         let employee_id = $('#employee_id').val();
-        console.log(employee_id);
+        // console.log(employee_id);
         if(end_date && start_date && employee_id)
             $(location).attr('href','/leave-request/details?sd='+start_date+'&ed='+end_date+'&e='+employee_id);
         else if(end_date && start_date)
             $(location).attr('href','/leave-request/details?sd='+start_date+'&ed='+end_date);
-        else if(employee_id && start_date)
-            $(location).attr('href','/leave-request/details?sd='+start_date+'&e='+employee_id);
-        else if(employee_id && end_date)
-            $(location).attr('href','/leave-request/details?ed='+end_date+'&e='+employee_id);
+        else if(!end_date && start_date)
+            $(".end_date_warning").css("visibility", "visible");
+        else if(!start_date && end_date)
+            $(".start_date_warning").css("visibility", "visible");
         else if(employee_id)
             $(location).attr('href','/leave-request/details?e='+employee_id);
     }

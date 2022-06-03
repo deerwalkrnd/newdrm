@@ -365,7 +365,7 @@ class AttendanceController extends Controller
                         ->send(new EarlyPunchOutMail($employee_full_name));
                 }
                 }catch(Exception $e){
-                    dd($e);
+                    redirect()->back()->with('error',$e->getMessage());
                 }
             }
         }
