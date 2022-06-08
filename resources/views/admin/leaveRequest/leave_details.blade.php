@@ -63,9 +63,9 @@
         </tr>
     </thead>
     <tbody>
-        @forelse($leaveRequests as $leaveRequest)
+        @forelse($leaveRequests as $key=>$leaveRequest)
         <tr>
-            <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
+            <th scope="row" class="ps-4 text-dark">{{ $leaveRequests->firstItem() + $key }}</th>
             <td>{{ $leaveRequest->employee->first_name.' '.$leaveRequest->employee->last_name }}</td>
             <td>{{ $leaveRequest->leaveType->name }}</td>
             <td>{{ $leaveRequest->year }}</td>

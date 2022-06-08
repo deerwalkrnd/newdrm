@@ -19,9 +19,9 @@
         </tr>
     </thead>
     <tbody>
-        @forelse($leaveList as $leave)
+        @forelse($leaveList as $key=>$leave)
         <tr>
-            <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
+            <th scope="row" class="ps-4 text-dark">{{ $leaveList->firstItem() + $key }}</th>
             <td>{{ $leave->employee->first_name.' '.$leave->employee->last_name }}</td>
             <td>{{ $leave->leaveType->name }}</td>
             <td>{{ $leave->year }}</td>
