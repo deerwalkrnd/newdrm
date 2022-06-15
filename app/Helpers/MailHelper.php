@@ -51,7 +51,7 @@ class MailHelper{
                                 ->with('employee:id,first_name,middle_name,last_name,manager_id,email')
                                 ->whereDate('punch_in_time',date('Y-m-d'))        //for cron job
                                 ->get();
-        
+
         foreach($attendances as $attendance){
              try{
                 $LeaveRequests = LeaveRequest::create([
