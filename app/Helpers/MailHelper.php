@@ -10,6 +10,7 @@ use App\Mail\PendingLeaveNotificationMail;
 use App\Mail\TestMail;
 use App\Mail\SendMail;
 use App\Mail\MissedPunchOutMail;
+use Illuminate\Support\Facades\DB;
 
 class MailHelper{
 
@@ -44,6 +45,7 @@ class MailHelper{
 
     //Missed Punch Out Mail
     public static function sendMissedPunchOutMail(){
+        $thisYear = (new self)->getNepaliYear(date('Y-m-d'));
 
         Attendance::where('punch_out_time',NULL)->whereDate('punch_in_time',date('Y-m-d'))->update(['missed_punch_out'=>'1','punch_out_time'=>date('Y-m-d H:i:s')]);
         
@@ -53,31 +55,31 @@ class MailHelper{
                                 ->get();
 
         foreach($attendances as $attendance){
-             try{
-                $LeaveRequests = LeaveRequest::create([
+             try{             
+                $leaveRequest = LeaveRequest::create([
                     'employee_id' => $attendance->employee_id,
                     'start_date' => date('Y-m-d'),
                     'end_date' => date('Y-m-d'),
                     'days' => '1',
-                    'year' => (new self)->getNepaliYear(date('Y-m-d')),
+                    'year' => $thisYear,
                     'leave_type_id' => '1',
                     'full_leave' => '0',
                     'half_leave' => 'second',
                     'reason' => 'Forced (System) Missed Punch Out',
                     'acceptance' => 'accepted',
-                    'requested_by' => \Auth::user()->employee_id,
+                    'requested_by' => $attendance->employee_id,
                     'accepted_by' => NULL
                 ]);
 
                 $employee_name = $attendance->employee->first_name.' '.$attendance->employee->middle_name.' '.$attendance->employee->last_name;
-                $ccList =  MailHelper::getHrEmail();
-                array_push($ccList,MailHelper::getManagerEmail($attendance->employee_id));
+                $ccList =  (new self)->getHrEmail();
+                array_push($ccList,(new self)->getManagerEmail($attendance->employee_id));
                 
-                Mail::to($attendance->employee->email)
+                $mail= Mail::to($attendance->employee->email)
                     ->cc($ccList)
                     ->queue(new MissedPunchOutMail($employee_name));
             }catch(\Exception $e){
-                dd($e);
+                \Log::debug($e);
                 redirect()->back()->with('error',$e->getMessage());
             }
         }
@@ -96,8 +98,8 @@ class MailHelper{
         foreach($leaveRequests as $leaveRequest){
             $to = $leaveRequest->employee->email;
             $name = $leaveRequest->employee->first_name;
-            $ccList =  MailHelper::getHrEmail();
-            array_push($ccList,MailHelper::getManagerEmail($leaveRequest->employee_id));
+            $ccList =  (new self)->getHrEmail();
+            array_push($ccList,(new self)->getManagerEmail($leaveRequest->employee_id));
             $mail = Mail::to($to)
                 ->cc($ccList)
                 ->queue(new PendingLeaveNotificationMail($name));
@@ -130,6 +132,7 @@ class MailHelper{
             $date = new NepaliCalendarHelper($year,1);
             $nepaliDate = $date->in_bs();
             $nepaliDateArray = explode('-',$nepaliDate);
+            \Log::debug($nepaliDateArray);
             return $nepaliDateArray[0];
         }catch(Exception $e)
         {
