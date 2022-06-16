@@ -335,7 +335,9 @@ class LeaveRequestController extends Controller
 
     public function forceDestroy($id)
     {
-        $leaveRequest = LeaveRequest::where('reason','Forced (System)')->findOrFail($id);
+        $leaveRequest = LeaveRequest::where('reason','Forced (System)')
+                                    ->orWhere('reason','Forced (System) Missed Punch Out')
+                                    ->findOrFail($id);
         $leaveRequest->delete();
         $res = [
             'title' => 'Forced Leave Deleted',
