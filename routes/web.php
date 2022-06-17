@@ -108,15 +108,15 @@ Route::middleware(['manager'])->group(function(){
     Route::get('/leave-request/approve',[LeaveRequestController::class, 'approve']);
     //employee-livesearch
     Route::get('/employee/search',[EmployeeController::class, 'search']);
-    //Employees forced Leave
-    Route::get('/leave-request/forced',[LeaveRequestController::class, 'getForcedLeave']);
-    Route::delete('/leave-request/force/{id}',[LeaveRequestController::class, 'forceDestroy']);
-
-
 });
 
 // lowest level hr
 Route::middleware(['hr'])->group(function(){
+
+    //Employees forced Leave
+    Route::get('/leave-request/forced',[LeaveRequestController::class, 'getForcedLeave']);
+    Route::delete('/leave-request/force/{id}',[LeaveRequestController::class, 'forceDestroy']);
+
     //Download Leave Balance report
     Route::get('/download/leave-balance-report', [DownloadController::class, 'exportLeaveBalanceReport']);
     
