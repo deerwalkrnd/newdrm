@@ -50,7 +50,13 @@
         @forelse($employees as $employee)
             @forelse($employee->attendances as $attendance)
             <tr>
+                @if(!request()->get('e'))
+                <th scope="row" class="ps-4 text-dark">{{ $loop->parent->iteration }}</th>
+                @else
                 <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
+                @endif
+                <!-- <th scope="row" class="ps-4 text-dark">{{-- $loop->parent->iteration --}}</th> -->
+
                 <td>{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</td>
                 <td>{{ $employee->manager ? $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name:'--' }}</td>
                 <td>{{ $attendance->punch_in_ip}}</td>
