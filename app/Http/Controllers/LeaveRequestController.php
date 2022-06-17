@@ -457,7 +457,10 @@ class LeaveRequestController extends Controller
     public function getMyForcedLeave()
     {
         $leaveList = LeaveRequest::where('employee_id',\Auth::user()->employee_id)
-                                    ->where('reason','LIKE','Forced (System)%')
+                                    ->where(function($query){
+                                        $query->where('reason','Forced (System)')
+                                            ->orWhere('reason','Forced (System) Missed Punch Out');
+                                    })
                                     ->orderBy('end_date','desc')
                                     ->paginate(20);
         return view('admin.leaveRequest.myForcedLeave')->with(compact('leaveList'));
