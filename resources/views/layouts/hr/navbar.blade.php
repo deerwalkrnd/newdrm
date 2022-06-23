@@ -232,7 +232,7 @@
                                 Welcome: {{ \Auth::user()->employee->first_name." ".\Auth::user()->employee->last_name }}</a>
                         </li>
                         <li class="nav-item navigation_item">
-                            <a class="nav-link navigation_link" href="#"><i class="fas fa-power-off"></i>
+                            <a class="nav-link navigation_link" href="javascript:{}" onclick="document.getElementById('logout_form').submit();"><i class="fas fa-power-off"></i>
                                 Logout</a>
                         </li>
                     </div>
