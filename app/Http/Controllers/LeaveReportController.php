@@ -216,14 +216,15 @@ class LeaveReportController extends Controller
             $remaining_month = 13-$this->employee_join_month;
             $allowedLeave = round(($allowedLeave/12*$remaining_month)*2)/2;
         }
-
+        $acquiredLeave = $allowedLeave;
         //for carryover = 0
         // $allowedLeave = $this->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
-        if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
+        if($year == $this->thisYear){
+             if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
                 $acquiredLeave = round(($allowedLeave / 12 * $thisMonth) * 2) / 2;
-        }else{
-            $acquiredLeave = $allowedLeave;
+            }
         }
+       
         
         $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
                                     ->where('acceptance','accepted')
