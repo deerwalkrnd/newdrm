@@ -57,6 +57,7 @@ class LeaveReportController extends Controller
         $thisYearMonth = $this->getNepaliYear(date('Y-m-d')); //current year and month
         $this->thisYear = $thisYearMonth[0];
         $thisYear = $this->thisYear;
+        $thisMonth = $thisYearMonth[1];
         $employeeSearch = 0;
 
         $units = Unit::select('id','unit_name')->get();
@@ -144,7 +145,7 @@ class LeaveReportController extends Controller
                 foreach($leaveTypes as $type)
                 {
                     if(strtolower($type->gender) == 'male' && strtolower($employee->gender) == 'male'){  
-                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year,$thisMonth);
                         $temp['leaves'][$type->name]= [
                             'allowed' => $leaveTypeBalance['allowed'],
                             'accrued' => $leaveTypeBalance['accrued'],
@@ -157,7 +158,7 @@ class LeaveReportController extends Controller
                         }
                        
                     }elseif(strtolower($type->gender) == 'female' && strtolower($employee->gender) == 'female'){
-                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);                        
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year,$thisMonth);                        
                         $temp['leaves'][$type->name]= [
                             'allowed' => $leaveTypeBalance['allowed'],
                             'accrued' => $leaveTypeBalance['accrued'],
@@ -170,7 +171,7 @@ class LeaveReportController extends Controller
                         }
 
                     }elseif(strtolower($type->gender) == 'all'){
-                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year,$thisMonth);
                         $temp['leaves'][$type->name]= [
                             'allowed' => $leaveTypeBalance['allowed'],
                             'accrued' => $leaveTypeBalance['accrued'],
@@ -205,7 +206,7 @@ class LeaveReportController extends Controller
             return [$records,$leaveTypes,$leaveTypesCount,$thisYear,$employees,$employeeSearch,$units];
     }
 
-    private function getEmployeeLeaveBalance($employee,$type,$year){
+    private function getEmployeeLeaveBalance($employee,$type,$year,$thisMonth){
         $dashboardController = new DashboardController;
         
         //gives carryover
@@ -218,7 +219,11 @@ class LeaveReportController extends Controller
 
         //for carryover = 0
         // $allowedLeave = $this->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
-        $acquiredLeave = $allowedLeave;
+        if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
+                $acquiredLeave = round(($allowedLeave / 12 * $thisMonth) * 2) / 2;
+        }else{
+            $acquiredLeave = $allowedLeave;
+        }
         
         $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
                                     ->where('acceptance','accepted')
