@@ -112,7 +112,7 @@ class DashboardController extends Controller
 
     private function getEmployeeShift()
     {
-        return strtolower(\Auth::user()->employee->shift);        
+        return strtolower(\Auth::user()->employee->shift->name);        
     }
 
     private function isHoliday()
@@ -138,7 +138,7 @@ class DashboardController extends Controller
             // if employee has custom shift punch in time is set accordingly
             if($this->getEmployeeShift() == "custom")
             {
-                $maxTime = $employee_shift_time->start_time;
+                $maxTime = \Auth::user()->employee->start_time;
             }
 
             // if employee is on first half leave max time is set to first half max time
