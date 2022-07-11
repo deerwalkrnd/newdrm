@@ -375,7 +375,7 @@ class AttendanceController extends Controller
 
     public function myPunchIn()
     {
-        $myPunchInList = Attendance::select('id','employee_id','punch_in_time','punch_in_ip','punch_out_time','punch_out_ip','missed_punch_out','late_punch_in')
+        $myPunchInList = Attendance::select('id','employee_id','punch_in_time','punch_in_ip','punch_out_time','punch_out_ip','missed_punch_out','late_punch_in','reason')
                     ->where('employee_id',\Auth::user()->employee_id)
                     ->orderBy('punch_in_time','desc')
                     ->get();
