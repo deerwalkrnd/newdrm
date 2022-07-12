@@ -211,17 +211,28 @@ class LeaveReportController extends Controller
         
         //gives carryover
         $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year,$employee->id);
-        
+        $remaining_month = 0;
+        $acquiredMonth = 0;
+
         if($this->employee_join_year == $year){
             $remaining_month = 13-$this->employee_join_month;
             $allowedLeave = round(($allowedLeave/12*$remaining_month)*2)/2;
+            $acquiredMonth = $thisMonth - $this->employee_join_month + 1;      
         }
+
         $acquiredLeave = $allowedLeave;
+
         //for carryover = 0
         // $allowedLeave = $this->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
+
         if($year == $this->thisYear){
-             if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
-                $acquiredLeave = round(($allowedLeave / 12 * $thisMonth) * 2) / 2;
+            if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
+                $acquiredLeave = round($allowedLeave / 12 * $thisMonth * 2) / 2;
+
+                if($this->employee_join_year == $year){
+                    $acquiredLeave = round($allowedLeave / 12 * $acquiredMonth * 2) / 2;
+                }
+
             }
         }
        
