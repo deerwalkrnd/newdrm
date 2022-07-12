@@ -332,9 +332,10 @@ class DashboardController extends Controller
 
     private function getLeaveBalance()
     {
-        $currentYearMonth = $this->getNepaliYear(date('Y-m-d'));
-        $year = $currentYearMonth[0];
-        $month = $currentYearMonth[1];
+        $currentYearMonthDate = $this->getNepaliYear(date('Y-m-d'));
+        $year = $currentYearMonthDate[0];
+        $month = $currentYearMonthDate[1];
+        $today = $currentYearMonthDate[2];
 
         $unit_id = \Auth::user()->employee->unit_id;
         $leaveTypes = LeaveType::select('name','id')
@@ -353,28 +354,24 @@ class DashboardController extends Controller
             // else months remaining in year i.e 13 - join month
             // allowe leave = allow / 12 * remaining months
             $join_date = Employee::select('id','join_date')->where('id',\Auth::user()->employee_id)->first()->join_date;
-            $joinYearMonth = $this->getNepaliYear($join_date);
-            $joinYear = $joinYearMonth[0];
-            $joinMonth = $joinYearMonth[1];
+            $joinYearMonthDate = $this->getNepaliYear($join_date);
+            $joinYear = $joinYearMonthDate[0];
+            $joinMonth = $joinYearMonthDate[1];
+            $joinDate = $joinYearMonthDate[2];
 
             $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year,\Auth::user()->employee_id);
             //if joinyear is this year or greater than this year, leave allowance is calculated from joined month
-            $remaining_month = 0;
-            $acquiredMonth = 0;
-
-            // dd($allowedLeave);
 
             if($joinYear >= $year){
                 $remaining_month = 13-$joinMonth;
                 $allowedLeave = round(($allowedLeave/12*$remaining_month)*2)/2;
             }
 
+            $acquiredMonth = 0;
             if($joinYear == $year){
                 $acquiredMonth = $month - $joinMonth + 1;      
             }
 
-            
-           
             $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave','year')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
@@ -394,15 +391,16 @@ class DashboardController extends Controller
                                         ->sum('days');
 
             $leaveTaken = $fullLeaveTaken + 0.5 * $halfLeaveTaken;
-            $acquiredLeave = $allowedLeave;
 
-            if($leaveType->id != '2' && $leaveType->id != '13' && $leaveType->id != '6' && $leaveType->id != '10'){
-                $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
+            $acquiredLeave = $this->getAcquiredLeave($leaveType,$allowedLeave,$acquiredMonth,$year,$month,$today,$joinYear,$joinDate);
+
+            // if($leaveType->id != '2' && $leaveType->id != '13' && $leaveType->id != '6' && $leaveType->id != '10'){
+            //     $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
                 
-                if($joinYear == $year){
-                    $acquiredLeave = round($allowedLeave / 12 * $acquiredMonth * 2) / 2;
-                }
-            }
+            //     if($joinYear == $year){
+            //         $acquiredLeave = round($allowedLeave / 12 * $acquiredMonth * 2) / 2;
+            //     }
+            // }
         
             $balance = $acquiredLeave - $leaveTaken;
 
@@ -415,6 +413,25 @@ class DashboardController extends Controller
         }
 
         return $lists;
+    }
+
+    private function getAcquiredLeave($leaveType,$allowedLeave,$acquiredMonth,$year,$month,$today,$joinYear,$joinDate){
+        $acquiredLeave = $allowedLeave;
+
+        if($leaveType->id != '2' && $leaveType->id != '13' && $leaveType->id != '6' && $leaveType->id != '10'){
+            $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
+            
+            if($joinYear == $year){
+                $acquiredLeave = round($allowedLeave / 12 * $acquiredMonth * 2) / 2;
+            }
+        }
+        
+        //if join date is greater than today, acquired leave is 0
+        if($joinDate > $today){
+            $acquiredLeave = 0;
+        }
+
+        return $acquiredLeave;
     }
 
     public function getAllowedLeaveDays($unit_id,$leaveType,$year,$employee_id)
@@ -490,8 +507,8 @@ class DashboardController extends Controller
             $date = new NepaliCalendarHelper($year,1);
             $nepaliDate = $date->in_bs();
             $nepaliDateArray = explode('-',$nepaliDate);
-            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1]];
-            return $year_month;
+            $year_month_date = [$nepaliDateArray[0],$nepaliDateArray[1],$nepaliDate];
+            return $year_month_date;
         }catch(Exception $e)
         {
             print_r($e->getMessage());

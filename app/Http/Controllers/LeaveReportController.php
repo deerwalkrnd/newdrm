@@ -19,16 +19,18 @@ class LeaveReportController extends Controller
 {
     protected $employee_join_month;
     protected $employee_join_year;
+    protected $employee_join_date;
     protected $thisYear;
+    protected $thisMonth;
+    protected $today;
     protected $balanceRecords;
-    // protected $leaveTypes=[];
 
     private function getNepaliYear($year){
         try{
             $date = new NepaliCalendarHelper($year,1);
             $nepaliDate = $date->in_bs();
             $nepaliDateArray = explode('-',$nepaliDate);
-            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1]];
+            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1],$nepaliDate];
             return $year_month;
         }catch(Exception $e)
         {
@@ -48,16 +50,19 @@ class LeaveReportController extends Controller
 
         return  view('admin.leaveBalance.index',compact('records','leaveTypes','leaveTypesCount','thisYear','employees','employeeSearch','units'));
     }
+    
+    
     public function getLeaveBalanceRecords($request,$download=0)
     {
         // $request->d  =>year;
         // $request->u  =>unit_id;
         // $request->e  =>employee_id;
         
-        $thisYearMonth = $this->getNepaliYear(date('Y-m-d')); //current year and month
-        $this->thisYear = $thisYearMonth[0];
+        $thisYearMonthDate = $this->getNepaliYear(date('Y-m-d')); //current year and month
+        $this->thisYear = $thisYearMonthDate[0];
         $thisYear = $this->thisYear;
-        $thisMonth = $thisYearMonth[1];
+        $this->thisMonth = $thisYearMonthDate[1];
+        $this->today = $thisYearMonthDate[2];
         $employeeSearch = 0;
 
         $units = Unit::select('id','unit_name')->get();
@@ -127,15 +132,17 @@ class LeaveReportController extends Controller
             $temp['unit'] = $employee->unit->unit_name;
             $temp['leaves'] = array();
            
-            $join_year_month = $this->getNepaliYear($employee->join_date);
-            $this->employee_join_year = $join_year_month[0];
-            $this->employee_join_month = $join_year_month[1];
+            $join_year_month_date = $this->getNepaliYear($employee->join_date);
+            $this->employee_join_year = $join_year_month_date[0];
+            $this->employee_join_month = $join_year_month_date[1];
+            $this->employee_join_date = $join_year_month_date[2];
+
             
             if($request->d != NULL && $request->d != 1){
                 $start_year = $request->d;
                 $end_year = $request->d;
             }else{
-                $start_year = $join_year_month[0];
+                $start_year = $join_year_month_date[0];
                 $end_year = $this->thisYear;
             }
             for($year=$start_year; $year <= $end_year; $year++)
@@ -145,7 +152,7 @@ class LeaveReportController extends Controller
                 foreach($leaveTypes as $type)
                 {
                     if(strtolower($type->gender) == 'male' && strtolower($employee->gender) == 'male'){  
-                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year,$thisMonth);
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
                         $temp['leaves'][$type->name]= [
                             'allowed' => $leaveTypeBalance['allowed'],
                             'accrued' => $leaveTypeBalance['accrued'],
@@ -158,7 +165,7 @@ class LeaveReportController extends Controller
                         }
                        
                     }elseif(strtolower($type->gender) == 'female' && strtolower($employee->gender) == 'female'){
-                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year,$thisMonth);                        
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);                        
                         $temp['leaves'][$type->name]= [
                             'allowed' => $leaveTypeBalance['allowed'],
                             'accrued' => $leaveTypeBalance['accrued'],
@@ -171,7 +178,7 @@ class LeaveReportController extends Controller
                         }
 
                     }elseif(strtolower($type->gender) == 'all'){
-                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year,$thisMonth);
+                        $leaveTypeBalance = $this->getEmployeeLeaveBalance($employee,$type,$year);
                         $temp['leaves'][$type->name]= [
                             'allowed' => $leaveTypeBalance['allowed'],
                             'accrued' => $leaveTypeBalance['accrued'],
@@ -206,36 +213,20 @@ class LeaveReportController extends Controller
             return [$records,$leaveTypes,$leaveTypesCount,$thisYear,$employees,$employeeSearch,$units];
     }
 
-    private function getEmployeeLeaveBalance($employee,$type,$year,$thisMonth){
+    private function getEmployeeLeaveBalance($employee,$type,$year){
         $dashboardController = new DashboardController;
         
         //gives carryover
         $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year,$employee->id);
-        $remaining_month = 0;
         $acquiredMonth = 0;
 
         if($this->employee_join_year == $year){
             $remaining_month = 13-$this->employee_join_month;
             $allowedLeave = round(($allowedLeave/12*$remaining_month)*2)/2;
-            $acquiredMonth = $thisMonth - $this->employee_join_month + 1;      
+            $acquiredMonth = $this->thisMonth - $this->employee_join_month + 1;      
         }
 
-        $acquiredLeave = $allowedLeave;
-
-        //for carryover = 0
-        // $allowedLeave = $this->getAllowedLeaveDays($employee->unit_id,$type->id,$year);
-
-        if($year == $this->thisYear){
-            if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
-                $acquiredLeave = round($allowedLeave / 12 * $thisMonth * 2) / 2;
-
-                if($this->employee_join_year == $year){
-                    $acquiredLeave = round($allowedLeave / 12 * $acquiredMonth * 2) / 2;
-                }
-
-            }
-        }
-       
+        $acquiredLeave = $this->getAcquiredLeave($type,$allowedLeave,$acquiredMonth,$year);
         
         $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
                                     ->where('acceptance','accepted')
@@ -265,24 +256,28 @@ class LeaveReportController extends Controller
         return $lists;
     }
 
-    private function getAllowedLeaveDays($unit_id,$leaveType,$year)
-    {
-        // dd($org_id,$leaveType,$year);
-        $allowedLeave = YearlyLeave::select('days')
-                                ->where('year',$year)
-                                ->where('unit_id',$unit_id)
-                                ->where('leave_type_id',$leaveType)
-                                ->where('status','active')
-                                ->get()->first();
-        
-        // dd($allowedLeave->exists());
-        if(isset($allowedLeave) && ($allowedLeave->exists() == 1))
-            $allowedLeave = $allowedLeave->days;
-        else
-            $allowedLeave = 0;
+    private function getAcquiredLeave($type,$allowedLeave,$acquiredMonth,$year){
+        $acquiredLeave = $allowedLeave;
 
-        return $allowedLeave;
+        if($year == $this->thisYear){
+            if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
+                $acquiredLeave = round($allowedLeave / 12 * $this->thisMonth * 2) / 2;
+
+                if($this->employee_join_year == $year){
+                    $acquiredLeave = round($allowedLeave / 12 * $acquiredMonth * 2) / 2;
+                }
+
+            }
+        }
+       
+        //if join date is greater than today, acquired leave is 0
+        if($this->employee_join_date > $this->today){
+            $acquiredLeave = 0;
+        }
+
+        return $acquiredLeave;
     }
+
 
     public function employeesOnLeave(Request $request){
         if(isset($request->d))
