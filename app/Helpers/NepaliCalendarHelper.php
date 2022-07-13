@@ -5,10 +5,10 @@ class NepaliCalendarHelper{
 	private $english_date = ['year'=>'','month'=>'','day'=>''];
 
 	private $min_eng_year = 2011;
-	private $max_eng_year = 2023;
+	private $max_eng_year = 2033;
 
 	private $min_nep_year = 2067;
-	private $max_nep_year = 2080;
+	private $max_nep_year = 2090;
 
 	public $status = false;
 
