@@ -53,10 +53,10 @@
                     @method('PUT')
                     <button type="submit" class="btn btn-sm btn-secondary text-white">Reject</button>
                 </form>
-                |
+                <!-- |
                 <a href="/leave-request/subordinate-leave/edit/{{ $leaveRequest->id }}">
                     <button type="submit" class="btn btn-sm btn-primary text-white">Edit</button>
-                </a> 
+                </a>  -->
                 
                 @else
                 <div class="dropdown">
