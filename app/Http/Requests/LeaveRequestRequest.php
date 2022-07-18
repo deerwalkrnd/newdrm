@@ -47,6 +47,7 @@ class LeaveRequestRequest extends FormRequest
         if(\Request::input('leave_time') != 'full'){
             $calcDay = $calcDay/2;
         }
+        // dd(\Request::input('days'));
         
         // dd('applied leave days: ',$calcDay,'remaining leave days: ',$remainingDays,'days',\Request::input('days'));
         return [

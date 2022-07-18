@@ -26,10 +26,16 @@ class SubordinateLeaveRequestRequest extends FormRequest
      */
     public function rules()
     {
+        // dd(\Route::current()->getActionName());
+        // dd(\Request::route()->getName());
         if(array_key_exists('employee_id',\Request::input()) == false)
             return ['employee_id' => 'required|exists:employees,id'];
         
         $today = date('Y-m-d');
+
+        if(\Route::current()->getActionName() == "App\Http\Controllers\LeaveRequestController@update")
+            $today = date("Y-m-d", strtotime ( '-1 month' , strtotime ( $today ) )) ;
+
         $start_date = \Request::input('start_date');
         $end_date = \Request::input('end_date');
         $leave_type_id = \Request::input('leave_type_id');

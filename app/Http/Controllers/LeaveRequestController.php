@@ -119,7 +119,7 @@ class LeaveRequestController extends Controller
     public function store(LeaveRequestRequest $request)
     {
         $data = $request->validated();
-
+        // dd($data);
         $leave_type_id = $data['leave_type_id'];
         $requested_leave_days = $data['days'];
         $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('unit_id',\Auth::user()->employee->unit_id)->get()->first();
@@ -164,6 +164,10 @@ class LeaveRequestController extends Controller
         }else{
             $data['full_leave'] = '0';
             $not_eligible_dates = $this->nonEligibleFullLeaveDays($data,\Auth::user()->employee_id);
+            
+            $days = $data['days']/0.5;
+            $data['days'] = (int)$days;
+
             if($data['leave_time'] == 'first'){
                 $data['half_leave'] = 'first';
                 if(!$not_eligible_dates->isEmpty()){
@@ -223,6 +227,10 @@ class LeaveRequestController extends Controller
             $data['full_leave'] = '1';
         }else{
             $data['full_leave'] = '0';
+
+            $days = $data['days']/0.5;
+            $data['days'] = (int)$days;
+
             if($data['leave_time'] == 'first'){
                 $data['half_leave'] = 'first';
             }else{
@@ -309,6 +317,9 @@ class LeaveRequestController extends Controller
             $input['half_leave'] = NULL;
         }else{
             $input['full_leave'] = '0';
+            $days = $input['days']/0.5;
+            $input['days'] = (int)$days;
+
             if($input['leave_time'] == 'first'){
                 $input['half_leave'] = 'first';
             }else{
@@ -329,6 +340,10 @@ class LeaveRequestController extends Controller
         }else{
             $input['year'] = $start_year;
         }
+
+        // $leave_start_date = \Carbon\Carbon::createFromFormat('Y-m-d', $input['start_date']);
+        // $leave_end_date = \Carbon\Carbon::createFromFormat('Y-m-d', $input['end_date']);
+        // $input['days'] = $leave_start_date->diffInDays($leave_end_date)+1;
 
         $leaveRequest->update($input);
         $res = [

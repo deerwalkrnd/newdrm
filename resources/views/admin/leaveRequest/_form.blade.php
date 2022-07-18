@@ -44,7 +44,7 @@
             </div>
             <div class="form-check form-check-inline">
                 <input onchange="calculateLeaveDays()" class="form-check-input" type="radio" name="leave_time" id="leave_time2" value="second" 
-                {{ (isset($leaveRequest) && strtolower($leaveRequest->leave_time) == 'second') ? 'checked':''}}
+                {{ (isset($leaveRequest) && strtolower($leaveRequest->half_leave) == 'second') ? 'checked':''}}
                 {{ old('leave_time') == 'second' ? 'checked':'' }}>
                 <label class="form-check-label" for="leave_time2">Second Half</label>
             </div>
@@ -84,7 +84,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label for="days">Leave Days*</label>
-            <input type="number"  class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : (isset($leaveRequest)??$leaveRequest->days*($leaveRequest->full_leave == 1 ? 1 : 0.5)) }}">
+            <input type="number"  class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : (!empty($leaveRequest)?$leaveRequest->days*($leaveRequest->full_leave==1?1:0.5):'') }}">
             <span id="reason" class="action"></span>
             @error('days')
                 <p class="text-danger">{{ $message }}</p>

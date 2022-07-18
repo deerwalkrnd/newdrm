@@ -57,9 +57,7 @@
             <th scope="col">State</th>
             <th scope="col">Manager</th>
             <th scope="col">Approved By</th>
-            @if(strtolower($table_title)!='employee leave details lists')
-                <th scope="col" class="text-center">Action</th>    
-            @endif
+            <th scope="col" class="text-center">Action</th>    
         </tr>
     </thead>
     <tbody>
@@ -81,19 +79,11 @@
             @else
             <td> -- </td>
             @endif            
-            @if(!($leaveRequest->start_date == date('Y-m-d')) && strtolower($table_title)!='employee leave details lists')
             <td class="text-center">
-                
-                <a href="/leave-request/edit/{{ $leaveRequest->id }}"><i class="far fa-edit"></i></a> 
-                | 
-                <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="delete action border-0"><i class="fas fa-trash-alt action"></i></button>
-                </form>
+                <a href="/leave-request/subordinate-leave/edit/{{ $leaveRequest->id }}">
+                    <i class="far fa-edit"></i>
+                </a> 
             </td>
-
-            @endif
         </tr>
         @empty
         <tr>
