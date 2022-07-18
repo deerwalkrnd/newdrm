@@ -31,19 +31,19 @@
             <label for="half_leave">Leave Time*</label>
             <br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="leave_time" id="leave_time0" value="full" 
+                <input onchange="calculateLeaveDays()" class="form-check-input" type="radio" name="leave_time" id="leave_time0" value="full" 
                 {{ (isset($leaveRequest) && $leaveRequest->full_leave == 1) ? 'checked':''}}
                 {{ old('leave_time') == 'full' ? 'checked':'' }}>
                 <label class="form-check-label" for="leave_time0">Full Day</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="leave_time" id="leave_time1" value="first" 
+                <input onchange="calculateLeaveDays()" class="form-check-input" type="radio" name="leave_time" id="leave_time1" value="first" 
                 {{ (isset($leaveRequest) && strtolower($leaveRequest->half_leave) == 'first') ? 'checked':''}}
                 {{ old('leave_time') == 'first' ? 'checked':'' }}>
                 <label class="form-check-label" for="leave_time1">First Half</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="leave_time" id="leave_time2" value="second" 
+                <input onchange="calculateLeaveDays()" class="form-check-input" type="radio" name="leave_time" id="leave_time2" value="second" 
                 {{ (isset($leaveRequest) && strtolower($leaveRequest->leave_time) == 'second') ? 'checked':''}}
                 {{ old('leave_time') == 'second' ? 'checked':'' }}>
                 <label class="form-check-label" for="leave_time2">Second Half</label>
@@ -84,7 +84,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label for="days">Leave Days*</label>
-            <input type="number"  class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : $leaveRequest->days ?? '' }}">
+            <input type="number"  class="form-control" id="days" placeholder="Enter Leave Days" name="days" value="{{ !empty(old('days')) ? old('days') : $leaveRequest->days*($leaveRequest->full_leave == 1 ? 1 : 0.5) }}">
             <span id="reason" class="action"></span>
             @error('days')
                 <p class="text-danger">{{ $message }}</p>

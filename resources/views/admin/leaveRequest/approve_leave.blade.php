@@ -31,7 +31,7 @@
             <td>{{ $leaveRequest->start_date }}</td>
             <td>{{ $leaveRequest->end_date }}</td>
             <td>{{ $leaveRequest->days * ($leaveRequest->full_leave == 1 ? 1 : 0.5) }}</td>
-            <td>{{ $leaveRequest->reason }}</td>
+            <td style="width:14rem;">{{ $leaveRequest->reason }}</td>
             <td>{{ $leaveRequest->employee->manager ? $leaveRequest->employee->manager->first_name.' '.$leaveRequest->employee->manager->last_name:''}}</td>
             <td>{{ $leaveRequest->acceptance }}</td>
             <td>
@@ -39,20 +39,25 @@
                 <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="delete">Delete</button>
+                    <button type="submit" class="btn btn-sm btn-danger text-white">Delete</button>
                 </form>
                 |
                 <form action="/leave-request/accept/{{ $leaveRequest->id }}" method="POST" class="d-inline">
                     @csrf
                     @method('PUT')
-                    <button type="submit" class="delete">Accept</button>
+                    <button type="submit" class="btn btn-sm btn-success">Accept</button>
                 </form>
                 |
                 <form action="/leave-request/reject/{{ $leaveRequest->id }}" method="POST" class="d-inline">
                     @csrf
                     @method('PUT')
-                    <button type="submit" class="delete">Reject</button>
+                    <button type="submit" class="btn btn-sm btn-secondary text-white">Reject</button>
                 </form>
+                |
+                <a href="/leave-request/subordinate-leave/edit/{{ $leaveRequest->id }}">
+                    <button type="submit" class="btn btn-sm btn-primary text-white">Edit</button>
+                </a> 
+                
                 @else
                 <div class="dropdown">
                     <button class="btn btn-{{ $leaveRequest->acceptance == 'accepted' ? 'success' : 'danger' }} dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">

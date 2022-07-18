@@ -112,6 +112,9 @@ Route::middleware(['manager'])->group(function(){
 
 // lowest level hr
 Route::middleware(['hr'])->group(function(){
+    // '/leave-request/subordinate-leave'
+    Route::get('/leave-request/subordinate-leave/edit/{id}',[LeaveRequestController::class, 'edit']);
+    Route::put('/leave-request/subordinate-leave/{id}',[LeaveRequestController::class, 'update']);
 
     //Employees forced Leave
     Route::get('/leave-request/forced',[LeaveRequestController::class, 'getForcedLeave']);

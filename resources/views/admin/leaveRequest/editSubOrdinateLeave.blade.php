@@ -6,7 +6,7 @@
 <!-- page title start -->
 <section class="my-3 pt-3">
     <div class="text-center">
-        <h1 class="fs-2 title">Create Sub-Ordinate Leave</h1>
+        <h1 class="fs-2 title">Edit Sub-Ordinate Leave</h1>
     </div>
     <div class="underline mx-auto"></div>
 </section>
@@ -15,10 +15,11 @@
 <!-- form start -->
 <section class="form_container mx-auto">
     <div class="row mx-auto">
-    <form method="POST"class="main_form p-4" class="main_form p-4" action="/leave-request/subordinate-leave">
+    <form method="POST"class="main_form p-4" class="main_form p-4" action="/leave-request/subordinate-leave/{{ $leaveRequest->id }}">
         @csrf
+        @method('PUT')
         @include('admin.leaveRequest.subOrdinateLeave_form')
-        <center><button type="submit" class="btn btn-primary mt-2">Add</button></center>   
+        <center><button type="submit" class="btn btn-primary mt-2">Update</button></center>   
         </form>
     </div>
 </section>
@@ -96,8 +97,8 @@
 
                 console.log('in create form',data.days,data.reason);
             },
-             error: function (data) {
-                console.log(data);
+             error: function (error) {
+                console.log(error);
             }
         });
     }

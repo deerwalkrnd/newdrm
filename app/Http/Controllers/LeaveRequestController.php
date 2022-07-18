@@ -286,7 +286,8 @@ class LeaveRequestController extends Controller
     {
         $leaveRequest = LeaveRequest::findOrFail($id);
         $leaveTypes = LeaveType::select('id','name')->get();
-        return view('admin.leaveRequest.edit')->with(compact('leaveRequest','leaveTypes'));
+        // dd($leaveRequest->employee->id);
+        return view('admin.leaveRequest.editSubOrdinateLeave')->with(compact('leaveRequest','leaveTypes'));
 
     }
 
@@ -297,18 +298,45 @@ class LeaveRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(LeaveRequestRequest $request, $id)
+    public function update(SubordinateLeaveRequestRequest $request, $id)
     {
         $leaveRequest = LeaveRequest::findOrFail($id);
         $input = $request->validated();
         
+        if($input['leave_time'] == 'full')
+        {
+            $input['full_leave'] = '1';
+            $input['half_leave'] = NULL;
+        }else{
+            $input['full_leave'] = '0';
+            if($input['leave_time'] == 'first'){
+                $input['half_leave'] = 'first';
+            }else{
+                $input['half_leave'] = 'second';
+            }
+        }
+
+        $start_year = $this->getNepaliYear($input['start_date']);
+        $end_year = $this->getNepaliYear($input['end_date']);
+        
+         if($start_year != $end_year){
+            $res = [
+                'title' => 'Leave Request Error',
+                'message' => 'Leave should be requested from same Nepali year.',
+                'icon' => 'error'
+            ];
+            return redirect()->back()->with(compact('res'));
+        }else{
+            $input['year'] = $start_year;
+        }
+
         $leaveRequest->update($input);
         $res = [
             'title' => 'Leave Request Updated',
             'message' => 'Leave Request has been successfully Updated',
             'icon' => 'success'
         ];
-        return redirect('/leave-request/details')->with(compact('res'));
+        return redirect('/leave-request/approve')->with(compact('res'));
     }
 
     /**
@@ -486,12 +514,12 @@ class LeaveRequestController extends Controller
             $calcDay = $calcDay/2;
         }
         // return [$leave_type_id,$start_date,$end_date,$remainingDays,$calcDay];
-            return ['days'=>$calcDay];
+        return ['days'=>$calcDay];
 
-        if($calcDay <= $remainingDays){
-            return ['days'=>$calcDay];
-        }else 
-            return ['days'=>'0','reason'=>'Allowed leave days has been maxed out for selected leave type.'];     
+        // if($calcDay <= $remainingDays){
+        //     return ['days'=>$calcDay];
+        // }else 
+        //     return ['days'=>'0','reason'=>'Allowed leave days has been maxed out for selected leave type.'];     
     }
 
 
