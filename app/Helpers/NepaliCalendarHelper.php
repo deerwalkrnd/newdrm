@@ -92,6 +92,7 @@ class NepaliCalendarHelper{
 	public function __construct($date,$type = 0){
 		$date = explode('-', $date);
 		if(count($date) == 3)
+		{
 			if($type == 0){
 				if($this->is_valid_nep_date($date)){
 					// return true;
@@ -109,7 +110,9 @@ class NepaliCalendarHelper{
 					return true;
 				}
 			}
-		throw new Exception('Invalid Date');
+		}else{
+			throw new Exception('Invalid Date');
+		}
 	}
 
 	private function set_nepali_date($date)

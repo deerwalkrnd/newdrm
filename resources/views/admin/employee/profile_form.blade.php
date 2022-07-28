@@ -428,7 +428,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="mb-4">
-            <label class="form-label" for="join_date">Join Date*</label>
+            <label class="form-label" for="join_date">Join Date* (AD)</label>
             <input type="date" class="form-control" id="join_date" placeholder="None" disabled name="join_date" value="{{ !empty(old('join_date')) ? old('join_date') : $employee->join_date ?? '' }}">
             @error('join_date')
                 <p class="text-danger">{{ $message }}</p>
