@@ -1,6 +1,6 @@
 <div>
     <p>Dear {{$name}},</p>
-    <p>Your Password has been reset to 'Deerwa1k@DRM'. Please change it as soon as possible.</p>
+    <p>Your Password has been reset to Deerwa1k@DRM. Please change it as soon as possible.</p>
     <p>Regards,</p>
     <br>
     <div id="signature">

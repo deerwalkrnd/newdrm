@@ -2,7 +2,7 @@
     <p>Dear {{$name}},</p>
     <p>Your Employee ID is {{$employee_id}}. And your credentials for the DRM System is:</p>
     <p>Username: {{$username}} <br>
-    Password: 'Deerwa1k@DRM'</p>
+    Password: Deerwa1k@DRM</p>
     <p>Regards,</p>
     <br>
     <div id="signature">
