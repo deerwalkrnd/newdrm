@@ -51,22 +51,29 @@ class ManagerController extends Controller
     {
         $input = $request->validated();
         Manager::create($input);
+
         //update user role according to manager status
-        $employee = [];
         $employee_id = Manager::select('employee_id')->where('employee_id',$request->employee_id)->first()->employee_id;
-            
-        if(strtolower($input['is_active']) == 'active')
-            $employee['role_id'] = '2'; //2-manager
-        else
-            $employee['role_id'] = '3'; //3-employee
-        
         $user = User::where('employee_id',$employee_id)->first();
-        $user->update($employee);
+        
+        if($user->role_id != 1) // employee is not hr
+        {
+            if(strtolower($input['is_active']) == 'active')
+            {
+                $newRole = 2; //2-manager                
+            }else{
+                $newRole = 3; //3-employee
+            }
+
+            $user->update(['role_id' => $newRole]);
+        }
+        
         $res = [
             'title' => 'Manager Created',
             'message' => 'Manager has been successfully created',
             'icon' => 'success'
         ];
+
         return redirect('/manager')->with(compact('res'));
     }
 
@@ -105,31 +112,36 @@ class ManagerController extends Controller
     {
         $manager = Manager::findOrFail($id);
         $employees_under_manager  = Employee::select('id','manager_id','first_name')->where('manager_id',$manager->employee_id)->get();
-        // dd(count($employees_under_manager));
-
+        
         //get validated input and merge input fields
         $input = $request->validated();
         $input['version'] = DB::raw('version+1');
-        if($input['employee_id'] != $manager->employee_id)
+        if($input['employee_id'] != $manager->employee_id){
             if(count($employees_under_manager)>0){
                 foreach($employees_under_manager as $employee_under_manager){
                     $employee_under_manager->update(['manager_id' => $input['employee_id'],'manager_change_date'=> date('Y-m-d')]);   
                 }
             }
+        }
             
         $manager->update($input);
         
         //update user role according to manager status
-        $employee = [];
         $employee_id = $manager->employee_id;
-
-        if(strtolower($manager->is_active) == 'active')
-            $employee['role_id'] = '2';
-        else
-            $employee['role_id'] = '3';
-
         $user = User::where('employee_id',$employee_id)->first();
-        $user->update($employee);
+        
+        if($user->role_id != 1) // employee is not hr
+        {
+            if(strtolower($manager->is_active) == 'active')
+            {
+                $newRole = 2; //2-manager                
+            }else{
+                $newRole = 3; //3-employee
+            }
+
+            $user->update(['role_id' => $newRole]);
+        }
+        
         $res = [
             'title' => 'Manager Updated',
             'message' => 'Manager has been successfully updated',
