@@ -160,6 +160,7 @@ class MailHelper{
                 
     }
 
+    // cron job running
     public static function testMail2(){
         $name = "Deena";
         Mail::to('deena.sitikhu@deerwalk.edu.np')

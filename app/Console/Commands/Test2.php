@@ -13,6 +13,7 @@ class Test2 extends Command
      *
      * @var string
      */
+    // cron job running
     protected $signature = 'send:mail';
 
     /**
