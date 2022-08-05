@@ -263,11 +263,16 @@ class AttendanceController extends Controller
                 $ccList = MailHelper::getHrEmail();
                 array_push($ccList,MailHelper::getManagerEmail($attendance->employee_id));
                 
-                if($attendance->late_punch_in && $send_mail){
+                try{
+                    if($attendance->late_punch_in && $send_mail){
                     Mail::to(\Auth::user()->employee->email)
                         ->cc($ccList)
                         ->send(new LatePunchInMail($attendance));
+                    }
+                }catch(\Exception $e){
+                    return redirect()->back()->with('error',$e->getMessage());
                 }
+                
             }
             return true;
         }
