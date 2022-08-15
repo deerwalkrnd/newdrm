@@ -95,9 +95,6 @@
     </div>
 </div>
 <!-- section for employees on leave part end-->
-@if(date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i'))
-<h1>sdas</h1>
-@endif
 
 <!-- Birthday Pop Up Notification -->
 @if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i') && count($todayBirthdayList)>0)
