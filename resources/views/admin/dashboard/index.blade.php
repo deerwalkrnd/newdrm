@@ -95,4 +95,51 @@
     </div>
 </div>
 <!-- section for employees on leave part end-->
+@if(date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i'))
+<h1>sdas</h1>
+@endif
+
+<!-- Birthday Pop Up Notification -->
+@if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i') && count($todayBirthdayList)>0)
+    @foreach($todayBirthdayList as $birthdayEmployee)
+        <div class="modal fade birthdayModal" id="exampleModal{{$birthdayEmployee->id}}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content birthday-modal-content">
+                    <div cl ass="modal-body">
+                        <div class="container-fluid">
+                            <div class="row" style="position:relative">
+                                <!-- <button type="button" class="btn-close birthday-close-button" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                                <div class="birthday-employee-image col-4">
+                                    @if(strtolower($birthdayEmployee->gender)=='female')
+                                        <img class="employee-image img-thumbnail"  src="{{ ($birthdayEmployee->image_name != NULL) ? asset($birthdayEmployee->image_name) : '/assets/images/woman.png' }}" >
+                                    @else
+                                        <img class="employee-image img-thumbnail"  src="{{ ($birthdayEmployee->image_name != NULL) ? asset($birthdayEmployee->image_name) : '/assets/images/man.png' }}" >
+                                    @endif
+                                        <!-- <img src="{{asset('assets/images/deena.jpg')}}" alt="" class="employee-image"> -->
+                                </div>
+                                <div class="col-12 pt-2 pb-0  birthday-image-card">
+                                    <span class="birthday-employee-name text-center">{{$birthdayEmployee->first_name." ".substr($birthdayEmployee->middle_name,0,1)." ".$birthdayEmployee->last_name}}</span>
+                                    <img src="{{asset('assets/images/birthday.png')}}" alt="birthday card" class="birthday-card-image">
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+@endif
+
+@endsection
+
+@section('scripts')
+<script>
+    var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+    console.log(width);
+    $(document).ready(function(){
+        if(width >= 992){
+            $(".birthdayModal").modal('show');
+        }
+    });
+</script>
 @endsection

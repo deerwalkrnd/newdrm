@@ -21,11 +21,13 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        // dd(\Auth::user()->first_time_login);
         $this->isPasswordExpired();
        
         $leaveBalance = $this->getLeaveBalance();
         $birthdayList = $this->getBirthdayList();
         $leaveList = $this->getLeaveList();
+        $todayBirthdayList = $this->getTodayBirthdayList();
 
         $state = $this->getAttendanceState();
         $userIp  = request()->ip();
@@ -37,16 +39,8 @@ class DashboardController extends Controller
         if($this->hasPendingLeaveRequest())
             $this->setManagerNotification();
 
-            // dd(compact(
-            //     'leaveBalance',
-            //     'birthdayList',
-            //     'leaveList',
-            //     'state',
-            //     'userIp',
-            //     'late_within_ten_days',
-            //     'max_punch_in_time',
-            //     'noPunchInNoLeaveRecordExists'
-            // ));
+        $first_login_today = \Auth::user()->is_logged_in_today;
+        // dd($first_login_today);
 
         return view('admin.dashboard.index')
                 ->with(compact(
@@ -57,7 +51,9 @@ class DashboardController extends Controller
                     'userIp',
                     'late_within_ten_days',
                     'max_punch_in_time',
-                    'noPunchInNoLeaveRecordExists'
+                    'noPunchInNoLeaveRecordExists',
+                    'todayBirthdayList',
+                    'first_login_today'
                 ));      
     }
 
@@ -500,6 +496,21 @@ class DashboardController extends Controller
         }else{
             return true;
         }
+    }
+
+    private function getTodayBirthdayList(){
+        $curr_month = date('m');
+        $curr_day = date('d');
+
+        $todayBirthdayEmployees = Employee::select('id','first_name','last_name','middle_name','date_of_birth','image_name','gender')
+                            ->where('contract_status','active')
+                            ->where(function($query) use($curr_day,$curr_month){
+                                $query->whereMonth('date_of_birth',$curr_month)
+                                      ->whereDay('date_of_birth',$curr_day);
+                            })
+                            ->orderBy('first_name','desc')
+                            ->get();
+        return $todayBirthdayEmployees;
     }
     
     private function getNepaliYear($year){
