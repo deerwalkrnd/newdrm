@@ -362,7 +362,8 @@ class LeaveRequestController extends Controller
      */
     public function destroy($id)
     {
-        $leaveRequest = LeaveRequest::where('acceptance','pending')->findOrFail($id);
+        // dd("ere");
+        $leaveRequest = LeaveRequest::findOrFail($id);
         $leaveRequest->delete();
         $res = [
             'title' => 'Leave Request Deleted',
@@ -375,6 +376,27 @@ class LeaveRequestController extends Controller
         else
             return redirect('/leave-request')->with(compact('res'));
     }
+
+
+    public function VerifyEmployeeName($id,$fullname)
+    {
+        $employee_name = explode(' ',$fullname);
+        if(count($employee_name) == 2){
+            $employees = Employee::where('first_name',$employee_name[0])->where('last_name',$employee_name[1])->get();
+        }else if(count($employee_name) == 3){
+            $employees = Employee::where('first_name',$employee_name[0])->where('middle_name',$employee_name[1])->where('last_name',$employee_name[2])->get();
+        }else{
+            $employees = null;
+        }
+
+        foreach($employees as $employee){
+            $leaveRequest = LeaveRequest::findOrFail($id);
+            if($employee->id == $leaveRequest->employee_id){
+                return [$employee->id];
+            }
+        }
+    }
+   
 
     public function forceDestroy($id)
     {
