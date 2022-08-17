@@ -174,8 +174,8 @@
         var form =  $(this).closest("form");
         event.preventDefault();
         Swal.fire({
-            title: `Are you sure you want to delete this record?`,
-            text: "If you delete this, it will be gone forever.",
+            title: `Are you sure you want to delete this already accepted leave request?`,
+            text: "If you delete this, all its record will be gone forever.",
             icon: "warning",
             buttons: true,
             dangerMode: true,
