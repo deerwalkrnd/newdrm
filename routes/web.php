@@ -77,6 +77,7 @@ Route::middleware(['logged-in'])->group(function(){
     Route::get('/leave-request',[LeaveRequestController::class, 'index']);
     Route::get('/leave-request/my-forced',[LeaveRequestController::class, 'getMyForcedLeave']);
     Route::delete('/leave-request/{id}',[LeaveRequestController::class, 'destroy']);
+    Route::get('/leave-request/verify-employee-name/{id}/{employeeName}',[LeaveRequestController::class, 'VerifyEmployeeName']);
     Route::post('/calculate-leave-days',[LeaveRequestController::class,'getLeaveDays']);
   
     //employee profile

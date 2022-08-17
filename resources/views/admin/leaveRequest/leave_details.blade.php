@@ -80,9 +80,13 @@
             <td> -- </td>
             @endif            
             <td class="text-center">
-                <a href="/leave-request/subordinate-leave/edit/{{ $leaveRequest->id }}">
-                    <i class="far fa-edit"></i>
-                </a> 
+                <a href="/leave-request/subordinate-leave/edit/{{ $leaveRequest->id }}"><i class="far fa-edit"></i></a> 
+                |
+                 <form action="/leave-request/{{ $leaveRequest->id }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="delete action border-0 deleteConfirm"><i class="fas fa-trash-alt action"></i></button>
+                </form>
             </td>
         </tr>
         @empty
@@ -165,5 +169,50 @@
             cache: true
         }
     });
+
+    $('.deleteConfirm').click(function(event) {
+        var form =  $(this).closest("form");
+        event.preventDefault();
+        Swal.fire({
+            title: `Are you sure you want to delete this record?`,
+            text: "If you delete this, it will be gone forever.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            Swal.fire({
+                title: "Please Enter the Employee's Full Name",
+                input: "text",
+                inputAttributes: {
+                    autocapitalize: "off"
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                showLoaderOnConfirm: true,
+                preConfirm: (employeeName) => {
+                    leaveRequestId = this.form.action.split('/')[4];;   
+                    console.log(leaveRequestId,employeeName); 
+
+                    return fetch(`/leave-request/verify-employee-name/${leaveRequestId}/${employeeName}`)
+                        .then(
+                        response => response.json(), 
+                        )
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            `Request failed: Invalid Employee Name`
+                        )
+                    })
+                },
+            })
+            .then((result) => {
+                if (result.value) {
+                    // console.log(result.value);
+                    form.submit();
+                }
+            })
+        });
+    });
+    
 </script>
 @endsection

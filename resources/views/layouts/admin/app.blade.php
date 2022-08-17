@@ -35,6 +35,10 @@
 
         <!-- select 2 -->
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+         <!-- sweet alert -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css">
+        
         <script>
             $('.manager-livesearch').select2({
                 
