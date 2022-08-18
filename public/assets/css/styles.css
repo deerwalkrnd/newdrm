@@ -480,6 +480,7 @@ legend {
 .birthday-modal-content{
     overflow: hidden;
     height: 33rem;
+    /* margin: 47px; */
 }
 
  .birthday-employee-image{
@@ -532,9 +533,16 @@ legend {
 }
 
 /* birthday card with no employee photo */
+.birthday-modal-content-no-photo{
+    overflow: hidden;
+    height: 32rem;
+    margin: 3rem;
+    /* margin: 47px; */
+}
+
 .birthday-card-image-no-photo{
     height: 32rem;
-    width: 29.6rem;
+    width: 23.6rem;
 }
 
 .employee-name-no-photo-div{
@@ -542,9 +550,8 @@ legend {
     word-break:break-word; 
     width:100%;
     position:absolute;
-    transform:translateY(-133%);
-    z-index: 9999999999;
-    font-size:2.8rem; 
+    transform:translateY(-149%);
+    font-size:2.5rem; 
     font-family: 'Marck Script', cursive;
     /* font-family: 'Cookie', cursive; */
     font-weight: bold;

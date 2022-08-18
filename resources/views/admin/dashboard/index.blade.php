@@ -133,7 +133,7 @@
                                     </div>
                                 @else
                                     <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content birthday-modal-content">
+                                        <div class="modal-content birthday-modal-content-no-photo">
                                             <div cl ass="modal-body">
                                                 <div class="container-fluid pt-2 pb-0">
                                                     <div class="image-div" style="position:relative;">
