@@ -168,9 +168,9 @@
     var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
     // console.log(width);
     $(document).ready(function(){
-        if(width >= 992){
+        // if(width >= 992){
             $(".birthdayModal").modal('show');
-        }
+        // }
     });
 </script>
 @endsection

@@ -541,7 +541,7 @@ legend {
 }
 
 .birthday-card-image-no-photo{
-    height: 32rem;
+    /* height: 32rem; */
     width: 23.6rem;
 }
 
@@ -562,38 +562,91 @@ legend {
     right:0;
     /* top:0; */
 }
-/* @media only screen and (max-width: 380px) {
-    .employee-name-no-photo-div{
-        font-size:1.7rem;
-        transform: translateY(-204%);
-    }
-    .birthday-card-image-no-photo {
-        width: 14.5rem;
-    }
-}
 
-@media only screen and (max-width: 400px) {
-    .close-button{
-        right:-10px;
+
+
+@media only screen and (max-width: 299px) {
+    .birthday-modal-content-no-photo{
+        margin: 0px;
     }
+    .close-button{
+        right:-15px;
+    }
+    
     .employee-name-no-photo-div{
-        font-size:1.7rem;
-        transform: translateY(-204%);
+        font-size:1.5rem;
+        transform: translateY(-151%);
     }
     .birthday-card-image-no-photo {
         width: 15.5rem;
     }
 }
 
-@media only screen and (min-width: 400px) and (max-width: 600px) {
+@media only screen and (min-width: 300px) and (max-width: 364px) {
+    .close-button{
+        right:-11px;
+        top: -4px;
+    }
+    
+    .employee-name-no-photo-div{
+        font-size:1.5rem;
+        transform: translateY(-150%);
+    }
+    .birthday-card-image-no-photo {
+        width: 14rem;
+    }
+}
+
+@media only screen and (min-width: 365px) and (max-width: 379px) {
+    .close-button{
+        right:-11px;
+        top: -4px;
+    }
+    
+    .employee-name-no-photo-div{
+        font-size:1.5rem;
+        transform: translateY(-150%);
+    }
+    .birthday-card-image-no-photo {
+        width: 15rem;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 399px) {
     .close-button{
         right:-10px;
     }
     .employee-name-no-photo-div{
         font-size:1.7rem;
-        transform: translateY(-204%);
+        transform: translateY(-148%);
     }
     .birthday-card-image-no-photo {
-        width: 14.5rem;
+        width: 15.8rem;
     }
-} */
+}
+
+@media only screen and (min-width: 400px) and (max-width: 430px) {
+    .close-button{
+        right:-5px;
+    }
+    .employee-name-no-photo-div{
+        font-size:1.7rem;
+        transform: translateY(-148%);
+    }
+    .birthday-card-image-no-photo {
+        width: 17rem;
+    }
+}
+
+@media only screen and (min-width: 431px) and (max-width: 545px) {
+    .close-button{
+        right:-5px;
+    }
+    .employee-name-no-photo-div{
+        font-size:2.5rem;
+        transform: translateY(-148%);
+    }
+    .birthday-card-image-no-photo {
+        width: 25rem;
+    }
+}
