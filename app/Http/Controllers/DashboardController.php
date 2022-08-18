@@ -311,7 +311,7 @@ class DashboardController extends Controller
         $birthdayList = Employee::select('first_name','last_name','middle_name','date_of_birth')
                                 ->where('contract_status','active')
                                 ->where(function($query) use($curr_month,$curr_day){
-                                    $query->whereMonth('date_of_birth','>=',$curr_month)
+                                    $query->whereMonth('date_of_birth','>',$curr_month)
                                             ->orWhere(function($query) use($curr_month,$curr_day){
                                                 $query->whereMonth('date_of_birth',$curr_month)
                                                     ->whereDay('date_of_birth','>=',$curr_day);
@@ -508,7 +508,8 @@ class DashboardController extends Controller
                                 $query->whereMonth('date_of_birth',$curr_month)
                                       ->whereDay('date_of_birth',$curr_day);
                             })
-                            ->orderBy('first_name','desc')
+                            ->orderBy('image_name','asc')
+                            // ->orderBy('first_name','desc')
                             ->get();
         return $todayBirthdayEmployees;
     }

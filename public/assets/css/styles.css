@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Marck+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cookie&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -510,7 +512,7 @@ legend {
     top:0
 }
 
-.birthday-image-card, .birthday-employee-name{
+.birthday-image-card, .birthday-employee-name, .birthday-employee-name-no-photo{
     position:absolute;
 }
 
@@ -520,12 +522,31 @@ legend {
 .birthday-employee-name{
     font-weight: bolder;
     font-size:2rem;
-    color:#3573A3;
-    font-family: Arial;
+    color:#3d76a5;
+    font-family: 'Marck Script', cursive;
     position:absolute;
     width:50%;
     /* display: inline-block; */
-    transform: translateY(781%);
+    transform: translateY(823%);
     /* transform: translate(34%, 781%); */
 }
 
+/* birthday card with no employee photo */
+.birthday-card-image-no-photo{
+    height: 32rem;
+    width: 29.6rem;
+}
+
+.employee-name-no-photo-div{
+    color: #3d76a5;;
+    word-break:break-word; 
+    width:100%;
+    position:absolute;
+    transform:translateY(-133%);
+    z-index: 9999999999;
+    font-size:2.8rem; 
+    font-family: 'Marck Script', cursive;
+    /* font-family: 'Cookie', cursive; */
+    font-weight: bold;
+    text-align:center; 
+}
