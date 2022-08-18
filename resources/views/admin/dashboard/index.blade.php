@@ -124,7 +124,7 @@
 
                                                     </div>
                                                     <div class="col-12 pt-2 pb-0  birthday-image-card">
-                                                        <span class="birthday-employee-name text-center">{{$birthdayEmployee->first_name." ".substr($birthdayEmployee->middle_name,0,1)." ".$birthdayEmployee->last_name}}</span>
+                                                        <span class="birthday-employee-name text-center">{{$birthdayEmployee->first_name." ".substr($birthdayEmployee->middle_name,0,1).". ".$birthdayEmployee->last_name}}</span>
                                                         <img src="{{asset('assets/images/birthday.png')}}" alt="birthday card" class="birthday-card-image">
                                                     </div>
                                                 </div>

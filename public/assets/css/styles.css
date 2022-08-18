@@ -522,12 +522,12 @@ legend {
 .birthday-employee-name{
     font-weight: bolder;
     font-size:2rem;
-    color:#0f5288;
-    font-family: Arial;
+    color:#3d76a5;
+    font-family: 'Marck Script', cursive;
     position:absolute;
     width:50%;
     /* display: inline-block; */
-    transform: translateY(781%);
+    transform: translateY(823%);
     /* transform: translate(34%, 781%); */
 }
 

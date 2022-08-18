@@ -508,7 +508,8 @@ class DashboardController extends Controller
                                 $query->whereMonth('date_of_birth',$curr_month)
                                       ->whereDay('date_of_birth',$curr_day);
                             })
-                            ->orderBy('first_name','desc')
+                            ->orderBy('image_name','asc')
+                            // ->orderBy('first_name','desc')
                             ->get();
         return $todayBirthdayEmployees;
     }
