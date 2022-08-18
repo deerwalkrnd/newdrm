@@ -124,7 +124,7 @@
 
                                                     </div>
                                                     <div class="col-12 pt-2 pb-0  birthday-image-card">
-                                                        <span class="birthday-employee-name text-center">{{$birthdayEmployee->first_name." ".substr($birthdayEmployee->middle_name,0,1).". ".$birthdayEmployee->last_name}}</span>
+                                                        <span class="birthday-employee-name text-center">{{$birthdayEmployee->first_name." ".substr($birthdayEmployee->middle_name,0,1)." ".$birthdayEmployee->last_name}}</span>
                                                         <img src="{{asset('assets/images/birthday.png')}}" alt="birthday card" class="birthday-card-image">
                                                     </div>
                                                 </div>
@@ -140,7 +140,7 @@
                                                         <img src="{{asset('assets/images/birthdayCardNoPhoto.jpg')}}" alt="birthday card" class="birthday-card-image-no-photo">
 
                                                         <div class="employee-name-no-photo-div" style="">
-                                                            <span class=" ">{{ucfirst($birthdayEmployee->first_name)." ".ucfirst(substr($birthdayEmployee->middle_name,0,1)).". ".ucfirst($birthdayEmployee->last_name)}} </span>
+                                                            <span class=" ">{{ucfirst($birthdayEmployee->first_name)." ".ucfirst(substr($birthdayEmployee->middle_name,0,1))." ".ucfirst($birthdayEmployee->last_name)}} </span>
                                                         </div>
                                                     </div>
                                                 </div>
