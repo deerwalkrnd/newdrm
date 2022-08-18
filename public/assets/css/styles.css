@@ -476,7 +476,7 @@ legend {
 
 /* Birthday Card */
 .birthday-modal-content{
-    /* overflow: hidden; */
+    overflow: hidden;
     height: 33rem;
 }
 
