@@ -535,7 +535,7 @@ legend {
 /* birthday card with no employee photo */
 .birthday-modal-content-no-photo{
     overflow: hidden;
-    height: 32rem;
+    /* height: 32rem; */
     margin: 3rem;
     /* margin: 47px; */
 }
@@ -557,3 +557,43 @@ legend {
     font-weight: bold;
     text-align:center; 
 }
+.close-button{
+    position:absolute;
+    right:0;
+    /* top:0; */
+}
+/* @media only screen and (max-width: 380px) {
+    .employee-name-no-photo-div{
+        font-size:1.7rem;
+        transform: translateY(-204%);
+    }
+    .birthday-card-image-no-photo {
+        width: 14.5rem;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .close-button{
+        right:-10px;
+    }
+    .employee-name-no-photo-div{
+        font-size:1.7rem;
+        transform: translateY(-204%);
+    }
+    .birthday-card-image-no-photo {
+        width: 15.5rem;
+    }
+}
+
+@media only screen and (min-width: 400px) and (max-width: 600px) {
+    .close-button{
+        right:-10px;
+    }
+    .employee-name-no-photo-div{
+        font-size:1.7rem;
+        transform: translateY(-204%);
+    }
+    .birthday-card-image-no-photo {
+        width: 14.5rem;
+    }
+} */
