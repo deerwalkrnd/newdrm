@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Marck+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cookie&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -535,35 +537,16 @@ legend {
     width: 29.6rem;
 }
 
-
-.birthday-employee-name-no-photo{
-    /* font-weight: bolder;
-    font-size:2rem;
-    
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    position:absolute;
-    width:125%;
-
-    word-wrap:break-word;
-    white-space: normal;
-    transform: translateY(902%); */
-
-    /* transform: translateY(902%);
-    text-align: justify;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-weight: bolder;
-    font-size: 24pt;
-    color:#0f5288; */
-}
-
 .employee-name-no-photo-div{
-    color: #0f5288;
+    color: #3d76a5;;
     word-break:break-word; 
     width:100%;
     position:absolute;
-    transform:translateY(-171%);
+    transform:translateY(-133%);
     z-index: 9999999999;
-    font-size:1.8rem; 
-    font-weight: bolder;
+    font-size:2.8rem; 
+    font-family: 'Marck Script', cursive;
+    /* font-family: 'Cookie', cursive; */
+    font-weight: bold;
     text-align:center; 
 }
