@@ -21,6 +21,8 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        dd(MailHelper::morningLeaveMail());
+        // dd("ere");
         // dd(\Auth::user()->first_time_login);
         $this->isPasswordExpired();
        

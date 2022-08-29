@@ -46,6 +46,10 @@ class Kernel extends ConsoleKernel
         if($send_mail_missed_punch_out)
             $schedule->command('punchOut:missed')->dailyAt('23:40');
             // ->dailyAt('23:40');
+
+
+        $schedule->command('leave:mail')->dailyAt('12:46'); //dailyAt('10:00')
+        
     }
 
     /**
