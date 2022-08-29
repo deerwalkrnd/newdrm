@@ -20,7 +20,7 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     public function index(Request $request)
-    {
+    {        
         $this->isPasswordExpired();
        
         $leaveBalance = $this->getLeaveBalance();

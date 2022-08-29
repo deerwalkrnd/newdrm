@@ -119,11 +119,37 @@ class MailHelper{
                         ->whereDate('start_date','<=',date('Y-m-d'))
                         ->whereDate('end_date','>=',date('Y-m-d'))
                         ->get();
+        
+        $deerwalk_sifal = Leaverequest::whereDate('start_date','<=',date('Y-m-d'))
+                    ->whereDate('end_date','>=',date('Y-m-d'))
+                    ->where('acceptance','accepted')
+                    ->whereHas('employee',function($query){
+                        $query->where('unit_id',11);
+                    })
+                    ->get()
+                    ->count();
+        
+        $deerwalk_compware = Leaverequest::whereDate('start_date','<=',date('Y-m-d'))
+                    ->whereDate('end_date','>=',date('Y-m-d'))
+                    ->where('acceptance','accepted')
+                    ->whereHas('employee',function($query){
+                        $query->where('unit_id',10);
+                    })
+                    ->get()
+                    ->count();
+
+        $deerwalk_group = Leaverequest::whereDate('start_date','<=',date('Y-m-d'))
+                    ->whereDate('end_date','>=',date('Y-m-d'))
+                    ->where('acceptance','accepted')
+                    ->whereHas('employee',function($query){
+                        $query->where('unit_id',1)
+                                ->orWhere('unit_id',13);
+                    })
+                    ->get()
+                    ->count();       
 
         $mail= Mail::to(explode(',',env('GP_EMAIL')))
-                ->queue(new LeaveMail($leaveList));
-        // explode(',',env('GP_EMAIL'))
-
+                ->queue(new LeaveMail($leaveList,$deerwalk_compware,$deerwalk_group,$deerwalk_sifal));
 
         return true;
     }
