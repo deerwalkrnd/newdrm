@@ -2,23 +2,23 @@
     <p>Hello All,</p>
     <p>This message is to inform you that the following team members of DSS are on leave today. According to DRM, no one is on leave from DWG & DWC.
     <div >
-        <table border=1>
+        <table border=1 style=" border-collapse: collapse;">
             <tr>
-                <th>
+                <th style="padding:10px">
                     <center>S.N.</center>
                 </th>
-                <th>Name of Employee</th>
-                <th>Leave Type</th>
-                <th>Unit</th>
+                <th style="padding:10px">Name of Employee</th>
+                <th style="padding:10px">Leave Type</th>
+                <th style="padding:10px">Unit</th>
             </tr>
             @forelse($leaveList as $onLeave)
             <tr>
-                <td>
+                <td style="padding:10px">
                     <center>{{ $loop->iteration }}</center>
                 </td>
-                <td>{{ $onLeave->employee->first_name." ".$onLeave->employee->last_name}}</td>
-                <td>{{ $onLeave->leaveType->name }}</td>
-                <td>{{ $onLeave->employee->unit->unit_name }}</td>
+                <td style="padding:10px">{{ $onLeave->employee->first_name." ".$onLeave->employee->last_name}}</td>
+                <td style="padding:10px">{{ $onLeave->leaveType->name }}</td>
+                <td style="padding:10px">{{ $onLeave->employee->unit->unit_name }}</td>
             </tr>
             @empty
             <tr>
