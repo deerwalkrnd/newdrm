@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\PendingLeaveNotificationMail;
 use App\Mail\TestMail;
 use App\Mail\SendMail;
+use App\Mail\LeaveMail;
 use App\Mail\MissedPunchOutMail;
 use Illuminate\Support\Facades\DB;
 
@@ -110,6 +111,23 @@ class MailHelper{
         return true;
     }
 
+    public static function morningLeaveMail(){
+        $leaveList = LeaveRequest::select('id','employee_id','start_date','end_date','days','full_leave','half_leave','leave_type_id')
+                        ->with('employee:id,first_name,last_name,middle_name,unit_id')
+                        ->with('leaveType:id,name')
+                        ->where('acceptance','accepted')
+                        ->whereDate('start_date','<=',date('Y-m-d'))
+                        ->whereDate('end_date','>=',date('Y-m-d'))
+                        ->get();
+
+        $mail= Mail::to(explode(',',env('GP_EMAIL')))
+                ->queue(new LeaveMail($leaveList));
+        // explode(',',env('GP_EMAIL'))
+
+
+        return true;
+    }
+
     public static function testMail1(){
         // $name = "Test Mail1";
         // Mail::to('deena.sitikhu@deerwalk.edu.np')
@@ -181,6 +199,8 @@ class MailHelper{
             print_r($e->getMessage());
         }
     }
+
+    
 }
 
 ?>
