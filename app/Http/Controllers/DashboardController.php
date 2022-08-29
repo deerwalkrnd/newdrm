@@ -21,7 +21,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // dd(\Auth::user()->first_time_login);
         $this->isPasswordExpired();
        
         $leaveBalance = $this->getLeaveBalance();
