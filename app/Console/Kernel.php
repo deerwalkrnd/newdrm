@@ -28,6 +28,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('test:mail')->everyFiveMinutes(); //dailyAt('23:50')  
+
+        // Mail cron job set to check daily status of cron job and queue
         $schedule->command('send:mail')->dailyAt('17:00'); //dailyAt('16:00')
 
         // $schedule->job(new TestJob)->everyMinute();
@@ -47,8 +49,8 @@ class Kernel extends ConsoleKernel
             $schedule->command('punchOut:missed')->dailyAt('23:40');
             // ->dailyAt('23:40');
 
-
-        $schedule->command('leave:mail')->dailyAt('10:00'); //dailyAt('10:00')
+        // Morning Leave Mail Schedule
+        // $schedule->command('leave:mail')->dailyAt('10:00'); //dailyAt('10:00')
         
     }
 
