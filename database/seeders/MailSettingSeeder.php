@@ -32,7 +32,7 @@ class MailSettingSeeder extends Seeder
             'send_mail'=> '1'
         ]);
         DB::table('mail_controls')->insert([
-            'name' => 'Missed Punch Out',
+            'name' => 'Missed Punch Out Mail',
             'send_mail'=> '1'
         ]);
         DB::table('mail_controls')->insert([
@@ -45,6 +45,10 @@ class MailSettingSeeder extends Seeder
         ]);
         DB::table('mail_controls')->insert([
             'name' => 'Early Punch Out',
+            'send_mail'=> '1'
+        ]);
+        DB::table('mail_controls')->insert([
+            'name' => 'Missed Punch Out Full Functionality',
             'send_mail'=> '1'
         ]);
     }
