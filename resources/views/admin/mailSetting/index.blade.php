@@ -28,8 +28,7 @@
                         {{ old('send_mail') == '1' ? 'checked':'' }} />
                     </center>   
                 </form>
-            </td>    
-            
+            </td>                
         </tr>
         @empty
         <tr>
