@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\MissedPunchOut::class,
+        Commands\MissedPunchOutMail::class,
         Commands\PendingLeaveNotification::class,
     ];
 
@@ -27,26 +28,21 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('test:mail')->everyFiveMinutes(); //dailyAt('23:50')  
-
         // Mail cron job set to check daily status of cron job and queue
-        $schedule->command('send:mail')->dailyAt('17:00'); //dailyAt('16:00')
+        $schedule->command('send:mail')->dailyAt('16:00'); //dailyAt('16:00')
 
-        // $schedule->job(new TestJob)->everyMinute();
-
-        //No Punch In No Leave Request Record Update
         $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50') test mail
-
-        // //Pending Leave request of tommorow Notification
+        
         $send_mail_pending_leave_request = MailControl::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
         if($send_mail_pending_leave_request)
             $schedule->command('leave:pending')->dailyAt('21:00');
         // ->dailyAt('21:00');
         
-        // //Today's Missed Punch Out Notification 
+        $schedule->command('punchOut:missed')->dailyAt('23:40');
+
         $send_mail_missed_punch_out = MailControl::select('send_mail')->where('name','Missed Punch Out')->first()->send_mail;
         if($send_mail_missed_punch_out)
-            $schedule->command('punchOut:missed')->dailyAt('23:40');
+            $schedule->command('missedPunchOut:mail')->dailyAt('23:40');
             // ->dailyAt('23:40');
 
         // Morning Leave Mail Schedule
