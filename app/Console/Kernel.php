@@ -41,11 +41,11 @@ class Kernel extends ConsoleKernel
         $missed_punch_out_full_functionality_status = MailControl::select('send_mail')->where('name','Missed Punch Out Full Functionality')->first()->send_mail;
         
         if($missed_punch_out_full_functionality_status){
-            $schedule->command('punchOut:missed')->everyMinute();//dailyAt('23:40');
+            $schedule->command('punchOut:missed')->dailyAt('23:40');
 
             $send_mail_missed_punch_out = MailControl::select('send_mail')->where('name','Missed Punch Out Mail')->first()->send_mail;
             if($send_mail_missed_punch_out)
-                $schedule->command('missedPunchOut:mail')->everyMinute();//dailyAt('23:40');
+                $schedule->command('missedPunchOut:mail')->dailyAt('23:40');
         }
 
         
