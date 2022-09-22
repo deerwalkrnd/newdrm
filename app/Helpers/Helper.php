@@ -153,19 +153,6 @@ final class Helper
             return $remaining_leave;     
     }
 
-    private function getNepaliYear($year){
-        try{
-            $date = new NepaliCalendarHelper($year,1);
-            $nepaliDate = $date->in_bs();
-            $nepaliDateArray = explode('-',$nepaliDate);
-            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1]];
-            return $year_month;
-        }catch(Exception $e)
-        {
-            print_r($e->getMessage());
-        }
-    }
-
     private function getAlreadyTakenLeaves($year,$leave_type_id,$employee_id){
         $already_taken_full_leaves = LeaveRequest::select('id','days','leave_type_id','year','acceptance')
                                         ->where('acceptance','accepted')
@@ -183,6 +170,50 @@ final class Helper
                                         ->sum('days');
         $already_taken_total_leaves = $already_taken_full_leaves + $already_taken_half_leaves/2;
         return $already_taken_total_leaves;
+    }
+
+    public static function getNepaliMonthList(){
+        $months=[
+            '01'=>'Baisakh',
+            '02'=>'Jestha',
+            '03'=>'Asadh',
+            '04'=>'Shrawan',
+            '05'=>'Bhadra',
+            '06'=>'Asoj',
+            '07'=>'Kartik',
+            '08'=>'Mangshir',
+            '09'=>'Poush',
+            '10'=>'Magh',
+            '11'=>'Falgun',
+            '12'=>'Chaitra'    
+        ];
+        return $months;
+    }
+
+    public static function getNepaliYear($year){
+        try{
+            $date = new NepaliCalendarHelper($year,1);
+            $nepaliDate = $date->in_bs();
+            $nepaliDateArray = explode('-',$nepaliDate);
+            $year_month = [$nepaliDateArray[0],$nepaliDateArray[1]];
+            return $year_month;
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
+    }
+
+    public static function getEnglishDate($year){
+        try{
+            $date = new NepaliCalendarHelper($year,0);
+            $englishDate = $date->in_ad();
+            $englishDateArray = explode('-',$englishDate);
+            $year_month_day = [$englishDateArray[0],$englishDateArray[1],$englishDateArray[2]];
+            return $year_month_day;
+        }catch(Exception $e)
+        {
+            print_r($e->getMessage());
+        }
     }
 }
 ?>
