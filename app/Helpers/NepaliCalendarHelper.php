@@ -315,6 +315,15 @@ class NepaliCalendarHelper{
 
 		return array($english_year, $english_month, $english_day);
 	} 
+
+	protected function getNepaliMonthDay(){
+		return $this->nep_month_day;
+	}
+
+	
+	protected function getNepaliDate(){
+		return $this->nepali_date;
+	}
 }
 
  ?>

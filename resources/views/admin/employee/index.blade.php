@@ -12,10 +12,10 @@
 @section('content')
 @include('layouts.basic.tableHead',["table_title" => "Employee List", "url" => "/employee/create"])
 <div class="row m-4 d-flex aligns-items-center justify-content-center ">
-    <div class="col-md-5">
+    <div class="col-md-3 col-sm-6">
         <!-- <label class="form-label" for="unit_id">Unit: </label> -->
-        <select class="form-control p-2" name="unit_id" onchange="search()" id="unit_id" data-placeholder="-- Choosee Unit --">
-            <option value="0"  selected disabled class="text-center">----------   Choose Unit   -----------</option>
+        <select class="form-control p-2" name="unit_id" id="unit_id" data-placeholder="-- Choosee Unit --">
+            <option value="0"  selected disabled class="text-center">-----   Choose Unit   -----</option>
             @foreach($units as $unit)
                 <option value="{{$unit->id}}"
                     {{ (!empty(old('unit_id')) && old('unit_id') == $unit->id) ? 'selected': ''}}
@@ -25,10 +25,27 @@
         </select>
     </div> 
 
+    <div class="col-md-3 col-sm-6">
+        <!-- <label class="form-label" for="unit_id">Unit: </label> -->
+        <select class="form-control p-2" name="month" id="month" data-placeholder="-- Choosee  Birthday Month --">
+            <option value="0"  selected disabled class="text-center">-----   Birthday Month   -----</option>
+            @foreach($months as $id=>$month)
+                <option value="{{ $id }}"
+                    {{ (!empty(old('month')) && old('month') == $id )? 'selected': ''}}
+                    {{ ((request()->get('m')) && (request()->get('m')) == $id && empty(old('month'))) ? 'selected' : ''}}>{{ $month }}
+                </option>
+            @endforeach
+        </select>
+    </div> 
+
     <div class="col-md-1 ml-1">
+        <button class="btn border-0 text-white bg-primary" onclick="search()" style="float:right;width:100px;">Search</button>
+    </div>
+
+    <div class="col-md-1 ml-1 ">
         <button class="btn border-0 text-white" onclick="reset()" style="background-color:#0f5288;float:right;width:100px;">Reset</button>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-1 ">
         <a href="{{ '/download/employee?'.request()->getQueryString() }}"  id="export" class="btn btn-success border-0 text-white" style="float:right;width:100px;">Export</a>
     </div>
 </div>
@@ -48,6 +65,7 @@
         <th scope="col">Since Year</th>
         <th scope="col">Status</th>
         <th scope="col">Position</th>
+        <th scope="col">Date of Birth</th>
         <th scope="col">Punch In</th>
         <th scope="col">Action</th>
     </tr>
@@ -68,6 +86,7 @@
         <td>{{ $join_year[$i]}}</td>
         <td>{{ $employee->serviceType->service_type_name }}</td>
         <td>{{ $employee->designation->job_title_name }}</td>
+        <td>{{ $employee->date_of_birth }}</td>
         @if($employee->attendances_count > 0)
         <td>Already Punched In</td>
         @else
@@ -125,10 +144,14 @@
 
     //Search Unit wise
     function search(){
-        console.log('here');
         let unit_id = $("#unit_id").val();
-        console.log(unit_id);
-        if(unit_id)
+        let month_id = $("#month").val();
+
+        if(month_id && unit_id)
+            $(location).attr('href','/employee?u='+unit_id+'&m='+month_id);
+        else if(month_id)
+            $(location).attr('href','/employee?m='+month_id);
+        else if(unit_id)
             $(location).attr('href','/employee?u='+unit_id);
     };
 </script>

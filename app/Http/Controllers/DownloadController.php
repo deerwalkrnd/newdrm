@@ -121,7 +121,7 @@ class DownloadController extends Controller
             "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
             "Expires"             => "0"
         );
-        $columns = array('Employee Name', 'Manager', 'Organization','Unit', 'Department', 'Internship/Traineeship Date','Join Date','Since Year','Status','Position');
+        $columns = array('Employee Name', 'Manager', 'Organization','Unit', 'Department', 'Internship/Traineeship Date','Join Date','Since Year','Status','Position','Date of Birth');
 
         $callback = function() use($employees, $columns,$join_year) {
             $file = fopen('php://output', 'w');
@@ -145,8 +145,9 @@ class DownloadController extends Controller
                 $row['Since Year'] = $join_year[$i];
                 $row['Status'] = $employee->serviceType->service_type_name;
                 $row['Position'] = $employee->designation->job_title_name;
+                $row['Date of Birth'] = $employee->date_of_birth;
                 $i++; 
-                $data = array($row['Employee Name'], $row['Manager'], $row['Organization'],$row['Unit'], $row['Department'], $row['Internship/Traineeship Date'], $row['Join Date'], $row['Since Year'], $row['Status'], $row['Position']);
+                $data = array($row['Employee Name'], $row['Manager'], $row['Organization'],$row['Unit'], $row['Department'], $row['Internship/Traineeship Date'], $row['Join Date'], $row['Since Year'], $row['Status'], $row['Position'],$row['Date of Birth']);
                 fputcsv($file, $data);
             }
             fclose($file);

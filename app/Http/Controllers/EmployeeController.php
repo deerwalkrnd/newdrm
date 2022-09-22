@@ -26,6 +26,8 @@ use App\Models\Manager;
 use App\Models\CarryOverLeave;
 use App\Helpers\NepaliCalendarHelper;
 use App\Helpers\MailHelper;
+use App\Helpers\Helper;
+use App\Helpers\CalendarHelper;
 
 use App\Actions\Fortify\CreateNewUser;
 
@@ -38,9 +40,9 @@ class EmployeeController extends Controller
      */
     public function index(Request $request,$download=0)
     {
-        // $request->u => unit_id
+        // $request->u => unit_id $request->m => nepali birth month
         $date= date('Y-m-d');
-        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date')
+        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date','date_of_birth')
                                 ->with('designation:id,job_title_name')
                                 ->with('organization:id,name')
                                 ->with('unit:id,unit_name')
@@ -53,37 +55,49 @@ class EmployeeController extends Controller
                                 }])
                                 ->orderBy('first_name') 
                                 ->orderBy('last_name');
-                                // ->get();
+
+        if($request->u && $request->m){
+            $employees = $employees->where('unit_id',$request->u);
+            $employees = $this->getEmployeesByBirthMonth($employees,$request->m);
+        }                                
         if($request->u)
             $employees = $employees->where('unit_id',$request->u);
-        
+
+        if($request->m){
+            $employees = $this->getEmployeesByBirthMonth($employees,$request->m);
+            
+
+            // $employees = $employees->selectRaw("DATE_FORMAT(date_of_birth, '%m-%d') as DOB")
+            //                         ->having('DOB', '>=', $english_start_month_day[1].'-'.$english_start_month_day[2])
+            //                         ->having('DOB', '<=', $english_end_month_day[1].'-'.$english_end_month_day[2]);
+
+        }
+
         $employees = $employees->get();
 
         $join_year =[];
 
         foreach ($employees as $employee){
-            try{
-                $date = new NepaliCalendarHelper($employee->join_date,1);
-                $nepaliDate = $date->in_bs();
-                $nepaliDateArray = explode('-',$nepaliDate);
-                array_push($join_year,$nepaliDateArray[0]);
-            }catch(Exception $e)
-            {
-                print_r($e->getMessage());
-            }
+            array_push($join_year, Helper::getNepaliYear($employee->join_date)[0]);
         }
+
+        
+        $units = Unit::select('id','unit_name')->get();
+        $months = Helper::getNepaliMonthList();
+
+        $code = 'OXqSTexF5zn4uXSp';
+
+      
         $res = [
             'title' => 'Employee welcome ',
             'message' => 'Employee has been successfully Created ',
             'icon' => 'success'
         ];
-        $units = Unit::select('id','unit_name')->get();
-        $code = 'OXqSTexF5zn4uXSp';
 
         if($download == 1)
             return [$employees,$join_year];
         else
-            return view('admin.employee.index')->with(compact('employees','join_year','res','code','units'));
+            return view('admin.employee.index')->with(compact('employees','join_year','res','code','units','months'));
     }
 
     /**
@@ -442,6 +456,34 @@ class EmployeeController extends Controller
         ];
 
         return redirect('/employee/terminate')->with(compact('res'));
+    }
+
+    public function getEmployeesByBirthMonth($employees,$month){
+        $current_year = Helper::getNepaliYear(date('Y-m-d'))[0];
+            $calendarHelper = new CalendarHelper;
+
+            $nepali_start_month_day = $current_year.'-'.$month.'-01';   
+            $nepali_end_month_day = $current_year.'-'.$month.'-'.$calendarHelper->getLastDayOfMonth($current_year,$month);        
+
+            $english_start_month_day = Helper::getEnglishDate($nepali_start_month_day);
+            $english_end_month_day = Helper::getEnglishDate($nepali_end_month_day);
+
+            $employees =  $employees->where(function($query) use($english_start_month_day,$english_end_month_day){
+                                    $query->whereMonth('date_of_birth','>',$english_start_month_day[1])
+                                            ->orWhere(function($query) use($english_start_month_day,$english_end_month_day){
+                                                $query->whereMonth('date_of_birth',$english_start_month_day[1])
+                                                    ->whereDay('date_of_birth','>=',$english_start_month_day[2]);
+                                            });   
+                                })
+                                ->where(function($query) use($english_end_month_day){
+                                    $query->whereMonth('date_of_birth','<',$english_end_month_day[1])
+                                            ->orWhere(function($query) use($english_end_month_day){
+                                                $query->whereMonth('date_of_birth',$english_end_month_day[1])
+                                                    ->whereDay('date_of_birth','<=',$english_end_month_day[2]);
+                                            });  
+                                        
+                                });
+            return $employees;
     }
 
 }
