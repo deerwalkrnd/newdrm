@@ -650,3 +650,20 @@ legend {
         width: 25rem;
     }
 }
+
+/* style the tooltip box and arrow based on your class*/
+.bs-tooltip-top .white-tooltip {
+    background-color: whitesmoke !important
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+      border-top-color: whitesmoke;
+    }
+/* .tooltip.bs-tooltip-bottom .tooltip-arrow::before{
+    border-bottom-color: whitesmoke !important;
+    background-color: #0f5288;
+} */
+.bs-tooltip-top.show{
+    opacity: 1;
+}
+
