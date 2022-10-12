@@ -486,4 +486,42 @@ class EmployeeController extends Controller
             return $employees;
     }
 
+
+    public function editContact($id)
+    {
+        $employee = Employee::with('emergencyContact')->findOrFail($id);
+        $organizations = Organization::select('id','name')->get();
+        $units = Unit::select('id','unit_name')->get();
+        $departments = Department::select('id','name','unit_id')->get();
+        $designations = Designation::select('id','job_title_name')->get();
+        $provinces = Province::select('id', 'province_name')->get();
+        $districts = District::select('id', 'district_name', 'province_id')->get();
+        $serviceTypes = ServiceType::select('id','service_type_name')->get();
+        $shifts = Shift::select('id','name','time_required')->get();
+        $user = User::select('id','username')->where('employee_id',$id)->get();
+        $roles = Role::select('id','authority')->where('id','!=','2')->get();
+        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
+        return view('admin.employee.contact')->with(compact('employee','user','departments','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
+    }
+
+    public function updateContact(Request $request, $id)
+    {
+        $employee = Employee::findOrFail($id);
+        $input = $request->validate([
+            'mobile' => 'required|digits:10',
+        ]);
+        
+        try {
+            $employee->update($input);
+        } catch (\Exception $e) {
+            return redirect('/employee');
+        }
+        $res = [
+            'title' => 'Contact Updated ',
+            'message' => 'Employee\'s contact has been successfully Updated ',
+            'icon' => 'success'
+        ];
+        return redirect('/contact')->with(compact('res'));
+    }
+
 }

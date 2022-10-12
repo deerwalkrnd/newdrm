@@ -237,6 +237,9 @@ Route::middleware(['hr'])->group(function(){
     Route::put('/contact/{id}',[ContactController::class, 'update']);
     Route::delete('/contact/{id}',[ContactController::class, 'destroy']);
 
+    Route::get('/employee-contact/edit/{id}',[EmployeeController::class, 'editContact']);
+    Route::put('/employee-contact/{id}',[EmployeeController::class, 'updateContact']);
+
     // yearly leaves route
     Route::get('/yearly-leaves/create',[YearlyLeaveController::class, 'create']);
     Route::post('/yearly-leaves',[YearlyLeaveController::class, 'store']);

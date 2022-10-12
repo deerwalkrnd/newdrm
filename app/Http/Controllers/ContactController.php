@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Contact;
+use App\Models\Employee;
 use App\Http\Requests\ContactRequest;
 
 
@@ -19,7 +20,8 @@ class ContactController extends Controller
     public function index()
     {
         $contacts = Contact::select('id', 'name', 'number')->get();
-        return view('admin.contact.index')->with(compact('contacts'));
+        $employees = Employee::select('id','first_name','middle_name','last_name','mobile','image_name')->get();
+        return view('admin.contact.index')->with(compact('contacts','employees'));
     }
 
     /**
