@@ -20,7 +20,7 @@ class ContactController extends Controller
     public function index()
     {
         $contacts = Contact::select('id', 'name', 'number')->get();
-        $employees = Employee::select('id','first_name','middle_name','last_name','mobile','image_name')->get();
+        $employees = Employee::select('id','first_name','middle_name','last_name','mobile','image_name')->where('contract_status','active')->get();
         return view('admin.contact.index')->with(compact('contacts','employees'));
     }
 
