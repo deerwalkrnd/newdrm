@@ -113,6 +113,9 @@ Route::middleware(['manager'])->group(function(){
 
 // lowest level hr
 Route::middleware(['hr'])->group(function(){
+
+    Route::get('/force-punch-out',[AttendanceController::class, 'forcePunchOut']);
+
     // '/leave-request/subordinate-leave'
     Route::get('/leave-request/subordinate-leave/edit/{id}',[LeaveRequestController::class, 'edit']);
     Route::put('/leave-request/subordinate-leave/{id}',[LeaveRequestController::class, 'update']);

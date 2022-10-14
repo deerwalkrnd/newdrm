@@ -41,7 +41,6 @@ class DashboardController extends Controller
             $this->setManagerNotification();
 
         $first_login_today = \Auth::user()->is_logged_in_today;
-        // dd($first_login_today);
 
         return view('admin.dashboard.index')
                 ->with(compact(

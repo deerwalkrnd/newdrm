@@ -192,7 +192,6 @@
                 showLoaderOnConfirm: true,
                 preConfirm: (employeeName) => {
                     leaveRequestId = this.form.action.split('/')[4];;   
-                    console.log(leaveRequestId,employeeName); 
 
                     return fetch(`/leave-request/verify-employee-name/${leaveRequestId}/${employeeName}`)
                         .then(
@@ -207,7 +206,6 @@
             })
             .then((result) => {
                 if (result.value) {
-                    // console.log(result.value);
                     form.submit();
                 }
             })
