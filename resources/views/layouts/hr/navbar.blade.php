@@ -175,7 +175,10 @@
 
                                         <tr>
                                             <td></td>
-                                            <td></td>
+                                            <!-- link doesnot work, it is just for information in frontend. redirection works through swal -->
+                                            <td class="hr_menu_content"><a href="/force-punch-out" id="confirmForcePunchOut"><img class="img-fluid"
+                                                src="/assets/images/icons/attendance.png">Force Punch Out
+                                            </a></td>
                                             <td class="hr_menu_content"><a href="/mail"><img class="img-fluid"
                                                 src="/assets/images/icons/mail.png">Mail Setting
                                             </a></td>

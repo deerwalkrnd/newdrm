@@ -399,7 +399,20 @@ class AttendanceController extends Controller
         }
     }
 
-    public function getMaxPunchInTime(){
-
+    public function ForcePunchOut(){
+        $attendances = Attendance::whereDate('punch_in_time',date('Y-m-d'))
+                                    ->where('punch_out_time',NULL)
+                                    ->update(['punch_out_time'=>date('Y-m-d H:i:s'),'punch_out_ip'=>'110.44.116.42']);
+        
+        if($attendances != 0)
+            return response()->json([
+                'success' => true,
+                'message' => "Punch Out Successfully.",
+            ]);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => "Punch Out Unsucessful. Everyone must've punched out already.",
+            ]);
     }
 }
