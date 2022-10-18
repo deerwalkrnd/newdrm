@@ -84,9 +84,19 @@ class CarryOverLeaveController extends Controller
                 return $record;
             })->toArray();
             
-            CarryOverLeave::upsert($employees,['employee_id','year'],['days']);
+            $updateCarryOver = CarryOverLeave::upsert($employees,['employee_id','year'],['days']);
         }
-        return redirect('/dashboard');
+        if($updateCarryOver)
+            return response()->json([
+                'success' => true,
+                'message' => "Carry Over Leave has been Created Successfully.",
+            ]);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => "Error Occured while creating Carry-Over Leave.",
+            ]);
+        // return redirect('/dashboard');
     }
 
     //calculate leave days ofeach employee usign both half and full leave
