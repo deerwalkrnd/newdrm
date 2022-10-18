@@ -91,35 +91,64 @@
         );
         @endif
 
-         $('#confirmForcePunchOut').click(function(event) {
-                event.preventDefault();
-                Swal.fire({
-                    title: `Are you sure you want to make forced punch in today for everyone?`,
-                    text: "If you force punch in now, punch out datetime will be set to now for those who have not punch out today.",
-                    icon: "warning",
-                    showCancelButton: true,
-                   
-                })
-                .then((isConfirm) => {
-                    if(isConfirm.value == true)
-                        $.ajax({
-                            url:"/force-punch-out",
-                            type: 'GET',
-                            dataType: 'JSON',
-                            success: function(results){
-                                if(results.success === true){
-                                    swal.fire("Done!", results.message, "success");
-                                    setTimeout(function(){
-                                        location.reload();
-                                    },2000);
-                                } else {
-                                    console.log("'here");
-                                    swal.fire("Error!", results.message, "error");
-                                }
+        $('#confirmForcePunchOut').click(function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: `Are you sure you want to make forced punch in today for everyone?`,
+                text: "If you force punch in now, punch out datetime will be set to now for those who have not punch out today.",
+                icon: "warning",
+                showCancelButton: true,
+                
+            })
+            .then((isConfirm) => {
+                if(isConfirm.value == true)
+                    $.ajax({
+                        url:"/force-punch-out",
+                        type: 'GET',
+                        dataType: 'JSON',
+                        success: function(results){
+                            if(results.success === true){
+                                swal.fire("Done!", results.message, "success");
+                                setTimeout(function(){
+                                    location.reload();
+                                },2000);
+                            } else {
+                                console.log("'here");
+                                swal.fire("Error!", results.message, "error");
                             }
-                        })
-                });
+                        }
+                    })
             });
+        });
+
+        $('#confirmCalculateCarryOverLeave').click(function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: `Are you sure you want to Update the Carry-Over Leave of This Year?`,
+                text: "The left-over personal leaves of employees in previous year will be added as carry-over leaves in this year. Once Updated Cannot be Revert.",
+                icon: "warning",
+                showCancelButton: true,
+            })
+            .then((isConfirm) => {
+                if(isConfirm.value == true)
+                    $.ajax({
+                        url:"/info",
+                        type: 'GET',
+                        dataType: 'JSON',
+                        success: function(results){
+                            if(results.success === true){
+                                swal.fire("Done!", results.message, "success");
+                                setTimeout(function(){
+                                    location.reload();
+                                },2000);
+                            } else {
+                                console.log("'here");
+                                swal.fire("Error!", results.message, "error");
+                            }
+                        }
+                    })
+            });
+        });
     </script>
 </body>
 

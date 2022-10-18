@@ -72,7 +72,8 @@
                                                         src="/assets/images/icons/list.png">Upload Files
                                                 </a></td>
                                             <td class="hr_menu_content">
-                                            <a href="/info" onclick="return confirm('Are you sure you want to update the carry-over leave of this year?')"><img class="img-fluid"
+                                            <!-- link doesnot work, it is just for information in frontend. redirection works through swal -->
+                                            <a href="/info" id="confirmCalculateCarryOverLeave"><img class="img-fluid"
                                                         src="/assets/images/icons/logout.png" >Calculate Carry Over Leave
                                                 </a>
                                                 <!-- <a href="#"><img class="img-fluid"
