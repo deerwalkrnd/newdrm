@@ -19,10 +19,10 @@ class MissedPunchOutHelper{
                                 ->with('employee:id,first_name,middle_name,last_name,manager_id,email')
                                 ->whereDate('punch_in_time',date('Y-m-d'))        //for cron job
                                 ->get();
-
+                                
         foreach($attendances as $attendance){
-             try{             
-                $leaveRequest = LeaveRequest::create([
+            try{             
+                LeaveRequest::create([
                     'employee_id' => $attendance->employee_id,
                     'start_date' => date('Y-m-d'),
                     'end_date' => date('Y-m-d'),
@@ -39,10 +39,9 @@ class MissedPunchOutHelper{
 
             }catch(\Exception $e){
                 \Log::debug($e);
-            }
-        
-            return true;
+            }        
         }
+        return true;
     }
 
     public static function getNepaliYear($year){
