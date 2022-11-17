@@ -28,7 +28,7 @@ class NepaliCalendarHelper{
 	);
 
 	private $eng_days = array(31,28,31,30,31,30,31,31,30,31,30,31);
-	private $eng_days_leap = array(31,28,31,30,31,30,31,31,30,31,30,31);
+	private $eng_days_leap = array(31,29,31,30,31,30,31,31,30,31,30,31);
 
 	private $nep_month_day = array(
 		'2067' => array(31,31,32,31,31,31,30,29,30,29,30,30),
@@ -257,15 +257,16 @@ class NepaliCalendarHelper{
 
 		foreach($this->nep_month_day[$nepali_year] as $mth)
 		{
-			if($days > $mth)
+			if($days > $mth) 
 			{
 				$days -= $mth;
 				$nepali_month++;
 			}else{
 				$nepali_day = $days;
+				break;
 			}
 		}
-
+		
 		return array($nepali_year, $nepali_month, $nepali_day);
 	}
 
