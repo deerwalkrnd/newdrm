@@ -263,9 +263,10 @@ class NepaliCalendarHelper{
 				$nepali_month++;
 			}else{
 				$nepali_day = $days;
+				break;
 			}
 		}
-
+		
 		return array($nepali_year, $nepali_month, $nepali_day);
 	}
 
