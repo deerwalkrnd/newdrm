@@ -17,14 +17,18 @@ final class Helper
 
     public static function getDays($start_date, $end_date, $leave_type_id,$employee_id){
         $employee = Employee::select('id','gender','unit_id','join_date')->where('contract_status','active')->findOrFail($employee_id);
-        $includeHoliday = LeaveType::select('include_holiday')->where('id',$leave_type_id)->get()->first();
         $s_date = date('Y-m-d',strtotime($start_date));
         $e_date = date('Y-m-d',strtotime($end_date));
-        if($includeHoliday->include_holiday)
+
+        if($leave_type_id)
         {
-            return (new self)->calculateTotalLeaveDays($s_date,$e_date);      
-        }else{
-            return (new self)->calculateLeaveDays($s_date,$e_date, $employee);      
+            $includeHoliday = LeaveType::select('include_holiday')->where('id',$leave_type_id)->get()->first();
+            if($includeHoliday->include_holiday)
+            {
+                return (new self)->calculateTotalLeaveDays($s_date,$e_date);      
+            }else{
+                return (new self)->calculateLeaveDays($s_date,$e_date, $employee);      
+            }
         }
     }
 
