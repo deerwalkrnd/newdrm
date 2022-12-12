@@ -25,10 +25,10 @@
                 <td class="text-center">
                 <a href="/file-upload/download/{{ $fileUpload->id }}"><i class="fa fa-download" aria-hidden="true"></i></a> 
                 | 
-                <form action="/file-upload/{{ $fileUpload->id }}" method="POST" class="d-inline">
+                <form id="deleteFile" action="/file-upload/{{ $fileUpload->id }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="delete border-0"><i class="fas fa-trash-alt action"></i></button>
+                    <button type="button" onclick="confirmDelete()" class="delete border-0 confirmDelete"><i class="fas fa-trash-alt action"></i></button>
                 </form>
             </td>
         </tr>
@@ -51,5 +51,22 @@
     $(document).ready(function() {
         $('.drmDataTable').DataTable();
     })
+
+    function confirmDelete(e)
+    {
+        Swal.fire({
+            title: `Are you sure you want to delete this file?`,
+            text: "If you delete it, file will also get deleted and cannot be undone.",
+            icon: "warning",
+            showCancelButton: true,
+        })
+        .then((res) => {
+            console.log(res.isConfirmed);
+            if(res.isConfirmed === true)
+            {
+                $('#deleteFile').submit();
+            }
+        });
+    }
 </script>
 @endsection
