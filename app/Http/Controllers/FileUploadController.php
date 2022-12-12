@@ -9,8 +9,6 @@ use App\Http\Requests\FileUploadRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Employee;
 
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-
 class FileUploadController extends Controller
 {
     /**
@@ -200,7 +198,7 @@ class FileUploadController extends Controller
                 'message' => 'Filename contains some error.',
                 'icon' => 'success'
                 ];
-                
+
             return redirect('/file-upload')->with(compact($res));
         }
     }
