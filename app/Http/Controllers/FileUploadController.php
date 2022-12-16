@@ -174,11 +174,32 @@ class FileUploadController extends Controller
         $path = $fileUpload['file_name'];
         $uploaded_by = $fileUpload['uploaded_by'];
         $employee_id = $fileUpload['employee_id'];
-        
-        if(strtolower(\Auth::user()->role->authority) == 'hr' || $employee_id  == \Auth::user()->employee_id ){
-            return Storage::download($path);
-        }else{
-           return redirect('/file-upload');
+
+        try{
+            $newFileName = $this->getNewFileName($fileUpload);
+            if(strtolower(\Auth::user()->role->authority) == 'hr' || $employee_id  == \Auth::user()->employee_id ){
+                if(Storage::exists($path))
+                {
+                    return Storage::download($path, $newFileName);    
+                }else{
+                    $res = [
+                        'title' => 'File Not Found',
+                        'message' => 'File not found in the server.',
+                        'icon' => 'error'
+                        ];
+                    return redirect('/file-upload')->with(compact('res'));
+                }
+            }else{
+               return redirect('/file-upload');
+            }
+        }catch(Exception $e){
+            $res = [
+                'title' => 'File Name Invalid',
+                'message' => 'Filename contains some error.',
+                'icon' => 'success'
+                ];
+
+            return redirect('/file-upload')->with(compact($res));
         }
     }
 
@@ -187,6 +208,16 @@ class FileUploadController extends Controller
         unset($input['file']);
         FileUpload::create($input);
         return redirect('/file-upload'); 
+    }
+
+    private function getNewFileName($fileUpload)
+    {
+        $ext = pathinfo($fileUpload->file_name, PATHINFO_EXTENSION);
+        $fileCategory = $fileUpload->fileCategory->category_name;
+        $fileCategory = str_replace(' ', '', $fileCategory);
+        $file_name = $fileCategory.'_'.$fileUpload->employee->first_name.'_'.$fileUpload->employee->last_name.'.'.$ext;
+        
+        return $file_name;
     }
     
 }
