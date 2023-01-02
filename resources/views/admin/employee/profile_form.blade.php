@@ -3,7 +3,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="employee_id">Employee ID</label>
-            <input type="number" disabled class="form-control" id="employee_id" placeholder="Enter Employee ID" name="employee_id" value="{{ !empty(old('employee_id')) ? old('employee_id') : $employee->employee_id ?? '' }}">
+            <input type="number" disabled class="form-control" id="employee_id" placeholder="None" name="employee_id" value="{{ !empty(old('employee_id')) ? old('employee_id') : $employee->employee_id ?? '' }}">
             @error('employee_id')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -56,21 +56,6 @@
 <!-- dob -->
   <div class="col-md-6">
         <div class="mb-4">
-            <label class="form-label" for="marital_status">Marital Status*</label>
-            <input type="text" class="form-control" id="marital_status" disabled name="marital_status" value="{{ !empty(old('marital_status')) ? old('marital_status') : ucfirst($employee->marital_status) ?? '' }}">
-            @error('marital_status')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-<!-- marital-status -->
-
-</div>
-
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="mb-4">
             <label  class="form-label" for="gender">Gender*</label>
             <input type="text" class="form-control" id="gender" disabled name="gender" value="{{ !empty(old('gender')) ? old('gender') : ucfirst($employee->gender) ?? '' }}">
             <!-- <br>
@@ -99,7 +84,38 @@
     </div>
 <!-- gender -->
 
+</div>
+
+
+<div class="row">
     <div class="col-md-6">
+        <div class="mb-4">
+            <label class="form-label" for="marital_status">Marital Status*</label>
+            <input type="text" class="form-control" id="marital_status" disabled name="marital_status" value="{{ !empty(old('marital_status')) ? old('marital_status') : ucfirst($employee->marital_status) ?? '' }}">
+            @error('marital_status')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- marital-status -->
+
+    @if ( ucfirst($employee->marital_status) == 'Divorced' ||  ucfirst($employee->marital_status) == 'Married')
+        <div class="col-md-6" id="spouseNameBlock" >
+        <div class="mb-4">
+            <label  class="form-label" for="spouse_name">Spouse Name</label>
+            <input type="text" class="form-control" id="spouse_name" disabled placeholder="Not Updated" name="spouse_name" value="{{ !empty(old('spouse_name')) ? old('spouse_name') : ucfirst($employee->spouse_name) ?? '' }}">
+            @error('spouse_name')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+    @endif
+<!-- spouse_name --> 
+</div>
+
+
+<div class="row">
+     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="grand_father">Grandfather Name</label>
             <input type="text" class="form-control" id="grand_father" placeholder="None" disabled name="grand_father" value="{{ !empty(old('grand_father')) ? old('grand_father') : ucfirst($employee->grand_father) ?? '' }}">
@@ -108,11 +124,8 @@
             @enderror
         </div>
     </div>
-    <!-- grand_father -->
-</div>
+    <!-- grand_father --> 
 
-
-<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="father_name">Father Name</label>
@@ -122,8 +135,11 @@
             @enderror
         </div>
     </div>
+<!-- father_name -->   
+</div>
 
-<!-- father_name -->
+
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="mother_name">Mother Name</label>
@@ -133,11 +149,8 @@
             @enderror
         </div>
     </div>
-</div>
 <!-- mother_name -->
 
-
-<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="mobile">Mobile*</label>
@@ -148,6 +161,9 @@
         </div>
     </div>
 <!-- mobile -->
+</div>
+
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" class="form-label" for="alternative_mobile">Alternative Mobile</label>
@@ -157,10 +173,8 @@
             @enderror
         </div>
     </div>
-</div>
 <!-- alternative_mobile -->
 
-<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="home_phone">Home Mobile</label>
@@ -171,7 +185,10 @@
         </div>
     </div>
 <!-- home_phone -->
+</div>
 
+
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="image">Image</label>
@@ -181,11 +198,8 @@
             @enderror
         </div>
     </div>
-</div>
-
 <!-- image -->
 
-<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="alter_email">Personal Email*</label>
@@ -197,7 +211,9 @@
     </div>
 
 <!-- alter_email -->
+</div>
 
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="cv">Resume (PDF)</label>
@@ -207,10 +223,8 @@
             @enderror
         </div>
     </div>
-</div>
-<!-- cv -->
+<!-- resume -->
 
-<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="country">Country*</label>
@@ -224,9 +238,10 @@
             @enderror
         </div>
     </div>
-
 <!-- country -->
+</div>
 
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="nationality">Nationality</label>
@@ -236,21 +251,7 @@
             @enderror
         </div>
     </div>
-</div>
 <!-- nationality -->
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label  class="form-label" for="profile">Profile</label>
-            <textarea class="form-control" id="profile" placeholder="None" disabled name="profile">{{ !empty(old('profile')) ? old('profile') : ucfirst($employee->profile) ?? '' }}</textarea>
-            @error('profile')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-
-<!-- profile -->
 
     <div class="col-md-6">
         <div class="mb-4">
@@ -261,8 +262,21 @@
             @enderror
         </div>
     </div>
-</div>
 <!-- blood_group -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label  class="form-label" for="profile">Profile</label>
+            <textarea class="form-control" id="profile" placeholder="None" disabled name="profile">{{ !empty(old('profile')) ? old('profile') : ucfirst($employee->profile) ?? '' }}</textarea>
+            @error('profile')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- profile -->
+</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -683,6 +697,62 @@
 </div>
 <!-- remarks -->
 
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="pan_number">Permanent Account Number (PAN)</label>
+            <input type="text" class="form-control" id="pan_number" disabled placeholder="Not Updated" name="pan_number" value="{{ !empty(old('pan_number')) ? old('pan_number') : $employee->pan_number ?? '' }}">
+            @error('pan_number')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- pan no. -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="cit_number">Citizen Investment Trust (CIT) Number </label>
+            <input type="text" class="form-control" id="cit_number" disabled placeholder="Not Updated" name="cit_number" value="{{ !empty(old('cit_number')) ? old('cit_number') : $employee->cit_number ?? '' }}">
+            @error('cit_number')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- CIT no. -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="ssf_id">Social Security Fund (SSF) Id</label>
+            <input type="text" class="form-control" id="ssf_id" disabled placeholder="Not Updated" name="ssf_id" value="{{ !empty(old('ssf_id')) ? old('ssf_id') : $employee->ssf_id ?? '' }}">
+            @error('ssf_id')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- SSF ID -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="nibl_account_number">NIBL Account Number</label>
+            <input type="text" class="form-control" id="nibl_account_number" disabled placeholder="Not Updated" name="nibl_account_number" value="{{ !empty(old('nibl_account_number')) ? old('nibl_account_number') : $employee->nibl_account_number ?? '' }}">
+            @error('nibl_account_number')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- NIBL Account no. -->
+
 <hr>
 <!-- emergency_contact -->
 <fieldset>
@@ -766,4 +836,30 @@
 
 
     <!-- alternate_contact -->
+</fieldset>
+
+
+<hr>
+<!-- available documents -->
+<fieldset>
+    <legend>Available Documents</legend>
+    
+    <div class="row">
+        @forelse ($employee->fileUploads as $fileUpload)
+            <div class="col-md-6 ">
+                <div class="mb-4 row">
+                    <div class="col-md-6">
+                        <label class="form-label" for="emg_first_name">{{ $fileUpload->fileCategory->category_name }}</label>
+                    </div>
+                    <div class="col-md-6 align-right">
+                        <a href="/file-upload/download/{{ $fileUpload->id }}"><i class="fa fa-download" aria-hidden="true"></i></a> 
+                    </div>
+                </div>
+            </div>
+        @empty
+            <p  class="text-center text-danger">------ No Uploaded File Found ------</p>
+        @endforelse
+        
+    </div>
+    <!-- available files end -->
 </fieldset>
