@@ -416,8 +416,9 @@ class EmployeeController extends Controller
                         ->with('shift')
                         ->with('manager:id,first_name,middle_name,last_name')
                         ->with('emergencyContact:employee_id,first_name,middle_name,last_name,relationship,phone_no,alternate_phone_no')
+                        ->with('fileUploads:employee_id,id,file_category_id,file_name')
                         ->findOrFail($user);
-        // dd($employee->emergencyContact->first_name);
+        // dd($employee->fileUploads->first());
         return view('admin.employee.profile')->with('employee',$employee);
     }
 

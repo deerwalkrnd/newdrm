@@ -168,5 +168,18 @@
             cache: false
         }
     });
+
+    // decide on display spouse name block on marital status
+    $('#marital_status').change(function() {
+        var selectedStatus = marital_status.options[marital_status.selectedIndex].value; 
+        if(selectedStatus != 'Single'){
+            $('#spouseNameBlock').show();
+        }
+        else{
+            $('#spouseNameBlock').hide();
+            $('#spouse_name').val(null);
+        }
+    })
+
 </script>
 @endsection

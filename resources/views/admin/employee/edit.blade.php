@@ -42,6 +42,7 @@
     $(document).ready(function() {
         shiftTime();
         tempAddressSameAsPermanent();
+        spouseNameBlock();
     })
     function shiftTime(){
         var ddl = document.getElementById("shift_id");
@@ -69,6 +70,15 @@
             $('#tempBlock').show();
         }else{
             $('#tempBlock').hide();
+        }
+        return true;
+    }
+
+    function spouseNameBlock(){
+        if($('#marital_status').val() != 'Single'){
+            $('#spouseNameBlock').show();
+        }else{
+            $('#spouseNameBlock').hide();
         }
         return true;
     }
@@ -186,5 +196,15 @@
             cache: false
         }
     });
+
+    // decide on display spouse name block on marital status
+    $('#marital_status').change(function() {
+        var selectedStatus = marital_status.options[marital_status.selectedIndex].value; 
+        if(selectedStatus != 'Single')
+            $('#spouseNameBlock').show();
+        else
+            $('#spouseNameBlock').hide();
+    })
+
 </script>
 @endsection
