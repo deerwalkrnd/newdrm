@@ -70,44 +70,7 @@
     </div>
 <!-- dob -->
 
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label class="form-label" for="marital_status">Marital Status*</label>
-            <select class="form-control" id="marital_status" name="marital_status">
-                <option value="" disabled="disabled" selected="selected">-- Choose Status --</option>
-                <option 
-                    value="Single" 
-                    {{ (!empty(old('marital_status')) && old('marital_status') == 'Single') ? 'selected': ''}}
-                    {{ (isset($employee) && strtolower($employee->marital_status) == 'single' && empty(old('marital_status'))) ? 'selected' : '' }} 
-                    >
-                    Single
-                </option>
-                <option 
-                    value="Married" 
-                    {{ (!empty(old('marital_status')) && old('marital_status') == 'Married') ? 'selected': ''}}
-                    {{ (isset($employee) &&  strtolower($employee->marital_status) == 'married' && empty(old('marital_status'))) ? 'selected' : '' }} 
-                    >
-                    Married
-                </option>
-                <option 
-                    value="Divorced" 
-                    {{ (!empty(old('marital_status')) && old('marital_status') == 'Divorced') ? 'selected': ''}}
-                    {{ (isset($employee) &&  strtolower($employee->marital_status) == 'divorced' && empty(old('marital_status'))) ? 'selected' : '' }} 
-                    >
-                    Divorced
-                </option>
-            </select>
-            @error('marital_status')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-<!-- marital-status -->
-</div>
-
-
-<div class="row">
-    <div class="col-md-6">
+     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="gender">Gender*</label>
             <br>
@@ -135,21 +98,71 @@
         </div>
     </div>
 <!-- gender -->
-  <div class="col-md-6">
+</div>
+
+
+<div class="row">
+     <div class="col-md-6">
         <div class="mb-4">
-            <label  class="form-label" for="grand_father">Grandfather Name</label>
-            <input type="text" class="form-control" id="grand_father" placeholder="Enter Employee grand_father" name="grand_father" value="{{ !empty(old('grand_father')) ? old('grand_father') : $employee->grand_father ?? '' }}">
-            @error('grand_father')
+            <label class="form-label" for="marital_status">Marital Status*</label>
+            <select class="form-control" id="marital_status" name="marital_status">
+                <option value="" disabled="disabled" selected="selected">-- Choose Status --</option>
+                <option 
+                    value="Single" 
+                    {{ (!empty(old('marital_status')) && old('marital_status') == 'Single') ? 'selected': ''}}
+                    {{ (isset($employee) && strtolower($employee->marital_status) == 'single' && empty(old('marital_status'))) ? 'selected' : '' }} 
+                    >
+                    Single
+                </option>
+                <option 
+                    value="Married" 
+                    {{ (!empty(old('marital_status')) && old('marital_status') == 'Married') ? 'selected': ''}}
+                    {{ (isset($employee) &&  strtolower($employee->marital_status) == 'married' && empty(old('marital_status'))) ? 'selected' : '' }} 
+                    >
+                    Married
+                </option>
+                <option 
+                    value="Divorced" 
+                    {{ (!empty(old('marital_status')) && old('marital_status') == 'Divorced') ? 'selected': ''}}
+                    {{ (isset($employee) &&  strtolower($employee->marital_status) == 'divorced' && empty(old('marital_status'))) ? 'selected' : '' }} 
+                   >
+                    Divorced
+                </option>
+            </select>
+            @error('marital_status')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>
     </div>
-<!-- grand_father -->
+<!-- marital-status -->
+   
+    <div class="col-md-6" id="spouseNameBlock" style="display:none;">
+        <div class="mb-4">
+            <label  class="form-label" for="spouse_name">Spouse Name</label>
+            <input type="text" class="form-control" id="spouse_name" placeholder="Enter Employee Spouse Name" name="spouse_name" value="{{ !empty(old('spouse_name')) ? old('spouse_name') : $employee->spouse_name ?? '' }}">
+            @error('spouse_name')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- spouse_name -->
 
 </div>
 
 
 <div class="row">
+    <div class="col-md-6">
+        <div class="mb-4">
+            <label  class="form-label" for="grand_father">Grandfather Name</label>
+            <input type="text" class="form-control" id="grand_father" placeholder="Enter Employee's Grandfather Name" name="grand_father" value="{{ !empty(old('grand_father')) ? old('grand_father') : $employee->grand_father ?? '' }}">
+            @error('grand_father')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+           
+        </div>
+    </div>
+<!--Grandfather -->
+
     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="father_name">Father Name</label>
@@ -157,10 +170,13 @@
             @error('father_name')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
+            
         </div>
     </div>
-
 <!-- father_name -->
+</div>
+
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="mother_name">Mother Name</label>
@@ -168,12 +184,11 @@
             @error('mother_name')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
+            
         </div>
     </div>
-</div>
 <!-- mother_name -->
 
-<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="mobile">Mobile*</label>
@@ -184,30 +199,36 @@
         </div>
     </div>
 <!-- mobile -->
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label class="form-label" class="form-label" for="alternative_mobile">Alternative Mobile</label>
-            <input type="text" class="form-control" id="alternative_mobile" placeholder="Enter Employee alternative_mobile" name="alternative_mobile" value="{{ !empty(old('alternative_mobile')) ? old('alternative_mobile') : $employee->alternative_mobile ?? '' }}">
-            @error('alternative_mobile')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
 </div>
-<!-- alternative_mobile -->
+
 
 <div class="row">
     <div class="col-md-6">
         <div class="mb-4">
+            <label class="form-label" class="form-label" for="alternative_mobile">Alternative Mobile</label>
+            <input type="text" class="form-control" id="alternative_mobile" placeholder="Enter Employee's Alternative Mobile Number" name="alternative_mobile" value="{{ !empty(old('alternative_mobile')) ? old('alternative_mobile') : $employee->alternative_mobile ?? '' }}">
+            @error('alternative_mobile')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+            
+        </div>
+    </div>
+<!-- alternative_mobile -->
+
+    <div class="col-md-6">
+        <div class="mb-4">
             <label class="form-label" for="home_phone">Home Mobile</label>
-            <input type="text" class="form-control" id="home_phone" placeholder="Enter Employee home_phone" name="home_phone" value="{{ !empty(old('home_phone')) ? old('home_phone') : $employee->home_phone ?? '' }}">
+            <input type="text" class="form-control" id="home_phone" placeholder="Enter Employee's Home Phone Number" name="home_phone" value="{{ !empty(old('home_phone')) ? old('home_phone') : $employee->home_phone ?? '' }}">
             @error('home_phone')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
+            
         </div>
     </div>
 <!-- home_phone -->
+</div>
 
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="image">Image</label>
@@ -215,13 +236,11 @@
             @error('image')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
+            
         </div>
     </div>
-</div>
-
 <!-- image -->
 
-<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="alter_email">Personal Email*</label>
@@ -229,26 +248,28 @@
             @error('alter_email')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
+           
         </div>
     </div>
-
 <!-- alter_email -->
-
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label class="form-label" for="cv">Resume (PDF)</label>
-            <input type="file" class="form-control" id="cv" name="cv">
-            @error('cv')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
 </div>
-<!-- cv -->
 
 <div class="row">
     <div class="col-md-6">
         <div class="mb-4">
+             <label class="form-label" for="cv">Resume (PDF)</label>
+            <input type="file" class="form-control" id="cv" name="cv">
+            @error('cv')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+            
+        </div>
+    </div>
+<!-- cv -->
+
+    <div class="col-md-6">
+        <div class="mb-4">
+            
             <label class="form-label" for="country">Country*</label>
             
             <select class="form-control" id="country" name="country">
@@ -258,11 +279,13 @@
             @error('country')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
+           
         </div>
     </div>
-
 <!-- country -->
+</div>
 
+<div class="row">
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="nationality">Nationality</label>
@@ -272,21 +295,7 @@
             @enderror
         </div>
     </div>
-</div>
 <!-- nationality -->
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="mb-4">
-            <label  class="form-label" for="profile">Profile</label>
-            <textarea class="form-control" id="profile" placeholder="Enter Employee profile" name="profile">{{ !empty(old('profile')) ? old('profile') : $employee->profile ?? '' }}</textarea>
-            @error('profile')
-                <p class="text-danger">{{ $message }}</p>
-            @enderror
-        </div>
-    </div>
-
-<!-- profile -->
 
     <div class="col-md-6">
         <div class="mb-4">
@@ -299,6 +308,19 @@
     </div>
 </div>
 <!-- blood_group -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label  class="form-label" for="profile">Profile</label>
+            <textarea class="form-control" id="profile" placeholder="Enter Employee profile" name="profile">{{ !empty(old('profile')) ? old('profile') : $employee->profile ?? '' }}</textarea>
+            @error('profile')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+<!-- profile -->
+</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -812,6 +834,62 @@
 </div>
 <!-- remarks -->
 
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="pan_number">Permanent Account Number (PAN)</label>
+            <input type="text" class="form-control" id="pan_number" placeholder="Enter Employee PAN Number" name="pan_number" value="{{ !empty(old('pan_number')) ? old('pan_number') : $employee->pan_number ?? '' }}">
+            @error('pan_number')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- pan no. -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="cit_number">Citizen Investment Trust (CIT) Number</label>
+            <input type="text" class="form-control" id="cit_number" placeholder="Enter Employee CIT Number" name="cit_number" value="{{ !empty(old('cit_number')) ? old('cit_number') : $employee->cit_number ?? '' }}">
+            @error('cit_number')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- CIT no. -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="ssf_id">Social Security Fund (SSF) Id</label>
+            <input type="text" class="form-control" id="ssf_id" placeholder="Enter Employee SSF ID" name="ssf_id" value="{{ !empty(old('ssf_id')) ? old('ssf_id') : $employee->ssf_id ?? '' }}">
+            @error('ssf_id')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- SSF ID -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-4">
+            <label class="form-label" for="nibl_account_number">NIBL Account Number</label>
+            <input type="text" class="form-control" id="nibl_account_number" placeholder="Enter Employee NIBL Account Number" name="nibl_account_number" value="{{ !empty(old('nibl_account_number')) ? old('nibl_account_number') : $employee->nibl_account_number ?? '' }}">
+            @error('nibl_account_number')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
+<!-- NIBL Account no. -->
+
 <hr>
 <!-- emergency_contact -->
 <fieldset>
@@ -892,7 +970,5 @@
             </div>
         </div>
     </div>
-
-
     <!-- alternate_contact -->
 </fieldset>

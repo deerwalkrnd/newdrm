@@ -17,6 +17,7 @@ class Employee extends Model
         'middle_name',
         'date_of_birth',
         'marital_status',
+        'spouse_name',
         'gender',
         'father_name',
         'mother_name',
@@ -60,6 +61,10 @@ class Employee extends Model
         'department_id',
         'department_change_date',
         'manager_change_date',
+        'pan_number',
+        'cit_number',
+        'ssf_id',
+        'nibl_account_number'
     ];
 
     public function serviceType()
