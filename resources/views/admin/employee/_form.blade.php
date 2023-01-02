@@ -25,7 +25,7 @@
      <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="first_name">First Name*</label>
-            <input type="text" class="form-control" id="first_name" placeholder="Enter Employee First Name" name="first_name" value="{{ !empty(old('first_name')) ? old('first_name') : $employee->first_name ?? '' }}">
+            <input type="text" class="form-control" id="first_name" placeholder="Enter Employee's First Name" name="first_name" value="{{ !empty(old('first_name')) ? old('first_name') : $employee->first_name ?? '' }}">
             @error('first_name')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -38,7 +38,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="middle_name">Middle Name</label>
-            <input type="text" class="form-control" id="middle_name" placeholder="Enter Employee Middle Name" name="middle_name" value="{{ !empty(old('middle_name')) ? old('middle_name') : $employee->middle_name ?? '' }}">
+            <input type="text" class="form-control" id="middle_name" placeholder="Enter Employee's Middle Name" name="middle_name" value="{{ !empty(old('middle_name')) ? old('middle_name') : $employee->middle_name ?? '' }}">
             @error('middle_name')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -48,7 +48,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="last_name">Last Name*</label>
-            <input type="text" class="form-control" id="last_name" placeholder="Enter Employee Last Name" name="last_name" value="{{ !empty(old('last_name')) ? old('last_name') : $employee->last_name ?? '' }}">
+            <input type="text" class="form-control" id="last_name" placeholder="Enter Employee's Last Name" name="last_name" value="{{ !empty(old('last_name')) ? old('last_name') : $employee->last_name ?? '' }}">
             @error('last_name')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -62,7 +62,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label for="date_of_birth" class="form-label">DOB*</label>
-            <input type="date" class="form-control" id="date_of_birth" placeholder="Enter Employee DOB" name="date_of_birth" value="{{ !empty(old('date_of_birth')) ? old('date_of_birth') : $employee->date_of_birth ?? '' }}">
+            <input type="date" class="form-control" id="date_of_birth" placeholder="Enter Employee's DOB" name="date_of_birth" value="{{ !empty(old('date_of_birth')) ? old('date_of_birth') : $employee->date_of_birth ?? '' }}">
             @error('date_of_birth')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -139,7 +139,7 @@
     <div class="col-md-6" id="spouseNameBlock" style="display:none;">
         <div class="mb-4">
             <label  class="form-label" for="spouse_name">Spouse Name</label>
-            <input type="text" class="form-control" id="spouse_name" placeholder="Enter Employee Spouse Name" name="spouse_name" value="{{ !empty(old('spouse_name')) ? old('spouse_name') : $employee->spouse_name ?? '' }}">
+            <input type="text" class="form-control" id="spouse_name" placeholder="Enter Employee's Spouse Name" name="spouse_name" value="{{ !empty(old('spouse_name')) ? old('spouse_name') : $employee->spouse_name ?? '' }}">
             @error('spouse_name')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -180,7 +180,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label  class="form-label" for="mother_name">Mother Name</label>
-            <input type="text" class="form-control" id="mother_name" placeholder="Enter Employee Mother Name" name="mother_name" value="{{ !empty(old('mother_name')) ? old('mother_name') : $employee->mother_name ?? '' }}">
+            <input type="text" class="form-control" id="mother_name" placeholder="Enter Employee's Mother Name" name="mother_name" value="{{ !empty(old('mother_name')) ? old('mother_name') : $employee->mother_name ?? '' }}">
             @error('mother_name')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -192,7 +192,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="mobile">Mobile*</label>
-            <input type="text" class="form-control" id="mobile" placeholder="Enter Employee mobile" name="mobile" value="{{ !empty(old('mobile')) ? old('mobile') : $employee->mobile ?? '' }}">
+            <input type="text" class="form-control" id="mobile" placeholder="Enter Employee's mobile" name="mobile" value="{{ !empty(old('mobile')) ? old('mobile') : $employee->mobile ?? '' }}">
             @error('mobile')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -244,7 +244,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="alter_email">Personal Email*</label>
-            <input type="text" class="form-control" id="alter_email" placeholder="Enter Employee alter_email" name="alter_email" value="{{ !empty(old('alter_email')) ? old('alter_email') : $employee->alter_email ?? '' }}">
+            <input type="text" class="form-control" id="alter_email" placeholder="Enter Employee's Alternative Email" name="alter_email" value="{{ !empty(old('alter_email')) ? old('alter_email') : $employee->alter_email ?? '' }}">
             @error('alter_email')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -289,7 +289,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="nationality">Nationality</label>
-            <input type="text" class="form-control" id="nationality" placeholder="Enter Employee nationality" name="nationality" value="{{ !empty(old('nationality')) ? old('nationality') : $employee->nationality ?? '' }}">
+            <input type="text" class="form-control" id="nationality" placeholder="Enter Employee's nationality" name="nationality" value="{{ !empty(old('nationality')) ? old('nationality') : $employee->nationality ?? '' }}">
             @error('nationality')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -300,7 +300,7 @@
     <div class="col-md-6">
         <div class="mb-4">
             <label class="form-label" for="blood_group">Blood Group*</label>
-            <input type="text" class="form-control" id="blood_group" placeholder="Enter Employee blood group" name="blood_group" value="{{ !empty(old('blood_group')) ? old('blood_group') : $employee->blood_group ?? '' }}">
+            <input type="text" class="form-control" id="blood_group" placeholder="Enter Employee's blood group" name="blood_group" value="{{ !empty(old('blood_group')) ? old('blood_group') : $employee->blood_group ?? '' }}">
             @error('blood_group')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -313,7 +313,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label  class="form-label" for="profile">Profile</label>
-            <textarea class="form-control" id="profile" placeholder="Enter Employee profile" name="profile">{{ !empty(old('profile')) ? old('profile') : $employee->profile ?? '' }}</textarea>
+            <textarea class="form-control" id="profile" placeholder="Enter Employee's profile" name="profile">{{ !empty(old('profile')) ? old('profile') : $employee->profile ?? '' }}</textarea>
             @error('profile')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -372,7 +372,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="permanent_municipality">Permanent Municipality*</label>
-            <input type="text" class="form-control" id="permanent_municipality" placeholder="Enter Employee permanent_municipality" name="permanent_municipality" value="{{ !empty(old('permanent_municipality')) ? old('permanent_municipality') : $employee->permanent_municipality ?? '' }}">
+            <input type="text" class="form-control" id="permanent_municipality" placeholder="Enter Employee's permanent_municipality" name="permanent_municipality" value="{{ !empty(old('permanent_municipality')) ? old('permanent_municipality') : $employee->permanent_municipality ?? '' }}">
             @error('permanent_municipality')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -385,7 +385,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="permanent_ward_no">Permanent Ward_no*</label>
-            <input type="text" class="form-control" id="permanent_ward_no" placeholder="Enter Employee permanent_ward_no" name="permanent_ward_no" value="{{ !empty(old('permanent_ward_no')) ? old('permanent_ward_no') : $employee->permanent_ward_no ?? '' }}">
+            <input type="text" class="form-control" id="permanent_ward_no" placeholder="Enter Employee's permanent_ward_no" name="permanent_ward_no" value="{{ !empty(old('permanent_ward_no')) ? old('permanent_ward_no') : $employee->permanent_ward_no ?? '' }}">
             @error('permanent_ward_no')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -398,7 +398,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="permanent_tole">Permanent Tole*</label>
-            <input type="text" class="form-control" id="permanent_tole" placeholder="Enter Employee permanent_tole" name="permanent_tole" value="{{ !empty(old('permanent_tole')) ? old('permanent_tole') : $employee->permanent_tole ?? '' }}">
+            <input type="text" class="form-control" id="permanent_tole" placeholder="Enter Employee's permanent_tole" name="permanent_tole" value="{{ !empty(old('permanent_tole')) ? old('permanent_tole') : $employee->permanent_tole ?? '' }}">
             @error('permanent_tole')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -486,7 +486,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="temporary_municipality">Temporary Municipality*</label>
-            <input type="text" class="form-control" id="temporary_municipality" placeholder="Enter Employee temporary_municipality" name="temporary_municipality" value="{{ !empty(old('temporary_municipality')) ? old('temporary_municipality') : $employee->temporary_municipality ?? '' }}">
+            <input type="text" class="form-control" id="temporary_municipality" placeholder="Enter Employee's temporary_municipality" name="temporary_municipality" value="{{ !empty(old('temporary_municipality')) ? old('temporary_municipality') : $employee->temporary_municipality ?? '' }}">
             @error('temporary_municipality')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -499,7 +499,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="temporary_ward_no">Temporary Ward_no*</label>
-            <input type="text" class="form-control" id="temporary_ward_no" placeholder="Enter Employee temporary_ward_no" name="temporary_ward_no" value="{{ !empty(old('temporary_ward_no')) ? old('temporary_ward_no') : $employee->temporary_ward_no ?? '' }}">
+            <input type="text" class="form-control" id="temporary_ward_no" placeholder="Enter Employee's temporary_ward_no" name="temporary_ward_no" value="{{ !empty(old('temporary_ward_no')) ? old('temporary_ward_no') : $employee->temporary_ward_no ?? '' }}">
             @error('temporary_ward_no')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -512,7 +512,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="temporary_tole">Temporary Tole*</label>
-            <input type="text" class="form-control" id="temporary_tole" placeholder="Enter Employee temporary_tole" name="temporary_tole" value="{{ !empty(old('temporary_tole')) ? old('temporary_tole') : $employee->temporary_tole ?? '' }}">
+            <input type="text" class="form-control" id="temporary_tole" placeholder="Enter Employee's temporary_tole" name="temporary_tole" value="{{ !empty(old('temporary_tole')) ? old('temporary_tole') : $employee->temporary_tole ?? '' }}">
             @error('temporary_tole')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -527,7 +527,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="join_date">Join Date* (A.D)</label>
-            <input type="date" class="form-control" id="join_date" placeholder="Enter Employee join_date" name="join_date" value="{{ !empty(old('join_date')) ? old('join_date') : $employee->join_date ?? '' }}">
+            <input type="date" class="form-control" id="join_date" placeholder="Enter Employee's join_date" name="join_date" value="{{ !empty(old('join_date')) ? old('join_date') : $employee->join_date ?? '' }}">
             @error('join_date')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -540,7 +540,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="intern_trainee_ship_date">Intern/TraineeShip Date</label>
-            <input type="date" class="form-control" id="intern_trainee_ship_date" placeholder="Enter Employee intern_trainee_ship_date" name="intern_trainee_ship_date" value="{{ !empty(old('intern_trainee_ship_date')) ? old('intern_trainee_ship_date') : $employee->intern_trainee_ship_date ?? '' }}">
+            <input type="date" class="form-control" id="intern_trainee_ship_date" placeholder="Enter Employee's intern_trainee_ship_date" name="intern_trainee_ship_date" value="{{ !empty(old('intern_trainee_ship_date')) ? old('intern_trainee_ship_date') : $employee->intern_trainee_ship_date ?? '' }}">
             @error('intern_trainee_ship_date')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -632,7 +632,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="designation_change_date">Designation Change Date</label>
-            <input type="date" class="form-control" id="designation_change_date" placeholder="Enter Employee designation_change_date" name="designation_change_date" value="{{ !empty(old('designation_change_date')) ? old('designation_change_date') : $employee->designation_change_date ?? '' }}">
+            <input type="date" class="form-control" id="designation_change_date" placeholder="Enter Employee's designation_change_date" name="designation_change_date" value="{{ !empty(old('designation_change_date')) ? old('designation_change_date') : $employee->designation_change_date ?? '' }}">
             @error('designation_change_date')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -720,7 +720,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="email">Email*</label>
-            <input type="text" class="form-control" id="email" placeholder="Enter Employee email" name="email" value="{{ !empty(old('email')) ? old('email') : $employee->email ?? '' }}">
+            <input type="text" class="form-control" id="email" placeholder="Enter Employee's email" name="email" value="{{ !empty(old('email')) ? old('email') : $employee->email ?? '' }}">
             @error('email')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -733,7 +733,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="username">Username*</label>
-            <input type="text" class="form-control" id="username" placeholder="Enter Employee username" name="username" 
+            <input type="text" class="form-control" id="username" placeholder="Enter Employee's username" name="username" 
             value="{{ !empty(old('username')) ? old('username'): $employee->user->username ?? ''}}">
             @error('username')
                 <p class="text-danger">{{ $message }}</p>
@@ -839,7 +839,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="pan_number">Permanent Account Number (PAN)</label>
-            <input type="text" class="form-control" id="pan_number" placeholder="Enter Employee PAN Number" name="pan_number" value="{{ !empty(old('pan_number')) ? old('pan_number') : $employee->pan_number ?? '' }}">
+            <input type="text" class="form-control" id="pan_number" placeholder="Enter Employee's PAN Number" name="pan_number" value="{{ !empty(old('pan_number')) ? old('pan_number') : $employee->pan_number ?? '' }}">
             @error('pan_number')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -853,7 +853,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="cit_number">Citizen Investment Trust (CIT) Number</label>
-            <input type="text" class="form-control" id="cit_number" placeholder="Enter Employee CIT Number" name="cit_number" value="{{ !empty(old('cit_number')) ? old('cit_number') : $employee->cit_number ?? '' }}">
+            <input type="text" class="form-control" id="cit_number" placeholder="Enter Employee's CIT Number" name="cit_number" value="{{ !empty(old('cit_number')) ? old('cit_number') : $employee->cit_number ?? '' }}">
             @error('cit_number')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -867,7 +867,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="ssf_id">Social Security Fund (SSF) Id</label>
-            <input type="text" class="form-control" id="ssf_id" placeholder="Enter Employee SSF ID" name="ssf_id" value="{{ !empty(old('ssf_id')) ? old('ssf_id') : $employee->ssf_id ?? '' }}">
+            <input type="text" class="form-control" id="ssf_id" placeholder="Enter Employee's SSF ID" name="ssf_id" value="{{ !empty(old('ssf_id')) ? old('ssf_id') : $employee->ssf_id ?? '' }}">
             @error('ssf_id')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -881,7 +881,7 @@
     <div class="col-md-12">
         <div class="mb-4">
             <label class="form-label" for="nibl_account_number">NIBL Account Number</label>
-            <input type="text" class="form-control" id="nibl_account_number" placeholder="Enter Employee NIBL Account Number" name="nibl_account_number" value="{{ !empty(old('nibl_account_number')) ? old('nibl_account_number') : $employee->nibl_account_number ?? '' }}">
+            <input type="text" class="form-control" id="nibl_account_number" placeholder="Enter Employee's NIBL Account Number" name="nibl_account_number" value="{{ !empty(old('nibl_account_number')) ? old('nibl_account_number') : $employee->nibl_account_number ?? '' }}">
             @error('nibl_account_number')
                 <p class="text-danger">{{ $message }}</p>
             @enderror
@@ -899,7 +899,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_first_name">First Name*</label>
-                <input type="text" class="form-control" id="emg_first_name" placeholder="Enter Emergency Contact First Name" name="emg_first_name" value="{{ !empty(old('emg_first_name')) ? old('emg_first_name') : $employee->emergencyContact->first_name?? '' }}">
+                <input type="text" class="form-control" id="emg_first_name" placeholder="Enter Emergency Contact's First Name" name="emg_first_name" value="{{ !empty(old('emg_first_name')) ? old('emg_first_name') : $employee->emergencyContact->first_name?? '' }}">
                 @error('emg_first_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -911,7 +911,7 @@
         <div class="col-md-6">
                 <div class="mb-4">
                 <label class="form-label" for="emg_middle_name">Middle Name</label>
-                <input type="text" class="form-control" id="emg_middle_name" placeholder="Enter Emergency Contact Middle Name" name="emg_middle_name" value="{{ !empty(old('emg_middle_name')) ? old('emg_middle_name') : $employee->emergencyContact->middle_name?? '' }}">
+                <input type="text" class="form-control" id="emg_middle_name" placeholder="Enter Emergency Contact's Middle Name" name="emg_middle_name" value="{{ !empty(old('emg_middle_name')) ? old('emg_middle_name') : $employee->emergencyContact->middle_name?? '' }}">
                 @error('emg_middle_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -924,7 +924,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_last_name">Last Name*</label>
-                <input type="text" class="form-control" id="emg_last_name" placeholder="Enter Emergency Contact Last Name" name="emg_last_name" value="{{ !empty(old('emg_last_name')) ? old('emg_last_name') : $employee->emergencyContact->last_name?? '' }}">
+                <input type="text" class="form-control" id="emg_last_name" placeholder="Enter Emergency Contact's Last Name" name="emg_last_name" value="{{ !empty(old('emg_last_name')) ? old('emg_last_name') : $employee->emergencyContact->last_name?? '' }}">
                 @error('emg_last_name')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -936,7 +936,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_relationship">Relationship*</label>
-                <input type="text" class="form-control" id="emg_relationship" placeholder="Enter Emergency Contact First Name" name="emg_relationship" value="{{ !empty(old('emg_relationship')) ? old('emg_relationship') : $employee->emergencyContact->relationship ?? '' }}">
+                <input type="text" class="form-control" id="emg_relationship" placeholder="Enter Employee's Relationship" name="emg_relationship" value="{{ !empty(old('emg_relationship')) ? old('emg_relationship') : $employee->emergencyContact->relationship ?? '' }}">
                 @error('emg_relationship')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -951,7 +951,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_contact">Emergency Contact*</label>
-                <input type="text" class="form-control" id="emg_contact" placeholder="Enter Emergency Contact First Name" name="emg_contact" value="{{ !empty(old('emg_contact')) ? old('emg_contact') : $employee->emergencyContact->phone_no?? '' }}">
+                <input type="text" class="form-control" id="emg_contact" placeholder="Enter Contact Number" name="emg_contact" value="{{ !empty(old('emg_contact')) ? old('emg_contact') : $employee->emergencyContact->phone_no?? '' }}">
                 @error('emg_contact')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -963,7 +963,7 @@
         <div class="col-md-6">
             <div class="mb-4">
                 <label class="form-label" for="emg_alternate_contact">Alternate Contact</label>
-                <input type="text" class="form-control" id="emg_alternate_contact" placeholder="Enter Emergency Alternate_contact First Name" name="emg_alternate_contact" value="{{ !empty(old('emg_alternate_contact')) ? old('emg_alternate_contact') : $employee->emergencyContact->alternate_phone_no?? '' }}">
+                <input type="text" class="form-control" id="emg_alternate_contact" placeholder="Enter Alternate Contact Number" name="emg_alternate_contact" value="{{ !empty(old('emg_alternate_contact')) ? old('emg_alternate_contact') : $employee->emergencyContact->alternate_phone_no?? '' }}">
                 @error('emg_alternate_contact')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
