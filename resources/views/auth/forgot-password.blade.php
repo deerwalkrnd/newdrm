@@ -153,7 +153,7 @@
 	<footer class="fixed-bottom mainfooter">
       <div class="container text-center">
       	<div class="footer-text text-muted mt-3">
-      		<p>© Copyright 2022 Deerwalk Group | All Rights Reserved.<br>Deerwalk Resources Manager Ver. 2.0.1</p>
+      		<p>© Copyright {{ date('Y') }} Deerwalk Group | All Rights Reserved.<br>Deerwalk Resources Manager Ver. 2.0.1</p>
       	</div>
       </div>
     </footer>
