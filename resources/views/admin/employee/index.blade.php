@@ -112,7 +112,7 @@
     @php($i++) 
     @empty
     <tr>
-        <th colspan=11 class="text-center text-dark">No Employee Created</th>
+        <th colspan=14 class="text-center text-dark">No Employee Created</th>
     </tr>
     @endforelse
     </tbody>
