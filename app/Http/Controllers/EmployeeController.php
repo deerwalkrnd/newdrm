@@ -65,12 +65,6 @@ class EmployeeController extends Controller
 
         if($request->m){
             $employees = $this->getEmployeesByBirthMonth($employees,$request->m);
-            
-
-            // $employees = $employees->selectRaw("DATE_FORMAT(date_of_birth, '%m-%d') as DOB")
-            //                         ->having('DOB', '>=', $english_start_month_day[1].'-'.$english_start_month_day[2])
-            //                         ->having('DOB', '<=', $english_end_month_day[1].'-'.$english_end_month_day[2]);
-
         }
 
         $employees = $employees->get();
@@ -461,30 +455,40 @@ class EmployeeController extends Controller
 
     public function getEmployeesByBirthMonth($employees,$month){
         $current_year = Helper::getNepaliYear(date('Y-m-d'))[0];
-            $calendarHelper = new CalendarHelper;
+        $calendarHelper = new CalendarHelper;
 
-            $nepali_start_month_day = $current_year.'-'.$month.'-01';   
-            $nepali_end_month_day = $current_year.'-'.$month.'-'.$calendarHelper->getLastDayOfMonth($current_year,$month);        
+        $nepali_start_month_day = $current_year.'-'.$month.'-01';   
+        $nepali_end_month_day = $current_year.'-'.$month.'-'.$calendarHelper->getLastDayOfMonth($current_year,$month);        
 
-            $english_start_month_day = Helper::getEnglishDate($nepali_start_month_day);
-            $english_end_month_day = Helper::getEnglishDate($nepali_end_month_day);
+        $english_start_month_day = Helper::getEnglishDate($nepali_start_month_day);
+        $english_end_month_day = Helper::getEnglishDate($nepali_end_month_day);
 
-            $employees =  $employees->where(function($query) use($english_start_month_day,$english_end_month_day){
-                                    $query->whereMonth('date_of_birth','>',$english_start_month_day[1])
-                                            ->orWhere(function($query) use($english_start_month_day,$english_end_month_day){
-                                                $query->whereMonth('date_of_birth',$english_start_month_day[1])
-                                                    ->whereDay('date_of_birth','>=',$english_start_month_day[2]);
-                                            });   
-                                })
-                                ->where(function($query) use($english_end_month_day){
-                                    $query->whereMonth('date_of_birth','<',$english_end_month_day[1])
-                                            ->orWhere(function($query) use($english_end_month_day){
-                                                $query->whereMonth('date_of_birth',$english_end_month_day[1])
-                                                    ->whereDay('date_of_birth','<=',$english_end_month_day[2]);
-                                            });  
-                                        
-                                });
-            return $employees;
+        $employees =  $employees->where(function($query) use($english_start_month_day){
+                            $query->whereMonth('date_of_birth','>',$english_start_month_day[1])
+                                ->orWhere(function($query) use($english_start_month_day){
+                                    $query->whereMonth('date_of_birth',$english_start_month_day[1])
+                                        ->whereDay('date_of_birth','>=',$english_start_month_day[2]);
+                                });   
+                        });
+
+        if($english_start_month_day[0] < $english_end_month_day[0]){
+            $employees = $employees->orWhere(function($query) use($english_end_month_day){
+                            $query->whereMonth('date_of_birth','<',$english_end_month_day[1])
+                                ->orWhere(function($query) use($english_end_month_day){
+                                    $query->whereMonth('date_of_birth',$english_end_month_day[1])
+                                        ->whereDay('date_of_birth','<=',$english_end_month_day[2]);
+                                    });    
+                            })->where('contract_status','active');            
+        }else{
+            $employees = $employees->where(function($query) use($english_end_month_day){
+                                $query->whereMonth('date_of_birth','<',$english_end_month_day[1])
+                                    ->orWhere(function($query) use($english_end_month_day){
+                                        $query->whereMonth('date_of_birth',$english_end_month_day[1])
+                                            ->whereDay('date_of_birth','<=',$english_end_month_day[2]);
+                                    });          
+                            });
+        }
+        return $employees;
     }
 
 
