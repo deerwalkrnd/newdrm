@@ -96,70 +96,50 @@
 </div>
 <!-- section for employees on leave part end-->
 
+
+{{-- Deerwalk Night --}}
+@if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i'))
+<div class="modal fade deerwalkNightModal" id="exampleModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content deerwalk-modal-content">
+            <div cl ass="modal-body">
+                <div class="container-fluid pt-2 pb-2">
+                    <div class="image-div" style="position:relative;">
+                        <button type="button" class="btn text-white close-button" data-bs-dismiss="modal" aria-label="Close" >X</button>
+                        <img src="{{asset('assets/images/dw_night_2.jpg')}}" alt="Deerwalk Night 3 Days To Go" class="deerwalk-night-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`
+@endif
+
+
 <!-- Birthday Pop Up Notification -->
 @if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i') && count($todayBirthdayList)>0)
     @foreach($todayBirthdayList as $birthdayEmployee)
         <div class="modal fade birthdayModal" id="exampleModal{{$birthdayEmployee->id}}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <!-- <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content birthday-modal-content">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content birthday-modal-content-no-photo">
                     <div cl ass="modal-body">
-                        <div class="container-fluid">
-                            <div class="row" style="position:relative"> -->
-                                <!-- <button type="button" class="btn-close birthday-close-button" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                               
-                                {{--@if($birthdayEmployee->image_name != null)--}}
-                                  <!-- <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content birthday-modal-content">
-                                        <div cl ass="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="row" style="position:relative">
-                                                    <div class="birthday-employee-image col-4"> -->
-                                                        {{-- @if(strtolower($birthdayEmployee->gender)=='female') --}}
-                                                            <!-- <img class="employee-image img-thumbnail"  src="{{ ($birthdayEmployee->image_name != NULL) ? asset($birthdayEmployee->image_name) : '/assets/images/woman.png' }}" > -->
-                                                        {{-- @else --}}
-                                                            <!-- <img class="employee-image img-thumbnail"  src="{{ ($birthdayEmployee->image_name != NULL) ? asset($birthdayEmployee->image_name) : '/assets/images/man.png' }}" > -->
-                                                        {{-- @endif --}}
-                                                            <!-- <img class="employee-image img-thumbnail"  src="{{ asset($birthdayEmployee->image_name) }}" > -->
+                        <div class="container-fluid pt-2 pb-0">
+                            <div class="image-div" style="position:relative;">
+                                <button type="button" class="btn text-white close-button" data-bs-dismiss="modal" aria-label="Close" >X</button>
+                                <img src="{{asset('assets/images/birthdayCardNoPhoto.jpg')}}" alt="birthday card" class="birthday-card-image-no-photo">
 
-                                                            <!-- <img src="{{asset('assets/images/deena.jpg')}}" alt="" class="employee-image"> -->
-
-                                                    <!-- </div>
-                                                    <div class="col-12 pt-2 pb-0  birthday-image-card">
-                                                        <button type="button" class="btn text-white" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; right: 0px;">X</button>
-
-                                                        <span class="birthday-employee-name text-center">{{$birthdayEmployee->first_name." ".substr($birthdayEmployee->middle_name,0,1)." ".$birthdayEmployee->last_name}}</span>
-                                                        <img src="{{asset('assets/images/birthday.png')}}" alt="birthday card" class="birthday-card-image">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                {{--@else--}}
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content birthday-modal-content-no-photo">
-                                            <div cl ass="modal-body">
-                                                <div class="container-fluid pt-2 pb-0">
-                                                    <div class="image-div" style="position:relative;">
-                                                        <button type="button" class="btn text-white close-button" data-bs-dismiss="modal" aria-label="Close" >X</button>
-                                                        <img src="{{asset('assets/images/birthdayCardNoPhoto.jpg')}}" alt="birthday card" class="birthday-card-image-no-photo">
-
-                                                        <div class="employee-name-no-photo-div" style="">
-                                                            <span class=" ">{{ucfirst($birthdayEmployee->first_name)." ".ucfirst(substr($birthdayEmployee->middle_name,0,1))." ".ucfirst($birthdayEmployee->last_name)}} </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {{-- @endif --}}
-                            <!-- </div>  
+                                <div class="employee-name-no-photo-div" style="">
+                                    <span class=" ">{{ucfirst($birthdayEmployee->first_name)." ".ucfirst(substr($birthdayEmployee->middle_name,0,1))." ".ucfirst($birthdayEmployee->last_name)}} </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     @endforeach
 @endif
+
 
 @endsection
 
@@ -170,6 +150,7 @@
     $(document).ready(function(){
         // if(width >= 992){
             $(".birthdayModal").modal('show');
+            $(".deerwalkNightModal").modal('show');
         // }
     });
 </script>
