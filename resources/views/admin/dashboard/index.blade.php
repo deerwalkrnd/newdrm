@@ -106,7 +106,7 @@
                 <div class="container-fluid pt-2 pb-2">
                     <div class="image-div" style="position:relative;">
                         <button type="button" class="btn text-white close-button" data-bs-dismiss="modal" aria-label="Close" >X</button>
-                        <img src="{{asset('assets/images/dw_night_2.jpg')}}" alt="Deerwalk Night 3 Days To Go" class="deerwalk-night-image">
+                        <img src="{{asset('assets/images/dw_night_3.jpg')}}" alt="Deerwalk Night 3 Days To Go" class="deerwalk-night-image">
                     </div>
                 </div>
             </div>
