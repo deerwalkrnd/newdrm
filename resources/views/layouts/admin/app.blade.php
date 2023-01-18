@@ -11,7 +11,7 @@
         <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 
         <!-- custom css -->
-        <link href="/assets/css/style.css" rel="stylesheet" type="text/css">    
+        <link href="/assets/css/style.css?v=1.2" rel="stylesheet" type="text/css">    
         <link href="/assets/images/login/favicon.gif" rel="shortcut icon">
         <title>DRM</title>
         
