@@ -97,7 +97,7 @@
 <!-- section for employees on leave part end-->
 
 
-{{-- Deerwalk Night --}}
+{{-- Deerwalk Night
 @if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i'))
 <div class="modal fade deerwalkNightModal" id="exampleModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -113,7 +113,7 @@
         </div>
     </div>
 </div>`
-@endif
+@endif --}}
 
 
 <!-- Birthday Pop Up Notification -->
