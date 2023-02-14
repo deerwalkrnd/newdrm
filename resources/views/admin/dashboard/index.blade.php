@@ -98,6 +98,7 @@
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 {{-- Deerwalk Night
 @if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i'))
@@ -119,6 +120,8 @@
 
 
 >>>>>>> 4cbb9b714b5795130c6cad935632bb52ac4f3adb
+=======
+>>>>>>> 01352666260baef077e41d541eeb335d10007fbb
 <!-- Birthday Pop Up Notification -->
 @if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i') && count($todayBirthdayList)>0)
     @foreach($todayBirthdayList as $birthdayEmployee)
