@@ -71,6 +71,7 @@ class DesignationController extends Controller
         return view('admin.designation.edit')->with(compact('designation'));
     }
 
+    
     /**
      * Update the specified resource in storage.
      *
