@@ -96,32 +96,6 @@
 </div>
 <!-- section for employees on leave part end-->
 
-
-
-
-
-{{-- Deerwalk Night
-@if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i'))
-<div class="modal fade deerwalkNightModal" id="exampleModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content deerwalk-modal-content">
-            <div cl ass="modal-body">
-                <div class="container-fluid pt-2 pb-2">
-                    <div class="image-div" style="position:relative;">
-                        <button type="button" class="btn text-white close-button" data-bs-dismiss="modal" aria-label="Close" >X</button>
-                        <img src="{{asset('assets/images/dw_night_happening.jpg')}}" alt="Deerwalk Night 3 Days To Go" class="deerwalk-night-image">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>`
-@endif --}}
-
-
->>>>>>> 4cbb9b714b5795130c6cad935632bb52ac4f3adb
-=======
->>>>>>> 01352666260baef077e41d541eeb335d10007fbb
 <!-- Birthday Pop Up Notification -->
 @if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i') && count($todayBirthdayList)>0)
     @foreach($todayBirthdayList as $birthdayEmployee)
