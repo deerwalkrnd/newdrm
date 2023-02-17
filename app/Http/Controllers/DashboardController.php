@@ -358,7 +358,7 @@ class DashboardController extends Controller
             $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year,\Auth::user()->employee_id);
             //if joinyear is this year or greater than this year, leave allowance is calculated from joined month
             
-            $remaining_month = 13-$joinMonth;
+            $remaining_month = 13-(int)$joinMonth;
             if($joinYear >= $year){
                 $allowedLeave = round(($allowedLeave/12*$remaining_month)*2)/2;
             }
