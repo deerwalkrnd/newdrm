@@ -105,7 +105,7 @@
                 <div class="container-fluid pt-2 pb-2">
                     <div class="image-div" style="position:relative;">
                         <button type="button" class="btn text-dark close-button" data-bs-dismiss="modal" aria-label="Close" >X</button>
-                        <img src="{{asset('assets/images/jobfair2.jpg')}}" alt="Job Fair" class="deerwalk-night-image">
+                        <img src="{{asset('assets/images/jobfair1.jpg')}}" alt="Job Fair" class="deerwalk-night-image">
                     </div>
                 </div>
             </div>
