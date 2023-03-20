@@ -40,9 +40,21 @@ class CarryOverLeaveController extends Controller
                                         ->where('leave_type_id','1')
                                         ->where('full_leave','1');
                                     }],'days')
+                                    ->withSum(['leaveRequest as sickHalfLeave' => function($query) use($year){
+                                        $query->where('year',$year)
+                                        ->where('acceptance','accepted')
+                                        ->where('leave_type_id','3')
+                                        ->where('full_leave','0');
+                                    }],'days')
+                                    ->withSum(['leaveRequest as sickFullLeave' => function($query) use($year){
+                                        $query->where('year',$year)
+                                        ->where('acceptance','accepted')
+                                        ->where('leave_type_id','3')
+                                        ->where('full_leave','1');
+                                    }],'days')
                                     ->get()
                                     ->map(function($employee){
-                                        $employee->days = $employee->halfLeave * 0.5 + $employee->fullLeave;
+                                        $employee->days = $employee->halfLeave * 0.5 + $employee->fullLeave + $employee->sickHalfLeave * 0.5 + $employee->sickFullLeave;
                                         return $employee;
                                     })->toArray();  
 
@@ -55,9 +67,19 @@ class CarryOverLeaveController extends Controller
                                                 })
                                             ->where('year',$year)
                                             ->first()->days;
+            
+            $maxSickLeave = YearlyLeave::select('days')
+                                            ->where('leave_type_id',3)
+                                            ->where(function($query) use ($unit){
+                                                $query->where('unit_id',$unit)
+                                                        ->orWhere('unit_id',null);
+                                                })
+                                            ->where('year',$year)
+                                            ->first()->days; 
 
+            $maxMixLeave = $maxPersonalLeave + $maxSickLeave;
 
-            $employees = collect($employees)->map(function($record) use($maxPersonalLeave,$year,$thisYear){
+            $employees = collect($employees)->map(function($record) use($maxMixLeave,$year,$thisYear){
                 
                 $joinYearMonth = $this->getNepaliYear($record['join_date']);
                 $joinYear = $joinYearMonth[0];
@@ -66,21 +88,18 @@ class CarryOverLeaveController extends Controller
                 //if joinyear is this year or greater than this year, leave allowance is calculated from joined month
                 if($joinYear < $thisYear && $joinYear == $year){
                     $remaining_month = 13-$joinMonth;
-                    $maxPersonalLeave = round(($maxPersonalLeave/12*$remaining_month)*2)/2; 
+                    $maxMixLeave = round(($maxMixLeave/12*$remaining_month)*2)/2; 
                 }elseif($joinYear == $thisYear){    //if joinyear is this year, carry over leave should be 0
-                    $maxPersonalLeave = 0;
+                    $maxMixLeave = 0;
                 }
                  
-                
-                // if join date is in previous year calculate myPersonalLeave else mypersonalLeave = $maxPersonalLeave
-                $remainingLeave = $maxPersonalLeave - $record['days'];
-                // if($record['id']== '1'){
-                //     dd($record,$joinYear,$joinMonth,$year,$thisYear,$maxPersonalLeave,$remainingLeave);
-                // }
+                // if join date is in previous year calculate myPersonalLeave+mySickLeave else mypersonalLeave = $maxPersonalLeave+maxSickLeave
+                $remainingLeave = $maxMixLeave - $record['days'];
+              
                 $record['employee_id'] = $record['id'];
                 $record['days'] = max(min($remainingLeave,8),0);
                 $record['year'] = $year;
-                unset($record['unit_id'],$record['join_date'],$record['fullLeave'],$record['halfLeave'],$record['id']);
+                unset($record['unit_id'],$record['join_date'],$record['fullLeave'],$record['halfLeave'],$record['sickFullLeave'],$record['sickHalfLeave'],$record['id']);
                 return $record;
             })->toArray();
             
