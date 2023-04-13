@@ -42,7 +42,7 @@ class EmployeeController extends Controller
     {
         // $request->u => unit_id $request->m => nepali birth month
         $date= date('Y-m-d');
-        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date','date_of_birth')
+        $employees = Employee::select('id', 'first_name','middle_name','last_name','email','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date','date_of_birth')
                                 ->with('designation:id,job_title_name')
                                 ->with('organization:id,name')
                                 ->with('unit:id,unit_name')

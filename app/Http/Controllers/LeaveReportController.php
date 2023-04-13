@@ -91,8 +91,7 @@ class LeaveReportController extends Controller
                 $employees = $employees->paginate(10)->withQueryString(); 
         }
         else if($request->e != NULL){       //search by only employee_id
-            $employees = Employee::where('contract_status','active')
-                                    ->where('id',$request->e)
+            $employees = Employee::where('id',$request->e)
                                     ->with('unit:id,unit_name');
             if($download==1)
                 $employees = $employees->get();
