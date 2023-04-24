@@ -40,14 +40,13 @@ class SendMailController extends Controller
 
         //employee by mnager_id to hr , cc manager, bcc employee
         
-        $to = 'deenasitikhu123@gmail.com';
-        $cc = ['satyadeep.neupane@deerwalk.edu.np'];
-        $bcc = ['deenasitikhu@gmail.com'];
-        $name = 'deena';
+        $to = 'pratyush.acharya@deerwalk.edu.np';
+        $cc = ['asim.poudel@deerwalk.edu.np'];
+        // $bcc = ['deenasitikhu@gmail.com'];
+        $name = 'pratyush';
         $message = 'still not punch out';
-        $regards ='HR';
+        // $regards ='HR';
         $subject = 'Punch In Subject';
-        // $receiver_mail = ['deenasitikhu@gmail.com','apurba.thapaliya@deerwalk.edu.np'];
-        return $this->sendMail($to, $name, $subject, $message, $cc, $bcc);
+        return $this->sendMail($to, $name, $subject, $message, $cc);
     }
 }

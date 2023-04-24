@@ -133,9 +133,9 @@ class MailHelper{
 
     // cron job running
     public static function testMail2(){
-        $name = "Deena";
-        Mail::to('deena.sitikhu@deerwalk.edu.np')
-                ->cc(['satyadeep.neupane@deerwalk.edu.np','_devops@deerwalk.edu.np'])
+        $name = "Pratyush";
+        Mail::to('pratyush.acharya@deerwalk.edu.np')
+                ->cc(['asim.poudel@deerwalk.edu.np','_devops@deerwalk.edu.np'])
                 ->queue(new SendMail($name));
         return true;       
     }
