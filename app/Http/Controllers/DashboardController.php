@@ -15,6 +15,7 @@ use App\Models\Employee;
 use App\Models\Attendance;
 use App\Models\CarryOverLeave;
 use App\Models\NoPunchInNoLeave;
+use App\Models\Holiday;
 use App\Models\Time;
 use Carbon\Carbon;
 
@@ -22,7 +23,7 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     public function index(Request $request)
-    {        
+    {    
         $this->isPasswordExpired();
        
         $leaveBalance = $this->getLeaveBalance();
@@ -41,6 +42,31 @@ class DashboardController extends Controller
             $this->setManagerNotification();
 
         $first_login_today = \Auth::user()->is_logged_in_today;
+        $holidaypopup = false;
+        if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
+            if ($date = $this->isPublicHoliday()){
+                $date = date_create($date);
+                $dateforedit = date_format($date,"l, d F");
+                $holiday = Holiday::select('name','date','female_only')->where('date',$date)->first();
+                $holidaypopup = true;
+                return view('admin.dashboard.index')
+                ->with(compact(
+                    'leaveBalance',
+                    'birthdayList',
+                    'leaveList',
+                    'state',
+                    'userIp',
+                    'late_within_ten_days',
+                    'max_punch_in_time',
+                    'noPunchInNoLeaveRecordExists',
+                    'todayBirthdayList',
+                    'first_login_today',
+                    'holiday',
+                    'holidaypopup',
+                    'dateforedit'
+                ));
+            }
+        }
 
         return view('admin.dashboard.index')
                 ->with(compact(
@@ -53,8 +79,28 @@ class DashboardController extends Controller
                     'max_punch_in_time',
                     'noPunchInNoLeaveRecordExists',
                     'todayBirthdayList',
-                    'first_login_today'
+                    'first_login_today',
+                    'holidaypopup'
                 ));      
+    }
+
+    private function isPublicHoliday()
+    {
+        $date = date('Y-m-d', strtotime('+1 day'));
+        $day = strtolower(date('D',strtotime($date)));
+        if ($day == "sat"){
+            $date = date('Y-m-d', strtotime('+3 day'));
+        }
+        elseif ($day == "sun"){
+            $date = date('Y-m-d',strtotime('+2 day'));
+        }
+        else{
+            //
+        }
+        if (Holiday::where('date',$date)->exists()){
+            return $date;
+        }
+        return false;
     }
 
     private function getAttendanceState()

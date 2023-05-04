@@ -13,6 +13,27 @@
     </div>
     <!-- section for current time end-->
 
+@if($holidaypopup)
+    <div class="popup">
+        <div class="modal d-flex align-items-center justify-content-center show position-fixed top-0 start-0 w-100 h-100">
+            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 rounded shadow">
+                <div class="d-flex flex-column align-items-center justify-content-center" >
+                <h3 class="text-center mb-4" >Holiday on {{$dateforedit}}</h3>
+                <div class="card mb-3" >
+                    <div class="card-body">
+                    <h5 class="card-title text-primary text-center fw-bold">{{$holiday->name}}</h5>
+                    <p class="card-text">Enjoy your day off!</p>
+                    </div>
+                </div>
+                <button onclick="closePopup()" class="btn btn-primary">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+@endif
+
     <div class="row top_buttons mx-4">
         <div class="col">
             <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
@@ -133,5 +154,9 @@
             $(".jobfairModal").modal('show');
         // }
     });
+
+    function closePopup() {
+        document.querySelector('.popup').style.display = 'none';
+    }
 </script>
 @endsection
