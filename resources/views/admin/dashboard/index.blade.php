@@ -13,13 +13,13 @@
     </div>
     <!-- section for current time end-->
 
-@if($holidaypopup)
+@if($holiday ?? '')
     <div class="popup">
         <div class="modal d-flex align-items-center justify-content-center show position-fixed top-0 start-0 w-100 h-100">
             <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-4 rounded shadow">
                 <div class="d-flex flex-column align-items-center justify-content-center" >
-                <h3 class="text-center mb-4" >Holiday on {{$dateforedit}}</h3>
+                <h3 class="text-center mb-4" >Holiday on {{ date('l, d F', strtotime($holiday->date)) }}</h3>
                 <div class="card mb-3" >
                     <div class="card-body">
                     <h5 class="card-title text-primary text-center fw-bold">{{$holiday->name}}</h5>

@@ -42,13 +42,10 @@ class DashboardController extends Controller
             $this->setManagerNotification();
 
         $first_login_today = \Auth::user()->is_logged_in_today;
-        $holidaypopup = false;
-        if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
-            if ($date = $this->isPublicHoliday()){
-                $date = date_create($date);
-                $dateforedit = date_format($date,"l, d F");
+        
+        if ($date = $this->isPublicHoliday()){
+            if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
                 $holiday = Holiday::select('name','date','female_only')->where('date',$date)->first();
-                $holidaypopup = true;
                 return view('admin.dashboard.index')
                 ->with(compact(
                     'leaveBalance',
@@ -62,8 +59,6 @@ class DashboardController extends Controller
                     'todayBirthdayList',
                     'first_login_today',
                     'holiday',
-                    'holidaypopup',
-                    'dateforedit'
                 ));
             }
         }
@@ -79,12 +74,11 @@ class DashboardController extends Controller
                     'max_punch_in_time',
                     'noPunchInNoLeaveRecordExists',
                     'todayBirthdayList',
-                    'first_login_today',
-                    'holidaypopup'
+                    'first_login_today'
                 ));      
     }
 
-    private function isPublicHoliday()
+    private function holidayNextDay()
     {
         $date = date('Y-m-d', strtotime('+1 day'));
         $day = strtolower(date('D',strtotime($date)));
@@ -94,11 +88,8 @@ class DashboardController extends Controller
         elseif ($day == "sun"){
             $date = date('Y-m-d',strtotime('+2 day'));
         }
-        else{
-            //
-        }
         if (Holiday::where('date',$date)->exists()){
-            return $date;
+            return date_create($date);
         }
         return false;
     }
