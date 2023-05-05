@@ -43,7 +43,7 @@ class DashboardController extends Controller
 
         $first_login_today = \Auth::user()->is_logged_in_today;
         
-        if ($date = $this->isPublicHoliday()){
+        if ($date = $this->holidayNextDay()){
             if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
                 $holiday = Holiday::select('name','date','female_only')->where('date',$date)->first();
                 return view('admin.dashboard.index')
