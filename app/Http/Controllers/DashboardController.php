@@ -96,7 +96,6 @@ class DashboardController extends Controller
             if ($holiday_unit_id == NULL){
                 return date_create($date);
             }else if($unit_id == $holiday_unit_id) {
-                dd($unit_id);
                 return date_create($date);
             }
         }
