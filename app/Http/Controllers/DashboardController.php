@@ -63,6 +63,26 @@ class DashboardController extends Controller
             }
         }
 
+        if ($date = $this->festivalNextDay()){
+            if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
+                $festival = Holiday::select('image')->where('date',$date)->first();
+                return view('admin.dashboard.index')
+                ->with(compact(
+                    'leaveBalance',
+                    'birthdayList',
+                    'leaveList',
+                    'state',
+                    'userIp',
+                    'late_within_ten_days',
+                    'max_punch_in_time',
+                    'noPunchInNoLeaveRecordExists',
+                    'todayBirthdayList',
+                    'first_login_today',
+                    'festival',
+                ));
+            }
+        }
+
         return view('admin.dashboard.index')
                 ->with(compact(
                     'leaveBalance',
@@ -88,7 +108,24 @@ class DashboardController extends Controller
         elseif ($day == "sun"){
             $date = date('Y-m-d',strtotime('+2 day'));
         }
-        if (Holiday::where('date',$date)->exists()){
+        if (Holiday::where('date',$date)->where('festival_only', 0)->exists()){
+            return date_create($date);
+        }
+        return false;
+    }
+
+    private function festivalNextDay()
+    {
+        $date = date('Y-m-d', strtotime('+1 day'));
+        $day = strtolower(date('D',strtotime($date)));
+        if ($day == "sat"){
+            $date = date('Y-m-d', strtotime('+3 day'));
+        }
+        elseif ($day == "sun"){
+            $date = date('Y-m-d',strtotime('+2 day'));
+        }
+
+        if (Holiday::where('date',$date)->whereNotNull('image')->exists()){
             return date_create($date);
         }
         return false;

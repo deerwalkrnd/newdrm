@@ -30,6 +30,8 @@ class HolidayRequest extends FormRequest
             'name'=>'required|string|max:255',
             'date' => ['required','date', new HolidayUniqueDate], 
             'female_only'=>'required|integer',
+            'festival_only'=>'nullable',
+            'image'=>'nullable'
         ];
     }
 }

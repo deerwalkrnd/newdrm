@@ -13,7 +13,9 @@ class Holiday extends Model
         'unit_id',
         'name',
         'date',
-        'female_only'
+        'female_only',
+        'festival_only',
+        'image'
     ];
     public function unit()
     {
