@@ -88,8 +88,16 @@ class DashboardController extends Controller
         elseif ($day == "sun"){
             $date = date('Y-m-d',strtotime('+2 day'));
         }
+
+        $unit_id = Employee::where('id',\Auth::user()->employee_id)->value('unit_id');
+        $holiday_unit_id = Holiday::where('date',$date)->value('unit_id');
+        
         if (Holiday::where('date',$date)->exists()){
-            return date_create($date);
+            if ($holiday_unit_id == NULL){
+                return date_create($date);
+            }else if($unit_id == $holiday_unit_id) {
+                return date_create($date);
+            }
         }
         return false;
     }
