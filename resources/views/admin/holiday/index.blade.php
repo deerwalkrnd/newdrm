@@ -16,6 +16,8 @@
             <th scope="col">Unit</th>
             <th scope='col'>Date</th>
             <th scope='col'>Female Only</th>
+            <th scope='col'>Festival Only</th>
+            <th scope='col'>Image</th>
             @if(Auth::user()->role->authority == "hr")
                 <th scope="col">Action</th>
             @endif
@@ -33,6 +35,8 @@
             @endif
             <td>{{ $holiday->date }}</td>
             <td> @if($holiday->female_only) Yes @else No</td>@endif
+            <td>@if($holiday->festival_only) Yes @else No</td>@endif
+            <td>@if(!is_null($holiday->image)) <img src="{{asset('/storage/' . $holiday->image )}}" alt = "image" style="max-width: 200px; max-height: 200px;">@else no image</td>@endif
             @if(Auth::user()->role->authority == "hr")
             <td class="text-center">
                 <a href="/holiday/edit/{{ $holiday->id }}"><i class="far fa-edit"></i></a> 

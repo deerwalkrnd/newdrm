@@ -17,13 +17,13 @@ class HolidayController extends Controller
      */
     public function index()
     {
-        $holidays = Holiday::select('id','name','date','female_only','unit_id')->orderBy('date','desc')->orderBy('unit_id')->get();
+        $holidays = Holiday::select('id','name','date','female_only','festival_only','unit_id','image')->orderBy('date','desc')->orderBy('unit_id')->get();
         return view('admin.holiday.index')->with(compact('holidays'));
     }
 
     public function myHoliday()
     {
-        $holidays = Holiday::select('id','name','date','female_only','unit_id')
+        $holidays = Holiday::select('id','name','date','female_only','festival_only','unit_id','image')
                             ->where(function($query){
                                 $query->where('unit_id',\Auth::user()->employee->unit_id)
                                         ->orWhere('unit_id',null);
@@ -57,9 +57,19 @@ class HolidayController extends Controller
      */
     public function store(HolidayRequest $request)
     {
-        // dd($request);
         $input = $request->validated();
+
+        if ($request->hasFile('image')){
+            $uploadedImage = $input['image'];
+            $imageName = time() . '-' . $uploadedImage->getClientOriginalName();
+            $request->file('image')->storeAs('public/festival',$imageName);
+            $input['image'] = 'festival/' . $imageName;
+        }else{
+            $input['image'] = NULL;
+        }
+
         Holiday::create($input);
+
         $res = [
             'title' => 'Holiday Created',
             'message' => 'Holiday has been successfully Created',
@@ -103,8 +113,18 @@ class HolidayController extends Controller
     {
         $holiday = Holiday::findOrFail($id);
         $input = $request->validated();
-        
+
+        if ($request->hasFile('image')){
+            $uploadedImage = $input['image'];
+            $imageName = time() . '-' . $uploadedImage->getClientOriginalName();
+            $request->file('image')->storeAs('public/festival',$imageName);
+            $input['image'] = 'festival/' . $imageName;
+        }else{
+            $input['image'] = NULL;
+        }
+
         $holiday->update($input);
+
         $res = [
             'title' => 'Holiday Updated',
             'message' => 'Holiday has been successfully Updated',

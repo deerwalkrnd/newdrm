@@ -43,39 +43,79 @@ class DashboardController extends Controller
 
         $first_login_today = \Auth::user()->is_logged_in_today;
         
-        if ($date = $this->holidayNextDay()){
-            if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
-                $holiday = Holiday::select('name','date','female_only')->where('date',$date)->first();
-                return view('admin.dashboard.index')
-                ->with(compact(
-                    'leaveBalance',
-                    'birthdayList',
-                    'leaveList',
-                    'state',
-                    'userIp',
-                    'late_within_ten_days',
-                    'max_punch_in_time',
-                    'noPunchInNoLeaveRecordExists',
-                    'todayBirthdayList',
-                    'first_login_today',
-                    'holiday',
-                ));
+        if (TRUE){
+            if ($date1 = $this->holidayNextDay() && $date2 = $this->festivalNextDay()){
+                    $date1 = $this->holidayNextDay();
+                    $holiday = Holiday::select('name','date','female_only')->where('date',$date1)->first();
+                    $festival = Holiday::select('image')->where('date',$date2)->first();
+                    return view('admin.dashboard.index')
+                    ->with(compact(
+                        'leaveBalance',
+                        'birthdayList',
+                        'leaveList',
+                        'state',
+                        'userIp',
+                        'late_within_ten_days',
+                        'max_punch_in_time',
+                        'noPunchInNoLeaveRecordExists',
+                        'todayBirthdayList',
+                        'first_login_today',
+                        'holiday',
+                        'festival'
+                    ));
+            }
+
+            if ($this->holidayNextDay() || $date2 = $this->festivalNextDay()){
+                if ($this->holidayNextDay()){
+                    $date1 = $this->holidayNextDay();
+                    $holiday = Holiday::select('name','date','female_only')->where('date',$date1)->first();
+                    return view('admin.dashboard.index')
+                    ->with(compact(
+                        'leaveBalance',
+                        'birthdayList',
+                        'leaveList',
+                        'state',
+                        'userIp',
+                        'late_within_ten_days',
+                        'max_punch_in_time',
+                        'noPunchInNoLeaveRecordExists',
+                        'todayBirthdayList',
+                        'first_login_today',
+                        'holiday'
+                    ));
+                }else{
+                    $festival = Holiday::select('image')->where('date',$date2)->first();
+                    return view('admin.dashboard.index')
+                    ->with(compact(
+                        'leaveBalance',
+                        'birthdayList',
+                        'leaveList',
+                        'state',
+                        'userIp',
+                        'late_within_ten_days',
+                        'max_punch_in_time',
+                        'noPunchInNoLeaveRecordExists',
+                        'todayBirthdayList',
+                        'first_login_today',
+                        'festival',
+                    ));
+                }
             }
         }
 
-        return view('admin.dashboard.index')
-                ->with(compact(
-                    'leaveBalance',
-                    'birthdayList',
-                    'leaveList',
-                    'state',
-                    'userIp',
-                    'late_within_ten_days',
-                    'max_punch_in_time',
-                    'noPunchInNoLeaveRecordExists',
-                    'todayBirthdayList',
-                    'first_login_today'
-                ));      
+    return view('admin.dashboard.index')
+            ->with(compact(
+                'leaveBalance',
+                'birthdayList',
+                'leaveList',
+                'state',
+                'userIp',
+                'late_within_ten_days',
+                'max_punch_in_time',
+                'noPunchInNoLeaveRecordExists',
+                'todayBirthdayList',
+                'first_login_today'
+            ));      
     }
 
     private function holidayNextDay()
@@ -92,12 +132,30 @@ class DashboardController extends Controller
         $unit_id = Employee::where('id',\Auth::user()->employee_id)->value('unit_id');
         $holiday_unit_id = Holiday::where('date',$date)->value('unit_id');
         
-        if (Holiday::where('date',$date)->exists()){
+        if (Holiday::where('date',$date)->where('festival_only', 0)->exists()){
             if ($holiday_unit_id == NULL){
                 return date_create($date);
             }else if($unit_id == $holiday_unit_id) {
                 return date_create($date);
             }
+        }
+        return false;
+    }
+
+
+    private function festivalNextDay()
+    {
+        $date = date('Y-m-d', strtotime('+1 day'));
+        $day = strtolower(date('D',strtotime($date)));
+        if ($day == "sat"){
+            $date = date('Y-m-d', strtotime('+3 day'));
+        }
+        elseif ($day == "sun"){
+            $date = date('Y-m-d',strtotime('+2 day'));
+        }
+
+        if (Holiday::where('date',$date)->whereNotNull('image')->exists()){
+            return date_create($date);
         }
         return false;
     }
