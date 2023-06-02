@@ -43,7 +43,7 @@ class DashboardController extends Controller
 
         $first_login_today = \Auth::user()->is_logged_in_today;
         
-        if (TRUE){
+        if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
             if ($date1 = $this->holidayNextDay() && $date2 = $this->festivalNextDay()){
                     $date1 = $this->holidayNextDay();
                     $holiday = Holiday::select('name','date','female_only')->where('date',$date1)->first();
