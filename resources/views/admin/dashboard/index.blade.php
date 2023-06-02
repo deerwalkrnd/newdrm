@@ -26,12 +26,31 @@
                     <p class="card-text">Enjoy your day off!</p>
                     </div>
                 </div>
-                <button onclick="closePopup()" class="btn btn-primary">Close</button>
+                <button onclick="closeHolidayPopup()" class="btn btn-primary">Close</button>
                 </div>
             </div>
             </div>
         </div>
     </div>
+@endif
+
+@if ($festival ?? '')
+    @if (!is_null($festival->image))
+    <div class="festivalpopup">
+            <div class="modal d-flex align-items-center justify-content-center show position-fixed top-0 start-0 w-100 h-100">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content p-4 rounded shadow">
+                        <div class="d-flex flex-column align-items-center justify-content-center">
+                            <div class="modal-body">
+                                <img src="/storage/{{$festival->image}}" class="img-fluid" alt="Festival Image">
+                            </div>
+                            <button onclick="closeFestivalPopup()" class="btn btn-primary">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @endif
 
     <div class="row top_buttons mx-4">
@@ -155,8 +174,12 @@
         // }
     });
 
-    function closePopup() {
+    function closeHolidayPopup() {
         document.querySelector('.popup').style.display = 'none';
+    }
+
+    function closeFestivalPopup() {
+        document.querySelector('.festivalpopup').style.display = 'none';
     }
 </script>
 @endsection
