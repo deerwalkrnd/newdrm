@@ -68,6 +68,7 @@
         <th scope="col">Position</th>
         <th scope="col">Date of Birth</th>
         <th scope="col">Punch In</th>
+        <th scope="col">Punch Out</th>
         <th scope="col">Action</th>
     </tr>
     </thead>
@@ -98,6 +99,19 @@
                 @csrf
                 <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
                 <button type="submit" class="border-0 btn btn-primary">Punch In</button>
+            </form> 
+        </td>
+        @endif
+        @if($employee->attendances_count == 0)
+        <td>Not Punched In</td>
+        @elseif($employee->hasPunchOut)
+        <td>Punched Out already</td>
+        @else
+        <td>
+            <form action="/punch-out/{{ $employee->id }}" method="POST" class="d-inline">
+                @csrf
+                <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
+                <button type="submit" class="border-0 btn btn-primary">Punch Out</button>
             </form> 
         </td>
         @endif

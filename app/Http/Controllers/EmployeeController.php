@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+use App\Models\Attendance;
 use App\Models\Employee;
 use App\Http\Requests\EmployeeRequest;
 use App\Mail\EmployeeCredentialMail;
@@ -88,6 +89,17 @@ class EmployeeController extends Controller
             'icon' => 'success'
         ];
 
+        $join_year = []; // Initialize the $join_year array
+        $hasPunchOut = [];
+
+        foreach ($employees as $employee) {
+            array_push($join_year, Helper::getNepaliYear($employee->join_date)[0]);
+            array_push($hasPunchOut, $this->hasPunchOut($employee->id));
+        }
+        foreach ($employees as $key => $employee) {
+            $join_year[] = Helper::getNepaliYear($employee->join_date)[0];
+            $employees[$key]->hasPunchOut = $hasPunchOut[$key];
+        }
         if($download == 1)
             return [$employees,$join_year];
         else
@@ -99,6 +111,21 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private function hasPunchOut($employee_id)
+    {
+        $today = date('Y-m-d');
+        $attendance = Attendance::where('employee_id', $employee_id)
+            ->whereDate('punch_in_time', $today)
+            ->first();
+    
+        if ($attendance && $attendance->punch_out_time !== null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function create()
     {
         $organizations = Organization::select('id','name')->get();
