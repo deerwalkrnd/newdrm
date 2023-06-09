@@ -1,6 +1,5 @@
 <!-- check if valid ip else no action can be performed -->
-<!-- @if(in_array($userIp, explode(',',env('IP'))))
-     -->
+@if(in_array($userIp, explode(',',env('IP'))))
     <!-- if state is 1 punch in is needed else if state is 2 punch out needed else no action available -->
     @if($state == 1)
 
@@ -37,6 +36,6 @@
     @else
         <p class="text-danger error-text">Punch Out Successful</p>
     @endif
-<!-- @else
+@else
     <p class="text-danger error-text">Invalid IP Address Detected</p>
-@endif -->
+@endif
