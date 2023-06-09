@@ -101,6 +101,7 @@ Route::middleware(['logged-in'])->group(function(){
 Route::middleware(['manager'])->group(function(){
     //subordinate leaves
     Route::get('/leave-request/create/subordinate-leave',[LeaveRequestController::class, 'createSubOrdinateLeave']);
+    Route::get('/leave-request/show/subordinate-leave',[LeaveRequestController::class, 'showSubOrdinateLeave']);
     Route::post('/leave-request/subordinate-leave',[LeaveRequestController::class, 'storeSubOrdinateLeave']);
     //approve-reject-delete leaves
     Route::put('/leave-request/accept/{id}',[LeaveRequestController::class, 'accept']);

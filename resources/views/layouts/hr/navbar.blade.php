@@ -213,6 +213,13 @@
                             Create Sub Ordinate Leave</a>
                     </li>
                     @endif
+
+                    @if(Auth::user()->role->authority == 'manager')
+                    <li class="nav-item navigation_item">
+                        <a class="nav-link navigation_link" href="/leave-request/show/subordinate-leave"><i class="fas"></i>
+                            Show SubOrdinate Leave</a>
+                    </li>
+                    @endif
                     <li class="nav-item navigation_item">
                         <a class="nav-link navigation_link" href="/my-file-upload"><i class="fas fa-file-alt icon"></i>
                             My Files</a>
