@@ -88,6 +88,7 @@
         <td>{{ $employee->terminated_date }}</td>
         <td class="text-center">
             <button type="button" class="btn btn-danger">Terminated</button>
+            <a class="btn btn-primary" href="/leave-balance-report?e={{$employee->id}}&d=1">Leave Balance Report</a>
         </td>
     </tr>
     @empty

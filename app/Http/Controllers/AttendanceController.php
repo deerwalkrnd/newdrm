@@ -40,9 +40,8 @@ class AttendanceController extends Controller
             return true;
     }
 
-    private function hasPunchOut()
+    private function hasPunchOut($employee_id)
     {
-        $employee_id = \Auth::user()->employee_id;
         $today = date('Y-m-d');
         $punchOutTime = Attendance::select('punch_out_time')
         ->where('employee_id',$employee_id)
@@ -285,7 +284,11 @@ class AttendanceController extends Controller
         $employee_full_name = \Auth::user()->employee->first_name.' '.\Auth::user()->employee->middle_name.' '.\Auth::user()->employee->last_name;
         $today = date('Y-m-d');
         
-        if($this->recordRowExists($employee_id) && !$this->hasPunchOut())
+        if($request->id){
+            $employee_id = $request->id;
+        }
+
+        if($this->recordRowExists($employee_id) && !$this->hasPunchOut($employee_id))
         {
             // $presentTime = strtotime(Carbon::now());
             $presentTime = Carbon::now()->format('Y-m-d');
@@ -374,7 +377,6 @@ class AttendanceController extends Controller
                 }
             }
         }
-
         return redirect($this->redirect_to);
     }
 

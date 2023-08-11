@@ -55,6 +55,7 @@
     <tr class="table_title" style="background-color: #0f5288;">
        <th scope="col" class="ps-4">S.N</th>
         <th scope="col">Name</th>
+        <th scope="col">Email</th>
         <!-- <th scope="col">Title</th> -->
         <th scope="col">Manager</th>
         <th scope="col">Organization</th>
@@ -67,6 +68,7 @@
         <th scope="col">Position</th>
         <th scope="col">Date of Birth</th>
         <th scope="col">Punch In</th>
+        <th scope="col">Punch Out</th>
         <th scope="col">Action</th>
     </tr>
     </thead>
@@ -77,6 +79,7 @@
         <th scope="row" class="ps-4 text-dark">{{ $loop->iteration }}</th>
         <td><a href="/employee/profile/{{$employee->id}}">{{ $employee->first_name.' '.substr($employee->middle_name,0,1).' '.$employee->last_name }}</a></td>
         <!-- <td>title</td> -->
+        <td>{{ $employee->email }}</td>
         <td>{{ $employee->manager != NULL ? $employee->manager->first_name.' '.substr($employee->manager->middle_name,0,1).' '.$employee->manager->last_name : "N/A"}} </td>
         <td>{{ $employee->organization->name }}</td>
         <td>{{ $employee->unit->unit_name }}</td>
@@ -96,6 +99,19 @@
                 @csrf
                 <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
                 <button type="submit" class="border-0 btn btn-primary">Punch In</button>
+            </form> 
+        </td>
+        @endif
+        @if($employee->attendances_count == 0)
+        <td>Not Punched In</td>
+        @elseif($employee->hasPunchOut)
+        <td>Punched Out already</td>
+        @else
+        <td>
+            <form action="/punch-out/{{ $employee->id }}" method="POST" class="d-inline">
+                @csrf
+                <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
+                <button type="submit" class="border-0 btn btn-primary">Punch Out</button>
             </form> 
         </td>
         @endif
@@ -129,6 +145,7 @@
             search: {
                 return: true
             },
+            scrollX: true
         });
 
         $('input[type="search"]').on("input", function(){

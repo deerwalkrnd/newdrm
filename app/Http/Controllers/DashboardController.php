@@ -15,6 +15,7 @@ use App\Models\Employee;
 use App\Models\Attendance;
 use App\Models\CarryOverLeave;
 use App\Models\NoPunchInNoLeave;
+use App\Models\Holiday;
 use App\Models\Time;
 use Carbon\Carbon;
 
@@ -22,7 +23,7 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     public function index(Request $request)
-    {        
+    {    
         $this->isPasswordExpired();
        
         $leaveBalance = $this->getLeaveBalance();
@@ -41,20 +42,122 @@ class DashboardController extends Controller
             $this->setManagerNotification();
 
         $first_login_today = \Auth::user()->is_logged_in_today;
+        
+        if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
+            if ($date1 = $this->holidayNextDay() && $date2 = $this->festivalNextDay()){
+                    $date1 = $this->holidayNextDay();
+                    $holiday = Holiday::select('name','date','female_only')->where('date',$date1)->first();
+                    $festival = Holiday::select('image')->where('date',$date2)->first();
+                    return view('admin.dashboard.index')
+                    ->with(compact(
+                        'leaveBalance',
+                        'birthdayList',
+                        'leaveList',
+                        'state',
+                        'userIp',
+                        'late_within_ten_days',
+                        'max_punch_in_time',
+                        'noPunchInNoLeaveRecordExists',
+                        'todayBirthdayList',
+                        'first_login_today',
+                        'holiday',
+                        'festival'
+                    ));
+            }
 
-        return view('admin.dashboard.index')
-                ->with(compact(
-                    'leaveBalance',
-                    'birthdayList',
-                    'leaveList',
-                    'state',
-                    'userIp',
-                    'late_within_ten_days',
-                    'max_punch_in_time',
-                    'noPunchInNoLeaveRecordExists',
-                    'todayBirthdayList',
-                    'first_login_today'
-                ));      
+            if ($this->holidayNextDay() || $date2 = $this->festivalNextDay()){
+                if ($this->holidayNextDay()){
+                    $date1 = $this->holidayNextDay();
+                    $holiday = Holiday::select('name','date','female_only')->where('date',$date1)->first();
+                    return view('admin.dashboard.index')
+                    ->with(compact(
+                        'leaveBalance',
+                        'birthdayList',
+                        'leaveList',
+                        'state',
+                        'userIp',
+                        'late_within_ten_days',
+                        'max_punch_in_time',
+                        'noPunchInNoLeaveRecordExists',
+                        'todayBirthdayList',
+                        'first_login_today',
+                        'holiday'
+                    ));
+                }else{
+                    $festival = Holiday::select('image')->where('date',$date2)->first();
+                    return view('admin.dashboard.index')
+                    ->with(compact(
+                        'leaveBalance',
+                        'birthdayList',
+                        'leaveList',
+                        'state',
+                        'userIp',
+                        'late_within_ten_days',
+                        'max_punch_in_time',
+                        'noPunchInNoLeaveRecordExists',
+                        'todayBirthdayList',
+                        'first_login_today',
+                        'festival',
+                    ));
+                }
+            }
+        }
+
+    return view('admin.dashboard.index')
+            ->with(compact(
+                'leaveBalance',
+                'birthdayList',
+                'leaveList',
+                'state',
+                'userIp',
+                'late_within_ten_days',
+                'max_punch_in_time',
+                'noPunchInNoLeaveRecordExists',
+                'todayBirthdayList',
+                'first_login_today'
+            ));      
+    }
+
+    private function holidayNextDay()
+    {
+        $date = date('Y-m-d', strtotime('+1 day'));
+        $day = strtolower(date('D',strtotime($date)));
+        if ($day == "sat"){
+            $date = date('Y-m-d', strtotime('+3 day'));
+        }
+        elseif ($day == "sun"){
+            $date = date('Y-m-d',strtotime('+2 day'));
+        }
+
+        $unit_id = Employee::where('id',\Auth::user()->employee_id)->value('unit_id');
+        $holiday_unit_id = Holiday::where('date',$date)->value('unit_id');
+        
+        if (Holiday::where('date',$date)->where('festival_only', 0)->exists()){
+            if ($holiday_unit_id == NULL){
+                return date_create($date);
+            }else if($unit_id == $holiday_unit_id) {
+                return date_create($date);
+            }
+        }
+        return false;
+    }
+
+
+    private function festivalNextDay()
+    {
+        $date = date('Y-m-d', strtotime('+1 day'));
+        $day = strtolower(date('D',strtotime($date)));
+        if ($day == "sat"){
+            $date = date('Y-m-d', strtotime('+3 day'));
+        }
+        elseif ($day == "sun"){
+            $date = date('Y-m-d',strtotime('+2 day'));
+        }
+
+        if (Holiday::where('date',$date)->whereNotNull('image')->exists()){
+            return date_create($date);
+        }
+        return false;
     }
 
     private function getAttendanceState()
@@ -357,9 +460,9 @@ class DashboardController extends Controller
 
             $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year,\Auth::user()->employee_id);
             //if joinyear is this year or greater than this year, leave allowance is calculated from joined month
-
+            
+            $remaining_month = 13-(int)$joinMonth;
             if($joinYear >= $year){
-                $remaining_month = 13-$joinMonth;
                 $allowedLeave = round(($allowedLeave/12*$remaining_month)*2)/2;
             }
 
@@ -388,7 +491,7 @@ class DashboardController extends Controller
 
             $leaveTaken = $fullLeaveTaken + 0.5 * $halfLeaveTaken;
 
-            $acquiredLeave = $this->getAcquiredLeave($leaveType,$allowedLeave,$acquiredMonth,$year,$month,$today,$joinYear,$joinDate);
+            $acquiredLeave = $this->getAcquiredLeave($leaveType,$allowedLeave,$acquiredMonth,$year,$month,$today,$joinYear,$joinDate,$remaining_month);
 
             // if($leaveType->id != '2' && $leaveType->id != '13' && $leaveType->id != '6' && $leaveType->id != '10'){
             //     $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
@@ -411,14 +514,14 @@ class DashboardController extends Controller
         return $lists;
     }
 
-    private function getAcquiredLeave($leaveType,$allowedLeave,$acquiredMonth,$year,$month,$today,$joinYear,$joinDate){
+    private function getAcquiredLeave($leaveType,$allowedLeave,$acquiredMonth,$year,$month,$today,$joinYear,$joinDate, $remaining_month){
         $acquiredLeave = $allowedLeave;
 
         if($leaveType->id != '2' && $leaveType->id != '13' && $leaveType->id != '6' && $leaveType->id != '10'){
             $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
             
             if($joinYear == $year){
-                $acquiredLeave = round($allowedLeave / 12 * $acquiredMonth * 2) / 2;
+                $acquiredLeave = round($allowedLeave / $remaining_month * $acquiredMonth * 2) / 2;
             }
         }
         

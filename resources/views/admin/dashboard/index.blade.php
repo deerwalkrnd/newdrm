@@ -13,6 +13,46 @@
     </div>
     <!-- section for current time end-->
 
+@if($holiday ?? '')
+    <div class="popup">
+        <div class="modal d-flex align-items-center justify-content-center show position-fixed top-0 start-0 w-100 h-100">
+            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 rounded shadow">
+                <div class="d-flex flex-column align-items-center justify-content-center" >
+                <h3 class="text-center mb-4" >Holiday on {{ date('l, d F', strtotime($holiday->date)) }}</h3>
+                <div class="card mb-3" >
+                    <div class="card-body">
+                    <h5 class="card-title text-primary text-center fw-bold">{{$holiday->name}}</h5>
+                    <p class="card-text">Enjoy your day off!</p>
+                    </div>
+                </div>
+                <button onclick="closeHolidayPopup()" class="btn btn-primary">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if ($festival ?? '')
+    @if (!is_null($festival->image))
+    <div class="festivalpopup">
+            <div class="modal d-flex align-items-center justify-content-center show position-fixed top-0 start-0 w-100 h-100">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content p-4 rounded shadow">
+                        <div class="d-flex flex-column align-items-center justify-content-center">
+                            <div class="modal-body">
+                                <img src="/storage/{{$festival->image}}" class="img-fluid" alt="Festival Image">
+                            </div>
+                            <button onclick="closeFestivalPopup()" class="btn btn-primary">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+@endif
+
     <div class="row top_buttons mx-4">
         <div class="col">
             <a href="/leave-request/create"><button type="button" class="btn btn-md applyLeave_btn mb-2">Apply for Leave</button></a>
@@ -100,66 +140,26 @@
 @if(!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i') && count($todayBirthdayList)>0)
     @foreach($todayBirthdayList as $birthdayEmployee)
         <div class="modal fade birthdayModal" id="exampleModal{{$birthdayEmployee->id}}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <!-- <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content birthday-modal-content">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content birthday-modal-content-no-photo">
                     <div cl ass="modal-body">
-                        <div class="container-fluid">
-                            <div class="row" style="position:relative"> -->
-                                <!-- <button type="button" class="btn-close birthday-close-button" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                               
-                                {{--@if($birthdayEmployee->image_name != null)--}}
-                                  <!-- <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content birthday-modal-content">
-                                        <div cl ass="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="row" style="position:relative">
-                                                    <div class="birthday-employee-image col-4"> -->
-                                                        {{-- @if(strtolower($birthdayEmployee->gender)=='female') --}}
-                                                            <!-- <img class="employee-image img-thumbnail"  src="{{ ($birthdayEmployee->image_name != NULL) ? asset($birthdayEmployee->image_name) : '/assets/images/woman.png' }}" > -->
-                                                        {{-- @else --}}
-                                                            <!-- <img class="employee-image img-thumbnail"  src="{{ ($birthdayEmployee->image_name != NULL) ? asset($birthdayEmployee->image_name) : '/assets/images/man.png' }}" > -->
-                                                        {{-- @endif --}}
-                                                            <!-- <img class="employee-image img-thumbnail"  src="{{ asset($birthdayEmployee->image_name) }}" > -->
+                        <div class="container-fluid pt-2 pb-0">
+                            <div class="image-div" style="position:relative;">
+                                <button type="button" class="btn text-white close-button" data-bs-dismiss="modal" aria-label="Close" >X</button>
+                                <img src="{{asset('assets/images/birthdayCardNoPhoto.jpg')}}" alt="birthday card" class="birthday-card-image-no-photo">
 
-                                                            <!-- <img src="{{asset('assets/images/deena.jpg')}}" alt="" class="employee-image"> -->
-
-                                                    <!-- </div>
-                                                    <div class="col-12 pt-2 pb-0  birthday-image-card">
-                                                        <button type="button" class="btn text-white" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; right: 0px;">X</button>
-
-                                                        <span class="birthday-employee-name text-center">{{$birthdayEmployee->first_name." ".substr($birthdayEmployee->middle_name,0,1)." ".$birthdayEmployee->last_name}}</span>
-                                                        <img src="{{asset('assets/images/birthday.png')}}" alt="birthday card" class="birthday-card-image">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                {{--@else--}}
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content birthday-modal-content-no-photo">
-                                            <div cl ass="modal-body">
-                                                <div class="container-fluid pt-2 pb-0">
-                                                    <div class="image-div" style="position:relative;">
-                                                        <button type="button" class="btn text-white close-button" data-bs-dismiss="modal" aria-label="Close" >X</button>
-                                                        <img src="{{asset('assets/images/birthdayCardNoPhoto.jpg')}}" alt="birthday card" class="birthday-card-image-no-photo">
-
-                                                        <div class="employee-name-no-photo-div" style="">
-                                                            <span class=" ">{{ucfirst($birthdayEmployee->first_name)." ".ucfirst(substr($birthdayEmployee->middle_name,0,1))." ".ucfirst($birthdayEmployee->last_name)}} </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {{-- @endif --}}
-                            <!-- </div>  
+                                <div class="employee-name-no-photo-div" style="">
+                                    <span class=" ">{{ucfirst($birthdayEmployee->first_name)." ".ucfirst(substr($birthdayEmployee->middle_name,0,1))." ".ucfirst($birthdayEmployee->last_name)}} </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     @endforeach
 @endif
+
 
 @endsection
 
@@ -170,7 +170,16 @@
     $(document).ready(function(){
         // if(width >= 992){
             $(".birthdayModal").modal('show');
+            $(".jobfairModal").modal('show');
         // }
     });
+
+    function closeHolidayPopup() {
+        document.querySelector('.popup').style.display = 'none';
+    }
+
+    function closeFestivalPopup() {
+        document.querySelector('.festivalpopup').style.display = 'none';
+    }
 </script>
 @endsection

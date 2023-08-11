@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+use App\Models\Attendance;
 use App\Models\Employee;
 use App\Http\Requests\EmployeeRequest;
 use App\Mail\EmployeeCredentialMail;
@@ -42,7 +43,7 @@ class EmployeeController extends Controller
     {
         // $request->u => unit_id $request->m => nepali birth month
         $date= date('Y-m-d');
-        $employees = Employee::select('id', 'first_name','middle_name','last_name','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date','date_of_birth')
+        $employees = Employee::select('id', 'first_name','middle_name','last_name','email','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date','date_of_birth')
                                 ->with('designation:id,job_title_name')
                                 ->with('organization:id,name')
                                 ->with('unit:id,unit_name')
@@ -88,6 +89,17 @@ class EmployeeController extends Controller
             'icon' => 'success'
         ];
 
+        $join_year = []; // Initialize the $join_year array
+        $hasPunchOut = [];
+
+        foreach ($employees as $employee) {
+            array_push($join_year, Helper::getNepaliYear($employee->join_date)[0]);
+            array_push($hasPunchOut, $this->hasPunchOut($employee->id));
+        }
+        foreach ($employees as $key => $employee) {
+            $join_year[] = Helper::getNepaliYear($employee->join_date)[0];
+            $employees[$key]->hasPunchOut = $hasPunchOut[$key];
+        }
         if($download == 1)
             return [$employees,$join_year];
         else
@@ -99,6 +111,21 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private function hasPunchOut($employee_id)
+    {
+        $today = date('Y-m-d');
+        $attendance = Attendance::where('employee_id', $employee_id)
+            ->whereDate('punch_in_time', $today)
+            ->first();
+    
+        if ($attendance && $attendance->punch_out_time !== null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function create()
     {
         $organizations = Organization::select('id','name')->get();
@@ -259,9 +286,12 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($id);
         $user = User::where('employee_id',$id)->first();
         $input = $request->validated();
-        
-        if($user['role_id'] == '2' && $input['role'] != 1)
+
+
+        if(($user['role_id'] == '2' && $input['role'] != 1) || ($input['role'] == 3 && $employee->isManager())){
             $input['role']=2;
+        }
+        
 
         $input['unit_id'] = Department::findOrFail($input['department_id'])->unit_id;
 

@@ -91,8 +91,7 @@ class LeaveReportController extends Controller
                 $employees = $employees->paginate(10)->withQueryString(); 
         }
         else if($request->e != NULL){       //search by only employee_id
-            $employees = Employee::where('contract_status','active')
-                                    ->where('id',$request->e)
+            $employees = Employee::where('id',$request->e)
                                     ->with('unit:id,unit_name');
             if($download==1)
                 $employees = $employees->get();
@@ -219,6 +218,7 @@ class LeaveReportController extends Controller
         //gives carryover
         $allowedLeave = $dashboardController->getAllowedLeaveDays($employee->unit_id,$type->id,$year,$employee->id);
         $acquiredMonth = 0;
+        $remaining_month = 0;
 
         if($this->employee_join_year == $year){
             $remaining_month = 13-$this->employee_join_month;
@@ -226,8 +226,8 @@ class LeaveReportController extends Controller
             $acquiredMonth = $this->thisMonth - $this->employee_join_month + 1;      
         }
 
-        $acquiredLeave = $this->getAcquiredLeave($type,$allowedLeave,$acquiredMonth,$year);
-        
+        $acquiredLeave = $this->getAcquiredLeave($type,$allowedLeave,$acquiredMonth,$year, $remaining_month);
+
         $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
                                     ->where('acceptance','accepted')
                                     ->where('year',$year)
@@ -256,15 +256,15 @@ class LeaveReportController extends Controller
         return $lists;
     }
 
-    private function getAcquiredLeave($type,$allowedLeave,$acquiredMonth,$year){
+    private function getAcquiredLeave($type,$allowedLeave,$acquiredMonth,$year,$remaining_month){
         $acquiredLeave = $allowedLeave;
-
+        
         if($year == $this->thisYear){
             if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
                 $acquiredLeave = round($allowedLeave / 12 * $this->thisMonth * 2) / 2;
 
                 if($this->employee_join_year == $year){
-                    $acquiredLeave = round($allowedLeave / 12 * $acquiredMonth * 2) / 2;
+                    $acquiredLeave = round($allowedLeave / $remaining_month * $acquiredMonth *2) / 2;
                 }
 
             }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\LeaveRequest;
+use App\Models\User;
 use App\Models\LeaveType;
 use App\Models\Employee;
 use App\Models\NoPunchInNoLeave;
@@ -42,6 +43,27 @@ class LeaveRequestController extends Controller
         $table_title = 'Employee Leave Details';
         return view('admin.leaveRequest.index')->with(compact('leaveRequests','table_title'));
     }
+
+    public function showSubOrdinateLeave()
+{
+    $managerId = \Auth::id();
+
+
+    $employee_id = User::where('id', $managerId)->value('employee_id');
+
+    $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
+        ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
+        ->whereHas('employee', function ($query) use ($employee_id) {
+            $query->where('manager_id', $employee_id);
+        })
+        ->orderBy('start_date', 'desc')
+        ->orderBy('created_at', 'desc')
+        ->orderBy('updated_at', 'desc')
+        ->get();
+
+    $table_title = 'Employee Leave Details';
+    return view('admin.leaveRequest.index')->with(compact('leaveRequests', 'table_title'));
+}
 
     public function leaveDetail(Request $request)
     {

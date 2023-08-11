@@ -12,7 +12,7 @@ class SendMailJobController extends Controller
         // $details['name'] = 'Receiver Name';
         // $details['subject'] = 'Hello Laravelcode';
         // $details['message'] = 'Here goes all message body.';
-        $name = "Deena Sitikhu";
+        // $name = "Deena Sitikhu";
         // dd(TestJob::dispatch($name)->delay(now()->addSeconds(5)));
         $done =TestJob::dispatchNow();
         if($done ==true)
