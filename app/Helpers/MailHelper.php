@@ -31,16 +31,18 @@ class MailHelper{
 
     public static function getHrEmail()
     {
-        $hr = User::whereHas('role',function($q){
-            $q->where('authority','hr');
-        })
-        ->whereHas('employee',function($q){
-            $q->where('contract_status','active');
-        })
-        ->with('employee:id,email')->get()->map(function($arr){
-            return $arr->employee->email;
-        })->toArray();
+        // $hr = User::whereHas('role',function($q){
+        //     $q->where('authority','hr');
+        // })
+        // ->whereHas('employee',function($q){
+        //     $q->where('contract_status','active');
+        // })
+        // ->with('employee:id,email')->get()->map(function($arr){
+        //     return $arr->employee->email;
+        // })->toArray();
 
+        $hr = ['bijaya.shrestha@sifal.deerwalk.edu.np','hitesh.karki@deerwalk.edu.np','alisha.ganeju@deerwalk.edu.np','aahishma.khanal@deerwalk.edu.np'];
+        
         return $hr;
     }
 
@@ -133,9 +135,9 @@ class MailHelper{
 
     // cron job running
     public static function testMail2(){
-        $name = "Pratyush";
-        Mail::to('pratyush.acharya@deerwalk.edu.np')
-                ->cc(['asim.poudel@deerwalk.edu.np','_devops@deerwalk.edu.np'])
+        $name = "test";
+        Mail::to('asim.poudel@deerwalk.edu.np')
+                ->cc(['asim.poudel@deerwalk.edu.np','shreejal.mainali@deerwalk.edu.np'])
                 ->queue(new SendMail($name));
         return true;       
     }
