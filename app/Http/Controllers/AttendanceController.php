@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use App\Mail\LatePunchInMail;
 use App\Mail\EarlyPunchOutMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 
 class AttendanceController extends Controller
@@ -236,6 +237,7 @@ class AttendanceController extends Controller
                 }
                 // dd("late punch in and no no remarks validation in weekend",$isLate, $request->reason);
                 if($state == 3){
+                    Log::info('Employee_id = ' . $employee_id . ', punch_in_time = ' . $punch_in_time . ', late_punch_in = ' . $isLate . ', reason = ' . $request->reason ."state 3");
                     $attendance = Attendance::create([
                         'employee_id' => $employee_id,
                         'punch_in_time' => $punch_in_time,
@@ -247,6 +249,7 @@ class AttendanceController extends Controller
                     ]);
                     \Session::put('punchIn', '1');
                 }else{
+                    Log::info('Employee_id = ' . $employee_id . ', punch_in_time = ' . $punch_in_time . ', late_punch_in = ' . $isLate . ', reason = ' . $request->reason);
                     $attendance = Attendance::create([
                         'employee_id' => $employee_id,
                         'punch_in_time' => $punch_in_time,
