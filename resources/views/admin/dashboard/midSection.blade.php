@@ -35,7 +35,7 @@
             <div class="col-md-9 birthday_person">
                 <h1>{{ $person->first_name." ".$person->last_name }}</h1>
                 @php
-                    $year = date('m',strtotime($person->date_of_birth)) == 1 ? date('Y')+1 : date('Y');
+                    $year = date('m',strtotime($person->date_of_birth)) == 1 ? date('Y') : date('Y')+1;
                 @endphp
                 <h4>{{date('D',strtotime($year."-".date('m-d',strtotime($person->date_of_birth)))) }}, {{ date('M d', strtotime($person->date_of_birth)) }}</h4>
             </div>
