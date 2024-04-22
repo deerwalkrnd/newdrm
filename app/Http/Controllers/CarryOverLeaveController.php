@@ -59,14 +59,16 @@ class CarryOverLeaveController extends Controller
                                     })->toArray();  
 
             // unit and year wise max personal leave type                        
-            $maxPersonalLeave = YearlyLeave::select('days')
-                                            ->where('leave_type_id',1)
-                                            ->where(function($query) use ($unit){
-                                                $query->where('unit_id',$unit)
-                                                        ->orWhere('unit_id',null);
-                                                })
-                                            ->where('year',$year)
-                                            ->first()->days;
+            $yearlyLeave = YearlyLeave::select('days')
+                ->where('leave_type_id', 1)
+                ->where(function($query) use ($unit) {
+                    $query->where('unit_id', $unit)
+                        ->orWhere('unit_id', null);
+                })
+                ->where('year', $year)
+                ->first();
+
+            $maxPersonalLeave = $yearlyLeave ? $yearlyLeave->days : 0;
             
             $maxSickLeave = YearlyLeave::select('days')
                                             ->where('leave_type_id',3)
