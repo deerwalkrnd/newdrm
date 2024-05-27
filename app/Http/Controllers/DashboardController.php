@@ -18,6 +18,7 @@ use App\Models\NoPunchInNoLeave;
 use App\Models\Holiday;
 use App\Models\Time;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 
 class DashboardController extends Controller
@@ -33,7 +34,7 @@ class DashboardController extends Controller
 
         $state = $this->getAttendanceState();
         $userIp  = request()->ip();
-
+        Log::alert($userIp);
         $late_within_ten_days = $this->isLateWithinTenDays();
         $max_punch_in_time = $this->getMaxPunchInTime();
         $noPunchInNoLeaveRecordExists = NoPunchInNoLeave::where('employee_id',\Auth::user()->employee_id)->get()->count() > 0;
