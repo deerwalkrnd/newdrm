@@ -41,7 +41,7 @@ class MailHelper{
         //     return $arr->employee->email;
         // })->toArray();
 
-        $hr = ['hitesh.karki@deerwalk.edu.np','aakancha.thapa@deerwalk.edu.np','alisha.thapa@deerwalk.edu.np', 'pooja.neupane@deerwalk.edu.np', '	ujjwal.poudel@sifal.deerwalk.edu.np' ];
+        $hr = ['hitesh.karki@deerwalk.edu.np','aakancha.thapa@deerwalk.edu.np','alisha.thapa@deerwalk.edu.np', 'pooja.neupane@deerwalk.edu.np', 'ujjwal.poudel@sifal.deerwalk.edu.np' ];
         
         return $hr;
     }
