@@ -326,7 +326,6 @@ class EmployeeController extends Controller
             $employee['department_change_date'] = date('Y-m-d');
 
         $userData = [];
-        $emergency_contact =[];
         //store image
         $image = $request->file('image');
         $cv = $request->file('cv');
@@ -348,14 +347,18 @@ class EmployeeController extends Controller
 
         $userData['role_id'] = $input['role'];
         
-        $emergency_contact['first_name'] = $input['emg_first_name'];
-        $emergency_contact['last_name'] =  $input['emg_last_name'];
-        $emergency_contact['middle_name'] =  $input['emg_middle_name'];
-        $emergency_contact['relationship'] =  $input['emg_relationship'];
-        $emergency_contact['phone_no'] = $input['emg_contact'];
-        $emergency_contact['alternate_phone_no'] =  $input['emg_alternate_contact'];
+
         $emergency_contact['employee_id'] = $id;
-     
+        $emergency_contact_data=[
+            'first_name'=>$input['emg_first_name'],
+            'last_name'=>$input['emg_last_name'],
+            'middle_name'=>$input['emg_middle_name'],
+            'relationship'=>$input['emg_relationship'],
+            'phone_no'=>$input['emg_contact'],
+            'alternate_phone_no'=>$input['emg_alternate_contact'],
+            'employee_id'=>$id,
+        ];
+        $emergency_contact_id = ['employee_id' => $id];
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
         unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
         
@@ -364,9 +367,11 @@ class EmployeeController extends Controller
             $employee->update($input);
             $user->update($userData);
             EmergencyContact::updateOrCreate(
-                $emergency_contact,
-                ['employee_id' => $id]
+                $emergency_contact_id,
+                $emergency_contact_data,
+                // ['employee_id' => $id]
             );
+            // dd("here");
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
