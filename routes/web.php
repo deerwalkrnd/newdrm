@@ -143,6 +143,7 @@ Route::middleware(['hr'])->group(function(){
     //get punch in and out report
     Route::get('/punch-in-detail',[PunchInOutReportController::class,'getPunchInOut']);
     Route::get('/attendancereport',[AttendanceController::class,'report']);
+    Route::get('/attendance/export/', [AttendanceController::class, 'export']);
     // late-punch-in missed-punch-out
     Route::get('/late-missed-punch',[PunchInOutReportController::class, 'latePunchInOut']);
     Route::post('/force-punch-in/{id}',[AttendanceController::class, 'forcePunchIn']);

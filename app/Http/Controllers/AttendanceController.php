@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AttendanceExport;
 use App\Models\Holiday;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,7 @@ use App\Mail\LatePunchInMail;
 use App\Mail\EarlyPunchOutMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class AttendanceController extends Controller
@@ -371,7 +373,7 @@ class AttendanceController extends Controller
         }
         return redirect($this->redirect_to);
     }
-
+    
     public function myPunchIn()
     {
         $myPunchInList = Attendance::select('id', 'employee_id', 'punch_in_time', 'punch_in_ip', 'punch_out_time', 'punch_out_ip', 'missed_punch_out', 'late_punch_in', 'reason')
@@ -413,42 +415,49 @@ class AttendanceController extends Controller
 
     public function report(Request $request)
     {
-        $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'manager_id')
-        ->where('contract_status', 'active')
-        ;
-        $attendance=Attendance::first();
-            
-        $employees = $employees->when(isset($request->e), function ($query) use ($request) {
-            return $query->whereHas('attendances', function ($query) use ($request) {
-                return $query->where('employee_id', $request->e);
-            });
-        })->when(isset($request->sd), function ($query) use ($request) {
-            return $query->whereHas('attendances', function ($query) use ($request) {
-                return $query->whereDate('punch_in_time', '>=', Carbon::parse($request->sd));
-            });
-        })->when(isset($request->ed), function ($query) use ($request) {
-            return $query->whereHas('attendances', function ($query) use ($request) {
-                return $query->whereDate('punch_in_time', '<=', Carbon::parse($request->ed));
-            });
-        })->get();
-            $attendance=Attendance::where("employee_id", $employees->first()->id)->get()->sortByDesc('id')->take(5);
-            $holidays = Holiday::where('female_only', '0')->pluck('date')->toArray();
-            $startDate =$request->has('sd') ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
-            $endDate=$request->has('ed') ? Carbon::parse($request->ed): Carbon::now();
-
-            $dates = collect();
-            $currentDate = $startDate->copy();
-            $iteration=0;
-            while ($currentDate->lte($endDate)) {
-                if (!$currentDate->isWeekend() && !in_array($currentDate->format('Y-m-d'), $holidays)) {
-                    $dates->push($currentDate->copy());
-                    $iteration++;
-                }
+        try {
+            $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'manager_id')
+            ->where('contract_status', 'active');
+            $attendance=Attendance::first();
                 
-                $currentDate->addDay();
-            }
-        $employeeSearch = Employee::select('id', 'first_name', 'middle_name', 'last_name')->where('id', $request->e)->where('contract_status', 'active')->first();
-
-        return view('admin.attendance.report')->with(compact('employees', 'employeeSearch', 'dates'));
+            $employees = $employees->when(isset($request->e), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->where('employee_id', $request->e);
+                });
+            })->when(isset($request->sd), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->whereDate('punch_in_time', '>=', Carbon::parse($request->sd));
+                });
+            })->when(isset($request->ed), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->whereDate('punch_in_time', '<=', Carbon::parse($request->ed));
+                });
+            })->get();
+                $attendance=Attendance::where("employee_id", $employees->first()->id)->get()->sortByDesc('id')->take(5);
+                $holidays = Holiday::where('female_only', '0')->pluck('date')->toArray();
+                $startDate =$request->has('sd') ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
+                $endDate=$request->has('ed') ? Carbon::parse($request->ed): Carbon::now();
+    
+                $dates = collect();
+                $currentDate = $startDate->copy();
+                $iteration=0;
+                while ($currentDate->lte($endDate)) {
+                    if (!$currentDate->isWeekend() && !in_array($currentDate->format('Y-m-d'), $holidays)) {
+                        $dates->push($currentDate->copy());
+                        $iteration++;
+                    }
+                    
+                    $currentDate->addDay();
+                }
+            $employeeSearch = Employee::select('id', 'first_name', 'middle_name', 'last_name')->where('id', $request->e)->where('contract_status', 'active')->first();
+    
+            return view('admin.report.attendance')->with(compact('employees', 'employeeSearch', 'dates'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with("error", "Oops! Something went wrong");
+        }
+    }
+    public function export(Request $request) 
+    {
+        return Excel::download(new AttendanceExport($request), 'attendancereport.xlsx');
     }
 }
