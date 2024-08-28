@@ -423,7 +423,7 @@ class EmployeeController extends Controller
             $keyword = $request->q;
             $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->where('contract_status','active')->get();
         }
-
+       
         return response()->json($employees);
     }
 
