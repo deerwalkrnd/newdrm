@@ -417,6 +417,8 @@ class AttendanceController extends Controller
     public function report(Request $request)
     {
         try {
+            $data=$request;
+            
             $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'manager_id')
             ->where('contract_status', 'active');
             $attendance=Attendance::first();
@@ -436,8 +438,8 @@ class AttendanceController extends Controller
             })->get();
                 $attendance=Attendance::where("employee_id", $employees->first()->id)->get()->sortByDesc('id')->take(5);
                 $holidays = Holiday::where('female_only', '0')->pluck('date')->toArray();
-                $startDate =$request->has('sd') ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
-                $endDate=$request->has('ed') ? Carbon::parse($request->ed): Carbon::now();
+                $startDate =isset($request->sd) ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
+                $endDate=isset($request->ed) ? Carbon::parse($request->ed): Carbon::now();
     
                 $dates = collect();
                 $currentDate = $startDate->copy();
@@ -450,9 +452,9 @@ class AttendanceController extends Controller
                     
                     $currentDate->addDay();
                 }
-            $employeeSearch = Employee::select('id', 'first_name', 'middle_name', 'last_name')->where('id', $request->e)->where('contract_status', 'active')->first();
+            $employeeList = Employee::select('id', 'first_name', 'middle_name', 'last_name')->where('contract_status', 'active')->get();
     
-            return view('admin.report.attendance')->with(compact('employees', 'employeeSearch', 'dates'));
+            return view('admin.report.attendance')->with(compact('employees', 'employeeList', 'dates',"data"));
         } catch (\Exception $e) {
             return redirect()->back()->with("error", "Oops! Something went wrong");
         }
@@ -465,9 +467,10 @@ class AttendanceController extends Controller
     public function terminatedreport(Request $request)
     {
         try {
+            $data=$request;
             $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'terminated_date')
             ->where('contract_status', 'terminated');
-                
+
             $employees = $employees->when(isset($request->e), function ($query) use ($request) {
                 return $query->whereHas('attendances', function ($query) use ($request) {
                     return $query->where('employee_id', $request->e);
@@ -483,8 +486,8 @@ class AttendanceController extends Controller
             })->get();
                 $attendance=Attendance::where("employee_id", $employees->first()->id)->get()->sortByDesc('id')->take(5);
                 $holidays = Holiday::where('female_only', '0')->pluck('date')->toArray();
-                $startDate =$request->has('sd') ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
-                $endDate=$request->has('ed') ? Carbon::parse($request->ed): Carbon::now();
+                $startDate =isset($request->sd) ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
+                $endDate=isset($request->ed) ? Carbon::parse($request->ed): Carbon::now();
     
                 $dates = collect();
                 $currentDate = $startDate->copy();
@@ -497,9 +500,9 @@ class AttendanceController extends Controller
                     
                     $currentDate->addDay();
                 }
-            $employeeSearch = Employee::select('id', 'first_name', 'middle_name', 'last_name')->where('id', $request->e)->where('contract_status', 'terminated')->first();
+            $employeeList = Employee::select('id', 'first_name', 'middle_name', 'last_name')->where('contract_status', 'terminated')->get();
     
-            return view('admin.report.terminatedAttendance')->with(compact('employees', 'employeeSearch', 'dates'));
+            return view('admin.report.terminatedAttendance')->with(compact('employees', 'employeeList', 'dates','data'));
         } catch (\Exception $e) {
             return redirect()->back()->with("error", "Oops! Something went wrong");
         }

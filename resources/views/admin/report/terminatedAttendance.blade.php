@@ -8,33 +8,35 @@
 
     <div class="row">
         <div class="col-md-4">
-            <label class="form-label" for="employee_id">Employee:</label>
-            <select class="employee-livesearch form-control p-3" onchange="search()" name="employee_id" id="employee_id"
-                data-placeholder="-- Choose Employee --">
-                @if (isset($employeeSearch))
-                    <option value="{{ request()->get('e') ?? request()->get('e') }}" selected="selected">
-                        {{ $employeeSearch->first_name . ' ' . $employeeSearch->middle_name . ' ' . $employeeSearch->last_name }}
+            <form action="/terminatedattendance/search/" method="GET">
+                @csrf
+                <label class="form-label" for="employee_id">Employee:</label>
+                <select class="employee-livesearch form-control "  name="e" id="employee_id"
+                placeholder="-- Choose Employee --">
+                <option value="">-- Choose Employee --</option>
+                    @foreach ($employeeList as $employee)
+                    <option value="{{$employee->id}}" {{$employee->id==$data->e ? "selected" : ""}}>
+                        {{$employee->first_name. " " . $employee->middle_name . " ". $employee->last_name}}
                     </option>
-                @endif
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="date">Start Date: </label>
-            <input class="form-control p-2" type="date" name="start_date" id="start_date" onchange="search()"
-                value="{{ request()->get('sd') ?? request()->get('sd') }}">
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" for="date">End Date: </label>
-            <input class="form-control p-2" type="date" name="end_date" id="end_date" onchange="search()"
-                value="{{ request()->get('ed') ?? request()->get('ed') }}">
-        </div>
-        <div class="col-md-4">
-            <button class="btn border-0 text-white" onclick="reset()"
-                style="background-color:#0f5288;float:right;">Reset</button>
-        </div>
+                    @endforeach
+                </select>
+                        </div>
+                        <div class="col-md-4">
+                <label class="form-label" for="date">Start Date: </label>
+                <input class="form-control p-2" type="date" name="sd" id="start_date" value="{{$data->sd}}">
+                        </div>
+                        <div class="col-md-4">
+                <label class="form-label" for="date">End Date: </label>
+                <input class="form-control p-2" type="date" name="ed" id="end_date" value="{{$data->ed}}">
+                        </div>
+                        <div class="col-md-4">
+                <button class="btn border-0 text-white"
+                    style="background-color:#0f5288;float:right;">Search</button>
+                        </div>
+            </form>
         <div class="col-md-4">
             <button class="btn border-0 text-white" id="downloadBtn" onclick="download()"
-                style="background-color:#0f5288;float:right;">Download</button>
+                style="background-color:#1b880f;float:right;">Download</button>
         </div>
     </div>
 
@@ -100,30 +102,7 @@
         $(document).ready(function() {
             $('.drmDataTable').DataTable();
         });
-
-        // Search by date or Employee
-        function search() {
-            let startDate = $('#start_date').val();
-            let endDate = $('#end_date').val();
-            let employee_id = $('#employee_id').val();
-            if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-                alert('Start date should be less than or equal to end date.');
-                return;
-            }
-            // Create an array to hold query parameters
-            let queryParams = [];
-
-            if (startDate) queryParams.push('sd=' + startDate);
-            if (endDate) queryParams.push('ed=' + endDate);
-            if (employee_id) queryParams.push('e=' + employee_id);
-
-
-            if (queryParams.length > 0) {
-                let queryString = queryParams.join('&');
-                $(location).attr('href', '/terminatedattendancereport?' + queryString);
-            }
-        }
-
+        $('#employee_id').select2({});
         function download() {
             let startDate = $('#start_date').val();
             let endDate = $('#end_date').val();
@@ -142,32 +121,5 @@
             updateDownloadLink('');
         }
 
-        $('.employee-livesearch').select2({
-            ajax: {
-                url: '/terminatedemployee/search',
-                data: function(params) {
-                    return {
-                        q: params.term // The search query
-                    };
-                },
-                dataType: 'json',
-                delay: 250,
-                processResults: function(data) {
-
-                    return {
-                        results: $.map(data, function(item) {
-                            let full_name = (item.middle_name === null) ?
-                                item.first_name + " " + item.last_name :
-                                item.first_name + " " + item.middle_name + " " + item.last_name;
-                            return {
-                                text: full_name,
-                                id: item.id
-                            };
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
     </script>
 @endsection
