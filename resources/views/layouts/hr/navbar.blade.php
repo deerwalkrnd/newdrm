@@ -196,7 +196,9 @@
                                         </tr>
                                          <tr>
                                             <td></td>
-                                            <td></td>
+                                            <td class="hr_menu_content"><a href="/terminatedattendancereport"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">Terminated Employee Attendance Report</a>
+                                            </td>
                                             <td class="hr_menu_content"><a href="/file-category"><img class="img-fluid"
                                                         src="/assets/images/icons/list.png">File Category Setting</a>
                                             </td>

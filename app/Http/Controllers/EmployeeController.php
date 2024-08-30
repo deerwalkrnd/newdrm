@@ -426,6 +426,21 @@ class EmployeeController extends Controller
        
         return response()->json($employees);
     }
+    public function searchTerminated(Request $request)
+    {
+        if(\Auth::user()->role->authority == 'manager')
+            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',\Auth::user()->employee_id)->get();
+        else
+            $employees = Employee::take(50)->where('contract_status','active')->get();
+
+        if($request->has('q'))
+        {
+            $keyword = $request->q;
+            $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->where('contract_status','terminated')->get();
+        }
+       
+        return response()->json($employees);
+    }
 
 
     public function profile(Request $request)

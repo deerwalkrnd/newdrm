@@ -110,6 +110,7 @@ Route::middleware(['manager'])->group(function(){
     Route::get('/leave-request/approve',[LeaveRequestController::class, 'approve']);
     //employee-livesearch
     Route::get('/employee/search',[EmployeeController::class, 'search']);
+    Route::get('/terminatedemployee/search',[EmployeeController::class, 'searchTerminated']);
 });
 
 // lowest level hr
@@ -143,7 +144,9 @@ Route::middleware(['hr'])->group(function(){
     //get punch in and out report
     Route::get('/punch-in-detail',[PunchInOutReportController::class,'getPunchInOut']);
     Route::get('/attendancereport',[AttendanceController::class,'report']);
+    Route::get('/terminatedattendancereport',[AttendanceController::class,'terminatedreport']);
     Route::get('/attendance/export/', [AttendanceController::class, 'export']);
+    Route::get('/terminatedattendance/export/', [AttendanceController::class, 'exportTerminated']);
     // late-punch-in missed-punch-out
     Route::get('/late-missed-punch',[PunchInOutReportController::class, 'latePunchInOut']);
     Route::post('/force-punch-in/{id}',[AttendanceController::class, 'forcePunchIn']);
