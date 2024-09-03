@@ -24,7 +24,7 @@ class TerminatedAttendanceExport implements FromView,ShouldAutoSize
     public function view(): View
 {
     $request = $this->data;
-    // dd($request->all());
+
     foreach (['e', 'ed', 'sd'] as $key) {
         if ($request->get($key) === "null" || $request->get($key) === "") {
             $request[$key] = null;
@@ -79,9 +79,9 @@ class TerminatedAttendanceExport implements FromView,ShouldAutoSize
                 $punchouttime = Carbon::parse($attendance->punch_out_time)->format('H:i:s');
 
                 if ($punchintime > '13:30:00' || $punchouttime < '13:30:00') {
-                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = 'P/A';
+                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = 'P/A' ."<br>". 'IN: ' . $punchintime ."<br>". 'OUT: ' . $punchouttime;
                 } else {
-                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = 'P';
+                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = 'P' ."<br>". 'IN: ' . $punchintime ."<br>". 'OUT: ' . $punchouttime;
                 }
             } else {
                 if($date->toDateString() > $employee->terminated_date){
