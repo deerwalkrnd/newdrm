@@ -13,7 +13,7 @@
                 <td>{{ $employee->first_name . ' ' . substr($employee->middle_name, 0, 1) . ' ' . $employee->last_name }}
                 </td>
                 @foreach ($attendanceStatuses[$employee->id] as $attendance)
-                    <td>{{ $attendance }}</td>
+                    <td>{!! $attendance !!}</td>
                 @endforeach
             </tr>
         @empty
