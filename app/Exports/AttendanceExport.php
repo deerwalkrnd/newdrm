@@ -31,7 +31,7 @@ class AttendanceExport implements FromView,ShouldAutoSize
         }
     }
 
-    $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name')
+    $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'join_date')
         ->where('contract_status', 'active');
 
     $employees = $employees->when(isset($request->e), function ($query) use ($request) {
@@ -79,12 +79,32 @@ class AttendanceExport implements FromView,ShouldAutoSize
                 $punchouttime = Carbon::parse($attendance->punch_out_time)->format('H:i:s');
 
                 if ($punchintime > '13:30:00' || $punchouttime < '13:30:00') {
-                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = 'P/A' ."<br>". 'IN: ' . $punchintime ."<br>". 'OUT: ' . $punchouttime;
+                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                        'status'=> 'P/A',
+                        'punchin'=> $punchintime,
+                        'punchout'=>$punchouttime,
+                    ];
                 } else {
-                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = 'P' . "<br>". 'IN: ' . $punchintime . "<br>".'OUT: ' . $punchouttime;
+                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                        'status'=> 'P',
+                        'punchin'=> $punchintime,
+                        'punchout'=>$punchouttime,
+                    ];
                 }
             } else {
-                $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = 'A';
+                if($date->toDateString()< $employee->join_date){
+                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                        'status'=> '-',
+                       'punchin'=> "-",
+                        'punchout'=> "-",
+                    ];
+                }else{
+                    $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                        'status'=> 'A',
+                        'punchin'=> "-",
+                        'punchout'=> "-",
+                    ];
+                }
             }
         }
     }
