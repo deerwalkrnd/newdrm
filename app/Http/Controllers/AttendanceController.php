@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Holiday;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -419,5 +420,280 @@ class AttendanceController extends Controller
                 'success' => false,
                 'message' => "Punch Out Unsucessful. Everyone must've punched out already.",
             ]);
+    }
+
+    public function report(Request $request)
+    {
+        try {
+            $data=$request;
+
+            $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'manager_id')
+            ->where('contract_status', 'active');
+            // $attendance=Attendance::first();
+
+            $employees = $employees->when(isset($request->e), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->where('employee_id', $request->e);
+                });
+            })->when(isset($request->sd), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->whereDate('punch_in_time', '>=', Carbon::parse($request->sd));
+                });
+            })->when(isset($request->ed), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->whereDate('punch_in_time', '<=', Carbon::parse($request->ed));
+                });
+            })->get();
+                $attendance=Attendance::where("employee_id", $employees->first()->id)->get()->sortByDesc('id')->take(5);
+                $holidays = Holiday::where('female_only', '0')->pluck('date')->toArray();
+                $startDate =isset($request->sd) ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
+                $endDate=isset($request->ed) ? Carbon::parse($request->ed): Carbon::now();
+
+                $dates = collect();
+                $currentDate = $startDate->copy();
+                $iteration=0;
+                while ($currentDate->lte($endDate)) {
+                    if (!$currentDate->isWeekend() && !in_array($currentDate->format('Y-m-d'), $holidays)) {
+                        $dates->push($currentDate->copy());
+                        $iteration++;
+                    }
+
+                    $currentDate->addDay();
+                }
+            $employeeList = Employee::select('id', 'first_name', 'middle_name', 'last_name')->where('contract_status', 'active')->get();
+            
+            return view('admin.report.attendance')->with(compact('employees', 'employeeList', 'dates',"data"));
+        } catch (\Exception $e) {
+            return redirect()->back()->with("error", "Oops! Something went wrong");
+        }
+    }
+
+    public function terminatedreport(Request $request)
+    {
+        try {
+            $data=$request;
+            $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'terminated_date')
+            ->where('contract_status', 'terminated');
+
+            $employees = $employees->when(isset($request->e), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->where('employee_id', $request->e);
+                });
+            })->when(isset($request->sd), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->whereDate('punch_in_time', '>=', Carbon::parse($request->sd));
+                });
+            })->when(isset($request->ed), function ($query) use ($request) {
+                return $query->whereHas('attendances', function ($query) use ($request) {
+                    return $query->whereDate('punch_in_time', '<=', Carbon::parse($request->ed));
+                });
+            })->get();
+                $attendance=Attendance::where("employee_id", $employees->first()->id)->get()->sortByDesc('id')->take(5);
+                $holidays = Holiday::where('female_only', '0')->pluck('date')->toArray();
+                $startDate =isset($request->sd) ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
+                $endDate=isset($request->ed) ? Carbon::parse($request->ed): Carbon::now();
+
+                $dates = collect();
+                $currentDate = $startDate->copy();
+                $iteration=0;
+                while ($currentDate->lte($endDate)) {
+                    if (!$currentDate->isWeekend() && !in_array($currentDate->format('Y-m-d'), $holidays)) {
+                        $dates->push($currentDate->copy());
+                        $iteration++;
+                    }
+
+                    $currentDate->addDay();
+                }
+            $employeeList = Employee::select('id', 'first_name', 'middle_name', 'last_name')->where('contract_status', 'terminated')->get();
+
+            return view('admin.report.terminatedAttendance')->with(compact('employees', 'employeeList', 'dates','data'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with("error", "Oops! Something went wrong");
+        }
+    }
+
+    public function export($request) 
+    {
+        // dd($request->all());
+        foreach (['e', 'ed', 'sd'] as $key) {
+            if ($request->get($key) === "null" || $request->get($key) === "") {
+                $request[$key] = null;
+            }
+        }
+    
+        $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'join_date')
+            ->where('contract_status', 'active');
+    
+        $employees = $employees->when(isset($request->e), function ($query) use ($request) {
+            return $query->whereHas('attendances', function ($query) use ($request) {
+                return $query->where('employee_id', $request->e);
+            });
+        })->get();
+        // dd($employees);
+        $startDate = isset($request->sd) ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
+        $endDate = isset($request->ed) ? Carbon::parse($request->ed) : Carbon::now();
+    
+        $holidays = Holiday::where('female_only', '0')->pluck('date')->toArray();
+    
+        // Fetch all relevant attendances in one query
+        $attendances = Attendance::whereDate('punch_in_time',">=",$startDate)->whereDate('punch_in_time',"<=",$endDate->endOfDay())->get();
+    
+        $dates = collect();
+        $currentDate = $startDate->copy();
+    
+        while ($currentDate->lte($endDate)) {
+            if (!$currentDate->isWeekend() && !in_array($currentDate->format('Y-m-d'), $holidays)) {
+                $dates->push($currentDate->copy());
+            }
+            $currentDate->addDay();
+        }
+    
+        // Create a map of attendances by employee ID and date
+        $attendanceMap = $attendances->groupBy(function($attendance) {
+            $punchInTime = Carbon::parse($attendance->punch_in_time);
+            return $attendance->employee_id . '_' . $punchInTime->format('Y-m-d');
+        });
+    
+        $attendanceStatuses = [];
+    
+        foreach ($employees as $employee) {
+            foreach ($dates as $date) {
+                $key = $employee->id . '_' . $date->format('Y-m-d');
+    
+                $attendancesForDate = $attendanceMap->get($key);
+    
+                $attendance = $attendancesForDate && $attendancesForDate->isNotEmpty() ? $attendancesForDate->first() : null;
+    
+                if ($attendance) {
+                    $punchintime = Carbon::parse($attendance->punch_in_time)->format('H:i:s');
+                    $punchouttime = Carbon::parse($attendance->punch_out_time)->format('H:i:s');
+    
+                    if ($punchintime > '13:30:00' || $punchouttime < '13:30:00') {
+                        $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                            'status'=> 'P/A',
+                            'punchin'=> $punchintime,
+                            'punchout'=>$punchouttime,
+                        ];
+                    } else {
+                        $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                            'status'=> 'P',
+                            'punchin'=> $punchintime,
+                            'punchout'=>$punchouttime,
+                        ];
+                    }
+                } else {
+                    if($date->toDateString()< $employee->join_date){
+                        $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                            'status'=> '-',
+                           'punchin'=> "-",
+                            'punchout'=> "-",
+                        ];
+                    }else{
+                        $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                            'status'=> 'A',
+                            'punchin'=> "-",
+                            'punchout'=> "-",
+                        ];
+                    }
+                }
+            }
+        }
+        // dd($employees);
+        return [
+            'employees' => $employees,
+            'dates' => $dates,
+            'attendanceStatuses' => $attendanceStatuses,
+        ];
+    }
+    public function exportTerminated($request){
+        foreach (['e', 'ed', 'sd'] as $key) {
+            if ($request->get($key) === "null" || $request->get($key) === "") {
+                $request[$key] = null;
+            }
+        }
+    
+        $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name','terminated_date','join_date')
+            ->where('contract_status', 'terminated');
+    
+        $employees = $employees->when(isset($request->e), function ($query) use ($request) {
+            return $query->whereHas('attendances', function ($query) use ($request) {
+                return $query->where('employee_id', $request->e);
+            });
+        })->get();
+    
+        $startDate = isset($request->sd) ? Carbon::parse($request->sd) : Carbon::now()->subDays(30);
+        $endDate = isset($request->ed) ? Carbon::parse($request->ed) : Carbon::now();
+    
+        $holidays = Holiday::where('female_only', '0')->pluck('date')->toArray();
+    
+        // Fetch all relevant attendances in one query
+        $attendances = Attendance::whereDate('punch_in_time',">=",$startDate)->whereDate('punch_in_time',"<=",$endDate->endOfDay())->get();
+    
+        $dates = collect();
+        $currentDate = $startDate->copy();
+    
+        while ($currentDate->lte($endDate)) {
+            if (!$currentDate->isWeekend() && !in_array($currentDate->format('Y-m-d'), $holidays)) {
+                $dates->push($currentDate->copy());
+            }
+            $currentDate->addDay();
+        }
+    
+        // Create a map of attendances by employee ID and date
+        $attendanceMap = $attendances->groupBy(function($attendance) {
+            $punchInTime = Carbon::parse($attendance->punch_in_time);
+            return $attendance->employee_id . '_' . $punchInTime->format('Y-m-d');
+        });
+    
+        $attendanceStatuses = [];
+    
+        foreach ($employees as $employee) {
+            foreach ($dates as $date) {
+                $key = $employee->id . '_' . $date->format('Y-m-d');
+    
+                $attendancesForDate = $attendanceMap->get($key);
+    
+                $attendance = $attendancesForDate && $attendancesForDate->isNotEmpty() ? $attendancesForDate->first() : null;
+                // dd($employee);
+                if ($attendance) {
+                    $punchintime = Carbon::parse($attendance->punch_in_time)->format('H:i:s');
+                    $punchouttime = Carbon::parse($attendance->punch_out_time)->format('H:i:s');
+    
+                    if ($punchintime > '13:30:00' || $punchouttime < '13:30:00') {
+                        $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                            'status'=> 'P/A',
+                            'punchin'=> $punchintime,
+                            'punchout'=>$punchouttime,
+                        ];
+                    } else {
+                        $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                            'status'=> 'P',
+                            'punchin'=> $punchintime,
+                            'punchout'=>$punchouttime,
+                        ];
+                    }
+                } else {
+                    if($date->toDateString() > $employee->terminated_date|| $date->toDateString()< $employee->join_date){
+                        $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                            'status'=> '-',
+                            'punchin'=> "-",
+                            'punchout'=> "-",
+                        ];
+                    }else{
+                        $attendanceStatuses[$employee->id][$date->format('Y-m-d')] = [
+                            'status'=> 'A',
+                            'punchin'=> "-",
+                            'punchout'=> "-",
+                        ];
+                    }
+    
+                }
+            }
+        }
+        return [
+            'employees' => $employees,
+            'dates' => $dates,
+            'attendanceStatuses' => $attendanceStatuses,
+        ];
     }
 }

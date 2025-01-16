@@ -7,6 +7,7 @@ use App\Models\Unit;
 use App\Models\LeaveType;
 use App\Http\Controllers\LeaveReportController;
 use App\Http\Controllers\EmployeeController;
+use function PHPUnit\Framework\callback;
 class DownloadController extends Controller
 {
     
@@ -200,4 +201,89 @@ class DownloadController extends Controller
         // $callback();
         return response()->stream($callback, 200, $headers);
     }
+    public function exportAttendanceReport(Request $request)
+    {
+        $attendanceController = new AttendanceController();
+        $reportData = $attendanceController->export($request);
+    
+        $fileName = 'AttendanceReport.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+    
+        $columns = ['Employee Name'];
+        foreach ($reportData['dates'] as $date) {
+            $columns[] = $date->format('Y-m-d');
+        }
+      
+        $callback = function () use ($reportData, $columns) {
+            ob_clean();
+            ob_end_flush();
+            
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+    
+            foreach ($reportData['employees'] as $employee) {
+                
+                $row['Employee Name'] = $employee->first_name ." ". $employee->last_name;
+                foreach ($reportData['attendanceStatuses'] as $attendanceStatuses) {
+                    foreach ($attendanceStatuses as $date=>$attendance){
+                        $row[$date]=$attendance['status'];
+                    }
+                }
+                fputcsv($file, $row);
+            }
+    
+            fclose($file);
+        };
+    
+        return response()->stream($callback, 200, $headers);
+    }
+    public function exportTerminatedAttendanceReport(Request $request)
+    {
+        $attendanceController = new AttendanceController();
+        $reportData = $attendanceController->exportTerminated($request);
+    
+        $fileName = 'TerminatedAttendanceReport.csv';
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+    
+        $columns = ['Employee Name'];
+        foreach ($reportData['dates'] as $date) {
+            $columns[] = $date->format('Y-m-d');
+        }
+      
+        $callback = function () use ($reportData, $columns) {
+            ob_clean();
+            ob_end_flush();
+            
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+    
+            foreach ($reportData['employees'] as $employee) {
+                
+                $row['Employee Name'] = $employee->first_name ." ". $employee->last_name;
+                foreach ($reportData['attendanceStatuses'] as $attendanceStatuses) {
+                    foreach ($attendanceStatuses as $date=>$attendance){
+                        $row[$date]=$attendance['status'];
+                    }
+                }
+                fputcsv($file, $row);
+            }
+    
+            fclose($file);
+        };
+    
+        return response()->stream($callback, 200, $headers);
+    }
+    
 }
