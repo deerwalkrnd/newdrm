@@ -5,7 +5,7 @@
 @section('content')
 <ul>
     @foreach($organizations as $organization)
-        <li style="list-style:none;"><i class="fas fa-folder fa-2x" id="head{{ $loop->iteration }}" data-unit="body{{ $loop->iteration }}" onclick="toggleDisplay(this.id)" style="color:#3d6f95b5;"></i> <span style="font-size:38px;">{{$organization->name,$organization->code}}</span></li>
+        <li style="list-style:none;"><i class="fas fa-folder fa-2x" id="head{{ $loop->iteration }}" data-unit="body{{ $loop->iteration }}" onclick="toggleDisplay(this.id)" style="color:#3d6f95b5;"></i> <span style="font-size:38px;">{{$organization->name.", ".$organization->code}}</span></li>
         <ul id="body{{ $loop->iteration }}" style="display:none;">
             @foreach($organization->unit as $unit)
                 <li style="list-style:none;"><i class="fas fa-folder fa-lg" id="unit{{ $unit->id }}" data-unit="unitBody{{ $unit->id }}" onclick="toggleDisplay(this.id)" style="color:#3d6f95b5;"></i> <span style="font-size:24px;">{{$unit->unit_name}}</span></li>
