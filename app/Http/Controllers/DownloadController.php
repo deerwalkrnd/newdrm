@@ -218,8 +218,9 @@ class DownloadController extends Controller
         $columns = ['Employee Name'];
         foreach ($reportData['dates'] as $date) {
             $columns[] = $date->format('Y-m-d');
-        }
-      
+            $columns[] = "Punch In";
+            $columns[] = "Punch Out";
+        };
         $callback = function () use ($reportData, $columns) {
             ob_clean();
             ob_end_flush();
@@ -228,14 +229,25 @@ class DownloadController extends Controller
             fputcsv($file, $columns);
     
             foreach ($reportData['employees'] as $employee) {
-                
-                $row['Employee Name'] = $employee->first_name ." ". $employee->last_name;
-                foreach ($reportData['attendanceStatuses'] as $attendanceStatuses) {
-                    foreach ($attendanceStatuses as $date=>$attendance){
-                        $row[$date]=$attendance['status'];
+                $row = [];
+                $row[] = $employee->first_name . " " . $employee->last_name; // Employee Name
+    
+                foreach ($reportData['dates'] as $date) {
+                    $formattedDate = $date->format('Y-m-d');
+                    $attendance = $reportData['attendanceStatuses'][$employee->id][$formattedDate] ?? null;
+    
+                    if ($attendance) {
+                        $row[] = $attendance['status'];       // Status
+                        $row[] = $attendance['punchin'] ?? 'N/A'; // Punch In
+                        $row[] = $attendance['punchout'] ?? 'N/A'; // Punch Out
+                    } else {
+                        $row[] = 'N/A'; // Status
+                        $row[] = 'N/A'; // Punch In
+                        $row[] = 'N/A'; // Punch Out
                     }
                 }
-                fputcsv($file, $row);
+    
+                fputcsv($file, $row); // Write the employee row
             }
     
             fclose($file);
@@ -260,7 +272,9 @@ class DownloadController extends Controller
         $columns = ['Employee Name'];
         foreach ($reportData['dates'] as $date) {
             $columns[] = $date->format('Y-m-d');
-        }
+            $columns[] = "Punch In";
+            $columns[] = "Punch Out";
+        };
       
         $callback = function () use ($reportData, $columns) {
             ob_clean();
@@ -270,15 +284,27 @@ class DownloadController extends Controller
             fputcsv($file, $columns);
     
             foreach ($reportData['employees'] as $employee) {
-                
-                $row['Employee Name'] = $employee->first_name ." ". $employee->last_name;
-                foreach ($reportData['attendanceStatuses'] as $attendanceStatuses) {
-                    foreach ($attendanceStatuses as $date=>$attendance){
-                        $row[$date]=$attendance['status'];
+                $row = [];
+                $row[] = $employee->first_name . " " . $employee->last_name; // Employee Name
+    
+                foreach ($reportData['dates'] as $date) {
+                    $formattedDate = $date->format('Y-m-d');
+                    $attendance = $reportData['attendanceStatuses'][$employee->id][$formattedDate] ?? null;
+    
+                    if ($attendance) {
+                        $row[] = $attendance['status'];       // Status
+                        $row[] = $attendance['punchin'] ?? 'N/A'; // Punch In
+                        $row[] = $attendance['punchout'] ?? 'N/A'; // Punch Out
+                    } else {
+                        $row[] = 'N/A'; // Status
+                        $row[] = 'N/A'; // Punch In
+                        $row[] = 'N/A'; // Punch Out
                     }
                 }
-                fputcsv($file, $row);
+    
+                fputcsv($file, $row); // Write the employee row
             }
+    
     
             fclose($file);
         };

@@ -72,9 +72,9 @@
                                 // dd($attendance);
                             @endphp
                             @if ($punchintime > '13:30:00' || $punchouttime < '13:30:00')
-                                <td>P/A</td>
+                                <td>P/A{{" (". $punchintime. " - ". $punchouttime.")"}}</td>
                             @else
-                                <td>P</td>
+                                <td>P{{" (". $punchintime. " - ". $punchouttime.")"}}</td>
                             @endif
                         @else
                             @if($date->toDateString()>$employee->terminated_date)
