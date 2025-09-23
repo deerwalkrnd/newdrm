@@ -1,5 +1,5 @@
 <!-- check if valid ip else no action can be performed -->
-@if(in_array($userIp, explode(',',env('IP'))))
+{{-- @if(in_array($userIp, explode(',',env('IP')))) --}}
     <!-- if state is 1 punch in is needed else if state is 2 punch out needed else no action available -->
     @if($state == 1)
 
@@ -7,7 +7,7 @@
         @if(!$noPunchInNoLeaveRecordExists)
 
             <!-- check if on full-leave or any holiday else max time must be checked -->
-            @if($max_punch_in_time == False) 
+            @if($max_punch_in_time == False)
                 <!-- include punch-in with reason -->
                 @include('layouts.basic.punchIn',['reason' => 'required'])
             @else
@@ -36,6 +36,6 @@
     @else
         <p class="text-danger error-text">Punch Out Successful</p>
     @endif
-@else
+{{-- @else
     <p class="text-danger error-text">Invalid IP Address Detected</p>
-@endif
+@endif --}}
