@@ -1,5 +1,5 @@
 <?php
-   
+
 namespace App\Helpers;
 use App\Models\Employee;
 use App\Models\Attendance;
@@ -42,7 +42,7 @@ class MailHelper{
         // })->toArray();
 
         $hr = ['hitesh.karki@deerwalk.edu.np','aakancha.thapa@deerwalk.edu.np','alisha.thapa@deerwalk.edu.np','ujjwal.poudel@sifal.deerwalk.edu.np','pooja.neupane@deerwalk.edu.np'];
-        
+
         return $hr;
     }
 
@@ -58,7 +58,7 @@ class MailHelper{
                 $employee_name = $attendance->employee->first_name.' '.$attendance->employee->middle_name.' '.$attendance->employee->last_name;
                 $ccList =  (new self)->getHrEmail();
                 array_push($ccList,(new self)->getManagerEmail($attendance->employee_id));
-                
+
                 $mail= Mail::to($attendance->employee->email)
                     ->cc($ccList)
                     ->queue(new MissedPunchOutMail($employee_name));
@@ -98,7 +98,7 @@ class MailHelper{
                         ->whereDate('start_date','<=',date('Y-m-d'))
                         ->whereDate('end_date','>=',date('Y-m-d'))
                         ->get();
-        
+
         $deerwalk_sifal = Leaverequest::whereDate('start_date','<=',date('Y-m-d'))
                     ->whereDate('end_date','>=',date('Y-m-d'))
                     ->where('acceptance','accepted')
@@ -107,7 +107,7 @@ class MailHelper{
                     })
                     ->get()
                     ->count();
-        
+
         $deerwalk_compware = Leaverequest::whereDate('start_date','<=',date('Y-m-d'))
                     ->whereDate('end_date','>=',date('Y-m-d'))
                     ->where('acceptance','accepted')
@@ -125,7 +125,7 @@ class MailHelper{
                                 ->orWhere('unit_id',13);
                     })
                     ->get()
-                    ->count();       
+                    ->count();
 
         $mail= Mail::to(explode(',',env('GP_EMAIL')))
                 ->queue(new LeaveMail($leaveList,$deerwalk_compware,$deerwalk_group,$deerwalk_sifal));
@@ -136,10 +136,10 @@ class MailHelper{
     // cron job running
     public static function testMail2(){
         $name = "test";
-        Mail::to('asim.poudel@deerwalk.edu.np')
-                ->cc(['asim.poudel@deerwalk.edu.np','shreejal.mainali@deerwalk.edu.np'])
+        Mail::to('bijay.shrestha@deerwalk.edu.np')
+                ->cc(['sunav.sharma@deerwalk.edu.np'])
                 ->queue(new SendMail($name));
-        return true;       
+        return true;
     }
 
     public static function getNepaliYear($year){
@@ -155,7 +155,7 @@ class MailHelper{
         }
     }
 
-    
+
 }
 
 ?>
