@@ -31,6 +31,7 @@ use App\Helpers\Helper;
 use App\Helpers\CalendarHelper;
 
 use App\Actions\Fortify\CreateNewUser;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -39,50 +40,52 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,$download=0)
+    public function index(Request $request, $download = 0)
     {
         // $request->u => unit_id $request->m => nepali birth month
-        $date= date('Y-m-d');
-        $employees = Employee::select('id', 'first_name','middle_name','last_name','email','manager_id','service_type','designation_id','organization_id','unit_id','department_id','intern_trainee_ship_date','join_date','date_of_birth')
-                                ->with('designation:id,job_title_name')
-                                ->with('organization:id,name')
-                                ->with('unit:id,unit_name')
-                                ->with('department:id,name,unit_id')
-                                ->with('serviceType:id,service_type_name')
-                                ->where('contract_status','active')
-                                // ->with('attendances:id,employee_id,punch_in_time,created_at')
-                                ->withCount(['attendances'=>function ($query) use ($date) {
-                                    $query->whereDate('punch_in_time', $date);
-                                }])
-                                ->orderBy('first_name') 
-                                ->orderBy('last_name');
+        $date = date('Y-m-d');
+        $employees = Employee::select('id', 'first_name', 'middle_name', 'last_name', 'email', 'manager_id', 'service_type', 'designation_id', 'organization_id', 'unit_id', 'department_id', 'intern_trainee_ship_date', 'join_date', 'date_of_birth')
+            ->with('designation:id,job_title_name')
+            ->with('organization:id,name')
+            ->with('unit:id,unit_name')
+            ->with('department:id,name,unit_id')
+            ->with('serviceType:id,service_type_name')
+            ->where('contract_status', 'active')
+            // ->with('attendances:id,employee_id,punch_in_time,created_at')
+            ->withCount([
+                'attendances' => function ($query) use ($date) {
+                    $query->whereDate('punch_in_time', $date);
+                }
+            ])
+            ->orderBy('first_name')
+            ->orderBy('last_name');
 
-        if($request->u && $request->m){
-            $employees = $employees->where('unit_id',$request->u);
-            $employees = $this->getEmployeesByBirthMonth($employees,$request->m);
-        }                                
-        if($request->u)
-            $employees = $employees->where('unit_id',$request->u);
+        if ($request->u && $request->m) {
+            $employees = $employees->where('unit_id', $request->u);
+            $employees = $this->getEmployeesByBirthMonth($employees, $request->m);
+        }
+        if ($request->u)
+            $employees = $employees->where('unit_id', $request->u);
 
-        if($request->m){
-            $employees = $this->getEmployeesByBirthMonth($employees,$request->m);
+        if ($request->m) {
+            $employees = $this->getEmployeesByBirthMonth($employees, $request->m);
         }
 
         $employees = $employees->get();
 
-        $join_year =[];
+        $join_year = [];
 
-        foreach ($employees as $employee){
+        foreach ($employees as $employee) {
             array_push($join_year, Helper::getNepaliYear($employee->join_date)[0]);
         }
 
-        
-        $units = Unit::select('id','unit_name')->get();
+
+        $units = Unit::select('id', 'unit_name')->get();
         $months = Helper::getNepaliMonthList();
 
         $code = 'OXqSTexF5zn4uXSp';
 
-      
+
         $res = [
             'title' => 'Employee welcome ',
             'message' => 'Employee has been successfully Created ',
@@ -100,10 +103,10 @@ class EmployeeController extends Controller
             $join_year[] = Helper::getNepaliYear($employee->join_date)[0];
             $employees[$key]->hasPunchOut = $hasPunchOut[$key];
         }
-        if($download == 1)
-            return [$employees,$join_year];
+        if ($download == 1)
+            return [$employees, $join_year];
         else
-            return view('admin.employee.index')->with(compact('employees','join_year','res','code','units','months'));
+            return view('admin.employee.index')->with(compact('employees', 'join_year', 'res', 'code', 'units', 'months'));
     }
 
     /**
@@ -118,7 +121,7 @@ class EmployeeController extends Controller
         $attendance = Attendance::where('employee_id', $employee_id)
             ->whereDate('punch_in_time', $today)
             ->first();
-    
+
         if ($attendance && $attendance->punch_out_time !== null) {
             return true;
         } else {
@@ -128,22 +131,22 @@ class EmployeeController extends Controller
 
     public function create()
     {
-        $organizations = Organization::select('id','name')->get();
-        $units = Unit::select('id','unit_name')->get();
-        $departments = Department::select('id','name','unit_id')->get();
-        $designations = Designation::select('id','job_title_name')->get();
+        $organizations = Organization::select('id', 'name')->get();
+        $units = Unit::select('id', 'unit_name')->get();
+        $departments = Department::select('id', 'name', 'unit_id')->get();
+        $designations = Designation::select('id', 'job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
-        $serviceTypes = ServiceType::select('id','service_type_name')->get();
-        $shifts = Shift::select('id','name','time_required')->get();
-        $roles = Role::select('id','authority')->where('id','!=','2')->get();
-        $managers = Manager::select('id','employee_id')
-                    ->with('employee:id,first_name,middle_name,last_name,contract_status')
-                    ->whereHas('employee',function($query){
-                        $query->where('contract_status','active');
-                    })
-                    ->where('is_active','active')->get();
-        return view('admin.employee.create')->with(compact('managers','units','departments','organizations','designations','provinces','districts','serviceTypes','shifts','roles'));
+        $serviceTypes = ServiceType::select('id', 'service_type_name')->get();
+        $shifts = Shift::select('id', 'name', 'time_required')->get();
+        $roles = Role::select('id', 'authority')->where('id', '!=', '2')->get();
+        $managers = Manager::select('id', 'employee_id')
+            ->with('employee:id,first_name,middle_name,last_name,contract_status')
+            ->whereHas('employee', function ($query) {
+                $query->where('contract_status', 'active');
+            })
+            ->where('is_active', 'active')->get();
+        return view('admin.employee.create')->with(compact('managers', 'units', 'departments', 'organizations', 'designations', 'provinces', 'districts', 'serviceTypes', 'shifts', 'roles'));
     }
 
     /**
@@ -158,19 +161,18 @@ class EmployeeController extends Controller
         $input['unit_id'] = Department::findOrFail($input['department_id'])->unit_id;
 
         // reset temporary address
-        if($input['temp_add_same_as_per_add'] == 1)
-        {
+        if ($input['temp_add_same_as_per_add'] == 1) {
             unset(
                 $input['temporary_address'],
                 $input['temporary_district'],
                 $input['temporary_municipality'],
                 $input['temporary_ward_no'],
                 $input['temporary_tole']
-            );            
+            );
         }
 
         $shift = Shift::findOrFail($input['shift_id']);
-        if(!$shift->time_required){
+        if (!$shift->time_required) {
             unset(
                 $input['start_time'],
                 $input['end_time']
@@ -178,42 +180,42 @@ class EmployeeController extends Controller
         }
 
         $user = [];
-        $emergency_contact =[];
+        $emergency_contact = [];
 
         //store image
         $image = $request->file('image');
         $cv = $request->file('cv');
-        
+
         //merge files
-        if($image!=null){
+        if ($image != null) {
             $input['image_name'] = $image->store('employees/images');
         }
-        if($cv != null){
+        if ($cv != null) {
             $input['cv_file_name'] = $cv->store('employees/cv');
         }
 
         //add data to user
         $user['username'] = $request->username;
         $user['role_id'] = $request->role;
-       
+
         $emergency_contact['first_name'] = $input['emg_first_name'];
-        $emergency_contact['last_name'] =  $input['emg_last_name'];
-        $emergency_contact['middle_name'] =  $input['emg_middle_name'];
-        $emergency_contact['relationship'] =  $input['emg_relationship'];
+        $emergency_contact['last_name'] = $input['emg_last_name'];
+        $emergency_contact['middle_name'] = $input['emg_middle_name'];
+        $emergency_contact['relationship'] = $input['emg_relationship'];
         $emergency_contact['phone_no'] = $input['emg_contact'];
-        $emergency_contact['alternate_phone_no'] =  $input['emg_alternate_contact'];
-     
+        $emergency_contact['alternate_phone_no'] = $input['emg_alternate_contact'];
+
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
-        unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
+        unset($input['emg_first_name'], $input['emg_last_name'], $input['emg_middle_name'], $input['emg_contact'], $input['emg_alternate_contact'], $input['emg_relationship']);
         DB::beginTransaction();
         try {
             $employee = Employee::create($input);
             $user['employee_id'] = $employee->id;
-            $emergency_contact['employee_id']=$user['employee_id'];
+            $emergency_contact['employee_id'] = $user['employee_id'];
             $createUser = new CreateNewUser();
             $created_user = $createUser->create($user);
             EmergencyContact::create($emergency_contact);
-            
+
             $carryOverLeave = [
                 'employee_id' => $user['employee_id'],
                 'year' => date('Y') - 1,
@@ -232,9 +234,9 @@ class EmployeeController extends Controller
             'icon' => 'success'
         ];
         // dd($input,$created_user);
-        $send_mail = MailControl::select('send_mail')->where('name','Employee Credentials')->first()->send_mail;
-        
-        if($send_mail){
+        $send_mail = MailControl::select('send_mail')->where('name', 'Employee Credentials')->first()->send_mail;
+
+        if ($send_mail) {
             Mail::to($employee->email)->send(new EmployeeCredentialMail($created_user));
         }
         return redirect('/employee')->with(compact('res'));
@@ -260,18 +262,19 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::with('emergencyContact')->findOrFail($id);
-        $organizations = Organization::select('id','name')->get();
-        $units = Unit::select('id','unit_name')->get();
-        $departments = Department::select('id','name','unit_id')->get();
-        $designations = Designation::select('id','job_title_name')->get();
+        $organizations = Organization::select('id', 'name')->get();
+        $units = Unit::select('id', 'unit_name')->get();
+        $departments = Department::select('id', 'name', 'unit_id')->get();
+        $designations = Designation::select('id', 'job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
-        $serviceTypes = ServiceType::select('id','service_type_name')->get();
-        $shifts = Shift::select('id','name','time_required')->get();
-        $user = User::select('id','username')->where('employee_id',$id)->get();
-        $roles = Role::select('id','authority')->where('id','!=','2')->get();
-        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
-        return view('admin.employee.edit')->with(compact('employee','user','departments','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
+        $serviceTypes = ServiceType::select('id', 'service_type_name')->get();
+        $shifts = Shift::select('id', 'name', 'time_required')->get();
+        // include role_id to ensure the view can reliably show current role
+        $user = User::select('id', 'username', 'role_id')->where('employee_id', $id)->first();
+        $roles = Role::select('id', 'authority')->where('id', '!=', '2')->get();
+        $managers = Manager::select('id', 'employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active', 'active')->get();
+        return view('admin.employee.edit')->with(compact('employee', 'user', 'departments', 'organizations', 'units', 'designations', 'provinces', 'districts', 'serviceTypes', 'shifts', 'roles', 'managers'));
     }
 
     /**
@@ -284,88 +287,116 @@ class EmployeeController extends Controller
     public function update(EmployeeRequest $request, $id)
     {
         $employee = Employee::findOrFail($id);
-        $user = User::where('employee_id',$id)->first();
+        $user = User::where('employee_id', $id)->first();
         $input = $request->validated();
 
 
-        if(($user['role_id'] == '2' && $input['role'] != 1) || ($input['role'] == 3 && $employee->isManager())){
-            $input['role']=2;
+        if (($user['role_id'] == '2' && $input['role'] != 1) || ($input['role'] == 3 && $employee->isManager())) {
+            $input['role'] = 2;
         }
-        
+
 
         $input['unit_id'] = Department::findOrFail($input['department_id'])->unit_id;
 
         // reset temporary address
-        if($input['temp_add_same_as_per_add'] == 1)
-        {
-            unset(  $input['temporary_address'],
-                    $input['temporary_district'],
-                    $input['temporary_municipality'],
-                    $input['temporary_ward_no'],
-                    $input['temporary_tole']
-                );            
+        if ($input['temp_add_same_as_per_add'] == 1) {
+            unset(
+                $input['temporary_address'],
+                $input['temporary_district'],
+                $input['temporary_municipality'],
+                $input['temporary_ward_no'],
+                $input['temporary_tole']
+            );
         }
 
         //shift setting
         $shift = Shift::findOrFail($input['shift_id']);
-        if(!$shift->time_required){
-                $input['start_time']=NULL;
-                $input['end_time']=NULL;
+        if (!$shift->time_required) {
+            $input['start_time'] = NULL;
+            $input['end_time'] = NULL;
         }
 
         // dd($employee['manager_id'], $input['manager_id'], $employee['designation_id'], $input['designation_id']);
         //update manager change date/ designation change date
-        if(array_key_exists('manager_id',$input))
-            if($employee['manager_id'] != $input['manager_id'])
+        if (array_key_exists('manager_id', $input))
+            if ($employee['manager_id'] != $input['manager_id'])
                 $employee['manager_change_date'] = date('Y-m-d');
 
-        if($employee['designation_id'] != $input['designation_id'])
+        if ($employee['designation_id'] != $input['designation_id'])
             $employee['designation_change_date'] = date('Y-m-d');
-        
-        if($employee['department_id'] != $input['department_id'])
+
+        if ($employee['department_id'] != $input['department_id'])
             $employee['department_change_date'] = date('Y-m-d');
 
         $userData = [];
         //store image
         $image = $request->file('image');
         $cv = $request->file('cv');
-        
+
         //merge files
-        if($image!=null){
+        if ($image != null) {
             $input['image_name'] = $image->store('employees/images');
         }
-        if($cv != null){
+        if ($cv != null) {
             $input['cv_file_name'] = $cv->store('employees/cv');
         }
 
         //add data to user
         // $user
-        if($user->username != $request->username)
+        if ($user->username != $request->username)
             $userData['username'] = $input['username'];
-        else    
+        else
             unset($input['username']);
 
-        $userData['role_id'] = $input['role'];
-        
+        // cast role to int and set explicitly
+        $userData['role_id'] = (int) $input['role'];
+
+        // log before updating to help debug production-only issues
+        try {
+            \Log::info('EmployeeController:update - before user update', [
+                'employee_id' => $id,
+                'user_id' => $user->id ?? null,
+                'user_role_before' => $user->role_id ?? null,
+                'input_role' => $input['role'],
+                'userData' => $userData
+            ]);
+        } catch (\Exception $e) {
+            // ignore logging failures
+        }
+
 
         $emergency_contact['employee_id'] = $id;
-        $emergency_contact_data=[
-            'first_name'=>$input['emg_first_name'],
-            'last_name'=>$input['emg_last_name'],
-            'middle_name'=>$input['emg_middle_name'],
-            'relationship'=>$input['emg_relationship'],
-            'phone_no'=>$input['emg_contact'],
-            'alternate_phone_no'=>$input['emg_alternate_contact'],
-            'employee_id'=>$id,
+        $emergency_contact_data = [
+            'first_name' => $input['emg_first_name'],
+            'last_name' => $input['emg_last_name'],
+            'middle_name' => $input['emg_middle_name'],
+            'relationship' => $input['emg_relationship'],
+            'phone_no' => $input['emg_contact'],
+            'alternate_phone_no' => $input['emg_alternate_contact'],
+            'employee_id' => $id,
         ];
         $emergency_contact_id = ['employee_id' => $id];
         unset($input['image'], $input['cv'], $input['username'], $input['role']);
-        unset($input['emg_first_name'],$input['emg_last_name'],$input['emg_middle_name'],$input['emg_contact'],$input['emg_alternate_contact'],$input['emg_relationship']);
-        
+        unset($input['emg_first_name'], $input['emg_last_name'], $input['emg_middle_name'], $input['emg_contact'], $input['emg_alternate_contact'], $input['emg_relationship']);
+
         DB::beginTransaction();
         try {
             $employee->update($input);
             $user->update($userData);
+
+            try {
+                Log::info('EmployeeController:update - after user update', [
+                    'employee_id' => $id,
+                    'user_id' => $user->id ?? null,
+                    'user_role_after' => $user->fresh()->role_id ?? null,
+                ]);
+            } catch (\Exception $e) {
+                // ignore logging failures
+                Log::error('EmployeeController:update - logging failure after user update', [
+                    'employee_id' => $id,
+                    'error_message' => $e->getMessage(),
+                ]);
+            }
             EmergencyContact::updateOrCreate(
                 $emergency_contact_id,
                 $emergency_contact_data,
@@ -393,13 +424,13 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        try{
+        try {
             $employee = Employee::findOrFail($id);
             return redirect('/employee');
-    
-        }catch(\Illuminate\Database\QueryException $e){
+
+        } catch (\Illuminate\Database\QueryException $e) {
             dd($e);
-            if($e->getCode() == "23000"){
+            if ($e->getCode() == "23000") {
                 return redirect()->back();
             }
         }
@@ -407,92 +438,90 @@ class EmployeeController extends Controller
 
     /**
      * Search the specified resource from storage
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */ 
+     */
     public function search(Request $request)
     {
-        if(\Auth::user()->role->authority == 'manager')
-            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',\Auth::user()->employee_id)->get();
+        if (\Auth::user()->role->authority == 'manager')
+            $employees = Employee::take(50)->where('contract_status', 'active')->where('manager_id', \Auth::user()->employee_id)->get();
         else
-            $employees = Employee::take(50)->where('contract_status','active')->get();
+            $employees = Employee::take(50)->where('contract_status', 'active')->get();
 
-        if($request->has('q'))
-        {
+        if ($request->has('q')) {
             $keyword = $request->q;
-            $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->where('contract_status','active')->get();
+            $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'), 'like', "%$keyword%")->take(20)->where('contract_status', 'active')->get();
         }
-       
+
         return response()->json($employees);
     }
     public function searchTerminated(Request $request)
     {
-        if(\Auth::user()->role->authority == 'manager')
-            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',\Auth::user()->employee_id)->get();
+        if (\Auth::user()->role->authority == 'manager')
+            $employees = Employee::take(50)->where('contract_status', 'active')->where('manager_id', \Auth::user()->employee_id)->get();
         else
-            $employees = Employee::take(50)->where('contract_status','active')->get();
+            $employees = Employee::take(50)->where('contract_status', 'active')->get();
 
-        if($request->has('q'))
-        {
+        if ($request->has('q')) {
             $keyword = $request->q;
-            $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'),'like',"%$keyword%")->take(20)->where('contract_status','terminated')->get();
+            $employees = Employee::where(DB::raw('CONCAT_WS(" ", first_name, middle_name, last_name)'), 'like', "%$keyword%")->take(20)->where('contract_status', 'terminated')->get();
         }
-       
+
         return response()->json($employees);
     }
 
 
     public function profile(Request $request)
     {
-        if($request->id == NULL)
+        if ($request->id == NULL)
             $user = \Auth::user()->employee_id;
         else
             $user = (int) $request->id;
 
 
         $employee = Employee::with('designation:id,job_title_name')
-                        ->with('organization:id,name')
-                        ->with('unit:id,unit_name')
-                        ->with('province:id,province_name')
-                        ->with('district:id,district_name')
-                        ->with('serviceType:id,service_type_name')
-                        ->with('shift')
-                        ->with('manager:id,first_name,middle_name,last_name')
-                        ->with('emergencyContact:employee_id,first_name,middle_name,last_name,relationship,phone_no,alternate_phone_no')
-                        ->with('fileUploads:employee_id,id,file_category_id,file_name')
-                        ->findOrFail($user);
+            ->with('organization:id,name')
+            ->with('unit:id,unit_name')
+            ->with('province:id,province_name')
+            ->with('district:id,district_name')
+            ->with('serviceType:id,service_type_name')
+            ->with('shift')
+            ->with('manager:id,first_name,middle_name,last_name')
+            ->with('emergencyContact:employee_id,first_name,middle_name,last_name,relationship,phone_no,alternate_phone_no')
+            ->with('fileUploads:employee_id,id,file_category_id,file_name')
+            ->findOrFail($user);
         // dd($employee->fileUploads->first());
-        return view('admin.employee.profile')->with('employee',$employee);
+        return view('admin.employee.profile')->with('employee', $employee);
     }
 
-    public function terminated(Request $request,$download=0)
+    public function terminated(Request $request, $download = 0)
     {
-        $terminatedEmployees = Employee::select('id','first_name','last_name','middle_name','manager_id', 'designation_id','terminated_date','join_date')
-                    ->where('contract_status','terminated')
-                    ->with('designation')
-                    ->with('manager:id,first_name,last_name,middle_name')
-                    ->orderBy('terminated_date','desc');
-                    // ->get();
-        if($request->u)
-            $terminatedEmployees = $terminatedEmployees->where('unit_id',$request->u);
-        
+        $terminatedEmployees = Employee::select('id', 'first_name', 'last_name', 'middle_name', 'manager_id', 'designation_id', 'terminated_date', 'join_date')
+            ->where('contract_status', 'terminated')
+            ->with('designation')
+            ->with('manager:id,first_name,last_name,middle_name')
+            ->orderBy('terminated_date', 'desc');
+        // ->get();
+        if ($request->u)
+            $terminatedEmployees = $terminatedEmployees->where('unit_id', $request->u);
+
         $terminatedEmployees = $terminatedEmployees->get();
-        $units = Unit::select('id','unit_name')->get();
-        
-        if($download == 1)
+        $units = Unit::select('id', 'unit_name')->get();
+
+        if ($download == 1)
             return $terminatedEmployees;
         else
-            return view('admin.employee.terminate')->with(compact('terminatedEmployees','units'));
+            return view('admin.employee.terminate')->with(compact('terminatedEmployees', 'units'));
     }
 
     public function terminate(Request $request)
     {
         $id = (int) $request->employee_id;
-        if(User::select('id','role_id')->where('employee_id',$id)->first()->role_id == '2')
-            Manager::select('id','employee_id')->where('employee_id',$id)->update(['is_active'=>'inactive']);
+        if (User::select('id', 'role_id')->where('employee_id', $id)->first()->role_id == '2')
+            Manager::select('id', 'employee_id')->where('employee_id', $id)->update(['is_active' => 'inactive']);
 
-        Employee::findOrFail($id)->update(['contract_status' => 'terminated','terminated_date' => date('Y-m-d'),]);
+        Employee::findOrFail($id)->update(['contract_status' => 'terminated', 'terminated_date' => date('Y-m-d'),]);
 
         $res = [
             'title' => 'Employee Terminated ',
@@ -503,55 +532,56 @@ class EmployeeController extends Controller
         return redirect('/employee/terminate')->with(compact('res'));
     }
 
-    public function getEmployeesByBirthMonth($employees,$month){
+    public function getEmployeesByBirthMonth($employees, $month)
+    {
         $current_year = Helper::getNepaliYear(date('Y-m-d'))[0];
         $calendarHelper = new CalendarHelper;
 
-        $nepali_start_month_day = $current_year.'-'.$month.'-01';   
-        $nepali_end_month_day = $current_year.'-'.$month.'-'.$calendarHelper->getLastDayOfMonth($current_year,$month);        
+        $nepali_start_month_day = $current_year . '-' . $month . '-01';
+        $nepali_end_month_day = $current_year . '-' . $month . '-' . $calendarHelper->getLastDayOfMonth($current_year, $month);
 
         $english_start_month_day = Helper::getEnglishDate($nepali_start_month_day);
         $english_end_month_day = Helper::getEnglishDate($nepali_end_month_day);
 
-        if($english_start_month_day[0] < $english_end_month_day[0]){
-            $employees = $employees->where(function($query) use($english_start_month_day,$english_end_month_day){
-                            $query->where(function($query) use($english_start_month_day){
-                                $query->whereMonth('date_of_birth','>',$english_start_month_day[1])
-                                    ->orWhere(function($query) use($english_start_month_day){
-                                        $query->whereMonth('date_of_birth',$english_start_month_day[1])
-                                            ->whereDay('date_of_birth','>=',$english_start_month_day[2]);
-                                    });   
-                            });
-
-                            $query->orWhere(function($query) use($english_end_month_day){
-                                $query->whereMonth('date_of_birth','<',$english_end_month_day[1])
-                                    ->orWhere(function($query) use($english_end_month_day){
-                                        $query->whereMonth('date_of_birth',$english_end_month_day[1])
-                                            ->whereDay('date_of_birth','<=',$english_end_month_day[2]);
-                                        });    
-                                });
-            });        
-        }else{
-
-             $employees = $employees->where(function($query) use($english_start_month_day,$english_end_month_day){
-                        $query->where(function($query) use($english_start_month_day){
-                            $query->whereMonth('date_of_birth','>',$english_start_month_day[1])
-                                ->orWhere(function($query) use($english_start_month_day){
-                                    $query->whereMonth('date_of_birth',$english_start_month_day[1])
-                                        ->whereDay('date_of_birth','>=',$english_start_month_day[2]);
-                                });   
+        if ($english_start_month_day[0] < $english_end_month_day[0]) {
+            $employees = $employees->where(function ($query) use ($english_start_month_day, $english_end_month_day) {
+                $query->where(function ($query) use ($english_start_month_day) {
+                    $query->whereMonth('date_of_birth', '>', $english_start_month_day[1])
+                        ->orWhere(function ($query) use ($english_start_month_day) {
+                            $query->whereMonth('date_of_birth', $english_start_month_day[1])
+                                ->whereDay('date_of_birth', '>=', $english_start_month_day[2]);
                         });
+                });
 
-                         $query->where(function($query) use($english_end_month_day){
-                            $query->whereMonth('date_of_birth','<',$english_end_month_day[1])
-                                ->orWhere(function($query) use($english_end_month_day){
-                                    $query->whereMonth('date_of_birth',$english_end_month_day[1])
-                                        ->whereDay('date_of_birth','<=',$english_end_month_day[2]);
-                                    });    
-                            });
+                $query->orWhere(function ($query) use ($english_end_month_day) {
+                    $query->whereMonth('date_of_birth', '<', $english_end_month_day[1])
+                        ->orWhere(function ($query) use ($english_end_month_day) {
+                            $query->whereMonth('date_of_birth', $english_end_month_day[1])
+                                ->whereDay('date_of_birth', '<=', $english_end_month_day[2]);
+                        });
+                });
+            });
+        } else {
+
+            $employees = $employees->where(function ($query) use ($english_start_month_day, $english_end_month_day) {
+                $query->where(function ($query) use ($english_start_month_day) {
+                    $query->whereMonth('date_of_birth', '>', $english_start_month_day[1])
+                        ->orWhere(function ($query) use ($english_start_month_day) {
+                            $query->whereMonth('date_of_birth', $english_start_month_day[1])
+                                ->whereDay('date_of_birth', '>=', $english_start_month_day[2]);
+                        });
+                });
+
+                $query->where(function ($query) use ($english_end_month_day) {
+                    $query->whereMonth('date_of_birth', '<', $english_end_month_day[1])
+                        ->orWhere(function ($query) use ($english_end_month_day) {
+                            $query->whereMonth('date_of_birth', $english_end_month_day[1])
+                                ->whereDay('date_of_birth', '<=', $english_end_month_day[2]);
+                        });
+                });
             });
         }
-        
+
         return $employees;
     }
 
@@ -559,18 +589,18 @@ class EmployeeController extends Controller
     public function editContact($id)
     {
         $employee = Employee::with('emergencyContact')->findOrFail($id);
-        $organizations = Organization::select('id','name')->get();
-        $units = Unit::select('id','unit_name')->get();
-        $departments = Department::select('id','name','unit_id')->get();
-        $designations = Designation::select('id','job_title_name')->get();
+        $organizations = Organization::select('id', 'name')->get();
+        $units = Unit::select('id', 'unit_name')->get();
+        $departments = Department::select('id', 'name', 'unit_id')->get();
+        $designations = Designation::select('id', 'job_title_name')->get();
         $provinces = Province::select('id', 'province_name')->get();
         $districts = District::select('id', 'district_name', 'province_id')->get();
-        $serviceTypes = ServiceType::select('id','service_type_name')->get();
-        $shifts = Shift::select('id','name','time_required')->get();
-        $user = User::select('id','username')->where('employee_id',$id)->get();
-        $roles = Role::select('id','authority')->where('id','!=','2')->get();
-        $managers = Manager::select('id','employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active','active')->get();
-        return view('admin.employee.contact')->with(compact('employee','user','departments','organizations','units','designations','provinces','districts','serviceTypes','shifts','roles','managers'));
+        $serviceTypes = ServiceType::select('id', 'service_type_name')->get();
+        $shifts = Shift::select('id', 'name', 'time_required')->get();
+        $user = User::select('id', 'username')->where('employee_id', $id)->get();
+        $roles = Role::select('id', 'authority')->where('id', '!=', '2')->get();
+        $managers = Manager::select('id', 'employee_id')->with('employees:id,first_name,middle_name,last_name')->where('is_active', 'active')->get();
+        return view('admin.employee.contact')->with(compact('employee', 'user', 'departments', 'organizations', 'units', 'designations', 'provinces', 'districts', 'serviceTypes', 'shifts', 'roles', 'managers'));
     }
 
     public function updateContact(Request $request, $id)
@@ -579,7 +609,7 @@ class EmployeeController extends Controller
         $input = $request->validate([
             'mobile' => 'required|digits:10',
         ]);
-        
+
         try {
             $employee->update($input);
         } catch (\Exception $e) {
