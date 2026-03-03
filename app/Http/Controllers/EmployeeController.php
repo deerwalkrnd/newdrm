@@ -56,6 +56,7 @@ class EmployeeController extends Controller
                                 }])
                                 ->withCount(['leaveRequest as on_leave' => function ($query) use ($date) {
                                     $query->where('acceptance', 'accepted')
+                                          ->where('full_leave', '1')
                                           ->whereDate('start_date', '<=', $date)
                                           ->whereDate('end_date', '>=', $date);
                                 }])
