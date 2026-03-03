@@ -54,6 +54,12 @@ class EmployeeController extends Controller
                                 ->withCount(['attendances'=>function ($query) use ($date) {
                                     $query->whereDate('punch_in_time', $date);
                                 }])
+                                ->withCount(['leaveRequest as on_leave' => function ($query) use ($date) {
+                                    $query->where('acceptance', 'accepted')
+                                          ->where('full_leave', '1')
+                                          ->whereDate('start_date', '<=', $date)
+                                          ->whereDate('end_date', '>=', $date);
+                                }])
                                 ->orderBy('first_name') 
                                 ->orderBy('last_name');
 

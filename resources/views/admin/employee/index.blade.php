@@ -96,11 +96,12 @@
             <td>{{ $employee->serviceType->service_type_name }}</td>
             <td>{{ $employee->designation->job_title_name }}</td>
             <td>{{ $employee->date_of_birth }}</td>
-            @if($employee->attendances_count > 0)
+            @if($employee->on_leave > 0)
+            <td>On Leave</td>
+            @elseif($employee->attendances_count > 0)
             <td>Already Punched In</td>
             @else
             <td>
-
                 <form action="/punch-in/{{ $employee->id }}" method="POST" class="d-inline">
                     @csrf
                     <input type="hidden" name="code" value="OXqSTexF5zn4uXSp">
@@ -108,7 +109,9 @@
                 </form>
             </td>
             @endif
-            @if($employee->attendances_count == 0)
+            @if($employee->on_leave > 0)
+            <td>On Leave</td>
+            @elseif($employee->attendances_count == 0)
             <td>Not Punched In</td>
             @elseif($employee->hasPunchOut)
             <td>Punched Out already</td>
