@@ -12,7 +12,9 @@ class CarryOverLeave extends Model
     public $fillable = [
         'employee_id',
         'year',
-        'days'
+        'days',
+        'personal_days',
+        'sick_days',
     ];
 
     public function employee()

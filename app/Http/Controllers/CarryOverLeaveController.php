@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Exception;
 
 use App\Models\LeaveRequest;
 use App\Models\YearlyLeave;
@@ -54,7 +55,8 @@ class CarryOverLeaveController extends Controller
                                     }],'days')
                                     ->get()
                                     ->map(function($employee){
-                                        $employee->days = $employee->halfLeave * 0.5 + $employee->fullLeave + $employee->sickHalfLeave * 0.5 + $employee->sickFullLeave;
+                                        $employee->personalDaysTaken = $employee->halfLeave * 0.5 + $employee->fullLeave;
+                                        $employee->sickDaysTaken    = $employee->sickHalfLeave * 0.5 + $employee->sickFullLeave;
                                         return $employee;
                                     })->toArray();  
 
@@ -70,42 +72,49 @@ class CarryOverLeaveController extends Controller
 
             $maxPersonalLeave = $yearlyLeave ? $yearlyLeave->days : 0;
             
-            $maxSickLeave = YearlyLeave::select('days')
+            $sickLeave = YearlyLeave::select('days')
                                             ->where('leave_type_id',3)
                                             ->where(function($query) use ($unit){
                                                 $query->where('unit_id',$unit)
                                                         ->orWhere('unit_id',null);
                                                 })
                                             ->where('year',$year)
-                                            ->first()->days; 
+                                            ->first();
+            $maxSickLeave = $sickLeave ? $sickLeave->days : 0;
 
-            $maxMixLeave = $maxPersonalLeave + $maxSickLeave;
-
-            $employees = collect($employees)->map(function($record) use($maxMixLeave,$year,$thisYear){
+            $employees = collect($employees)->map(function($record) use($maxPersonalLeave,$maxSickLeave,$year,$thisYear){
                 
                 $joinYearMonth = $this->getNepaliYear($record['join_date']);
                 $joinYear = $joinYearMonth[0];
                 $joinMonth = $joinYearMonth[1];
-                
-                //if joinyear is this year or greater than this year, leave allowance is calculated from joined month
+
+                $effectivePersonal = $maxPersonalLeave;
+                $effectiveSick     = $maxSickLeave;
+
                 if($joinYear < $thisYear && $joinYear == $year){
-                    $remaining_month = 13-$joinMonth;
-                    $maxMixLeave = round(($maxMixLeave/12*$remaining_month)*2)/2; 
-                }elseif($joinYear == $thisYear){    //if joinyear is this year, carry over leave should be 0
-                    $maxMixLeave = 0;
+                    $remaining_month = 13 - $joinMonth;
+                    $effectivePersonal = round(($effectivePersonal / 12 * $remaining_month) * 2) / 2;
+                    $effectiveSick     = round(($effectiveSick     / 12 * $remaining_month) * 2) / 2;
+                } elseif($joinYear == $thisYear){
+                    $effectivePersonal = 0;
+                    $effectiveSick     = 0;
                 }
-                 
-                // if join date is in previous year calculate myPersonalLeave+mySickLeave else mypersonalLeave = $maxPersonalLeave+maxSickLeave
-                $remainingLeave = $maxMixLeave - $record['days'];
-              
-                $record['employee_id'] = $record['id'];
-                $record['days'] = max(min($remainingLeave,8),0);
-                $record['year'] = $year;
-                unset($record['unit_id'],$record['join_date'],$record['fullLeave'],$record['halfLeave'],$record['sickFullLeave'],$record['sickHalfLeave'],$record['id']);
+
+                $remainingPersonal = max($effectivePersonal - $record['personalDaysTaken'], 0);
+                $remainingSick     = max($effectiveSick     - $record['sickDaysTaken'],     0);
+
+                $record['employee_id']   = $record['id'];
+                $record['personal_days'] = $remainingPersonal;
+                $record['sick_days']     = $remainingSick;
+                $record['days']          = $remainingPersonal + $remainingSick;
+                $record['year']          = $year;
+                unset($record['unit_id'],$record['join_date'],$record['fullLeave'],$record['halfLeave'],
+                      $record['sickFullLeave'],$record['sickHalfLeave'],$record['id'],
+                      $record['personalDaysTaken'],$record['sickDaysTaken']);
                 return $record;
             })->toArray();
             
-            $updateCarryOver = CarryOverLeave::upsert($employees,['employee_id','year'],['days']);
+            $updateCarryOver = CarryOverLeave::upsert($employees, ['employee_id','year'], ['days','personal_days','sick_days']);
         }
         if($updateCarryOver)
             return response()->json([

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -221,9 +222,11 @@ class EmployeeController extends Controller
             EmergencyContact::create($emergency_contact);
             
             $carryOverLeave = [
-                'employee_id' => $user['employee_id'],
-                'year' => date('Y') - 1,
-                'days' => 0
+                'employee_id'   => $user['employee_id'],
+                'year'          => Helper::getNepaliYear(date('Y-m-d'))[0] - 1,
+                'days'          => 0,
+                'personal_days' => 0,
+                'sick_days'     => 0,
             ];
 
             CarryOverLeave::create($carryOverLeave);
@@ -419,8 +422,8 @@ class EmployeeController extends Controller
     */ 
     public function search(Request $request)
     {
-        if(\Auth::user()->role->authority == 'manager')
-            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',\Auth::user()->employee_id)->get();
+        if(Auth::user()->role->authority == 'manager')
+            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',Auth::user()->employee_id)->get();
         else
             $employees = Employee::take(50)->where('contract_status','active')->get();
 
@@ -434,8 +437,8 @@ class EmployeeController extends Controller
     }
     public function searchTerminated(Request $request)
     {
-        if(\Auth::user()->role->authority == 'manager')
-            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',\Auth::user()->employee_id)->get();
+        if(Auth::user()->role->authority == 'manager')
+            $employees = Employee::take(50)->where('contract_status','active')->where('manager_id',Auth::user()->employee_id)->get();
         else
             $employees = Employee::take(50)->where('contract_status','active')->get();
 
@@ -452,7 +455,7 @@ class EmployeeController extends Controller
     public function profile(Request $request)
     {
         if($request->id == NULL)
-            $user = \Auth::user()->employee_id;
+            $user = Auth::user()->employee_id;
         else
             $user = (int) $request->id;
 

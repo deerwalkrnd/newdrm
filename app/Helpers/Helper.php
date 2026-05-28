@@ -8,8 +8,7 @@ use App\Models\YearlyLeave;
 use App\Models\CarryOverLeave;
 use App\Models\Holiday;
 use App\Models\Employee;
-use Carbon\CarbonPeriod;
-use Carbon\Carbon;
+use Exception;
 
 final class Helper
 {
@@ -136,25 +135,26 @@ final class Helper
         return $remaining_leave;     
     }
 
-    public static function getRemainingCarryOverLeave($employee)
+    public static function getRemainingCarryOverLeave($employee, $leave_type_id = 15)
     {
         $year = (new self)->getNepaliYear(date('Y-m-d'))[0];
-        if((new self)->getNepaliYear($employee->join_date ) == $year)   //if joined thhis year then carry over = 0
-            $remaining_leave = 0;
-        else{
-            $already_taken_leaves = (new self)->getAlreadyTakenLeaves($year,2,$employee->id);
-            $allowed_leave = CarryOverLeave::select('days')
-                                            ->where('year',$year-1)
-                                            ->where('employee_id',$employee->id)
-                                            ->first();
-            if($allowed_leave)
-                $allowed_leave = $allowed_leave->days;
-            else
-                $allowed_leave = 0;
-            
-            $remaining_leave = $allowed_leave - $already_taken_leaves;
-            }
-            return $remaining_leave;     
+        if((new self)->getNepaliYear($employee->join_date)[0] == $year)
+            return 0;
+
+        $already_taken_leaves = (new self)->getAlreadyTakenLeaves($year, $leave_type_id, $employee->id);
+
+        $record = CarryOverLeave::where('year', $year - 1)
+                                ->where('employee_id', $employee->id)
+                                ->first();
+
+        if($leave_type_id == 16) {
+            $allowed_leave = $record ? (float)$record->sick_days : 0;
+        } else {
+            // default: Carry Over - Personal (id=15)
+            $allowed_leave = $record ? (float)$record->personal_days : 0;
+        }
+
+        return $allowed_leave - $already_taken_leaves;
     }
 
     private function getAlreadyTakenLeaves($year,$leave_type_id,$employee_id){
