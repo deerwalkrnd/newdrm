@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\LeaveRequest;
@@ -19,6 +20,7 @@ use App\Helpers\NepaliCalendarHelper;
 use App\Helpers\MailHelper;
 use App\Helpers\Helper;
 use Illuminate\Support\Facades\Mail;
+use Exception;
 use App\Mail\LeaveRequestMail;
 use App\Mail\SubOrdinateLeaveRequestMail;
 
@@ -34,7 +36,7 @@ class LeaveRequestController extends Controller
     {
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
         ->with(['employee:id,first_name,last_name,manager_id','leaveType:id,name'])
-        ->where('employee_id',\Auth::user()->employee_id)
+        ->where('employee_id',Auth::user()->employee_id)
         ->orderBy('start_date','desc')
         ->orderBy('created_at','desc')
         ->orderBy('updated_at','desc')
@@ -46,7 +48,7 @@ class LeaveRequestController extends Controller
 
     public function showSubOrdinateLeave()
 {
-    $managerId = \Auth::id();
+    $managerId = Auth::id();
 
 
     $employee_id = User::where('id', $managerId)->value('employee_id');
@@ -144,14 +146,14 @@ class LeaveRequestController extends Controller
         // dd($data);
         $leave_type_id = $data['leave_type_id'];
         $requested_leave_days = $data['days'];
-        $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('unit_id',\Auth::user()->employee->unit_id)->get()->first();
+        $allowed_leave = YearlyLeave::select('days')->where('leave_type_id',$leave_type_id)->where('unit_id',Auth::user()->employee->unit_id)->get()->first();
         if($allowed_leave)
             $allowed_leave = $allowed_leave->days;
         else
             $allowed_leave = 0;
 
-        $data['employee_id'] = \Auth::user()->employee_id;
-        $data['requested_by'] = \Auth::user()->employee_id;
+        $data['employee_id'] = Auth::user()->employee_id;
+        $data['requested_by'] = Auth::user()->employee_id;
 
         //nepali date
         $start_year = $this->getNepaliYear($data['start_date']);
@@ -173,7 +175,7 @@ class LeaveRequestController extends Controller
         {
             $data['full_leave'] = '1';
 
-            $not_eligible_dates = $this->nonEligibleFullLeaveDays($data,\Auth::user()->employee_id);
+            $not_eligible_dates = $this->nonEligibleFullLeaveDays($data,Auth::user()->employee_id);
             if(!$not_eligible_dates->isEmpty()){
                 $res = [
                     'title' => 'Leave Request Warning',
@@ -185,7 +187,7 @@ class LeaveRequestController extends Controller
 
         }else{
             $data['full_leave'] = '0';
-            $not_eligible_dates = $this->nonEligibleFullLeaveDays($data,\Auth::user()->employee_id);
+            $not_eligible_dates = $this->nonEligibleFullLeaveDays($data,Auth::user()->employee_id);
             
             $days = $data['days']/0.5;
             $data['days'] = (int)$days;
@@ -242,7 +244,7 @@ class LeaveRequestController extends Controller
         $data = $request->validated();
         // dd($data);
         $data['employee_id'] = $data['employee_id'];
-        $data['requested_by'] = \Auth::user()->employee_id;
+        $data['requested_by'] = Auth::user()->employee_id;
         
         if($data['leave_time'] == 'full')
         {
@@ -315,7 +317,7 @@ class LeaveRequestController extends Controller
     public function edit($id)
     {
         $leaveRequest = LeaveRequest::findOrFail($id);
-        $leaveTypes = LeaveType::select('id','name')->get();
+        $leaveTypes = LeaveType::select('id','name')->where('status','active')->get();
         // dd($leaveRequest->employee->id);
         return view('admin.leaveRequest.editSubOrdinateLeave')->with(compact('leaveRequest','leaveTypes'));
 
@@ -392,7 +394,7 @@ class LeaveRequestController extends Controller
             'message' => 'Leave Request has been successfully Deleted',
             'icon' => 'success'
         ];
-        $role = \Auth::user()->role->authority;
+        $role = Auth::user()->role->authority;
         if($role == 'hr' || $role == 'manager')
             return back()->with(compact('res'));
         else
@@ -430,7 +432,7 @@ class LeaveRequestController extends Controller
             'message' => 'Force Leave has been successfully Deleted',
             'icon' => 'success'
         ];
-        $role = \Auth::user()->role->authority;
+        $role = Auth::user()->role->authority;
         if($role == 'hr' || $role == 'manager')
             return back()->with(compact('res'));
         else
@@ -442,7 +444,7 @@ class LeaveRequestController extends Controller
         $leaveRequest = LeaveRequest::findOrFail($id);
         $leaveRequest->update([
             'acceptance' => 'accepted',
-            'accepted_by' => \Auth::user()->employee_id
+            'accepted_by' => Auth::user()->employee_id
         ]);
 
         $noPunchInNoLeaveRecord = NoPunchInNoLeave::where('employee_id',$leaveRequest->employee_id)
@@ -464,7 +466,7 @@ class LeaveRequestController extends Controller
         LeaveRequest::findOrFail($id)
         ->update([
             'acceptance' => 'rejected',
-            'accepted_by' => \Auth::user()->employee_id
+            'accepted_by' => Auth::user()->employee_id
         ]);
           $res = [
             'title' => 'Leave Request Rejected',
@@ -491,7 +493,7 @@ class LeaveRequestController extends Controller
 
     public function approve(Request $request)
     {
-        if(\Auth::user()->role->authority == 'employee')
+        if(Auth::user()->role->authority == 'employee')
             return abort(401);
 
         $leaveRequests = LeaveRequest::select('id', 'start_date', 'year', 'employee_id', 'end_date', 'days','leave_type_id', 'full_leave', 'half_leave', 'reason', 'acceptance', 'accepted_by')
@@ -500,9 +502,9 @@ class LeaveRequestController extends Controller
 
         // dd("Here");
 
-        if(\Auth::user()->role->authority == 'manager'){
+        if(Auth::user()->role->authority == 'manager'){
             $leaveRequests = $leaveRequests->whereHas('employee',function($query){
-                $query->where('manager_id',\Auth::user()->employee_id);
+                $query->where('manager_id',Auth::user()->employee_id);
             });
         }
         if($request->d)
@@ -521,15 +523,15 @@ class LeaveRequestController extends Controller
 
     public function getForcedLeave()
     {
-        if(\Auth::user()->role->authority == 'hr')
+        if(Auth::user()->role->authority == 'hr')
         {
             $leaveList = LeaveRequest::where('reason','Forced (System)')
                                         ->orWhere('reason','Forced (System) Missed Punch Out')
                                         ->orderBy('end_date','desc')->paginate(20);
         }
-        elseif(\Auth::user()->role->authority == 'manager'){
+        elseif(Auth::user()->role->authority == 'manager'){
             $leaveList = LeaveRequest::whereHas('employee',function($query){
-                                                $query->where('manager_id',\Auth::user()->employee_id);
+                                                $query->where('manager_id',Auth::user()->employee_id);
                                         })
                                         ->where('reason','Forced (System)')
                                         ->orderBy('end_date','desc')
@@ -543,7 +545,7 @@ class LeaveRequestController extends Controller
 
     public function getMyForcedLeave()
     {
-        $leaveList = LeaveRequest::where('employee_id',\Auth::user()->employee_id)
+        $leaveList = LeaveRequest::where('employee_id',Auth::user()->employee_id)
                                     ->where(function($query){
                                         $query->where('reason','Forced (System)')
                                             ->orWhere('reason','Forced (System) Missed Punch Out');
@@ -556,19 +558,19 @@ class LeaveRequestController extends Controller
 
     //get leave days for dyanmic days calculation in form
     public function getLeaveDays(Request $request){
-        if(\Request::input('employee_id'))
-            $employee_id = \Request::input('employee_id');
+        if($request->input('employee_id'))
+            $employee_id = $request->input('employee_id');
         else
-            $employee_id = \Auth::user()->employee_id;
+            $employee_id = Auth::user()->employee_id;
 
         $today = date('Y-m-d');
-        $start_date =   \Request::input('start_date');
-        $end_date = \Request::input('end_date');
-        $leave_type_id = \Request::input('leave_type_id');
+        $start_date    = $request->input('start_date');
+        $end_date      = $request->input('end_date');
+        $leave_type_id = $request->input('leave_type_id');
         $calcDay = Helper::getDays($start_date, $end_date, $leave_type_id,$employee_id);
         $employee = Employee::select('id','unit_id','join_date')->where('id',$employee_id)->first();
 
-        if(\Request::input('leave_time') != 'full'){
+        if($request->input('leave_time') != 'full'){
             // $remainingDays = $remainingDays*2;
             $calcDay = $calcDay/2;
         }

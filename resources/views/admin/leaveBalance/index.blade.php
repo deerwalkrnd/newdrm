@@ -68,7 +68,6 @@
             <th scope="col" colspan=4>{{ $leaveType->name }}</th>
             @endforeach
             <th scope="col" colspan=1>Unpaid</th>
-            <th scope="col" colspan=2>Carry Over</th>
             <th scope="col" colspan=2>Exceeded</th>
         </tr>
         <tr class="table_title" style="background-color: #0f5288;">
@@ -79,8 +78,6 @@
             <th>B</th>
             @endfor
             <th>Total Taken</th>
-            <th>A</th>
-            <th>T</th>
             <th>Total Leave Days</th>
         </tr>
     </thead>
@@ -119,14 +116,6 @@
                 @endforelse
                 <!-- Unpaid -->
                 <td>{{$record['total_unpaid_leaves']}}</td>
-                <!-- CarryOver -->
-                @if(array_key_exists('Carry Over',$record['leaves']))
-                    <td>{{$record['leaves']['Carry Over']['allowed']}}</td>
-                    <td>{{$record['leaves']['Carry Over']['taken']}}</td>
-                @else
-                    <td>0.0</td>
-                    <td>0.0</td>
-                @endif
                 <!-- Sum of Negative Leaves -->
                 <td>{{$record['exceeded_leave_days']}}</td>
 

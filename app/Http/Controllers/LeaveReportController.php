@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Exception;
 
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
@@ -260,7 +262,7 @@ class LeaveReportController extends Controller
         $acquiredLeave = $allowedLeave;
         
         if($year == $this->thisYear){
-            if($type->id != '2' && $type->id != '13' && $type->id != '6' && $type->id != '10'){
+            if(!in_array($type->id, ['13', '6', '10', '15', '16'])){
                 $acquiredLeave = round($allowedLeave / 12 * $this->thisMonth * 2) / 2;
 
                 if($this->employee_join_year == $year){

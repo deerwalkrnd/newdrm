@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Exception;
 
 use App\Helpers\MailHelper;
 use App\Helpers\NepaliCalendarHelper;
@@ -37,14 +39,16 @@ class DashboardController extends Controller
         Log::alert($userIp);
         $late_within_ten_days = $this->isLateWithinTenDays();
         $max_punch_in_time = $this->getMaxPunchInTime();
-        $noPunchInNoLeaveRecordExists = NoPunchInNoLeave::where('employee_id',\Auth::user()->employee_id)->get()->count() > 0;
+        $noPunchInNoLeaveRecordExists = NoPunchInNoLeave::where('employee_id',Auth::user()->employee_id)->get()->count() > 0;
 
         if($this->hasPendingLeaveRequest())
             $this->setManagerNotification();
 
-        $first_login_today = \Auth::user()->is_logged_in_today;
+        $first_login_today = Auth::user()->is_logged_in_today;
         
-        if (!$first_login_today && date('Y-m-d H:i',strtotime(\Auth::user()->last_login)) == date('Y-m-d H:i')){
+        if (!$first_login_today && date('Y-m-d H:i',strtotime(Auth::user()->last_login)) == date('Y-m-d H:i')){
+            $date1 = null;
+            $date2 = null;
             if ($date1 = $this->holidayNextDay() && $date2 = $this->festivalNextDay()){
                     $date1 = $this->holidayNextDay();
                     $holiday = Holiday::select('name','date','female_only')->where('date',$date1)->first();
@@ -130,7 +134,7 @@ class DashboardController extends Controller
             $date = date('Y-m-d',strtotime('+2 day'));
         }
 
-        $unit_id = Employee::where('id',\Auth::user()->employee_id)->value('unit_id');
+        $unit_id = Employee::where('id',Auth::user()->employee_id)->value('unit_id');
         $holiday_unit_id = Holiday::where('date',$date)->value('unit_id');
         
         if (Holiday::where('date',$date)->where('festival_only', 0)->exists()){
@@ -182,13 +186,13 @@ class DashboardController extends Controller
 
     private function isPasswordExpired()
     {
-        if(\Auth::check() && \Auth::user()->password_expired != '0')
+        if(Auth::check() && Auth::user()->password_expired != '0')
             return redirect('/change-password');
     }
 
     private function isEmployeeOnLeave()
     {
-        $leaveRequest = LeaveRequest::where('employee_id', \Auth::user()->employee_id)
+        $leaveRequest = LeaveRequest::where('employee_id', Auth::user()->employee_id)
                     ->whereDate('start_date', '<=', date('Y-m-d'))
                     ->whereDate('end_date', '>=', date('Y-m-d'))
                     ->where('acceptance','accepted');
@@ -212,7 +216,7 @@ class DashboardController extends Controller
 
     private function getEmployeeShift()
     {
-        return strtolower(\Auth::user()->employee->shift->name);        
+        return strtolower(Auth::user()->employee->shift->name);        
     }
 
     private function isHoliday()
@@ -238,7 +242,7 @@ class DashboardController extends Controller
             // if employee has custom shift punch in time is set accordingly
             if($this->getEmployeeShift() == "custom")
             {
-                $maxTime = \Auth::user()->employee->start_time;
+                $maxTime = Auth::user()->employee->start_time;
             }
 
             // if employee is on first half leave max time is set to first half max time
@@ -257,7 +261,7 @@ class DashboardController extends Controller
     private function isLateWithinTenDays()
     {
         $late_within_ten_days = Attendance::select('late_punch_in','punch_in_time')
-            ->where('employee_id', \Auth::user()->employee_id)
+            ->where('employee_id', Auth::user()->employee_id)
             ->whereDate('punch_in_time','>=',date('Y-m-d',strtotime("-10 days")))
             ->where('late_punch_in','1')
             ->count();
@@ -270,11 +274,11 @@ class DashboardController extends Controller
 
     private function hasPendingLeaveRequest()
     {
-        if(\Auth::user()->role->authority != 'manager'){
+        if(Auth::user()->role->authority != 'manager'){
             return false;
         }else{
             $count = LeaveRequest::whereHas('employee',function($query){
-                $query->where('manager_id',\Auth::user()->employee_id);
+                $query->where('manager_id',Auth::user()->employee_id);
             })->where('acceptance','pending')->count();
             
             if($count > 0)
@@ -309,7 +313,7 @@ class DashboardController extends Controller
     //     }
 
     //     //Custom shift Employee
-    //     $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',\Auth::user()->employee_id)->first(); 
+    //     $employee_shift_time = Employee::select('id','shift_id','start_time','end_time')->where('id',Auth::user()->employee_id)->first(); 
     //     $isWeekend = 0;
         
     //     if(date('D') == 'Sat' || date('D') == 'Sun'){    //weekend punchin
@@ -325,7 +329,7 @@ class DashboardController extends Controller
     //     $first_half_leave_max_punch_in_time = Time::select('id','time')->where('id','2')->first()->time;
     //     $hasAnyLeave = LeaveRequest::whereDate('start_date', '<=', date('Y-m-d'))
     //                     ->whereDate('end_date', '>=', date('Y-m-d'))
-    //                     ->where('employee_id', \Auth::user()->employee_id)
+    //                     ->where('employee_id', Auth::user()->employee_id)
     //                     ->where('acceptance','accepted')
     //                     ->count();
     //     if($hasAnyLeave == 0)
@@ -334,7 +338,7 @@ class DashboardController extends Controller
     //     }else{
     //         $leave = LeaveRequest::whereDate('start_date', '<=', date('Y-m-d'))
     //                 ->whereDate('end_date', '>=', date('Y-m-d'))
-    //                 ->where('employee_id', \Auth::user()->employee_id)
+    //                 ->where('employee_id', Auth::user()->employee_id)
     //                 ->where('acceptance','accepted')
     //                 ->first();
 
@@ -351,13 +355,13 @@ class DashboardController extends Controller
     //     $isLate = time() <= $maxTime ? '0' : '1';
     //     // dd($isLate);
     //     $late_within_ten_days = Attendance::select('late_punch_in','punch_in_time')
-    //         ->where('employee_id', \Auth::user()->employee_id)
+    //         ->where('employee_id', Auth::user()->employee_id)
     //         ->whereDate('punch_in_time','>=',date('Y-m-d',strtotime("-10 days")))
     //         ->where('late_punch_in','1')
     //         ->count();
 
     //     //check if there exists no punch in no leave record
-    //     $noPunchInNoLeaveRecords = NoPunchInNoLeave::where('employee_id',\Auth::user()->employee_id)->get()->count();
+    //     $noPunchInNoLeaveRecords = NoPunchInNoLeave::where('employee_id',Auth::user()->employee_id)->get()->count();
 
     //     //set punch-in state;
     //     \Session::put('punchIn', $state);
@@ -371,8 +375,8 @@ class DashboardController extends Controller
     //     $birthdayList = $this->getBirthdayList();
     //     $leaveList = $this->getLeaveList();
     //     $res=[];
-    //     if(\Auth::user()->role->authority == 'manager'){
-    //         $employees_under_manager = Employee::select('id')->where('manager_id',\Auth::user()->employee_id)->get();
+    //     if(Auth::user()->role->authority == 'manager'){
+    //         $employees_under_manager = Employee::select('id')->where('manager_id',Auth::user()->employee_id)->get();
     //         foreach($employees_under_manager as $employee){
     //             if(LeaveRequest::where('employee_id',$employee->id)->where('acceptance','pending')->first()){
     //                 $res = [
@@ -384,7 +388,7 @@ class DashboardController extends Controller
     //             }
     //         }
     //     }
-    //     if(\Auth::user()->password_expired != '0')
+    //     if(Auth::user()->password_expired != '0')
     //     {
     //         return redirect('/change-password');
     //     }else{
@@ -437,12 +441,12 @@ class DashboardController extends Controller
         $month = $currentYearMonthDate[1];
         $today = $currentYearMonthDate[2];
 
-        $unit_id = \Auth::user()->employee->unit_id;
+        $unit_id = Auth::user()->employee->unit_id;
         $leaveTypes = LeaveType::select('name','id')
                                 ->where('status','active')
                                 ->where(function($query){
                                     $query->where('gender','all')
-                                    ->orWhere('gender',ucfirst(\Auth::user()->employee->gender));
+                                    ->orWhere('gender',ucfirst(Auth::user()->employee->gender));
                                 })
                                 ->get();
                                 
@@ -453,13 +457,13 @@ class DashboardController extends Controller
             // if year < this year no change
             // else months remaining in year i.e 13 - join month
             // allowe leave = allow / 12 * remaining months
-            $join_date = Employee::select('id','join_date')->where('id',\Auth::user()->employee_id)->first()->join_date;
+            $join_date = Employee::select('id','join_date')->where('id',Auth::user()->employee_id)->first()->join_date;
             $joinYearMonthDate = $this->getNepaliYear($join_date);
             $joinYear = $joinYearMonthDate[0];
             $joinMonth = $joinYearMonthDate[1];
             $joinDate = $joinYearMonthDate[2];
 
-            $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year,\Auth::user()->employee_id);
+            $allowedLeave = $this->getAllowedLeaveDays($unit_id,$leaveType->id,$year,Auth::user()->employee_id);
             //if joinyear is this year or greater than this year, leave allowance is calculated from joined month
             
             $remaining_month = 13-(int)$joinMonth;
@@ -475,7 +479,7 @@ class DashboardController extends Controller
             $fullLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave','year')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
-                                        ->where('employee_id', \Auth::user()->employee_id)
+                                        ->where('employee_id', Auth::user()->employee_id)
                                         ->where('leave_type_id',$leaveType->id)
                                         ->where('full_leave',"1")
                                         ->sum('days');
@@ -485,7 +489,7 @@ class DashboardController extends Controller
             $halfLeaveTaken = LeaveRequest::select('id','days','leave_type_id','full_leave')
                                         ->where('acceptance','accepted')
                                         ->where('year',$year)
-                                        ->where('employee_id', \Auth::user()->employee_id)
+                                        ->where('employee_id', Auth::user()->employee_id)
                                         ->where('leave_type_id',$leaveType->id)
                                         ->where('full_leave',"0")
                                         ->sum('days');
@@ -518,7 +522,7 @@ class DashboardController extends Controller
     private function getAcquiredLeave($leaveType,$allowedLeave,$acquiredMonth,$year,$month,$today,$joinYear,$joinDate, $remaining_month){
         $acquiredLeave = $allowedLeave;
 
-        if($leaveType->id != '2' && $leaveType->id != '13' && $leaveType->id != '6' && $leaveType->id != '10'){
+        if(!in_array($leaveType->id, ['13', '6', '10', '15', '16'])){
             $acquiredLeave = round(($allowedLeave / 12 * $month) * 2) / 2;
             
             if($joinYear == $year){
@@ -536,15 +540,19 @@ class DashboardController extends Controller
 
     public function getAllowedLeaveDays($unit_id,$leaveType,$year,$employee_id)
     {
-        // if carry Over Leave // carry over is set to 2
-        if($leaveType == 2)
+        // Carry Over - Personal (id=15) and Carry Over - Sick (id=16)
+        if($leaveType == 15 || $leaveType == 16)
         {
             $employee_id = strval($employee_id);
-            $allowedLeave = CarryOverLeave::where('employee_id',$employee_id)
-                                            ->where('year',$year-1)
-                                            // ->get();
-                                            ->first();
-            
+            $record = CarryOverLeave::where('employee_id', $employee_id)
+                                    ->where('year', $year - 1)
+                                    ->first();
+
+            if($leaveType == 16) {
+                return $record ? (float)$record->sick_days : 0;
+            } else {
+                return $record ? (float)$record->personal_days : 0;
+            }
         }else{
             $allowedLeave = YearlyLeave::select('days')
                                         ->where('year',$year)
@@ -573,7 +581,7 @@ class DashboardController extends Controller
 
     private function recordRowExists()
     {
-        $employee_id = \Auth::user()->employee_id;
+        $employee_id = Auth::user()->employee_id;
         $today = date('Y-m-d');
         $rowExists = Attendance::where('employee_id',$employee_id)
         ->whereDate('punch_in_time',$today)
@@ -587,7 +595,7 @@ class DashboardController extends Controller
 
     private function hasPunchOut()
     {
-        $employee_id = \Auth::user()->employee_id;
+        $employee_id = Auth::user()->employee_id;
         $today = date('Y-m-d');
         $punchOutTime = Attendance::select('punch_out_time')
         ->where('employee_id',$employee_id)
