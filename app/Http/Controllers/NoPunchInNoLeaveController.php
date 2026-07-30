@@ -37,7 +37,7 @@ class NoPunchInNoLeaveController extends Controller
                         ->where('contract_status','active')
                         ->where('join_date','<=',date('Y-m-d'))
                         ->whereDoesntHave('attendances', function ($query) use ($date) {
-                            $query->whereDate('created_at', $date);
+                            $query->whereDate('punch_in_time', $date);
                         })
                         ->whereDoesntHave('leaveRequest', function($query) use ($date){
                             $query->whereDate('start_date','<=',$date)

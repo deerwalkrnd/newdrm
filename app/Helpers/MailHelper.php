@@ -59,12 +59,11 @@ class MailHelper{
                 $ccList =  (new self)->getHrEmail();
                 array_push($ccList,(new self)->getManagerEmail($attendance->employee_id));
 
-                $mail= Mail::to($attendance->employee->email)
+                Mail::to($attendance->employee->email)
                     ->cc($ccList)
-                    ->queue(new MissedPunchOutMail($employee_name));
+                    ->send(new MissedPunchOutMail($employee_name));
             }catch(\Exception $e){
-                \Log::debug($e);
-                redirect()->back()->with('error',$e->getMessage());
+                \Log::error($e->getMessage());
             }
         }
         return true;

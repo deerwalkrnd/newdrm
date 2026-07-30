@@ -533,7 +533,10 @@ class LeaveRequestController extends Controller
             $leaveList = LeaveRequest::whereHas('employee',function($query){
                                                 $query->where('manager_id',Auth::user()->employee_id);
                                         })
-                                        ->where('reason','Forced (System)')
+                                        ->where(function($query){
+                                            $query->where('reason','Forced (System)')
+                                                ->orWhere('reason','Forced (System) Missed Punch Out');
+                                        })
                                         ->orderBy('end_date','desc')
                                         ->paginate(20);
         }else{
