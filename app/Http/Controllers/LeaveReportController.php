@@ -302,12 +302,12 @@ class LeaveReportController extends Controller
         $code = 'OXqSTexF5zn4uXSp';
 
         $records = NoPunchInNoLeave::select('id','employee_id','date')->with('employee:id,first_name,middle_name,last_name,manager_id');
-        if(isset($request->e))
-            $records =  $records->where('employee_id',$request->e);
+        if(isset($request->e) && isset($request->d))
+            $records = $records->where('employee_id',$request->e)->whereDate('date',$request->d);
+        elseif(isset($request->e))
+            $records = $records->where('employee_id',$request->e);
         elseif(isset($request->d))
-            $records =  $records->whereDate('date',$request->d);
-        else
-            $records = $records->whereDate('date',date('Y-m-d'));
+            $records = $records->whereDate('date',$request->d);
                 
         $records = $records->orderBy('date','desc')->get();
 
