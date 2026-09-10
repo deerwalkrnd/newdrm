@@ -198,12 +198,10 @@ class AttendanceController extends Controller
                 ->where('acceptance', 'accepted')
                 ->first();
 
-            $full_leave = $leave->full_leave;
-            if ($full_leave == 0) {
-                $half = $leave->half_leave;
-                if ($half == 'first') {
-                    $maxTime = strtotime(date('Y-m-d') . ' ' . $first_half_leave_max_punch_in_time);
-                }
+            if ($leave && $leave->full_leave == 0 && $leave->half_leave == 'first') {
+                $maxTime = strtotime(date('Y-m-d') . ' ' . $first_half_leave_max_punch_in_time);
+            } else {
+                $maxTime = strtotime(date('Y-m-d') . ' ' . $maxTime);
             }
         }
 
