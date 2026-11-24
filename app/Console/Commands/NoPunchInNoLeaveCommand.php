@@ -42,8 +42,9 @@ class NoPunchInNoLeaveCommand extends Command
      */
     public function handle()
     {
-        $noPunchInNoLeave = new NoPunchInNoLeaveController;
-        $create = $noPunchInNoLeave->create();
-        return true;
+        $created = (new NoPunchInNoLeaveController)->create();
+        $this->info('no:punchInLeave created='.$created);
+
+        return 0;
     }
 }

@@ -31,7 +31,9 @@ class Kernel extends ConsoleKernel
         // Mail cron job set to check daily status of cron job and queue
         $schedule->command('send:mail')->dailyAt('16:00'); //dailyAt('16:00')
 
-        $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50') test mail
+        $schedule->command('no:punchInLeave')
+            ->dailyAt('23:50')
+            ->appendOutputTo(storage_path('logs/scheduler.log'));
 
         if (self::mailFlagOn('Pending Leave Request')) {
             $schedule->command('leave:pending')->dailyAt('21:00');

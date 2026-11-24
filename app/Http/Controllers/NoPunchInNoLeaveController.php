@@ -55,18 +55,23 @@ class NoPunchInNoLeaveController extends Controller
                 if($all_unit_female_holiday){
                     $employees = $employees->where('gender','!=','female');
                 }
-                $some_unit_holiday = Holiday::whereDate('date',$date)->where('unit_id','!=',null)->get()->count();
-                if($some_unit_holiday){
-                    $some_unit_all_holiday = Holiday::whereDate('date',$date)->where('unit_id','!=',null)->where('female_only','0')->get()->count();
-                    if($some_unit_all_holiday){
-                        $units = Holiday::select('unit_id')->whereDate('date',$date)->where('unit_id','!=',null)->where('female_only','0')->get()->toArray();
-                        $employees = $employees->whereNotIn('unit_id',$units);
-                    }
-                    $some_unit_female_holiday = Holiday::whereDate('date',$date)->where('unit_id','!=',null)->where('female_only','1')->get()->count();
-                    if ($some_unit_female_holiday){
-                        $units = Holiday::select('unit_id')->whereDate('date',$date)->where('unit_id','!=',null)->where('female_only','1')->get()->toArray();
-                        $employees = $employees->whereNotIn('unit_id',$units)->where('gender','!=','female');
-                    }
+                $unitHolidayIds = Holiday::whereDate('date', $date)
+                    ->whereNotNull('unit_id')
+                    ->where('female_only', '0')
+                    ->pluck('unit_id');
+                if ($unitHolidayIds->isNotEmpty()) {
+                    $employees = $employees->whereNotIn('unit_id', $unitHolidayIds);
+                }
+
+                $femaleUnitHolidayIds = Holiday::whereDate('date', $date)
+                    ->whereNotNull('unit_id')
+                    ->where('female_only', '1')
+                    ->pluck('unit_id');
+                if ($femaleUnitHolidayIds->isNotEmpty()) {
+                    $employees = $employees->where(function ($query) use ($femaleUnitHolidayIds) {
+                        $query->whereNotIn('unit_id', $femaleUnitHolidayIds)
+                            ->orWhere('gender', '!=', 'female');
+                    });
                 }              
             }
         }
@@ -78,7 +83,7 @@ class NoPunchInNoLeaveController extends Controller
                 'date'=>$date,
             ]);
         }
-        return true;
+        return $employees->count();
     }
 
 
