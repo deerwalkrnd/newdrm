@@ -69,5 +69,7 @@ class Kernel extends HttpKernel
         'employee' => \App\Http\Middleware\IsEmployee::class,
         'token.verify' => \App\Http\Middleware\VerifyToken::class,
         'pre.process.manager.request' => \App\Http\Middleware\ProcessManagerRequest::class,
+        'backup.admin' => \App\Http\Middleware\EnsureBackupAdmin::class,
+        'backup.signature' => \App\Http\Middleware\VerifyBackupSignature::class,
     ];
 }

@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Signed trigger from the GitHub Actions workflow in the dumps repo, four
+// times a day. See scripts/backup/README.md. Rate-limited per IP; HMAC-checked; 202.
+Route::post('/backup/trigger', \App\Http\Controllers\BackupTriggerController::class)
+    ->middleware(['throttle:' . (int) config('dump-github.trigger.rate_per_hour', 12) . ',60', 'backup.signature'])
+    ->name('backup.trigger');

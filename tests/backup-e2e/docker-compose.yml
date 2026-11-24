@@ -1,0 +1,24 @@
+# End-to-end test rig for the in-app backups. Nothing here talks to GitHub:
+# the app is pointed at mock-github (a fake of the Git Data API backed by a
+# local bare repo). Run: tests/backup-e2e/run.sh
+name: newdrm-backup-e2e
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: newdrm
+    command: ["--log-bin-trust-function-creators=1", "--max-allowed-packet=256M"]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-prootpw"]
+      interval: 3s
+      retries: 40
+  app:
+    build: .
+    image: newdrm-backup-e2e:php81
+    volumes:
+      - ../..:/src:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["sleep", "infinity"]
