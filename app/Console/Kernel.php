@@ -32,24 +32,22 @@ class Kernel extends ConsoleKernel
         $schedule->command('send:mail')->dailyAt('16:00'); //dailyAt('16:00')
 
         $schedule->command('no:punchInLeave')->dailyAt('23:50'); //dailyAt('23:50') test mail
-        
-        $send_mail_pending_leave_request = MailControl::select('send_mail')->where('name','Pending Leave Request')->first()->send_mail;
-        if($send_mail_pending_leave_request)
-            $schedule->command('leave:pending')->dailyAt('21:00');
-        // ->dailyAt('21:00');
-        
-        $missed_punch_out_full_functionality_status = MailControl::select('send_mail')->where('name','Missed Punch Out Full Functionality')->first()->send_mail;
-        
-        if($missed_punch_out_full_functionality_status){
-            $schedule->command('punchOut:missed')->dailyAt('23:20');
 
-            $send_mail_missed_punch_out = MailControl::select('send_mail')->where('name','Missed Punch Out Mail')->first()->send_mail;
-            if($send_mail_missed_punch_out)
-                $schedule->command('missedPunchOut:mail')->dailyAt('23:40');
+        if (self::mailFlagOn('Pending Leave Request')) {
+            $schedule->command('leave:pending')->dailyAt('21:00');
         }
 
-        
-            // ->dailyAt('23:40');
+        if (self::mailFlagOn('Missed Punch Out Full Functionality')) {
+            $schedule->command('punchOut:missed')
+                ->dailyAt('23:20')
+                ->appendOutputTo(storage_path('logs/scheduler.log'));
+
+            if (self::mailFlagOn('Missed Punch Out Mail')) {
+                $schedule->command('missedPunchOut:mail')
+                    ->dailyAt('23:40')
+                    ->appendOutputTo(storage_path('logs/scheduler.log'));
+            }
+        }
 
         // Morning Leave Mail Schedule
         // $schedule->command('leave:mail')->dailyAt('10:00'); //dailyAt('10:00')
@@ -66,5 +64,10 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
+    }
+
+    private static function mailFlagOn($name)
+    {
+        return MailControl::where('name', $name)->value('send_mail') == '1';
     }
 }
