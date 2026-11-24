@@ -447,12 +447,10 @@ class LeaveRequestController extends Controller
             'accepted_by' => Auth::user()->employee_id
         ]);
 
-        $noPunchInNoLeaveRecord = NoPunchInNoLeave::where('employee_id',$leaveRequest->employee_id)
-                                                    ->whereDate('date','<=',$leaveRequest->start_date)
-                                                    ->first();
-        if($noPunchInNoLeaveRecord)
-            if($noPunchInNoLeaveRecord->count() >= 1)
-                $noPunchInNoLeaveRecord->delete();  
+        NoPunchInNoLeave::where('employee_id', $leaveRequest->employee_id)
+            ->whereDate('date', '>=', $leaveRequest->start_date)
+            ->whereDate('date', '<=', $leaveRequest->end_date)
+            ->delete();  
         $res = [
             'title' => 'Leave Request Accepted',
             'message' => 'Leave Request has been successfully Accepted',

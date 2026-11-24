@@ -1,71 +1,124 @@
 <?php
-   
+
 namespace App\Helpers;
 
 use App\Models\Attendance;
 use App\Models\LeaveRequest;
+use App\Models\LeaveType;
+use Illuminate\Support\Facades\Log;
 
-use Illuminate\Support\Facades\DB;
+class MissedPunchOutHelper
+{
+    public static function createMissedPunchOut()
+    {
+        $today = date('Y-m-d');
+        $openCount = Attendance::where('punch_out_time', null)
+            ->whereDate('punch_in_time', $today)
+            ->count();
 
-class MissedPunchOutHelper{
+        Log::info('punchOut:missed started', [
+            'date' => $today,
+            'open_punch_outs' => $openCount,
+        ]);
 
-    //Missed Punch Out Mail
-    public static function createMissedPunchOut(){
-        Attendance::where('punch_out_time',NULL)->whereDate('punch_in_time',date('Y-m-d'))->update(['missed_punch_out'=>'1','punch_out_time'=>date('Y-m-d H:i:s')]);
-        
-        $attendances = Attendance::where('missed_punch_out','1')
-                                ->with('employee:id,first_name,middle_name,last_name,manager_id,email')
-                                ->whereDate('punch_in_time',date('Y-m-d'))        //for cron job
-                                ->get();
-                                
-        foreach($attendances as $attendance){
-            try{
+        Attendance::where('punch_out_time', null)
+            ->whereDate('punch_in_time', $today)
+            ->update([
+                'missed_punch_out' => '1',
+                'punch_out_time' => date('Y-m-d H:i:s'),
+            ]);
+
+        $attendances = Attendance::where('missed_punch_out', '1')
+            ->with('employee:id,first_name,middle_name,last_name,manager_id,email')
+            ->whereDate('punch_in_time', $today)
+            ->get();
+
+        $leaveTypeId = LeaveType::where('name', 'Personal')->value('id') ?: 1;
+        $created = 0;
+        $skipped = 0;
+        $failed = 0;
+
+        foreach ($attendances as $attendance) {
+            try {
                 $attDate = date('Y-m-d', strtotime($attendance->punch_in_time));
                 $thisYear = (new self)->getNepaliYear($attDate);
 
-                $existingLeave = LeaveRequest::where('employee_id', $attendance->employee_id)
-                                            ->whereDate('start_date', '<=', $attDate)
-                                            ->whereDate('end_date', '>=', $attDate)
-                                            ->where('acceptance', 'accepted')
-                                            ->exists();
+                $alreadyForced = LeaveRequest::where('employee_id', $attendance->employee_id)
+                    ->whereDate('start_date', $attDate)
+                    ->whereDate('end_date', $attDate)
+                    ->where('reason', 'Forced (System) Missed Punch Out')
+                    ->whereNotIn('acceptance', ['rejected', 'cancelled'])
+                    ->exists();
 
-                if(!$existingLeave){
-                    LeaveRequest::create([
+                // Skip only if the afternoon is already covered (full day or second half).
+                $afternoonCovered = LeaveRequest::where('employee_id', $attendance->employee_id)
+                    ->whereDate('start_date', '<=', $attDate)
+                    ->whereDate('end_date', '>=', $attDate)
+                    ->where('acceptance', 'accepted')
+                    ->where(function ($query) {
+                        $query->where('full_leave', '1')
+                            ->orWhere('half_leave', 'second');
+                    })
+                    ->exists();
+
+                if ($alreadyForced || $afternoonCovered) {
+                    $skipped++;
+                    Log::info('punchOut:missed skipped leave', [
                         'employee_id' => $attendance->employee_id,
-                        'start_date' => $attDate,
-                        'end_date' => $attDate,
-                        'days' => '1',
-                        'year' => $thisYear,
-                        'leave_type_id' => '1',
-                        'full_leave' => '0',
-                        'half_leave' => 'second',
-                        'reason' => 'Forced (System) Missed Punch Out',
-                        'acceptance' => 'accepted',
-                        'requested_by' => $attendance->employee_id,
-                        'accepted_by' => NULL
+                        'already_forced' => $alreadyForced,
+                        'afternoon_covered' => $afternoonCovered,
                     ]);
+                    continue;
                 }
 
-            }catch(\Exception $e){
-                \Log::debug($e);
-            }        
+                LeaveRequest::create([
+                    'employee_id' => $attendance->employee_id,
+                    'start_date' => $attDate,
+                    'end_date' => $attDate,
+                    'days' => '1',
+                    'year' => $thisYear,
+                    'leave_type_id' => $leaveTypeId,
+                    'full_leave' => '0',
+                    'half_leave' => 'second',
+                    'reason' => 'Forced (System) Missed Punch Out',
+                    'acceptance' => 'accepted',
+                    'requested_by' => $attendance->employee_id,
+                    'accepted_by' => null,
+                ]);
+                $created++;
+            } catch (\Exception $e) {
+                $failed++;
+                Log::error('punchOut:missed failed to create leave', [
+                    'employee_id' => $attendance->employee_id,
+                    'message' => $e->getMessage(),
+                ]);
+            }
         }
-        return true;
+
+        $result = [
+            'date' => $today,
+            'open' => $openCount,
+            'flagged' => $attendances->count(),
+            'created' => $created,
+            'skipped' => $skipped,
+            'failed' => $failed,
+        ];
+
+        Log::info('punchOut:missed finished', $result);
+
+        return $result;
     }
 
-    public static function getNepaliYear($year){
-        try{
-            $date = new NepaliCalendarHelper($year,1);
+    public static function getNepaliYear($year)
+    {
+        try {
+            $date = new NepaliCalendarHelper($year, 1);
             $nepaliDate = $date->in_bs();
-            $nepaliDateArray = explode('-',$nepaliDate);
-            \Log::debug($nepaliDateArray);
+            $nepaliDateArray = explode('-', $nepaliDate);
             return $nepaliDateArray[0];
-        }catch(\Exception $e)
-        {
-            \Log::error($e->getMessage());
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return date('Y');
         }
     }
 }
-
-?>

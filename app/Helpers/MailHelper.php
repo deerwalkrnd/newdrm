@@ -50,23 +50,52 @@ class MailHelper{
     public static function sendMissedPunchOutMail(){
         $attendances = Attendance::where('missed_punch_out','1')
                                 ->with('employee:id,first_name,middle_name,last_name,manager_id,email')
-                                ->whereDate('punch_in_time',date('Y-m-d'))        //for cron job
+                                ->whereDate('punch_in_time',date('Y-m-d'))
                                 ->get();
+
+        $result = [
+            'flagged' => $attendances->count(),
+            'sent' => 0,
+            'skipped' => 0,
+            'failed' => 0,
+        ];
+
+        \Log::info('missedPunchOut:mail started', ['count' => $result['flagged']]);
 
         foreach($attendances as $attendance){
             try{
-                $employee_name = $attendance->employee->first_name.' '.$attendance->employee->middle_name.' '.$attendance->employee->last_name;
-                $ccList =  (new self)->getHrEmail();
-                array_push($ccList,(new self)->getManagerEmail($attendance->employee_id));
+                if (!$attendance->employee || !$attendance->employee->email) {
+                    $result['skipped']++;
+                    \Log::warning('missedPunchOut:mail skipped, no employee email', [
+                        'employee_id' => $attendance->employee_id,
+                    ]);
+                    continue;
+                }
 
-                Mail::to($attendance->employee->email)
-                    ->cc($ccList)
-                    ->send(new MissedPunchOutMail($employee_name));
+                $employee_name = $attendance->employee->first_name.' '.$attendance->employee->middle_name.' '.$attendance->employee->last_name;
+                $ccList = array_values(array_unique(array_filter(array_merge(
+                    (new self)->getHrEmail(),
+                    [(new self)->getManagerEmail($attendance->employee_id)]
+                ))));
+
+                $mail = Mail::to($attendance->employee->email);
+                if (!empty($ccList)) {
+                    $mail->cc($ccList);
+                }
+                $mail->send(new MissedPunchOutMail($employee_name));
+                $result['sent']++;
             }catch(\Exception $e){
-                \Log::error($e->getMessage());
+                $result['failed']++;
+                \Log::error('missedPunchOut:mail failed', [
+                    'employee_id' => $attendance->employee_id,
+                    'message' => $e->getMessage(),
+                ]);
             }
         }
-        return true;
+
+        \Log::info('missedPunchOut:mail finished', $result);
+
+        return $result;
     }
 
 

@@ -38,7 +38,21 @@ class MissedPunchOutMail extends Command
      */
     public function handle()
     {
-        MailHelper::sendMissedPunchOutMail();
-        return true;
+        $result = MailHelper::sendMissedPunchOutMail();
+        $line = sprintf(
+            'missedPunchOut:mail flagged=%d sent=%d skipped=%d failed=%d',
+            $result['flagged'],
+            $result['sent'],
+            $result['skipped'],
+            $result['failed']
+        );
+
+        if ($result['failed'] > 0) {
+            $this->error($line);
+            return 1;
+        }
+
+        $this->info($line);
+        return 0;
     }
 }
