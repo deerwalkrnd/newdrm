@@ -27,6 +27,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
+
+        // Backup settings saved on the Backups page override .env.
+        try {
+            \App\Services\Backup\BackupSettings::applyToConfig();
+        } catch (\Throwable $e) {
+            report($e);
+        }
         if($this->app->environment('production')) {
             // \URL::forceScheme('https');
         }

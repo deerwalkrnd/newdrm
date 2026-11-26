@@ -203,6 +203,14 @@
                                                         src="/assets/images/icons/list.png">File Category Setting</a>
                                             </td>
                                         </tr>
+                                        @if(\App\Http\Middleware\EnsureBackupAdmin::allows(Auth::user()))
+                                        <tr>
+                                            <td></td>
+                                            <td class="hr_menu_content"><a href="{{ route('backup.index') }}"><img class="img-fluid"
+                                                        src="/assets/images/icons/list.png">Database Backups</a>
+                                            </td>
+                                        </tr>
+                                        @endif
 
                                     </table>
                                 </div>

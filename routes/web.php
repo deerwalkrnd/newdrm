@@ -294,6 +294,18 @@ Route::middleware(['hr'])->group(function(){
 });
 
 
+// Database backups: HR accounts listed in dump-github.admins only (404 for everyone else)
+Route::middleware(['logged-in', 'backup.admin'])
+    ->prefix('database-backups')->name('backup.')
+    ->controller(\App\Http\Controllers\Admin\DatabaseBackupController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/latest/download', 'latest')->name('latest');
+        Route::get('/download', 'download')->name('download');
+        Route::post('/run', 'run')->middleware('throttle:6,60')->name('run');
+        Route::post('/settings', 'settings')->middleware('throttle:20,60')->name('settings');
+    });
+
 //reset password
 Route::get('/forgot-password',[PasswordResetController::class, 'create'])->name('password.forgot');
 Route::post('/forgot-password',[PasswordResetController::class, 'store'])->name('password.request');

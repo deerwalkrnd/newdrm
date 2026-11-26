@@ -1,0 +1,50 @@
+# Copy to .github/workflows/backup-trigger.yml in deerwalk-dumps/DMR-dumps.
+#
+# Asks the DRM (newdrm) app to back itself up shortly after each 06:00/18:00
+# (Nepal) slot, and once more two hours later in case GitHub skipped or
+# delayed the first run. The app answers 202 straight away and does nothing
+# if the slot is already in this repo, so the retry is harmless.
+#
+# Repo secrets:
+#   BACKUP_TRIGGER_URL     https://<app host>/api/backup/trigger
+#   BACKUP_TRIGGER_SECRET  the trigger secret saved on the app's Backups page
+name: backup-trigger
+
+on:
+  schedule:
+    # UTC. Nepal is UTC+05:45. Hourly for 4 hours after each slot, because
+    # GitHub runs schedules late and drops many: 00:20-03:20 = 06:05-09:05,
+    # 12:20-15:20 = 18:05-21:05.
+    - cron: "20 0-3,12-15 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  trigger:
+    # Off until the app is deployed and configured: set the repo variable
+    # BACKUP_TRIGGER_ENABLED=true (Settings -> Secrets and variables -> Variables).
+    if: vars.BACKUP_TRIGGER_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Signed request to the app
+        env:
+          URL: ${{ secrets.BACKUP_TRIGGER_URL }}
+          SECRET: ${{ secrets.BACKUP_TRIGGER_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "$URL" ] || [ -z "$SECRET" ]; then
+            echo "::error::BACKUP_TRIGGER_URL / BACKUP_TRIGGER_SECRET are not set"; exit 1
+          fi
+          body='{}'
+          ts=$(date +%s)
+          sig=$(printf '%s.%s' "$ts" "$body" | openssl dgst -sha256 -hmac "$SECRET" -r | cut -d' ' -f1)
+          code=$(curl -sS -o /tmp/resp -w '%{http_code}' --max-time 60 \
+            -X POST "$URL" \
+            -H 'Content-Type: application/json' \
+            -H "X-Backup-Timestamp: $ts" \
+            -H "X-Backup-Signature: sha256=$sig" \
+            --data "$body")
+          cat /tmp/resp; echo
+          [ "$code" = 202 ] || { echo "::error::app answered HTTP $code"; exit 1; }
